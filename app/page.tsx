@@ -582,6 +582,29 @@ export default function PasalkuLandingPage() {
         </div>
       </section>
 
+      <section id="supported-areas" className="py-16 md:py-32 px-4 bg-muted/20 scroll-animate">
+        <div className="max-w-7xl mx-auto">
+          <div className="text-center mb-12 md:mb-20">
+            <h2 className="text-4xl md:text-6xl font-black mb-6 md:mb-8 animate-text-shimmer">
+              Area <span className="text-primary">Hukum</span> yang Didukung
+            </h2>
+            <p className="text-lg md:text-2xl text-muted-foreground max-w-4xl mx-auto leading-relaxed">
+              Cakupan lengkap berbagai bidang hukum Indonesia dengan database terkini dan analisis mendalam
+            </p>
+          </div>
+
+          <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-4 md:gap-6">
+            {[
+              { name: "Hukum Pidana", icon: Gavel, desc: "KUHP & peraturan terkait" },
+              { name: "Hukum Perdata", icon: FileText, desc: "KUHPerdata & kontrak" },
+              { name: "Hukum Bisnis", icon: Building, desc: "Korporasi & investasi" },
+              { name: "Hukum Keluarga", icon: Shield, desc: "Perkawinan & waris" },
+              { name: "Hukum Tanah", icon: Globe, desc: "Pertanahan & properti" },
+              { name: "Hukum Pajak", icon: TrendingUp, desc: "Perpajakan & bea cukai" },
+              { name: "Hukum Ketenagakerjaan", icon: Award, desc: "Hubungan industrial" },
+              { name: "Hukum Lingkungan", icon: Target, desc: "Perlindungan lingkungan" },
+            ].map((area, index) => (
+              <div
                 key={index}
                 className="glass-card rounded-xl md:rounded-2xl p-4 md:p-6 border border-border hover:shadow-xl transition-all duration-300 hover-lift scroll-animate-scale text-center"
                 style={{ animationDelay: `${index * 0.1}s` }}
