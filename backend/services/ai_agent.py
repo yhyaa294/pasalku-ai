@@ -3,11 +3,10 @@ from byteplus.ark.ark import Ark
 from ..core.config import settings
 from .. import schemas
 
-# Initialize BytePlus Ark client
+# Initialize BytePlus Ark client according to the new documentation
 client = Ark(
-    ak=settings.BYTEPLUS_AK,
-    sk=settings.BYTEPLUS_SK,
-    endpoint=settings.BYTEPLUS_ENDPOINT
+    api_key=settings.ARK_API_KEY,
+    base_url=settings.ARK_BASE_URL
 )
 
 AI_CONSTITUTION = """
@@ -25,7 +24,7 @@ def get_ai_response(query: str) -> schemas.ChatResponse:
     try:
         # Send chat completion request to the model
         completion = client.chat.completions.create(
-            model=settings.BYTEPLUS_MODEL_ID,
+            model=settings.ARK_MODEL_ID,
             messages=[
                 {
                     "role": "system",
