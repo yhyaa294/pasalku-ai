@@ -2,9 +2,13 @@ import type React from "react"
 import type { Metadata } from "next"
 import { GeistSans } from "geist/font/sans"
 import { GeistMono } from "geist/font/mono"
-import { Analytics } from "@vercel/analytics/react"
 import { Suspense } from "react"
+import dynamic from "next/dynamic"
 import "./globals.css"
+
+const Analytics = dynamic(() => import("@vercel/analytics/react").then((mod) => ({ default: mod.Analytics })), {
+  ssr: false,
+})
 
 export const metadata: Metadata = {
   title: "Pasalku.ai - Asisten Informasi Hukum Berbasis AI",
