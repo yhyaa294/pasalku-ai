@@ -4,7 +4,9 @@ sqlalchemy
 python-jose[cryptography]
 passlib[bcrypt]
 python-dotenv
-byteplus-python-sdk
+byteplus-python-sdk-v2
 pydantic
 pydantic-settings
 email-validator
+psycopg2-binary
+stripe

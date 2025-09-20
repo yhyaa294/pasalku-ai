@@ -1,24 +1,42 @@
-from fastapi import FastAPI, Depends, HTTPException, status
+from typing import Optional
+from fastapi.middleware.cors import CORSMiddleware
 from sqlalchemy.orm import Session
 
 from fastapi.security import OAuth2PasswordBearer, OAuth2PasswordRequestForm
-from jose import JWTError
+from jose import JWTError, jwt
 
 oauth2_scheme = OAuth2PasswordBearer(tokenUrl="login")
 
 from . import crud, models, schemas
-from .core import security
-from .services import ai_agent
+from .core import config
+from .core.config import settings
+from .services import ai_agent, stripe_service
 from .database import engine, get_db
+from datetime import datetime
 
-# This line creates the database tables if they don't exist
-models.Base.metadata.create_all(bind=engine)
-
-app = FastAPI(
-    title="Pasalku.ai Backend",
-    description="API for Pasalku.ai, providing legal information through an AI agent.",
-    version="1.0.0",
+# Configure logging
+logging.basicConfig(
+    level=logging.INFO,
+    format='%(asctime)s - %(name)s - %(levelname)s - %(message)s'
 )
+
+# Add CORS middleware
+app.add_middleware(
+    CORSMiddleware,
+    allow_origins=["http://localhost:3000", "https://pasalku-ai.vercel.app"],  # Add your frontend URL
+    allow_credentials=True,
+    allow_methods=["*"],
+    allow_headers=["*"],
+)
+
+# Add request logging middleware
+@app.middleware("http")
+async def log_requests(request: Request, call_next):
+    start_time = datetime.now()
+    response = await call_next(request)
+    process_time = (datetime.now() - start_time).total_seconds()
+    logger.info(f"{request.method} {request.url.path} - {response.status_code} - {process_time:.4f}s")
+    return response
 
 
 @app.post("/register", response_model=schemas.User, status_code=status.HTTP_201_CREATED, tags=["Authentication"])
@@ -52,27 +70,36 @@ def login_for_access_token(db: Session = Depends(get_db), form_data: OAuth2Passw
     return {"access_token": access_token, "token_type": "bearer"}
 
 
+def decode_token(token: str) -> Optional[schemas.TokenData]:
+    """
+    Decode JWT token and return token data.
+    """
+    try:
+        payload = jwt.decode(token, settings.SECRET_KEY, algorithms=[settings.ALGORITHM])
+        email: str = payload.get("sub")
+        if email is None:
+            return None
+        return schemas.TokenData(email=email)
+    except JWTError:
+        return None
+
 async def get_current_user(token: str = Depends(oauth2_scheme), db: Session = Depends(get_db)):
+    """
+    Get current authenticated user from JWT token.
+    """
     credentials_exception = HTTPException(
         status_code=status.HTTP_401_UNAUTHORIZED,
         detail="Could not validate credentials",
         headers={"WWW-Authenticate": "Bearer"},
     )
-    try:
-        payload = jwt.decode(token, security.SECRET_KEY, algorithms=[security.ALGORITHM])
-        email: str = payload.get("sub")
-        if email is None:
-            raise credentials_exception
-        token_data = schemas.TokenData(email=email)
-    except JWTError:
+    token_data = decode_token(token)
+    if token_data is None:
         raise credentials_exception
     user = crud.get_user_by_email(db, email=token_data.email)
     if user is None:
         raise credentials_exception
     return user
 
-
-@app.get("/users/me", response_model=schemas.User, tags=["Users"])
 async def read_users_me(current_user: models.User = Depends(get_current_user)):
     """Fetch the current logged in user's data."""
     return current_user
@@ -80,7 +107,7 @@ async def read_users_me(current_user: models.User = Depends(get_current_user)):
 
 @app.post("/chat", response_model=schemas.ChatResponse, tags=["AI Chat"])
 async def chat_with_ai(
-    request: schemas.ChatRequest, 
+    request: schemas.ChatRequest,
     current_user: models.User = Depends(get_current_user)
 ):
     """
@@ -89,10 +116,44 @@ async def chat_with_ai(
     - Takes a user query and returns a structured AI response.
     """
     try:
-        response = ai_agent.get_ai_response(request.query)
+        # Validate input
+        if not request.query or len(request.query.strip()) < 10:
+            raise HTTPException(
+                status_code=status.HTTP_400_BAD_REQUEST,
+                detail="Query must be at least 10 characters long"
+            )
+
+        response = await ai_agent.get_ai_response(request.query)
         return response
+    except HTTPException:
+        raise
     except Exception as e:
-        raise HTTPException(status_code=status.HTTP_503_SERVICE_UNAVAILABLE, detail=str(e))
+        logger.error(f"Error in chat endpoint: {str(e)}")
+        raise HTTPException(
+            status_code=status.HTTP_503_SERVICE_UNAVAILABLE,
+            detail="AI service temporarily unavailable. Please try again later."
+        )
+
+
+@app.post("/create-checkout-session", tags=["Billing"])
+async def create_checkout_session_endpoint(current_user: models.User = Depends(get_current_user)):
+    """
+    Creates a Stripe checkout session for the current user to subscribe.
+    """
+    try:
+        checkout_session = stripe_service.create_checkout_session(
+            user_email=current_user.email,
+            price_id=settings.STRIPE_PRICE_ID
+        )
+        return {"checkout_url": checkout_session.url}
+    except HTTPException:
+        raise
+    except Exception as e:
+        logger.error(f"Error creating checkout session: {str(e)}")
+        raise HTTPException(
+            status_code=status.HTTP_500_INTERNAL_SERVER_ERROR,
+            detail="Failed to create checkout session. Please try again."
+        )
 
 
 @app.get("/", tags=["Root"])
