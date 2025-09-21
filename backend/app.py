@@ -57,11 +57,11 @@ async def startup_event():
     """Aksi yang dijalankan saat aplikasi startup"""
     logger.info("Starting up Pasalku AI Backend...")
     
-    # Inisialisasi database
-    from database import init_db
-    init_db()
+    # Inisialisasi database - commented out temporarily due to connection issues
+    # from database import init_db
+    # init_db()
     
-    logger.info("Application startup complete")
+    logger.info("Application startup complete (database initialization skipped)")
 
 # Event handler untuk shutdown
 @app.on_event("shutdown")
