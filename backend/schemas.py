@@ -17,6 +17,11 @@ class User(UserBase):
     class Config:
         from_attributes = True # formerly orm_mode
 
+# Properties to receive via API on update
+class UserUpdate(BaseModel):
+    email: EmailStr | None = None
+    password: str | None = None
+
 # Properties for token
 class Token(BaseModel):
     access_token: str
@@ -33,3 +38,13 @@ class ChatResponse(BaseModel):
     answer: str
     citations: list[str]
     disclaimer: str
+
+class ChatHistory(BaseModel):
+    id: int
+    user_id: int
+    query: str
+    response: str
+    timestamp: str
+    
+    class Config:
+        from_attributes = True

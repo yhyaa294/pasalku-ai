@@ -3,11 +3,10 @@
   "version": "0.1.0",
   "private": true,
   "scripts": {
-    "dev": "next dev",
+    "dev": "next dev -H 0.0.0.0 -p 5000",
     "build": "next build",
     "start": "next start",
-    "lint": "next lint",
-    "postinstall": "prisma generate"
+    "lint": "next lint"
   },
   "dependencies": {
     "@radix-ui/react-accordion": "^1.2.2",
@@ -66,7 +65,6 @@
     "vaul": "^0.9.9",
     "zod": "3.25.67"
   },
-  "peerDependencies": {},
   "devDependencies": {
     "@hookform/resolvers": "^3.10.0",
     "@tailwindcss/postcss": "^4.1.9",
