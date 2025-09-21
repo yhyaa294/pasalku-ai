@@ -345,3 +345,4 @@ Silakan ajukan pertanyaan Anda tentang hukum Indonesia.`,
       </div>
     </div>
   );
+}
