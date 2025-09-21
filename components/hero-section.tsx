@@ -30,17 +30,17 @@ export const HeroSection: FC<HeroSectionProps> = ({ onGetStarted }) => {
               Revolusi
             </span>
             <br />
-            <span className="text-foreground animate-slide-in-right">Konsultasi Hukum</span>
+            <span className="text-gray-900 font-black animate-slide-in-right">Konsultasi Hukum</span>
             <br />
             <span className="bg-gradient-to-r from-accent via-primary to-secondary bg-clip-text text-transparent animate-text-shimmer">
               dengan AI
             </span>
           </h1>
 
-          <p className="text-lg md:text-2xl lg:text-3xl text-muted-foreground max-w-4xl mx-auto leading-relaxed animate-slide-in-bottom">
+          <p className="text-lg md:text-2xl lg:text-3xl text-gray-600 max-w-4xl mx-auto leading-relaxed animate-slide-in-bottom">
             Dapatkan analisis hukum yang mendalam, akurat, dan mudah dipahami dalam hitungan detik.
-            <span className="text-primary font-bold animate-text-shimmer"> Teknologi AI terdepan</span>
-            yang telah dipercaya oleh ribuan profesional hukum dan masyarakat Indonesia.
+            <span className="text-blue-600 font-bold animate-text-shimmer"> Teknologi AI terdepan</span>
+            yang dirancang khusus untuk kebutuhan konsultasi hukum di Indonesia.
           </p>
 
           <div className="flex flex-col sm:flex-row gap-4 justify-center items-center animate-scale-in">

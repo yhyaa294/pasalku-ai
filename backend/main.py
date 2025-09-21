@@ -1,18 +1,15 @@
 from typing import Optional
 from fastapi.middleware.cors import CORSMiddleware
 from sqlalchemy.orm import Session
-
 from fastapi.security import OAuth2PasswordBearer, OAuth2PasswordRequestForm
 from jose import JWTError, jwt
-
-oauth2_scheme = OAuth2PasswordBearer(tokenUrl="login")
-
 from . import crud, models, schemas
 from .core import config
 from .core.config import settings
-from .services import ai_agent, stripe_service
+from .services import ai_agent, stripe_service, ai_service
 from .database import engine, get_db
 from datetime import datetime
+from .ai_service import byteplus_service
 
 # Configure logging
 logging.basicConfig(
@@ -123,7 +120,8 @@ async def chat_with_ai(
                 detail="Query must be at least 10 characters long"
             )
 
-        response = await ai_agent.get_ai_response(request.query)
+        # Get AI response from BytePlus
+        response = await byteplus_service.get_legal_response(request.query)
         return response
     except HTTPException:
         raise
@@ -137,9 +135,7 @@ async def chat_with_ai(
 
 @app.post("/create-checkout-session", tags=["Billing"])
 async def create_checkout_session_endpoint(current_user: models.User = Depends(get_current_user)):
-    """
-    Creates a Stripe checkout session for the current user to subscribe.
-    """
+    
     try:
         checkout_session = stripe_service.create_checkout_session(
             user_email=current_user.email,
@@ -156,7 +152,14 @@ async def create_checkout_session_endpoint(current_user: models.User = Depends(g
         )
 
 
-@app.get("/", tags=["Root"])
-async def read_root():
-    """A simple endpoint to check if the API is running."""
-    return {"message": "Welcome to Pasalku.ai Backend!"}
+@app.get("/test-byteplus", tags=["AI Test"])
+async def test_byteplus_connection():
+    """Test BytePlus API connection"""
+    try:
+        is_connected = byteplus_service.test_connection()
+        if is_connected:
+            return {"status": "success", "message": "BytePlus API connection successful"}
+        else:
+            return {"status": "error", "message": "BytePlus API connection failed"}
+    except Exception as e:
+        return {"status": "error", "message": f"BytePlus API error: {str(e)}"}
