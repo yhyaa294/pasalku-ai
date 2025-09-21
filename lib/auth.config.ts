@@ -1,0 +1,24 @@
+import { NextAuth } from "next-auth";
+import { authConfig } from "./auth.config";
+
+export const { auth, signIn, signOut } = NextAuth(authConfig);
+
+import type { NextAuthConfig } from "next-auth";
+
+export const authConfig = {
+  providers: [], // Tambahkan provider autentikasi di sini
+  callbacks: {
+    authorized({ auth, request: { nextUrl } }) {
+      const isLoggedIn = !!auth?.user;
+      const isOnDashboard = nextUrl.pathname.startsWith('/dashboard');
+      
+      if (isOnDashboard) {
+        if (isLoggedIn) return true;
+        return false; // Redirect ke halaman login jika belum login
+      } else if (isLoggedIn) {
+        return Response.redirect(new URL('/dashboard', nextUrl));
+      }
+      return true;
+    },
+  },
+} satisfies NextAuthConfig;
