@@ -1,39 +1,12 @@
-from typing import Optional
-from fastapi.middleware.cors import CORSMiddleware
-from sqlalchemy.orm import Session
-from fastapi.security import OAuth2PasswordBearer, OAuth2PasswordRequestForm
-from jose import JWTError, jwt
-from . import crud, models, schemas
-from .core import config
-from .core.config import settings
-from .services import ai_agent, stripe_service, ai_service
-from .database import engine, get_db
-from datetime import datetime
-from .ai_service import byteplus_service
+"""
+File utama untuk menjalankan aplikasi FastAPI.
+"""
+import uvicorn
 
-# Configure logging
-logging.basicConfig(
-    level=logging.INFO,
-    format='%(asctime)s - %(name)s - %(levelname)s - %(message)s'
-)
-
-# Add CORS middleware
-app.add_middleware(
-    CORSMiddleware,
-    allow_origins=["http://localhost:3000", "https://pasalku-ai.vercel.app"],  # Add your frontend URL
-    allow_credentials=True,
-    allow_methods=["*"],
-    allow_headers=["*"],
-)
-
-# Add request logging middleware
-@app.middleware("http")
-async def log_requests(request: Request, call_next):
-    start_time = datetime.now()
-    response = await call_next(request)
-    process_time = (datetime.now() - start_time).total_seconds()
-    logger.info(f"{request.method} {request.url.path} - {response.status_code} - {process_time:.4f}s")
-    return response
+if __name__ == "__main__":
+    import os
+    port = int(os.getenv("PORT", 8000))
+    uvicorn.run("app:app", host="0.0.0.0", port=port, reload=True)
 
 
 @app.post("/register", response_model=schemas.User, status_code=status.HTTP_201_CREATED, tags=["Authentication"])
