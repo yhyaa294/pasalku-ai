@@ -1,5 +1,5 @@
 from pydantic import BaseModel, EmailStr
-from .models import UserRole
+from models import UserRole
 
 # Shared properties
 class UserBase(BaseModel):

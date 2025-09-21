@@ -54,10 +54,10 @@ def get_db():
         db.close()
 
 def init_db():
-    ""
+    """
     Initialize the database by creating all tables.
     This should be called during application startup.
-    ""
+    """
     try:
         Base.metadata.create_all(bind=engine)
         logger.info("Database tables created successfully")

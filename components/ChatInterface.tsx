@@ -1,6 +1,6 @@
 'use client';
 
-import { useState, useRef, useEffect } from 'react';
+import React, { useState, useRef, useEffect } from 'react';
 import { Send, Loader2, Paperclip } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
@@ -8,9 +8,19 @@ import { ScrollArea } from '@/components/ui/scroll-area';
 import { MessageItem } from './chat';
 import { ErrorBoundary } from './ErrorBoundary';
 import { ChatSkeleton } from './chat/ChatSkeleton';
-import { Suspense } from 'react';
-import { Message } from '../src/types/chat';
-import React from 'react';
+import { MessageStatus, MessageRole } from '../src/types/chat';
+
+interface ChatMessage {
+  id: string;
+  content: string;
+  role: MessageRole | 'error';
+  timestamp: Date;
+  status: MessageStatus;
+  error?: string;
+  attachments?: File[];
+  // For compatibility with MessageItem component
+  attachmentsUrls?: string[];
+}
 
 interface ChatInterfaceProps {
   isAuthenticated?: boolean;
@@ -19,27 +29,28 @@ interface ChatInterfaceProps {
   onLoginRequired?: () => void;
 }
 
-export default function ChatInterface({ 
+const quickResponses = [
+  'Apa saja syarat membuat surat perjanjian yang sah?',
+  'Bagaimana prosedur pengajuan gugatan perdata?',
+  'Apa perbedaan antara KUHP dan KUHPerdata?',
+  'Bagaimana cara mengajukan banding di pengadilan?',
+  'Apa saja hak dan kewajiban dalam kontrak kerja?',
+  'Bagaimana cara mengurus sertifikat tanah?'
+];
+
+const ChatInterface: React.FC<ChatInterfaceProps> = ({
   isAuthenticated = true, 
   userRole = 'public',
   onClose,
   onLoginRequired 
-}: ChatInterfaceProps) {
-  const [messages, setMessages] = useState<Message[]>([]);
+}) => {
+  const [messages, setMessages] = useState<ChatMessage[]>([]);
   const [input, setInput] = useState('');
   const [isLoading, setIsLoading] = useState(false);
   const [isTyping, setIsTyping] = useState(false);
   const [attachments, setAttachments] = useState<File[]>([]);
   const fileInputRef = useRef<HTMLInputElement>(null);
   const messagesEndRef = useRef<HTMLDivElement>(null);
-  const [quickResponses] = useState([
-    'Apa saja syarat membuat surat perjanjian yang sah?',
-    'Bagaimana prosedur pengajuan gugatan perdata?',
-    'Apa perbedaan antara KUHP dan KUHPerdata?',
-    'Bagaimana cara mengajukan banding di pengadilan?',
-    'Apa saja hak dan kewajiban dalam kontrak kerja?',
-    'Bagaimana cara mengurus sertifikat tanah?'
-  ]);
 
   // Auto-scroll to bottom when messages change or when typing indicator appears
   useEffect(() => {
@@ -58,35 +69,24 @@ export default function ChatInterface({
     }
   }, [isLoading]);
 
-  const removeAttachment = (index: number) => {
+  const removeAttachment = (index: number): void => {
     setAttachments(prev => prev.filter((_, i) => i !== index));
   };
 
-  const handleFileChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+  const handleFileChange = (e: React.ChangeEvent<HTMLInputElement>): void => {
     if (e.target.files && e.target.files.length > 0) {
       const newFiles = Array.from(e.target.files);
       setAttachments(prev => [...prev, ...newFiles]);
-
-      // Reset file input
-      if (fileInputRef.current) {
-        fileInputRef.current.value = '';
-      }
+      e.target.value = ''; // Reset input value
     }
   };
 
-  const handleRetryMessage = async (messageId: string) => {
+  const handleRetryMessage = async (messageId: string): Promise<void> => {
     const messageToRetry = messages.find(m => m.id === messageId);
-    if (!messageToRetry) return;
+    if (!messageToRetry || isLoading) return;
 
-    if (isLoading) return;
-
-    // Update status message menjadi 'sending'
     setMessages(prev =>
-      prev.map(m =>
-        m.id === messageId
-          ? { ...m, status: 'sending' }
-          : m
-      )
+      prev.map(m => (m.id === messageId ? { ...m, status: 'sending' } : m))
     );
 
     setIsLoading(true);
@@ -141,30 +141,28 @@ export default function ChatInterface({
     }
   };
 
-  const handleSubmit = async (e: React.FormEvent) => {
+  const handleSubmit = async (e: React.FormEvent<HTMLFormElement>): Promise<void> => {
     e.preventDefault();
     if ((!input.trim() && attachments.length === 0) || isLoading) return;
 
-    // Periksa autentikasi
     if (!isAuthenticated) {
-      if (onLoginRequired) onLoginRequired();
+      onLoginRequired?.();
       return;
     }
 
-    // Buat pesan dengan status 'sending'
-    const userMessage: Message = {
+    const userMessage: ChatMessage = {
       id: Date.now().toString(),
       content: input,
       role: 'user',
       timestamp: new Date(),
-      status: 'sending'
+      status: 'sending',
+      attachments: [...attachments]
     };
 
     setMessages(prev => [...prev, userMessage]);
     setInput('');
     setIsLoading(true);
     
-    // Reset file input dan hapus lampiran
     if (fileInputRef.current) {
       fileInputRef.current.value = '';
     }
@@ -203,16 +201,17 @@ export default function ChatInterface({
       // Hapus lampiran setelah berhasil dikirim
       setAttachments([]);
 
-      // Tambahkan pesan balasan dari AI
-      const botMessage: Message = {
+      // Add the response message
+      const botMessage: ChatMessage = {
         id: `ai-${Date.now()}`,
         content: data.response || 'Maaf, terjadi kesalahan. Silakan coba lagi.',
         role: 'assistant',
         timestamp: new Date(),
-        status: 'sent'
+        status: 'sent',
+        attachmentsUrls: data.attachments || []
       };
 
-      setMessages((prev) => [...prev, botMessage]);
+      setMessages(prev => [...prev, botMessage]);
     } catch (error) {
       console.error('Error:', error);
       // Update status pesan menjadi 'failed' jika gagal
@@ -227,178 +226,158 @@ export default function ChatInterface({
             : msg
         )
       );
-      
-      const errorMessage: Message = {
+      // Add error message
+      const errorMessage: ChatMessage = {
         id: `error-${Date.now()}`,
         content: 'Terjadi kesalahan. Silakan coba lagi nanti.',
         role: 'assistant',
         timestamp: new Date(),
-        status: 'failed'
+        status: 'failed',
+        error: 'Failed to send message'
       };
-      setMessages((prev) => [...prev, errorMessage]);
+      setMessages(prev => [...prev, errorMessage]);
     } finally {
       setIsLoading(false);
     }
   };
 
   return (
-    <div className="flex flex-col h-[calc(100vh-200px)] max-w-3xl mx-auto bg-white rounded-lg shadow-lg overflow-hidden">
-      {/* Chat Header */}
-      <div className="bg-gradient-to-r from-blue-900 via-purple-900 to-indigo-900 text-white p-4 flex justify-between items-center">
-        <div>
-          <h2 className="text-xl font-bold">Pasalku.ai</h2>
-          <p className="text-sm opacity-90">
-            Konsultasi Hukum Profesional
-          </p>
-          <p className="text-xs opacity-75 mt-1">
-            {isAuthenticated
-              ? `Halo, Muhammad Syarifuddin Yahya!`
-              : 'Silakan login untuk konsultasi'}
-          </p>
+    <div className="flex flex-col h-screen bg-gray-50">
+      {/* Header */}
+      <div className="bg-blue-600 text-white p-4">
+        <div className="flex justify-between items-center">
+          <h1 className="text-xl font-bold">Pasalku AI</h1>
+          {onClose && (
+            <button 
+              onClick={onClose}
+              className="text-white hover:text-gray-200"
+              aria-label="Close chat"
+            >
+              ✕
+            </button>
+          )}
         </div>
-        {onClose && (
-          <button
-            onClick={onClose}
-            className="text-white hover:text-gray-200 p-1 rounded-full hover:bg-white/10 transition-colors"
-            aria-label="Tutup Chat"
-          >
-            ✕
-          </button>
-        )}
+      </div>
 
-      {/* Messages Area */}
-      <ScrollArea className="flex-1 p-4 space-y-4 overflow-y-auto">
-        {/* Quick Responses */}
+      {/* Messages */}
+      <div className="flex-1 overflow-y-auto p-4 space-y-4">
         {messages.length === 0 && !isLoading && (
-          <div className="grid grid-cols-2 gap-2 mb-4">
+          <div className="grid grid-cols-1 md:grid-cols-2 gap-3 mt-4">
             {quickResponses.map((response, index) => (
               <button
                 key={index}
-                onClick={() => {
-                  setInput(response);
-                  // Fokus ke input setelah memilih quick response
-                  setTimeout(() => {
-                    const inputEl = document.querySelector('input[type="text"]') as HTMLInputElement;
-                    inputEl?.focus();
-                  }, 0);
-                }}
-                className="text-left p-3 bg-gray-100 hover:bg-gray-200 rounded-lg text-sm transition-colors"
+                onClick={() => setInput(response)}
+                className="p-3 bg-white rounded-lg shadow text-left hover:bg-gray-50 transition-colors"
+                type="button"
               >
                 {response}
               </button>
-            </div>
-          </div>
-        </div>
-      ) : (
-        <ErrorBoundary>
-          <Suspense fallback={<ChatSkeleton />}>
-            {messages.map((message) => (
-              <MessageItem
-                key={message.id}
-                message={message}
-                isCurrentUser={message.role === 'user'}
-                onRetry={handleRetryMessage}
-              />
             ))}
-          </Suspense>
-        </ErrorBoundary>
-      )}
-      <div ref={messagesEndRef} />
-    </ScrollArea>
+          </div>
+        )}
 
-    {/* Input Area */}
-    <form onSubmit={handleSubmit} className="border-t p-4 bg-gray-50">
-      {/* Attachments Preview */}
-      {attachments.length > 0 && (
-        <div className="mb-3 p-2 bg-gray-100 rounded-lg">
+        {messages.map((message) => {
+          const isCurrentUser = message.role === 'user';
+          return (
+            <MessageItem
+              key={message.id}
+              message={message}
+              isCurrentUser={isCurrentUser}
+              onRetry={handleRetryMessage}
+            />
+          );
+        })}
+
+        {isTyping && (
+          <div className="flex items-center space-x-2">
+            <div className="w-2 h-2 bg-gray-400 rounded-full animate-bounce"></div>
+            <div className="w-2 h-2 bg-gray-400 rounded-full animate-bounce" style={{ animationDelay: '0.2s' }}></div>
+            <div className="w-2 h-2 bg-gray-400 rounded-full animate-bounce" style={{ animationDelay: '0.4s' }}></div>
+          </div>
+        )}
+        <div ref={messagesEndRef} />
+      </div>
+
+      {/* Input Area */}
+      <div className="border-t border-gray-200 p-4 bg-white">
+        {attachments.length > 0 && (
           <div className="flex flex-wrap gap-2 mb-2">
             {attachments.map((file, index) => (
-              <div 
-                key={index}
-                className="flex items-center bg-white p-2 rounded border border-gray-200 text-xs"
-              >
-                <span className="mr-2">📎 {file.name}</span>
+              <div key={index} className="flex items-center bg-gray-100 rounded px-2 py-1 text-sm">
+                <span className="truncate max-w-xs">{file.name}</span>
                 <button
-                  type="button"
                   onClick={() => removeAttachment(index)}
-                  className="text-red-500 hover:text-red-700"
-                  aria-label="Hapus lampiran"
+                  className="ml-2 text-gray-500 hover:text-gray-700"
+                  type="button"
+                  aria-label={`Hapus ${file.name}`}
                 >
                   ×
                 </button>
               </div>
             ))}
           </div>
-          <button
-            type="button"
-            onClick={() => setAttachments([])}
-            className="text-xs text-red-500 hover:text-red-700"
-          >
-            Hapus Semua Lampiran
-          </button>
-        </div>
-      )}
-      
-      <div className="flex gap-2">
-        <div className="relative flex-1">
-          <Input
-            type="text"
-            value={input}
-            onChange={(e) => setInput(e.target.value)}
-            placeholder={isAuthenticated ? "Ketik pesan Anda..." : "Login untuk mengirim pesan"}
-            className="pr-10"
-            disabled={isLoading || !isAuthenticated}
-            onKeyDown={(e: React.KeyboardEvent<HTMLInputElement>) => {
-              if (e.key === 'Enter' && !e.shiftKey) {
-                e.preventDefault();
-                handleSubmit(e as unknown as React.FormEvent<HTMLFormElement>);
-              }
-            }}
-          />
-          <button
-            type="button"
-            className="absolute right-2 top-1/2 -translate-y-1/2 text-gray-500 hover:text-gray-700"
-            onClick={() => fileInputRef.current?.click()}
-            disabled={isLoading}
-            title="Lampirkan file"
-          >
-            <Paperclip className={`h-5 w-5 ${isLoading ? 'opacity-50' : ''}`} />
-          </button>
-          <input
-            ref={fileInputRef}
-            type="file"
-            className="hidden"
-            onChange={handleFileChange}
-            disabled={isLoading}
-            multiple
-          />
-        </div>
-        <Button 
-          type="submit" 
-          disabled={isLoading || (!input.trim() && attachments.length === 0)}
-          className="shrink-0 bg-gradient-to-r from-blue-600 to-purple-600 hover:from-blue-700 hover:to-purple-600"
-          aria-label="Kirim pesan"
-        >
-          {isLoading ? (
-            <Loader2 className="h-4 w-4 animate-spin" />
-          ) : (
-            <Send className="h-4 w-4" />
-          )}
-        </Button>
-      </div>
-
-      {/* Typing Indicator */}
-      {isTyping && (
-        <div className="flex items-center mt-2 text-xs text-gray-500">
-          <div className="flex space-x-1 px-3 py-1 bg-gray-100 rounded-full">
-            <div className="w-2 h-2 bg-gray-400 rounded-full animate-bounce" style={{ animationDelay: '0ms' }}></div>
-            <div className="w-2 h-2 bg-gray-400 rounded-full animate-bounce" style={{ animationDelay: '150ms' }}></div>
-            <div className="w-2 h-2 bg-gray-400 rounded-full animate-bounce" style={{ animationDelay: '300ms' }}></div>
+        )}
+        <form onSubmit={handleSubmit} className="flex gap-2">
+          <div className="relative flex-1">
+            <Input
+              type="text"
+              value={input}
+              onChange={(e: React.ChangeEvent<HTMLInputElement>) => setInput(e.target.value)}
+              placeholder="Tulis pesan Anda..."
+              className="pr-10"
+              disabled={isLoading}
+              aria-label="Ketik pesan Anda"
+              onKeyDown={(e) => {
+                if (e.key === 'Enter' && !e.shiftKey) {
+                  e.preventDefault();
+                  handleSubmit(e as unknown as React.FormEvent<HTMLFormElement>);
+                }
+              }}
+            />
+            <input
+              type="file"
+              ref={fileInputRef}
+              onChange={handleFileChange}
+              className="hidden"
+              multiple
+              aria-label="Unggah file"
+            />
+            <button
+              type="button"
+              onClick={() => fileInputRef.current?.click()}
+              className="absolute right-2 top-1/2 transform -translate-y-1/2 text-gray-500 hover:text-gray-700"
+              disabled={isLoading}
+              aria-label="Lampirkan file"
+            >
+              <Paperclip className={`w-5 h-5 ${isLoading ? 'opacity-50' : ''}`} />
+            </button>
           </div>
-          <span className="ml-2">AI sedang mengetik...</span>
-        </div>
-      )}
-    </form>
-  </div>
-);
+          <Button 
+            type="submit" 
+            disabled={isLoading || (!input.trim() && attachments.length === 0)}
+            className="shrink-0 bg-gradient-to-r from-blue-600 to-purple-600 hover:from-blue-700 hover:to-purple-600"
+            aria-label="Kirim pesan"
+          >
+            {isLoading ? (
+              <Loader2 className="h-4 w-4 animate-spin" />
+            ) : (
+              <Send className="h-4 w-4" />
+            )}
+          </Button>
+        </form>
+
+        {/* Typing Indicator */}
+        {isTyping && (
+          <div className="flex items-center mt-2 text-xs text-gray-500">
+            <div className="flex space-x-1 px-3 py-1 bg-gray-100 rounded-full">
+              <div className="w-2 h-2 bg-gray-400 rounded-full animate-bounce" style={{ animationDelay: '0ms' }}></div>
+              <div className="w-2 h-2 bg-gray-400 rounded-full animate-bounce" style={{ animationDelay: '150ms' }}></div>
+              <div className="w-2 h-2 bg-gray-400 rounded-full animate-bounce" style={{ animationDelay: '300ms' }}></div>
+            </div>
+            <span className="ml-2">AI sedang mengetik...</span>
+          </div>
+        )}
+      </div>
+    </div>
+  );
 }

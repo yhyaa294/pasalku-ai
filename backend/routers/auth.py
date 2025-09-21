@@ -7,10 +7,12 @@ from sqlalchemy.orm import Session
 from datetime import timedelta
 from typing import Any
 
-from .. import crud, schemas, models
-from ..core.security import create_access_token, get_current_user
-from ..core.config import settings
-from ..database import get_db
+import crud
+import schemas
+import models
+from core.security import create_access_token, get_current_user
+from core.config import settings
+from database import get_db
 
 router = APIRouter()
 

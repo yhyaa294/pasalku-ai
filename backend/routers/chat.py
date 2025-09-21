@@ -5,10 +5,12 @@ from fastapi import APIRouter, Depends, HTTPException, status
 from sqlalchemy.orm import Session
 from typing import List
 
-from .. import crud, schemas, models
-from ..core.security import get_current_user
-from ..database import get_db
-from ..ai_service import byteplus_service
+import crud
+import schemas
+import models
+from core.security import get_current_user
+from database import get_db
+import ai_service
 
 router = APIRouter()
 
@@ -30,7 +32,7 @@ async def chat_with_ai(
             )
 
         # Dapatkan respon dari layanan AI
-        response = await byteplus_service.get_legal_response(chat_request.query)
+        response = await ai_service.byteplus_service.get_legal_response(chat_request.query)
         
         # Simpan riwayat chat ke database
         chat_history = crud.create_chat_history(

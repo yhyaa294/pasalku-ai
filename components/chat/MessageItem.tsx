@@ -1,11 +1,18 @@
 'use client';
 
-import { Message } from '@/types/chat';
 import { format } from 'date-fns';
 import { id } from 'date-fns/locale';
 
 interface MessageItemProps {
-  message: Message;
+  message: {
+    id: string;
+    content: string;
+    role: 'user' | 'assistant' | 'error' | 'system';
+    timestamp: Date;
+    status?: 'sending' | 'sent' | 'failed';
+    error?: string;
+    attachmentsUrls?: string[];
+  };
   isCurrentUser: boolean;
   onRetry?: (messageId: string) => void;
 }
@@ -40,7 +47,7 @@ export function MessageItem({ message, isCurrentUser, onRetry }: MessageItemProp
 
         <p className="whitespace-pre-wrap break-words">{message.content}</p>
 
-        {message.attachments?.map((url, index) => (
+        {message.attachmentsUrls?.map((url: string, index: number) => (
           <div key={index} className="mt-2">
             <a
               href={url}
