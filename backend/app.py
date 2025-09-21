@@ -35,7 +35,7 @@ app.add_middleware(
 )
 
 # Import dan include router
-from .routers import auth, chat, users
+from routers import auth, chat, users
 
 app.include_router(auth.router, prefix="/api/auth", tags=["Authentication"])
 app.include_router(users.router, prefix="/api/users", tags=["Users"])
@@ -58,7 +58,7 @@ async def startup_event():
     logger.info("Starting up Pasalku AI Backend...")
     
     # Inisialisasi database
-    from .database import init_db
+    from database import init_db
     init_db()
     
     logger.info("Application startup complete")

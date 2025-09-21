@@ -7,15 +7,38 @@ const nextConfig = {
   poweredByHeader: false,
   trailingSlash: false,
   productionBrowserSourceMaps: true,
+  
+  // Environment Variables
+  env: {
+    NEXT_PUBLIC_API_URL: process.env.NEXT_PUBLIC_API_URL || 'http://localhost:8000',
+  },
+
+  // Experimental Features
   experimental: {
-    appDir: true,
-    serverActions: true,
+    serverActions: {
+      bodySizeLimit: '2mb',
+    },
   },
+
+  // Images Configuration
   images: {
-    domains: ['localhost', 'vercel.app', 'railway.app'],
-    unoptimized: true,
+    domains: [
+      'localhost',
+      'vercel.app',
+      'railway.app',
+      // Add other domains as needed
+    ],
+    unoptimized: process.env.NODE_ENV !== 'production',
   },
-  webpack: (config, { isServer }) => {
+
+  // Webpack Configuration
+  webpack: (config, { isServer, dev }) => {
+    // Add support for importing SVG as React components
+    config.module.rules.push({
+      test: /\.svg$/,
+      use: ['@svgr/webpack'],
+    });
+
     // Fixes npm packages that depend on `node:` protocol
     if (!isServer) {
       config.resolve.fallback = {
@@ -28,7 +51,50 @@ const nextConfig = {
       };
     }
 
+    // Add source map support in development
+    if (dev) {
+      config.devtool = 'source-map';
+    }
+
     return config;
+  },
+
+  // Custom Headers
+  async headers() {
+    return [
+      {
+        source: '/(.*)',
+        headers: [
+          {
+            key: 'X-Content-Type-Options',
+            value: 'nosniff',
+          },
+          {
+            key: 'X-Frame-Options',
+            value: 'DENY',
+          },
+          {
+            key: 'X-XSS-Protection',
+            value: '1; mode=block',
+          },
+        ],
+      },
+    ];
+  },
+
+  // Redirects and Rewrites
+  async redirects() {
+    return [];
+  },
+
+  // Rewrites for API proxy if needed
+  async rewrites() {
+    return [
+      {
+        source: '/api/:path*',
+        destination: `${process.env.NEXT_PUBLIC_API_URL}/:path*`,
+      },
+    ];
   },
 };
 

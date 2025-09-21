@@ -10,5 +10,8 @@
     "env": {
       "NEXT_TELEMETRY_DISABLED": "1"
     }
-  }
+  },
+  "buildCommand": "npm install --no-frozen-lockfile && npm run build",
+  "installCommand": "npm install --no-frozen-lockfile",
+  "framework": "nextjs"
 }
