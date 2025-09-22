@@ -19,19 +19,40 @@ export default function LoginPage() {
     setIsLoading(true);
     setError('');
 
-    // Simple authentication - just check if fields are filled
-    if (formData.email && formData.password) {
-      // Store user data in localStorage (simplified)
-      localStorage.setItem('user', JSON.stringify({
-        email: formData.email,
-        name: formData.email.split('@')[0],
-        isAuthenticated: true
-      }));
+    try {
+      // Call backend API for authentication
+      const response = await fetch('http://localhost:8001/api/auth/login', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/x-www-form-urlencoded',
+        },
+        body: new URLSearchParams({
+          username: formData.email,
+          password: formData.password,
+        }),
+      });
 
-      // Redirect to chat page
-      router.push('/chat');
-    } else {
-      setError('Silakan isi email dan password');
+      if (response.ok) {
+        const data = await response.json();
+
+        // Store JWT token and user data in localStorage
+        localStorage.setItem('token', data.access_token);
+        localStorage.setItem('user', JSON.stringify({
+          email: data.user.email,
+          name: data.user.email.split('@')[0],
+          role: data.user.role,
+          isAuthenticated: true
+        }));
+
+        // Redirect to chat page
+        router.push('/chat');
+      } else {
+        const errorData = await response.json();
+        setError(errorData.detail || 'Login gagal. Periksa email dan password Anda.');
+      }
+    } catch (error) {
+      setError('Terjadi kesalahan koneksi. Pastikan backend server berjalan.');
+      console.error('Login error:', error);
     }
 
     setIsLoading(false);

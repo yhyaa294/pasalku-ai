@@ -1,13 +1,4 @@
-// Sementara file auth sederhana untuk development
-// TODO: Ganti dengan implementasi autentikasi yang sebenarnya
+import NextAuth from "next-auth";
+import { authConfig } from "./auth.config";
 
-export async function auth() {
-  // Simulasi user yang sudah login
-  return {
-    user: {
-      id: 'user-123',
-      name: 'Test User',
-      email: 'test@example.com'
-    }
-  };
-}
+export const { handlers, auth, signIn, signOut } = NextAuth(authConfig);

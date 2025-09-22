@@ -113,7 +113,7 @@ Silakan ajukan pertanyaan Anda tentang hukum Indonesia.`,
           'Authorization': `Bearer ${token}`
         },
         body: JSON.stringify({
-          message: trimmedInput
+          query: trimmedInput
         }),
         signal: AbortSignal.timeout(30000) // Timeout 30 detik
       });
@@ -123,7 +123,7 @@ Silakan ajukan pertanyaan Anda tentang hukum Indonesia.`,
       }
 
       const data = await response.json();
-      
+
       // Hapus pesan loading dan tambahkan pesan balasan
       const botMessage: Message = {
         id: Date.now().toString(),
@@ -131,14 +131,14 @@ Silakan ajukan pertanyaan Anda tentang hukum Indonesia.`,
         content: `${data.answer}\n\n**Sumber Hukum:**\n${data.citations?.join('\n') || 'Tidak ada sumber yang tersedia'}\n\n**Disclaimer:** ${data.disclaimer || 'Informasi ini bersifat umum dan bukan nasihat hukum resmi.'}`,
         timestamp: new Date()
       };
-      
+
       setMessages(prev => [
         ...prev.filter(m => m.id !== loadingMessage.id),
         botMessage
       ]);
     } catch (error) {
         console.error('Error:', error);
-        
+
         // Hapus pesan loading dan tambahkan pesan error
         setMessages(prev => [
           ...prev.filter(m => m.id !== loadingMessage.id),
@@ -151,7 +151,7 @@ Silakan ajukan pertanyaan Anda tentang hukum Indonesia.`,
             timestamp: new Date()
           }
         ]);
-        
+
         // Jika error karena autentikasi, arahkan ke halaman login
         if (error instanceof Error && error.message.includes('401')) {
           onLoginRequired();
