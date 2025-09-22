@@ -18,11 +18,17 @@ export default function PasalkuLandingPage() {
 
   useEffect(() => {
     // Check authentication status
-    const token = localStorage.getItem('token');
-    if (token) {
-      setIsAuthenticated(true);
-      // In a real app, decode JWT to get user role
-      setUserRole('public');
+    const userData = localStorage.getItem('user');
+    if (userData) {
+      try {
+        const user = JSON.parse(userData);
+        if (user.isAuthenticated) {
+          setIsAuthenticated(true);
+          setUserRole('public');
+        }
+      } catch (error) {
+        console.error('Error parsing user data:', error);
+      }
     }
   }, []);
 

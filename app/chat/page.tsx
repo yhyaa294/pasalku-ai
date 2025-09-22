@@ -34,16 +34,19 @@ Silakan ajukan pertanyaan Anda tentang hukum Indonesia.`,
 
   useEffect(() => {
     // Check authentication
-    const token = localStorage.getItem('token');
-    if (!token) {
+    const userData = localStorage.getItem('user');
+    if (!userData) {
       router.push('/login');
       return;
     }
 
-    // Get user data from token (simplified)
     try {
-      // In a real app, decode JWT token to get user info
-      setUser({ email: 'user@example.com', name: 'Pengguna' });
+      const user = JSON.parse(userData);
+      if (user.isAuthenticated) {
+        setUser(user);
+      } else {
+        router.push('/login');
+      }
     } catch (error) {
       router.push('/login');
     }
@@ -70,7 +73,7 @@ Silakan ajukan pertanyaan Anda tentang hukum Indonesia.`,
     setIsLoading(true);
 
     try {
-      const response = await fetch('http://localhost:8000/chat', {
+      const response = await fetch('http://localhost:8000/api/chat/query', {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',
@@ -114,7 +117,7 @@ Silakan ajukan pertanyaan Anda tentang hukum Indonesia.`,
   };
 
   const handleLogout = () => {
-    localStorage.removeItem('token');
+    localStorage.removeItem('user');
     router.push('/login');
   };
 
