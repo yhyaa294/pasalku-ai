@@ -1,4 +1,4 @@
-import { FC } from 'react'
+ import { FC } from 'react'
 
 import { Button } from '@/components/ui/button'
 import { ArrowRight, CheckCircle, Shield, Clock, Award, Zap, Gavel } from 'lucide-react'
@@ -37,7 +37,7 @@ export const HeroSection: FC<HeroSectionProps> = ({ onGetStarted }) => {
             </span>
           </h1>
 
-          <p className="text-lg md:text-2xl lg:text-3xl text-gray-700 max-w-4xl mx-auto leading-relaxed animate-slide-in-bottom">
+          <p className="text-lg md:text-2xl lg:text-3xl text-muted-foreground max-w-4xl mx-auto leading-relaxed animate-slide-in-bottom">
             Dapatkan analisis hukum yang mendalam, akurat, dan mudah dipahami dalam hitungan detik.
             <span className="text-blue-600 font-bold animate-text-shimmer"> Teknologi AI terdepan</span>
             yang dirancang khusus untuk kebutuhan konsultasi hukum di Indonesia.
@@ -76,7 +76,7 @@ export const HeroSection: FC<HeroSectionProps> = ({ onGetStarted }) => {
                 <div className="w-8 h-8 md:w-12 md:h-12 wood-texture rounded-full flex items-center justify-center animate-cyber-pulse">
                   <item.icon className="w-4 h-4 md:w-6 md:h-6 text-white" />
                 </div>
-                <span className="text-xs md:text-sm text-gray-600 font-medium text-center">
+                <span className="text-xs md:text-sm text-muted-foreground font-medium text-center">
                   {item.text}
                 </span>
               </div>

@@ -46,7 +46,7 @@ export const PricingSection: FC<PricingSectionProps> = ({ className = '' }) => {
   ]
 
   return (
-    <section className={`py-16 md:py-32 px-4 scroll-animate ${className}`}>
+    <section id="pricing" className={`py-16 md:py-32 px-4 scroll-animate ${className}`}>
       <div className="max-w-7xl mx-auto">
         <div className="text-center mb-12 md:mb-20">
           <h2 className="text-4xl md:text-6xl font-black mb-6 md:mb-8 animate-text-shimmer">
