@@ -45,19 +45,20 @@ Silakan ajukan pertanyaan Anda tentang hukum Indonesia.`,
 
   useEffect(() => {
     // Check authentication
-    const token = localStorage.getItem('token');
-    if (!token) {
+    const userData = localStorage.getItem('user');
+    if (!userData) {
       onLoginRequired();
       return;
     }
 
-    // Get user data from token
     try {
-      // In a real app, decode JWT token to get user info
-      // This is just a mock implementation
-      const userData = { email: 'user@example.com', name: 'Pengguna' };
-      setUser(userData);
-      setError(null);
+      const user = JSON.parse(userData);
+      if (user.isAuthenticated) {
+        setUser(user);
+        setError(null);
+      } else {
+        onLoginRequired();
+      }
     } catch (error) {
       console.error('Error getting user data:', error);
       setError('Gagal memuat data pengguna. Silakan coba lagi.');
@@ -105,7 +106,7 @@ Silakan ajukan pertanyaan Anda tentang hukum Indonesia.`,
     setMessages(prev => [...prev, loadingMessage]);
 
     try {
-      const response = await fetch('http://localhost:8000/chat', {
+      const response = await fetch('http://localhost:8000/api/chat/query', {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',
@@ -168,7 +169,7 @@ Silakan ajukan pertanyaan Anda tentang hukum Indonesia.`,
   };
 
   const handleLogout = () => {
-    localStorage.removeItem('token');
+    localStorage.removeItem('user');
     setUser(null);
     onLoginRequired();
   };

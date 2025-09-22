@@ -19,31 +19,22 @@ export default function LoginPage() {
     setIsLoading(true);
     setError('');
 
-    try {
-      const response = await fetch('http://localhost:8000/login', {
-        method: 'POST',
-        headers: {
-          'Content-Type': 'application/json',
-        },
-        body: JSON.stringify({
-          email: formData.email,
-          password: formData.password
-        }),
-      });
+    // Simple authentication - just check if fields are filled
+    if (formData.email && formData.password) {
+      // Store user data in localStorage (simplified)
+      localStorage.setItem('user', JSON.stringify({
+        email: formData.email,
+        name: formData.email.split('@')[0],
+        isAuthenticated: true
+      }));
 
-      if (response.ok) {
-        const data = await response.json();
-        localStorage.setItem('token', data.token);
-        router.push('/chat');
-      } else {
-        const errorData = await response.json();
-        setError(errorData.detail || 'Email atau password salah');
-      }
-    } catch (error) {
-      setError('Tidak dapat terhubung ke server');
-    } finally {
-      setIsLoading(false);
+      // Redirect to chat page
+      router.push('/chat');
+    } else {
+      setError('Silakan isi email dan password');
     }
+
+    setIsLoading(false);
   };
 
   const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
