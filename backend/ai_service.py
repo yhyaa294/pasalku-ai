@@ -4,15 +4,16 @@ from typing import Dict, Any
 from fastapi import HTTPException
 import byteplussdkcore
 from byteplussdkarkruntime import Ark
+from core.config import settings
 
 logger = logging.getLogger(__name__)
 
 class BytePlusAIService:
     def __init__(self):
-        # Setup BytePlus configuration
-        self.api_key = os.getenv("ARK_API_KEY")
-        self.base_url = "https://ark.ap-southeast.bytepluses.com/api/v3"
-        self.model = "ep-20250830093230-swczp"  # Model yang disarankan user
+        # Setup BytePlus configuration from settings
+        self.api_key = settings.ARK_API_KEY
+        self.base_url = settings.ARK_BASE_URL
+        self.model = settings.ARK_MODEL_ID
 
         # Configure BytePlus SDK
         self._configure_sdk()
@@ -26,7 +27,7 @@ class BytePlusAIService:
             )
         else:
             self.client = None
-            logger.warning("ARK_API_KEY not found in environment variables")
+            logger.warning("ARK_API_KEY not found in settings")
 
     def _configure_sdk(self):
         """Configure BytePlus SDK"""

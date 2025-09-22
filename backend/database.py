@@ -39,17 +39,11 @@ SessionLocal = scoped_session(
 Base = declarative_base()
 Base.query = SessionLocal.query_property()
 
-@contextmanager
 def get_db():
-    """Provide a transactional scope around a series of operations."""
+    """Provide a database session."""
     db = SessionLocal()
     try:
         yield db
-        db.commit()
-    except SQLAlchemyError as e:
-        db.rollback()
-        logger.error(f"Database error: {str(e)}")
-        raise
     finally:
         db.close()
 

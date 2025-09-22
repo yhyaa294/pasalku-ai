@@ -43,20 +43,17 @@ async def chat_with_ai(
             # Jika BytePlus service gagal, gunakan mock service
             logger.warning(f"BytePlus service failed: {str(ai_error)}, using mock service")
             response = await mock_ai_service.get_legal_response(chat_request.query)
-        
+
         # Simpan riwayat chat ke database
         chat_history = crud.create_chat_history(
             db=db,
-            chat_history=schemas.ChatHistoryCreate(
-                user_id=current_user.id,
-                query=chat_request.query,
-                response=response["answer"],
-                source_documents=response["citations"]
-            )
+            user_id=current_user.id,
+            query=chat_request.query,
+            response=response["answer"]
         )
-        
+
         return response
-        
+
     except Exception as e:
         raise HTTPException(
             status_code=status.HTTP_500_INTERNAL_SERVER_ERROR,
