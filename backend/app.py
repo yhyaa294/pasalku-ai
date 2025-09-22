@@ -1,4 +1,4 @@
-"""
+ """
 File inisialisasi utama untuk aplikasi Pasalku AI Backend.
 """
 import os
@@ -35,11 +35,13 @@ app.add_middleware(
 )
 
 # Import dan include router
-from routers import auth, chat, users
+from routers.auth import router as auth_router
+from routers.chat import router as chat_router
+from routers.users import router as users_router
 
-app.include_router(auth.router, prefix="/api/auth", tags=["Authentication"])
-app.include_router(users.router, prefix="/api/users", tags=["Users"])
-app.include_router(chat.router, prefix="/api/chat", tags=["Chat"])
+app.include_router(auth_router, prefix="/api/auth", tags=["Authentication"])
+app.include_router(users_router, prefix="/api/users", tags=["Users"])
+app.include_router(chat_router, prefix="/api/chat", tags=["Chat"])
 
 # Health check endpoint
 @app.get("/health")
@@ -56,12 +58,17 @@ async def health_check():
 async def startup_event():
     """Aksi yang dijalankan saat aplikasi startup"""
     logger.info("Starting up Pasalku AI Backend...")
-    
-    # Inisialisasi database - commented out temporarily due to connection issues
-    # from database import init_db
-    # init_db()
-    
-    logger.info("Application startup complete (database initialization skipped)")
+
+    # Inisialisasi database
+    try:
+        from database import init_db
+        init_db()
+        logger.info("Database initialization successful")
+    except Exception as e:
+        logger.error(f"Database initialization failed: {str(e)}")
+        logger.warning("Continuing without database connection...")
+
+    logger.info("Application startup complete")
 
 # Event handler untuk shutdown
 @app.on_event("shutdown")
