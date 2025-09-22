@@ -6,6 +6,7 @@ import { StatisticsSection } from '@/components/statistics-section';
 import { FeaturesSection } from '@/components/features-section';
 import { HowItWorksSection } from '@/components/how-it-works-section';
 import { PricingSection } from '@/components/pricing-section';
+import { Footer } from '@/components/footer';
 import { useEffect, useState } from 'react';
 import Link from 'next/link';
 
@@ -71,28 +72,54 @@ export default function PasalkuLandingPage() {
   };
 
   return (
-    <div className="min-h-screen bg-gradient-to-b from-background to-slate-900 text-foreground overflow-x-hidden">
+    <div className="min-h-screen bg-gradient-to-b from-background to-background text-foreground overflow-x-hidden">
       {/* Animated background elements */}
       <div className="fixed inset-0 overflow-hidden -z-10">
-        <div className="absolute inset-0 bg-gradient-to-b from-background via-slate-900/50 to-background" />
+        <div className="absolute inset-0 bg-gradient-to-b from-background via-background/50 to-background" />
         <div className="absolute inset-0 bg-[url('data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHdpZHRoPSIxMDAlIiBoZWlnaHQ9IjEwMCUiPgo8ZGVmcz4KPHBhdHRlcm4gaWQ9ImdyaWQiIHdpZHRoPSI0MCIgaGVpZ2h0PSI0MCIgcGF0dGVyblVuaXRzPSJ1c2VyU3BhY2VPblVzZSIgcGF0dGVyblRyYW5zZm9ybT0icm90YXRlKDQ1KSI+CjxwYXRoIGQ9Ik0gNDAgMCBMIDAgMCAwIDQwIiBmaWxsPSJub25lIiBzdHJva2U9InJnYmEoMTAwLCAxMTUsIDE5NSwgMC4wOCkiIHN0cm9rZS13aWR0aD0iMSIvPgo8L3BhdHRlcm4+CjwvZGVmcz4KPHJlY3Qgd2lkdGg9IjEwMCUiIGhlaWdodD0iMTAwJSIgZmlsbD0idXJsKCNncmlkKSIgLz4KPC9zdmc+')] opacity-30" />
       </div>
 
       <div className="fixed inset-0 pointer-events-none z-0">
-        {[...Array(20)].map((_, i) => (
-          <div
-            key={i}
-            className="absolute text-emerald-400/20 text-2xl animate-float"
-            style={{
-              left: `${Math.random() * 100}%`,
-              top: `${Math.random() * 100}%`,
-              animationDelay: `${Math.random() * 10}s`,
-              animationDuration: `${15 + Math.random() * 20}s`,
-            }}
-          >
-            {["⚖", "⚡", "📜", "⚔️", "🔍", "📚", "🏛️", "⚖️"][Math.floor(Math.random() * 8)]}
-          </div>
-        ))}
+        {[...Array(20)].map((_, i) => {
+          const emojis = ["⚖", "⚡", "📜", "⚔️", "🔍", "📚", "🏛️", "⚖️"];
+          const positions = [
+            { left: "10%", top: "20%" },
+            { left: "80%", top: "15%" },
+            { left: "25%", top: "60%" },
+            { left: "70%", top: "40%" },
+            { left: "45%", top: "10%" },
+            { left: "15%", top: "80%" },
+            { left: "85%", top: "70%" },
+            { left: "60%", top: "25%" },
+            { left: "30%", top: "45%" },
+            { left: "75%", top: "85%" },
+            { left: "5%", top: "35%" },
+            { left: "90%", top: "55%" },
+            { left: "40%", top: "75%" },
+            { left: "65%", top: "5%" },
+            { left: "20%", top: "90%" },
+            { left: "95%", top: "30%" },
+            { left: "50%", top: "65%" },
+            { left: "35%", top: "15%" },
+            { left: "78%", top: "90%" },
+            { left: "12%", top: "50%" }
+          ];
+
+          return (
+            <div
+              key={i}
+              className="absolute text-emerald-400/20 text-2xl animate-float"
+              style={{
+                left: positions[i]?.left || `${Math.floor(i * 4.5) * 10}%`,
+                top: positions[i]?.top || `${Math.floor(i * 2.5) * 20}%`,
+                animationDelay: `${i * 0.5}s`,
+                animationDuration: `${15 + (i * 2)}s`,
+              }}
+            >
+              {emojis[i % emojis.length]}
+            </div>
+          );
+        })}
       </div>
 
       <Navigation
@@ -109,6 +136,8 @@ export default function PasalkuLandingPage() {
         <HowItWorksSection />
         <PricingSection />
       </main>
+
+      <Footer />
 
       {/* Chat Interface */}
       {showChat && (

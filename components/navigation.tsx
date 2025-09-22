@@ -30,22 +30,22 @@ export const Navigation: FC<NavigationProps> = ({
           </div>
         </div>
         <div className="hidden md:flex items-center gap-4 md:gap-6 text-xs md:text-sm font-medium">
-          <a href="#features" className="hover:text-primary transition-all duration-300 hover:scale-110">
+          <a href="#features" className="text-gray-700 hover:text-primary transition-all duration-300 hover:scale-110 font-semibold">
             Fitur
           </a>
-          <a href="#how-it-works" className="hover:text-primary transition-all duration-300 hover:scale-110">
+          <a href="#how-it-works" className="text-gray-700 hover:text-primary transition-all duration-300 hover:scale-110 font-semibold">
             Cara Kerja
           </a>
-          <a href="#pricing" className="hover:text-primary transition-all duration-300 hover:scale-110">
+          <a href="#pricing" className="text-gray-700 hover:text-primary transition-all duration-300 hover:scale-110 font-semibold">
             Harga
           </a>
-          <a href="#faq" className="hover:text-primary transition-all duration-300 hover:scale-110">
+          <a href="#faq" className="text-gray-700 hover:text-primary transition-all duration-300 hover:scale-110 font-semibold">
             FAQ
           </a>
-          <a href="#supported-areas" className="hover:text-primary transition-all duration-300 hover:scale-110">
+          <a href="#supported-areas" className="text-gray-700 hover:text-primary transition-all duration-300 hover:scale-110 font-semibold">
             Area Hukum
           </a>
-          <a href="#why-us" className="hover:text-primary transition-all duration-300 hover:scale-110">
+          <a href="#why-us" className="text-gray-700 hover:text-primary transition-all duration-300 hover:scale-110 font-semibold">
             Mengapa Kami
           </a>
         </div>

@@ -24,3 +24,16 @@ def create_user(db: Session, user: schemas.UserCreate):
     db.commit()
     db.refresh(db_user)
     return db_user
+
+def create_admin_user(db: Session, email: str, password: str):
+    """Create an admin user in the database."""
+    hashed_password = get_password_hash(password)
+    db_user = models.User(
+        email=email,
+        hashed_password=hashed_password,
+        role="admin"
+    )
+    db.add(db_user)
+    db.commit()
+    db.refresh(db_user)
+    return db_user

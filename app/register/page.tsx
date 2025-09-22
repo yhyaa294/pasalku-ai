@@ -1,4 +1,4 @@
-'use client';
+gaktifkan fitur lihat pwa menk'use client';
 
 import { useState } from 'react';
 import { useRouter } from 'next/navigation';
@@ -36,6 +36,7 @@ export default function RegisterPage() {
     }
 
     try {
+      const response = await fetch('http://localhost:8001/api/auth/register', {
       const response = await fetch('http://localhost:8000/register', {
         method: 'POST',
         headers: {

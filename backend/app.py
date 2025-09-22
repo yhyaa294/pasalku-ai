@@ -1,4 +1,4 @@
- """
+"""
 File inisialisasi utama untuk aplikasi Pasalku AI Backend.
 """
 import os
