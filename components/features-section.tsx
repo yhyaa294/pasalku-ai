@@ -52,13 +52,13 @@ export const FeaturesSection: FC<FeaturesSectionProps> = ({ className = '' }) =>
   ]
 
   return (
-    <section className={`py-16 md:py-32 px-4 scroll-animate ${className}`}>
+    <section className={`py-16 md:py-32 px-4 scroll-animate bg-gradient-to-b from-slate-100 via-gray-50 to-slate-200 ${className}`}>
       <div className="max-w-7xl mx-auto">
         <div className="text-center mb-12 md:mb-20">
           <h2 className="text-4xl md:text-6xl font-black mb-6 md:mb-8 animate-text-shimmer">
             Fitur <span className="text-primary">Revolusioner</span>
           </h2>
-          <p className="text-lg md:text-2xl text-muted-foreground max-w-4xl mx-auto leading-relaxed">
+          <p className="text-lg md:text-2xl text-muted-foreground max-w-4xl mx-auto leading-relaxed animate-slide-in-bottom">
             Teknologi AI terdepan yang menghadirkan solusi hukum komprehensif dengan akurasi tinggi dan kemudahan
             penggunaan yang luar biasa
           </p>

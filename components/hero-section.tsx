@@ -30,23 +30,26 @@ export const HeroSection: FC<HeroSectionProps> = ({ onGetStarted }) => {
               Revolusi
             </span>
             <br />
-            <span className="text-gray-900 font-black animate-slide-in-right">Konsultasi Hukum</span>
+            <span className="text-gray-900 font-black animate-slide-in-right drop-shadow-2xl bg-white/90 px-2 py-1 rounded-lg">Konsultasi Hukum</span>
             <br />
             <span className="bg-gradient-to-r from-accent via-primary to-secondary bg-clip-text text-transparent animate-text-shimmer">
               dengan AI
             </span>
           </h1>
 
-          <p className="text-lg md:text-2xl lg:text-3xl text-gray-600 max-w-4xl mx-auto leading-relaxed animate-slide-in-bottom">
+          <p className="text-lg md:text-2xl lg:text-3xl text-muted-foreground max-w-4xl mx-auto leading-relaxed animate-slide-in-bottom">
             Dapatkan analisis hukum yang mendalam, akurat, dan mudah dipahami dalam hitungan detik.
             <span className="text-blue-600 font-bold animate-text-shimmer"> Teknologi AI terdepan</span>
             yang dirancang khusus untuk kebutuhan konsultasi hukum di Indonesia.
           </p>
 
           <div className="flex flex-col sm:flex-row gap-4 justify-center items-center animate-scale-in">
-            <button className="px-8 py-4 bg-gradient-to-r from-amber-800 to-amber-700 text-white rounded-2xl font-bold text-lg flex items-center gap-3 shadow-lg hover:shadow-xl transition-all duration-300">
+            <button
+              onClick={onGetStarted}
+              className="px-8 py-4 bg-gradient-to-r from-amber-800 to-amber-700 text-white rounded-2xl font-bold text-lg flex items-center gap-3 shadow-lg hover:shadow-xl transition-all duration-300 hover:scale-105"
+            >
               <Zap className="w-5 h-5 md:w-6 md:h-6 animate-cyber-pulse" />
-              Mulai Analisis Premium Sekarang
+              Mulai Analisis
             </button>
             <Button
               variant="outline"

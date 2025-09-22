@@ -42,13 +42,13 @@ export const HowItWorksSection: FC<HowItWorksSectionProps> = ({ className = '' }
   ]
 
   return (
-    <section className={`py-16 md:py-32 px-4 bg-muted/20 scroll-animate ${className}`}>
+    <section className={`py-16 md:py-32 px-4 bg-gradient-to-b from-gray-100 via-slate-50 to-gray-200 scroll-animate ${className}`}>
       <div className="max-w-7xl mx-auto">
         <div className="text-center mb-12 md:mb-20">
           <h2 className="text-4xl md:text-6xl font-black mb-6 md:mb-8 animate-text-shimmer">
             Cara <span className="text-primary">Kerja</span> Platform
           </h2>
-          <p className="text-lg md:text-2xl text-muted-foreground max-w-4xl mx-auto leading-relaxed">
+          <p className="text-lg md:text-2xl text-muted-foreground max-w-4xl mx-auto leading-relaxed animate-slide-in-bottom">
             Proses sederhana namun powerful yang mengubah pertanyaan hukum kompleks menjadi jawaban yang jelas dan
             actionable dalam hitungan detik
           </p>
