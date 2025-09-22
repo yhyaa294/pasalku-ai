@@ -1,6 +1,9 @@
 from pydantic_settings import BaseSettings
 from dotenv import load_dotenv
-load_dotenv()  # Pastikan ini dipanggil sebelum memuat variabel lain
+import os
+
+# Load .env file from backend directory
+load_dotenv(os.path.join(os.path.dirname(__file__), '..', '.env'))
 
 class Settings(BaseSettings):
     # Database
