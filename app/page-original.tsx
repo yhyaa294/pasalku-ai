@@ -72,7 +72,7 @@ export default function PasalkuLandingPage() {
   };
 
   return (
-    <div className="min-h-screen bg-background text-foreground overflow-x-hidden">
+    <div className="min-h-screen bg-gradient-to-b from-background to-background text-foreground overflow-x-hidden">
       {/* Animated background elements */}
       <div className="fixed inset-0 overflow-hidden -z-10">
         <div className="absolute inset-0 bg-gradient-to-b from-background via-background/50 to-background" />
