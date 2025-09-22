@@ -1,5 +1,7 @@
 from pydantic import BaseModel, EmailStr
 from models import UserRole
+from typing import Optional
+from datetime import datetime
 
 # Shared properties
 class UserBase(BaseModel):
@@ -45,6 +47,12 @@ class ChatHistory(BaseModel):
     query: str
     response: str
     timestamp: str
-    
+
     class Config:
         from_attributes = True
+
+class ChatHistoryCreate(BaseModel):
+    user_id: int
+    query: str
+    response: str
+    source_documents: Optional[list[str]] = None
