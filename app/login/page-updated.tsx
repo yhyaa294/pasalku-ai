@@ -1,4 +1,4 @@
-'use client';
+ dan warna teks hitam ahar bisa di lihat ke'use client';
 
 import { useState } from 'react';
 import { useRouter } from 'next/navigation';
@@ -21,7 +21,7 @@ export default function LoginPage() {
 
     try {
       // Call backend API for authentication
-      const response = await fetch('http://localhost:8001/api/auth/login', {
+      const response = await fetch('http://localhost:8000/api/auth/login', {
         method: 'POST',
         headers: {
           'Content-Type': 'application/x-www-form-urlencoded',

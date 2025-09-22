@@ -1,9 +1,12 @@
 """
 Router untuk handle chat dengan AI
 """
+import logging
 from fastapi import APIRouter, Depends, HTTPException, status
 from sqlalchemy.orm import Session
 from typing import List
+
+logger = logging.getLogger(__name__)
 
 import crud
 import schemas
@@ -11,6 +14,7 @@ import models
 from core.security import get_current_user
 from database import get_db
 import ai_service
+from ai_service_mock import mock_ai_service
 
 router = APIRouter()
 
@@ -32,7 +36,13 @@ async def chat_with_ai(
             )
 
         # Dapatkan respon dari layanan AI
-        response = await ai_service.byteplus_service.get_legal_response(chat_request.query)
+        try:
+            # Coba menggunakan BytePlus service terlebih dahulu
+            response = await ai_service.byteplus_service.get_legal_response(chat_request.query)
+        except Exception as ai_error:
+            # Jika BytePlus service gagal, gunakan mock service
+            logger.warning(f"BytePlus service failed: {str(ai_error)}, using mock service")
+            response = await mock_ai_service.get_legal_response(chat_request.query)
         
         # Simpan riwayat chat ke database
         chat_history = crud.create_chat_history(
@@ -40,8 +50,8 @@ async def chat_with_ai(
             chat_history=schemas.ChatHistoryCreate(
                 user_id=current_user.id,
                 query=chat_request.query,
-                response=response.response,
-                source_documents=response.source_documents
+                response=response["answer"],
+                source_documents=response["citations"]
             )
         )
         
