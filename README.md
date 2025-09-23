@@ -8,6 +8,8 @@
 
 > **Pasalku.ai** adalah platform konsultasi hukum berbasis AI yang menyediakan informasi hukum Indonesia yang akurat dan terpercaya. Platform ini menggunakan teknologi AI untuk memberikan penjelasan hukum yang mudah dipahami dengan sitasi yang jelas.
 
+link prototype desain https://9000-firebase-pasalku-ai-finalgit-1758619384783.cluster-bg6uurscprhn6qxr6xwtrhvkf6.cloudworkstations.dev/?embedded=0&monospaceUid=152357&fbclid=PAZXh0bgNhZW0CMTEAAacA4mNmR1-VpJhQ6AwoMOMkzSuKPhg4wEFAnhoa39V9gayBIPSjXXcnaLmyCg_aem_jOyeRzRCCCkxNN0C75B4sQ
+
 ## 📋 Daftar Isi
 
 - [Fitur Utama](#fitur-utama)
