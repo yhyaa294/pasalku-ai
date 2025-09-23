@@ -19,12 +19,30 @@ def get_users(db: Session, skip: int = 0, limit: int = 100):
 
 def authenticate_user(db: Session, email: str, password: str):
     """Authenticate a user by email and password."""
-    user = get_user_by_email(db, email)
-    if not user:
+    try:
+        logger.info(f"Authenticating user: {email}")
+        
+        # Get user by email
+        user = get_user_by_email(db, email)
+        if not user:
+            logger.warning(f"User not found during authentication: {email}")
+            return False
+        
+        logger.info(f"User found: {user.email}")
+        
+        # Verify password
+        if not verify_password(password, user.hashed_password):
+            logger.warning(f"Password verification failed for: {email}")
+            return False
+        
+        logger.info(f"Authentication successful for: {email}")
+        return user
+        
+    except Exception as e:
+        logger.error(f"Error during authentication: {str(e)}")
+        import traceback
+        logger.error(f"Traceback: {traceback.format_exc()}")
         return False
-    if not verify_password(password, user.hashed_password):
-        return False
-    return user
 
 def create_user(db: Session, user: schemas.UserCreate):
     """Create a new user in the database."""

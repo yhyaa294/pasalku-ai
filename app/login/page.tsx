@@ -32,8 +32,12 @@ export default function LoginPage() {
         }),
       });
 
+      console.log('Login response status:', response.status);
+      console.log('Login response headers:', response.headers);
+
       if (response.ok) {
         const data = await response.json();
+        console.log('Login response data:', data);
 
         // Store JWT token and user data in localStorage
         localStorage.setItem('token', data.access_token);
@@ -47,12 +51,20 @@ export default function LoginPage() {
         // Redirect to chat page
         router.push('/chat');
       } else {
-        const errorData = await response.json();
-        setError(errorData.detail || 'Login gagal. Periksa email dan password Anda.');
+        let errorMessage = 'Login gagal. Periksa email dan password Anda.';
+        try {
+          const errorData = await response.json();
+          errorMessage = errorData.detail || errorMessage;
+          console.error('Login error data:', errorData);
+        } catch (parseError) {
+          console.error('Failed to parse error response:', parseError);
+          console.error('Raw error response:', await response.text());
+        }
+        setError(errorMessage);
       }
     } catch (error) {
-      setError('Terjadi kesalahan koneksi. Pastikan backend server berjalan.');
-      console.error('Login error:', error);
+      console.error('Login request failed:', error);
+      setError('Terjadi kesalahan koneksi. Pastikan backend server berjalan di port 8001.');
     }
 
     setIsLoading(false);
