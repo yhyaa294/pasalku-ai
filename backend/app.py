@@ -3,12 +3,13 @@ File inisialisasi utama untuk aplikasi Pasalku AI Backend.
 """
 import os
 import logging
+import traceback
 from fastapi import FastAPI
 from fastapi.middleware.cors import CORSMiddleware
 
 # Setup logging
 logging.basicConfig(
-    level=logging.INFO,
+    level=logging.DEBUG,
     format='%(asctime)s - %(name)s - %(levelname)s - %(message)s',
     handlers=[
         logging.StreamHandler()
@@ -26,13 +27,33 @@ app = FastAPI(
 )
 
 # Konfigurasi CORS
+allowed_origins = [
+    "http://localhost:5000",
+    "http://127.0.0.1:5000",
+    "http://localhost:3000",
+    "http://127.0.0.1:3000"
+]
+
 app.add_middleware(
     CORSMiddleware,
-    allow_origins=["*"],  # Di production, ganti dengan domain yang sesuai
+    allow_origins=allowed_origins,
     allow_credentials=True,
     allow_methods=["*"],
     allow_headers=["*"],
 )
+
+# Add exception handler for debugging
+@app.exception_handler(Exception)
+async def global_exception_handler(request, exc):
+    logger.error(f"Global exception handler caught: {exc}")
+    logger.error(f"Exception type: {type(exc).__name__}")
+    logger.error(f"Traceback: {traceback.format_exc()}")
+    
+    return {
+        "error": "Internal server error",
+        "detail": str(exc),
+        "type": type(exc).__name__
+    }
 
 # Import dan include router
 from routers.auth import router as auth_router
@@ -47,10 +68,22 @@ app.include_router(chat_router, prefix="/api/chat", tags=["Chat"])
 @app.get("/health")
 async def health_check():
     """Endpoint untuk mengecek status server"""
+    try:
+        # Test database connection
+        from database import SessionLocal
+        db = SessionLocal()
+        db.execute("SELECT 1")
+        db.close()
+        db_status = "connected"
+    except Exception as e:
+        db_status = f"error: {str(e)}"
+    
     return {
         "status": "healthy",
         "environment": os.getenv("ENVIRONMENT", "development"),
-        "message": "Pasalku AI API is running"
+        "message": "Pasalku AI API is running",
+        "database": db_status,
+        "port": os.getenv("PORT", "8001")
     }
 
 # Event handler untuk startup

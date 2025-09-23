@@ -1,5 +1,6 @@
 from datetime import datetime, timedelta, timezone
 from typing import Any, Union
+import logging
 
 from fastapi import Depends, HTTPException, status
 from fastapi.security import OAuth2PasswordBearer
@@ -8,6 +9,8 @@ from passlib.context import CryptContext
 from sqlalchemy.orm import Session
 
 from .config import settings
+
+logger = logging.getLogger(__name__)
 
 pwd_context = CryptContext(schemes=["bcrypt"], deprecated="auto")
 
@@ -20,23 +23,48 @@ oauth2_scheme = OAuth2PasswordBearer(tokenUrl="api/auth/login")
 def create_access_token(
     subject: Union[str, Any], expires_delta: timedelta = None
 ) -> str:
+    try:
+        logger.debug(f"Creating access token for subject: {subject}")
+        
     if expires_delta:
         expire = datetime.now(timezone.utc) + expires_delta
     else:
         expire = datetime.now(timezone.utc) + timedelta(
             minutes=settings.ACCESS_TOKEN_EXPIRE_MINUTES
         )
+        
     to_encode = {"exp": expire, "sub": str(subject)}
+        logger.debug(f"Token payload: {to_encode}")
+        
     encoded_jwt = jwt.encode(to_encode, settings.SECRET_KEY, algorithm=ALGORITHM)
+        logger.debug("Token created successfully")
     return encoded_jwt
+        
+    except Exception as e:
+        logger.error(f"Error creating access token: {str(e)}")
+        raise
 
 
 def verify_password(plain_password: str, hashed_password: str) -> bool:
-    return pwd_context.verify(plain_password, hashed_password)
+    try:
+        logger.debug("Verifying password...")
+        result = pwd_context.verify(plain_password, hashed_password)
+        logger.debug(f"Password verification result: {result}")
+        return result
+    except Exception as e:
+        logger.error(f"Error verifying password: {str(e)}")
+        return False
 
 
 def get_password_hash(password: str) -> str:
-    return pwd_context.hash(password)
+    try:
+        logger.debug("Hashing password...")
+        hashed = pwd_context.hash(password)
+        logger.debug("Password hashed successfully")
+        return hashed
+    except Exception as e:
+        logger.error(f"Error hashing password: {str(e)}")
+        raise
 
 
 def get_current_user(
