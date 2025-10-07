@@ -1,11 +1,8 @@
 """
 Package utama untuk aplikasi Pasalku AI Backend.
+Avoid importing heavy modules at package import time to keep submodule imports (e.g., backend.server) working.
 """
 
 __version__ = "0.1.0"
 
-# Ekspor modul utama
-from .app import app
-from .database import SessionLocal, engine
-
-__all__ = ["app", "SessionLocal", "engine"]
+__all__ = ["__version__"]
