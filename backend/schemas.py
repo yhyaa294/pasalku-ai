@@ -1,5 +1,5 @@
 from pydantic import BaseModel, EmailStr
-from models import UserRole
+from backend.models import UserRole
 from typing import Optional
 from datetime import datetime
 
