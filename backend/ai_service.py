@@ -8,6 +8,7 @@ from typing import Dict, Any, Optional
 from fastapi import HTTPException
 import json
 import asyncio
+import httpx
 
 logger = logging.getLogger(__name__)
 
@@ -19,30 +20,7 @@ class BytePlusArkService:
         self.model_id = os.getenv("ARK_MODEL_ID", "ep-20250830093230-swczp")
         self.region = os.getenv("ARK_REGION", "ap-southeast")
         
-        self.client = None
-        self._initialize_client()
-    
-    def _initialize_client(self):
-        """Initialize the BytePlus Ark client"""
-        if not self.api_key:
-            logger.warning("ARK_API_KEY not found in environment variables")
-            return
-        
-        try:
-            # Import BytePlus SDK
-            from byteplussdkarkruntime import Ark
-            
-            self.client = Ark(
-                api_key=self.api_key,
-                base_url=self.base_url,
-                region=self.region
-            )
-            logger.info("BytePlus Ark client initialized successfully")
-            
-        except ImportError as e:
-            logger.error(f"BytePlus SDK not available: {e}")
-        except Exception as e:
-            logger.error(f"Failed to initialize BytePlus client: {e}")
+        logger.info(f"Initializing BytePlus service with API key: {self.api_key[:10] if self.api_key else 'None'}...")
     
     async def get_legal_response(self, query: str, user_context: str = "") -> Dict[str, Any]:
         """
@@ -55,8 +33,8 @@ class BytePlusArkService:
         Returns:
             Dict containing answer, citations, and disclaimer
         """
-        if not self.client:
-            logger.warning("BytePlus client not available, using fallback response")
+        if not self.api_key:
+            logger.warning("ARK_API_KEY not available, using fallback response")
             return self._get_fallback_response(query)
         
         try:
@@ -77,60 +55,56 @@ Anda adalah asisten hukum AI profesional untuk masyarakat Indonesia bernama Pasa
 4. **BERIKAN ANALISIS OBJEKTIF** - Jelaskan berbagai perspektif hukum yang relevan
 5. **SELALU TAMBAHKAN DISCLAIMER** - Ingatkan bahwa ini bukan nasihat hukum resmi
 
-**STRUKTUR RESPON:**
-1. **Pengakuan Pertanyaan** - Terima dan pahami pertanyaan pengguna
-2. **Analisis Hukum** - Berikan analisis berdasarkan hukum Indonesia yang berlaku
-3. **Opsi & Pertimbangan** - Jelaskan opsi-opsi yang tersedia secara objektif
-4. **Sumber Hukum** - Cantumkan UU/Pasal/Yurisprudensi yang relevan
-5. **Disclaimer** - Selalu sertakan disclaimer bahwa ini informasi, bukan nasihat
-
-**FORMAT RESPONS:**
-Berikan respons dalam format JSON dengan struktur:
-{
-  "answer": "Jawaban lengkap dalam bahasa Indonesia",
-  "citations": ["Daftar sitasi hukum"],
-  "disclaimer": "Disclaimer standar"
-}
+Berikan jawaban dalam bahasa Indonesia yang profesional dan mudah dipahami.
 """
             
             user_message = f"Konteks Pengguna: {user_context}\n\nPertanyaan Hukum: {query}"
             
-            # Make API call to BytePlus Ark
-            completion = self.client.chat.completions.create(
-                model=self.model_id,
-                messages=[
+            # Prepare request payload for BytePlus Ark API
+            payload = {
+                "model": self.model_id,
+                "messages": [
                     {"role": "system", "content": system_prompt},
                     {"role": "user", "content": user_message}
                 ],
-                # Optimized parameters for legal consultation
-                max_tokens=2000,
-                temperature=0.3,  # More conservative for legal accuracy
-                top_p=0.9,
-                # Enable encryption for security
-                extra_headers={'x-is-encrypted': 'true'}
-            )
-            
-            response_content = completion.choices[0].message.content
-            
-            # Try to parse JSON response first
-            try:
-                structured_response = json.loads(response_content)
-                # Validate required keys
-                if all(key in structured_response for key in ['answer', 'citations', 'disclaimer']):
-                    return structured_response
-            except json.JSONDecodeError:
-                pass
-            
-            # Fallback: create structured response from plain text
-            return {
-                "answer": response_content,
-                "citations": self._extract_citations(response_content),
-                "disclaimer": "Informasi ini bersifat edukasi dan bukan merupakan nasihat hukum resmi. Pasalku.ai tidak bertanggung jawab atas penggunaan informasi ini untuk keputusan hukum. Untuk kasus spesifik, mohon berkonsultasi dengan advokat yang berkompeten."
+                "max_tokens": 2000,
+                "temperature": 0.3,
+                "top_p": 0.9
             }
+            
+            headers = {
+                "Content-Type": "application/json",
+                "Authorization": f"Bearer {self.api_key}",
+                "x-is-encrypted": "true"
+            }
+            
+            # Make HTTP request to BytePlus Ark API
+            async with httpx.AsyncClient(timeout=30.0) as client:
+                response = await client.post(
+                    f"{self.base_url}/chat/completions",
+                    json=payload,
+                    headers=headers
+                )
+                
+                if response.status_code == 200:
+                    data = response.json()
+                    ai_response = data.get("choices", [{}])[0].get("message", {}).get("content", "")
+                    
+                    if ai_response:
+                        return {
+                            "answer": ai_response,
+                            "citations": self._extract_citations(ai_response),
+                            "disclaimer": "Informasi ini bersifat edukasi dan bukan merupakan nasihat hukum resmi. Pasalku.ai tidak bertanggung jawab atas penggunaan informasi ini untuk keputusan hukum. Untuk kasus spesifik, mohon berkonsultasi dengan advokat yang berkompeten."
+                        }
+                    else:
+                        logger.error("Empty response from BytePlus API")
+                else:
+                    logger.error(f"BytePlus API error: {response.status_code} - {response.text}")
             
         except Exception as e:
             logger.error(f"Error calling BytePlus Ark API: {str(e)}")
-            return self._get_fallback_response(query)
+            
+        return self._get_fallback_response(query)
     
     def _extract_citations(self, text: str) -> list:
         """Extract legal citations from AI response text"""
