@@ -67,7 +67,7 @@ def verify_password(plain_password: str, hashed_password: str) -> bool:
         try:
             simple_hash = hashlib.sha256(plain_password.encode()).hexdigest()
             return simple_hash == hashed_password
-        except:
+        except Exception:
             return False
 
 
