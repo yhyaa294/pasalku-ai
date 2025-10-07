@@ -139,25 +139,40 @@ Berikan jawaban dalam bahasa Indonesia yang profesional dan mudah dipahami.
             "disclaimer": "Layanan AI sementara tidak tersedia. Untuk konsultasi hukum profesional, hubungi advokat yang berkompeten atau developer Pasalku.ai."
         }
     
-    def test_connection(self) -> bool:
+    async def test_connection(self) -> bool:
         """Test BytePlus Ark API connection"""
-        if not self.client:
+        if not self.api_key:
             return False
         
         try:
-            completion = self.client.chat.completions.create(
-                model=self.model_id,
-                messages=[
+            payload = {
+                "model": self.model_id,
+                "messages": [
                     {"role": "system", "content": "You are a test assistant."},
                     {"role": "user", "content": "Hello, test connection"}
                 ],
-                max_tokens=50,
-                temperature=0.1
-            )
+                "max_tokens": 50,
+                "temperature": 0.1
+            }
             
-            response = completion.choices[0].message.content
-            logger.info("BytePlus connection test successful")
-            return bool(response)
+            headers = {
+                "Content-Type": "application/json",
+                "Authorization": f"Bearer {self.api_key}"
+            }
+            
+            async with httpx.AsyncClient(timeout=10.0) as client:
+                response = await client.post(
+                    f"{self.base_url}/chat/completions",
+                    json=payload,
+                    headers=headers
+                )
+                
+                if response.status_code == 200:
+                    logger.info("BytePlus connection test successful")
+                    return True
+                else:
+                    logger.error(f"BytePlus connection test failed: {response.status_code}")
+                    return False
             
         except Exception as e:
             logger.error(f"BytePlus connection test failed: {str(e)}")
