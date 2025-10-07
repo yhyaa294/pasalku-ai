@@ -4,6 +4,9 @@ import schemas
 from core.security import get_password_hash, verify_password
 from typing import List, Optional
 from datetime import datetime
+import logging
+
+logger = logging.getLogger(__name__)
 
 def get_user_by_email(db: Session, email: str):
     """Fetch a single user by their email address."""
