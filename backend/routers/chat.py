@@ -89,7 +89,7 @@ async def chat_with_ai_form(
 
         # Simpan riwayat chat ke database
         try:
-            chat_history = crud.create_chat_history(
+            _ = crud.create_chat_history(
                 db=db,
                 user_id=current_user.id,
                 query=message,
