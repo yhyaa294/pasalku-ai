@@ -2,48 +2,43 @@ import os
 import asyncio
 import logging
 from datetime import datetime
-from typing import Optional, List, Dict, Any
+from typing import Dict, List, Any, Optional
 from uuid import uuid4, UUID
 
-from fastapi import FastAPI, HTTPException
+from fastapi import FastAPI, HTTPException, Depends, status, Request
 from fastapi.middleware.cors import CORSMiddleware
+from fastapi.security import OAuth2PasswordBearer
 
-# Optional MongoDB (async) for logging; operate gracefully if absent
-mongo_available = True
-try:
-    import motor.motor_asyncio
-    from pymongo.errors import PyMongoError
-except Exception:  # motor not available
-    mongo_available = False
-    motor = None
-    PyMongoError = Exception
 
-# BytePlus Ark SDK
-from byteplussdkarkruntime import Ark
+from backend.core.config import settings
+from backend.database import init_db, get_db, SessionLocal
+from backend.routers import auth_router, users_router, chat_router
+from backend.services.ark_service import ark_service
 
-# Existing project modules (use absolute package imports)
-from backend.database import init_db
-from backend.routers.auth import router as auth_router
-from backend.routers.users import router as users_router
-from backend.routers.chat import router as chat_router
 
-# ----- Logging -----
-logging.basicConfig(level=logging.INFO, format="%(asctime)s [%(levelname)s] %(name)s: %(message)s")
+logging.basicConfig(
+    level=logging.INFO,
+    format="%(asctime)s [%(levelname)s] %(name)s: %(message)s"
+)
 logger = logging.getLogger("pasalku-backend")
 
-# ----- Environment -----
-MONGO_URL = os.environ.get("MONGO_URL")
-ARK_API_KEY = os.environ.get("ARK_API_KEY")
-ARK_BASE_URL = os.environ.get("ARK_BASE_URL", "https://ark.ap-southeast.bytepluses.com/api/v3")
-ARK_MODEL_ID = os.environ.get("ARK_MODEL_ID", "ep-20250830093230-swczp")
-
-# Bind config per environment rules
-BIND_HOST = "0.0.0.0"
-BIND_PORT = 8001
+mongo_available = False
+mongo_client = None
+if settings.MONGO_URL:
+    try:
+        import motor.motor_asyncio
+        from pymongo.errors import PyMongoError
+        mongo_client = motor.motor_asyncio.AsyncIOMotorClient(settings.MONGO_URL)
+        mongo_db = mongo_client.get_default_database()
+        mongo_available = True
+        logger.info("MongoDB client initialized successfully")
+    except Exception as e:
+        logger.warning(f"MongoDB not available: {str(e)}")
+        mongo_available = False
 
 # ----- App -----
 app = FastAPI(
-    title="Pasalku.ai Backend",
+    title=settings.PROJECT_NAME,
     version="1.0.0",
     docs_url="/api/docs",
     redoc_url="/api/redoc",
@@ -53,183 +48,184 @@ app = FastAPI(
 # CORS: allow frontend ingress to call backend
 app.add_middleware(
     CORSMiddleware,
-    allow_origins=["*"],
+    allow_origins=settings.CORS_ORIGINS,
     allow_credentials=True,
     allow_methods=["*"],
-    allow_headers=["*"]
+    allow_headers=["*"],
 )
 
-# ----- Global state -----
-client: Optional["motor.motor_asyncio.AsyncIOMotorClient"] = None
-mongo_db = None
-ark_client: Optional[Ark] = None
+# ----- Event Handlers -----
 
-# ----- Startup/Shutdown -----
 @app.on_event("startup")
 async def on_startup():
-    global client, mongo_db, ark_client
-
-    # Initialize SQL database tables
+    """Initialize services on app startup."""
+    global mongo_available
+    
+    logger.info(f"Starting up {settings.PROJECT_NAME} in {settings.ENVIRONMENT} mode...")
+    
+    # Initialize database
     try:
-        init_db()
-        logger.info("SQL database initialized")
+        await init_db()
+        logger.info("Database initialized successfully")
     except Exception as e:
-        logger.warning(f"SQL database init warning: {e}")
-
-    # Try to connect MongoDB (optional)
-    if mongo_available and MONGO_URL:
+        logger.error(f"Failed to initialize database: {str(e)}")
+        raise
+    
+    # Initialize MongoDB if available
+    if mongo_available:
         try:
-            client = motor.motor_asyncio.AsyncIOMotorClient(MONGO_URL)
-            mongo_db = client.get_default_database() or client.get_database("app")
-            await client.admin.command("ping")
-            logger.info("Connected to MongoDB successfully")
+            # Test MongoDB connection
+            await mongo_client.server_info()
+            logger.info("MongoDB connection successful")
         except Exception as e:
-            logger.warning("MongoDB not available: %s", e)
-            client = None
-            mongo_db = None
+            logger.error(f"MongoDB connection failed: {str(e)}")
+            mongo_available = False
+    
+    # Initialize BytePlus Ark client
+    if ark_service.client is None:
+        logger.warning("BytePlus Ark client is not initialized. Check your ARK_API_KEY.")
     else:
-        logger.info("MongoDB logging disabled (driver or MONGO_URL missing)")
-
-    # Ark client
-    if not ARK_API_KEY:
-        logger.warning("ARK_API_KEY not set; /api/consult will return 503 until configured")
-    else:
-        try:
-            ark_client = Ark(api_key=ARK_API_KEY, base_url=ARK_BASE_URL)
-            logger.info("Initialized BytePlus Ark client")
-        except Exception as e:
-            logger.exception("Failed initializing Ark client: %s", e)
-            ark_client = None
-
+        logger.info("BytePlus Ark client initialized successfully")
 
 @app.on_event("shutdown")
 async def on_shutdown():
-    global client
-    if client:
-        client.close()
-        logger.info("MongoDB client closed")
-
+    """Clean up resources on app shutdown."""
+    logger.info("Shutting down Pasalku.ai Backend...")
+    if mongo_available and mongo_client:
+        mongo_client.close()
+        logger.info("MongoDB connection closed")
 
 # ----- Helpers -----
-async def ark_chat_completion(messages: List[Dict[str, str]]) -> Dict[str, Any]:
-    if not ark_client or not ARK_API_KEY:
-        raise HTTPException(status_code=503, detail="AI service not configured")
 
-    loop = asyncio.get_event_loop()
-
-    def _call():
-        # Blocking SDK call executed in threadpool
-        return ark_client.chat.completions.create(
-            model=ARK_MODEL_ID,
-            messages=messages,
-        )
-
+async def log_consult_to_mongo(session_id: str, query: str, response: str, metadata: dict = None):
+    """Log consultation to MongoDB if available."""
+    if not mongo_available:
+        return
+    
     try:
-        resp = await loop.run_in_executor(None, _call)
-        # Normalize response to JSON serializable dict
-        result = {
-            "id": getattr(resp, "id", None),
-            "created": getattr(resp, "created", None),
-            "model": getattr(resp, "model", None),
-            "choices": [
-                {
-                    "index": c.index,
-                    "message": {
-                        "role": c.message.role,
-                        "content": c.message.content,
-                    },
-                    "finish_reason": getattr(c, "finish_reason", None),
-                }
-                for c in getattr(resp, "choices", [])
-            ],
-            "usage": {
-                "prompt_tokens": getattr(getattr(resp, "usage", None), "prompt_tokens", None),
-                "completion_tokens": getattr(getattr(resp, "usage", None), "completion_tokens", None),
-                "total_tokens": getattr(getattr(resp, "usage", None), "total_tokens", None),
-            },
+        consult_log = {
+            "session_id": session_id,
+            "query": query,
+            "response": response,
+            "timestamp": datetime.utcnow(),
+            "metadata": metadata or {}
         }
-        return result
+        
+        result = await mongo_db.consults.insert_one(consult_log)
+        logger.debug(f"Logged consult to MongoDB with ID: {result.inserted_id}")
     except Exception as e:
-        logger.exception("Ark chat completion error: %s", e)
-        raise HTTPException(status_code=502, detail=f"AI service error: {str(e)}")
-
+        logger.error(f"Failed to log consult to MongoDB: {str(e)}")
 
 # ----- Consolidated Routes (all prefixed with /api) -----
-# Existing routers from project
+# Include routers from the project
 app.include_router(auth_router, prefix="/api/auth", tags=["Authentication"])
 app.include_router(users_router, prefix="/api/users", tags=["Users"])
 app.include_router(chat_router, prefix="/api/chat", tags=["Chat"])
 
-
-@app.get("/api/health")
+# Health check endpoint
+@app.get("/api/health", tags=["Health"])
 async def health():
-    return {"status": "ok", "time": datetime.utcnow().isoformat()}
+    """Health check endpoint to verify the API is running."""
+    return {
+        "status": "ok",
+        "timestamp": datetime.utcnow().isoformat(),
+        "environment": settings.ENVIRONMENT,
+        "mongo_available": mongo_available,
+        "ark_available": ark_service.client is not None
+    }
 
-
-@app.post("/api/consult")
+# Public consultation endpoint (no auth required)
+@app.post("/api/consult", tags=["Consultation"])
 async def consult(payload: Dict[str, Any]):
     """
     Public legal consultation endpoint (no auth).
-    Body:
-    {
-      "query": "text",
-      "session_id": "optional UUID string",
-      "system_prompt": "optional system instructions"
-    }
+    
+    Request body:
+    - query (required): The user's legal question
+    - session_id (optional): Session ID for tracking conversation
+    - system_prompt (optional): Custom instructions for the AI
+    
+    Returns:
+        JSON response with the AI's answer and session information
     """
-    query = (payload or {}).get("query", "").strip()
-    if not query:
-        raise HTTPException(status_code=400, detail="Field 'query' is required")
-
-    # Manage session id as UUID string (do not use ObjectId)
-    session_id_str = (payload or {}).get("session_id") or str(uuid4())
     try:
-        UUID(session_id_str)
-    except Exception:
-        session_id_str = str(uuid4())
+        query = payload.get("query", "").strip()
+        if not query:
+            raise HTTPException(
+                status_code=status.HTTP_400_BAD_REQUEST,
+                detail="Query is required and cannot be empty"
+            )
+        
+        # Generate or use provided session ID
+        session_id = payload.get("session_id") or str(uuid4())
+        
+        # Prepare system prompt
+        system_prompt = payload.get(
+            "system_prompt", 
+            "Anda adalah asisten AI yang membantu pengguna dengan pertanyaan hukum di Indonesia. "
+            "Berikan jawaban yang jelas, ringkas, dan mudah dimengerti."
+        )
+        
+        # Prepare messages for the AI
+        messages = [
+            {"role": "system", "content": system_prompt},
+            {"role": "user", "content": query}
+        ]
+        
+        # Get response from BytePlus Ark
+        result = await ark_service.chat_completion(messages)
+        
+        if not result.get("success"):
+            logger.error(f"AI service error: {result.get('error')}")
+            raise HTTPException(
+                status_code=status.HTTP_503_SERVICE_UNAVAILABLE,
+                detail="AI service is currently unavailable. Please try again later."
+            )
+        
+        response_text = result.get("response", "")
+        
+        # Log the consultation (async, don't wait for it to complete)
+        if mongo_available:
+            asyncio.create_task(
+                log_consult_to_mongo(
+                    session_id=session_id,
+                    query=query,
+                    response=response_text,
+                    metadata={
+                        "model": settings.ARK_MODEL_ID,
+                        "tokens": len(response_text.split())  # Approximate token count
+                    }
+                )
+            )
+        
+        return {
+            "session_id": session_id,
+            "query": query,
+            "response": response_text,
+            "model": settings.ARK_MODEL_ID,
+            "disclaimer": (
+                "Informasi yang diberikan bersifat umum dan bukan merupakan nasihat hukum. "
+                "Untuk masalah hukum spesifik, disarankan untuk berkonsultasi dengan pengacara."
+            )
+        }
+        
+    except HTTPException:
+        raise
+    except Exception as e:
+        logger.error(f"Unexpected error in /api/consult: {str(e)}", exc_info=True)
+        raise HTTPException(
+            status_code=status.HTTP_500_INTERNAL_SERVER_ERROR,
+            detail="An unexpected error occurred. Please try again later."
+        )
 
-    system_prompt = (payload or {}).get("system_prompt") or (
-        "You are Pasalku.ai, an Indonesian legal AI assistant. "
-        "Provide answers with clear, plain Indonesian explanations, include relevant Indonesian legal citations "
-        "(UU/Peraturan/Putusan) when applicable. Add a short disclaimer: 'Bukan nasihat hukum, konsultasikan dengan profesional.'"
-    )
-
-    messages = [
-        {"role": "system", "content": system_prompt},
-        {"role": "user", "content": query},
-    ]
-
-    result = await ark_chat_completion(messages)
-
-    # Extract answer text (fallback to empty string)
-    answer = ""
-    if result.get("choices"):
-        answer = result["choices"][0]["message"].get("content", "")
-
-    # Persist log to Mongo (best-effort)
-    if mongo_db is not None:
-        try:
-            doc = {
-                "id": str(uuid4()),  # standalone UUID for the log entry
-                "session_id": session_id_str,
-                "query": query,
-                "answer": answer,
-                "usage": result.get("usage"),
-                "created_at": datetime.utcnow().isoformat(),
-            }
-            await mongo_db["consult_logs"].insert_one(doc)
-        except PyMongoError as e:
-            logger.warning("Failed to write consult log: %s", e)
-
-    return {
-        "session_id": session_id_str,
-        "answer": answer,
-        "raw": result,
-        "disclaimer": "Informasi ini bukan merupakan nasihat hukum. Konsultasikan dengan profesional hukum.",
-    }
-
-
-# Root for quick check (not under /api)
-@app.get("/")
+# Root endpoint for quick check (not under /api)
+@app.get("/", tags=["Root"])
 async def root():
-    return {"service": "Pasalku.ai Backend", "docs": "/api/docs"}
+    """Root endpoint to verify the API is running."""
+    return {
+        "message": f"{settings.PROJECT_NAME} API is running",
+        "status": "ok",
+        "environment": settings.ENVIRONMENT,
+        "docs": "/api/docs",
+        "version": "1.0.0"
+    }
