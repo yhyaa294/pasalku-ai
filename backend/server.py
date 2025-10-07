@@ -14,10 +14,7 @@ import motor.motor_asyncio
 from pymongo.errors import PyMongoError
 
 # BytePlus Ark SDK
-try:
-    from byteplussdk.arkruntime import Ark  # preferred import path
-except Exception:  # fallback if package exposes flat module path in some versions
-    from byteplussdkarkruntime import Ark  # type: ignore
+from byteplussdkarkruntime import Ark
 
 
 # ----- Logging -----
