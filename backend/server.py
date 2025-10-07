@@ -21,11 +21,11 @@ except Exception:  # motor not available
 # BytePlus Ark SDK
 from byteplussdkarkruntime import Ark
 
-# Existing project modules
-from database import init_db
-from routers.auth import router as auth_router
-from routers.users import router as users_router
-from routers.chat import router as chat_router
+# Existing project modules (use absolute package imports)
+from backend.database import init_db
+from backend.routers.auth import router as auth_router
+from backend.routers.users import router as users_router
+from backend.routers.chat import router as chat_router
 
 # ----- Logging -----
 logging.basicConfig(level=logging.INFO, format="%(asctime)s [%(levelname)s] %(name)s: %(message)s")
