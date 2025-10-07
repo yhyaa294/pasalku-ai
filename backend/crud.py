@@ -1,7 +1,7 @@
 from sqlalchemy.orm import Session
-import models
-import schemas
-from core.security import get_password_hash, verify_password
+from backend import models
+from backend import schemas
+from backend.core.security import get_password_hash, verify_password
 from typing import List, Optional
 from datetime import datetime
 import logging
