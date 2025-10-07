@@ -26,19 +26,19 @@ def create_access_token(
     try:
         logger.debug(f"Creating access token for subject: {subject}")
         
-    if expires_delta:
-        expire = datetime.now(timezone.utc) + expires_delta
-    else:
-        expire = datetime.now(timezone.utc) + timedelta(
-            minutes=settings.ACCESS_TOKEN_EXPIRE_MINUTES
-        )
-        
-    to_encode = {"exp": expire, "sub": str(subject)}
+        if expires_delta:
+            expire = datetime.now(timezone.utc) + expires_delta
+        else:
+            expire = datetime.now(timezone.utc) + timedelta(
+                minutes=settings.ACCESS_TOKEN_EXPIRE_MINUTES
+            )
+            
+        to_encode = {"exp": expire, "sub": str(subject)}
         logger.debug(f"Token payload: {to_encode}")
         
-    encoded_jwt = jwt.encode(to_encode, settings.SECRET_KEY, algorithm=ALGORITHM)
+        encoded_jwt = jwt.encode(to_encode, settings.SECRET_KEY, algorithm=ALGORITHM)
         logger.debug("Token created successfully")
-    return encoded_jwt
+        return encoded_jwt
         
     except Exception as e:
         logger.error(f"Error creating access token: {str(e)}")
