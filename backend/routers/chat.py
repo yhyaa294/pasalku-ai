@@ -8,12 +8,12 @@ from typing import List, Optional
 
 logger = logging.getLogger(__name__)
 
-import crud
-import schemas
-import models
-from core.security import get_current_user
-from database import get_db
-from ai_service import ai_service
+from backend import crud
+from backend import schemas
+from backend import models
+from backend.core.security import get_current_user
+from backend.database import get_db
+from backend.ai_service import ai_service
 
 router = APIRouter()
 

@@ -8,12 +8,12 @@ from sqlalchemy.orm import Session
 from datetime import timedelta
 from typing import Any
 
-import crud
-import schemas
-import models
-from core.security import create_access_token, get_current_user
-from core.config import settings
-from database import get_db
+from backend import crud
+from backend import schemas
+from backend import models
+from backend.core.security import create_access_token, get_current_user, verify_password
+from backend.core.config import settings
+from backend.database import get_db
 
 # Setup logging
 logger = logging.getLogger(__name__)
@@ -44,7 +44,6 @@ async def login_for_access_token(
         logger.info(f"User found: {user.email}, Role: {user.role}")
         
         # Verify password
-        from core.security import verify_password
         if not verify_password(form_data.password, user.hashed_password):
             logger.warning(f"Invalid password for user: {form_data.username}")
             raise HTTPException(
