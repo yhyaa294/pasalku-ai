@@ -2,9 +2,9 @@
 Script to create admin user for the application
 """
 from sqlalchemy.orm import Session
-from database import SessionLocal
-import crud
-import models
+from backend.database import SessionLocal
+from backend import crud
+from backend import models
 
 def create_admin_user():
     """Create an admin user if it doesn't exist"""

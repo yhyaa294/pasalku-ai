@@ -56,9 +56,9 @@ async def global_exception_handler(request, exc):
     }
 
 # Import dan include router
-from routers.auth import router as auth_router
-from routers.chat import router as chat_router
-from routers.users import router as users_router
+from backend.routers.auth import router as auth_router
+from backend.routers.chat import router as chat_router
+from backend.routers.users import router as users_router
 
 app.include_router(auth_router, prefix="/api/auth", tags=["Authentication"])
 app.include_router(users_router, prefix="/api/users", tags=["Users"])
@@ -70,7 +70,7 @@ async def health_check():
     """Endpoint untuk mengecek status server"""
     try:
         # Test database connection
-        from database import SessionLocal
+    from backend.database import SessionLocal
         from sqlalchemy import text
         db = SessionLocal()
         db.execute(text("SELECT 1"))
@@ -95,8 +95,8 @@ async def startup_event():
 
     # Inisialisasi database
     try:
-        from database import init_db
-        init_db()
+    from backend.database import init_db
+    init_db()
         logger.info("Database initialization successful")
     except Exception as e:
         logger.error(f"Database initialization failed: {str(e)}")
