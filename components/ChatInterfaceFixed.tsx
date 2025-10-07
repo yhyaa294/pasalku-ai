@@ -106,7 +106,8 @@ Silakan ajukan pertanyaan Anda tentang hukum Indonesia.`,
     setMessages(prev => [...prev, loadingMessage]);
 
     try {
-      const response = await fetch('http://localhost:8000/api/chat/query', {
+      const apiUrl = process.env.NEXT_PUBLIC_API_URL || 'http://localhost:8001';
+      const response = await fetch(`${apiUrl}/api/chat/query`, {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',
