@@ -10,10 +10,11 @@ from fastapi.middleware.cors import CORSMiddleware
 from fastapi.security import OAuth2PasswordBearer
 
 
-from backend.core.config import settings
+from backend.core.config import get_settings
+settings = get_settings()
 from backend.database import init_db, get_db, SessionLocal
 from backend.routers import auth_router, users_router, chat_router
-from backend.services.ark_service import ark_service
+from backend.ai_service import ai_service
 
 
 logging.basicConfig(
@@ -81,13 +82,11 @@ async def on_startup():
             logger.error(f"MongoDB connection failed: {str(e)}")
             mongo_available = False
     
-    # Initialize BytePlus Ark client
-    if ark_service.client is None:
-        logger.warning("BytePlus Ark client is not initialized. Check your ARK_API_KEY.")
-    else:
-        logger.info("BytePlus Ark client initialized successfully")
-
-@app.on_event("shutdown")
+        # Test AI service connection
+        if await ai_service.test_connection():
+            logger.info("AI service initialized successfully")
+        else:
+            logger.warning("AI service is not initialized. Check your configuration.")@app.on_event("shutdown")
 async def on_shutdown():
     """Clean up resources on app shutdown."""
     logger.info("Shutting down Pasalku.ai Backend...")
@@ -131,10 +130,8 @@ async def health():
         "timestamp": datetime.utcnow().isoformat(),
         "environment": settings.ENVIRONMENT,
         "mongo_available": mongo_available,
-        "ark_available": ark_service.client is not None
-    }
-
-# Public consultation endpoint (no auth required)
+        "ai_service_available": await ai_service.test_connection()
+    }# Public consultation endpoint (no auth required)
 @app.post("/api/consult", tags=["Consultation"])
 async def consult(payload: Dict[str, Any]):
     """
@@ -172,19 +169,14 @@ async def consult(payload: Dict[str, Any]):
             {"role": "user", "content": query}
         ]
         
-        # Get response from BytePlus Ark
-        result = await ark_service.chat_completion(messages)
-        
-        if not result.get("success"):
-            logger.error(f"AI service error: {result.get('error')}")
-            raise HTTPException(
-                status_code=status.HTTP_503_SERVICE_UNAVAILABLE,
-                detail="AI service is currently unavailable. Please try again later."
-            )
-        
-        response_text = result.get("response", "")
-        
-        # Log the consultation (async, don't wait for it to complete)
+        # Dapatkan respons dari layanan AI
+        result = await ai_service.get_legal_response(
+            query=query, 
+            user_context=payload.get("context", "")
+        )
+            
+        response_text = result.get("answer", "")
+        citations = result.get("citations", [])        # Log the consultation (async, don't wait for it to complete)
         if mongo_available:
             asyncio.create_task(
                 log_consult_to_mongo(
@@ -202,11 +194,12 @@ async def consult(payload: Dict[str, Any]):
             "session_id": session_id,
             "query": query,
             "response": response_text,
+            "citations": citations,
             "model": settings.ARK_MODEL_ID,
-            "disclaimer": (
+            "disclaimer": result.get("disclaimer", (
                 "Informasi yang diberikan bersifat umum dan bukan merupakan nasihat hukum. "
                 "Untuk masalah hukum spesifik, disarankan untuk berkonsultasi dengan pengacara."
-            )
+            ))
         }
         
     except HTTPException:

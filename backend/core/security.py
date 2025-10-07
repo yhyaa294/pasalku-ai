@@ -104,8 +104,8 @@ def get_current_user(
         raise credentials_exception
     
     # Import here to avoid circular imports
-    import crud
-    from database import SessionLocal
+    from backend import crud
+    from backend.database import SessionLocal
     
     if db is None:
         db = SessionLocal()

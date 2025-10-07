@@ -10,10 +10,10 @@ from sqlalchemy.orm import Session
 # Add backend to path
 sys.path.append(os.path.dirname(os.path.abspath(__file__)))
 
-from database import SessionLocal, init_db
-from core.security import verify_password, get_password_hash
-import crud
-import models
+from backend.database import SessionLocal, init_db
+from backend.core.security import verify_password, get_password_hash
+from backend import crud
+from backend import models
 
 async def debug_login_flow():
     """Debug complete login flow"""
