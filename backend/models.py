@@ -1,7 +1,9 @@
 import enum
-from sqlalchemy import Column, Integer, String, Enum, Text, DateTime, ForeignKey
+from sqlalchemy import Column, Integer, String, Enum, Text, DateTime, ForeignKey, UUID
 from sqlalchemy.orm import relationship
 from backend.database import Base
+import uuid
+from datetime import datetime
 
 class UserRole(str, enum.Enum):
     PUBLIC = "public"
@@ -11,22 +13,41 @@ class UserRole(str, enum.Enum):
 class User(Base):
     __tablename__ = "users"
 
-    id = Column(Integer, primary_key=True, index=True)
+    id = Column(UUID(as_uuid=True), primary_key=True, default=uuid.uuid4, index=True)
     email = Column(String, unique=True, index=True, nullable=False)
     hashed_password = Column(String, nullable=False)
+    full_name = Column(String, nullable=True)
     role = Column(Enum(UserRole), nullable=False, default=UserRole.PUBLIC)
+    is_active = Column(Integer, default=1, nullable=False)
+    created_at = Column(DateTime, default=datetime.utcnow, nullable=False)
+    updated_at = Column(DateTime, default=datetime.utcnow, onupdate=datetime.utcnow, nullable=False)
 
-    # Relationship with chat history
-    chat_histories = relationship("ChatHistory", back_populates="user")
+    # Relationship with chat sessions
+    chat_sessions = relationship("ChatSession", back_populates="user")
 
-class ChatHistory(Base):
-    __tablename__ = "chat_histories"
+class ChatSession(Base):
+    __tablename__ = "chat_sessions"
 
-    id = Column(Integer, primary_key=True, index=True)
-    user_id = Column(Integer, ForeignKey("users.id"), nullable=False)
-    query = Column(Text, nullable=False)
-    response = Column(Text, nullable=False)
-    timestamp = Column(DateTime, nullable=False)
+    id = Column(UUID(as_uuid=True), primary_key=True, default=uuid.uuid4, index=True)
+    user_id = Column(UUID(as_uuid=True), ForeignKey("users.id"), nullable=False)
+    title = Column(String, nullable=True)
+    status = Column(String, default="active")  # active/archived
+    created_at = Column(DateTime, default=datetime.utcnow, nullable=False)
+    updated_at = Column(DateTime, default=datetime.utcnow, onupdate=datetime.utcnow, nullable=False)
 
-    # Relationship with user
-    user = relationship("User", back_populates="chat_histories")
+    # Relationships
+    user = relationship("User", back_populates="chat_sessions")
+    messages = relationship("ChatMessage", back_populates="session", cascade="all, delete-orphan")
+
+class ChatMessage(Base):
+    __tablename__ = "chat_messages"
+
+    id = Column(UUID(as_uuid=True), primary_key=True, default=uuid.uuid4, index=True)
+    session_id = Column(UUID(as_uuid=True), ForeignKey("chat_sessions.id"), nullable=False)
+    role = Column(String, nullable=False)  # user/assistant
+    content = Column(Text, nullable=False)
+    citations = Column(Text, nullable=True)  # JSON string of citations
+    created_at = Column(DateTime, default=datetime.utcnow, nullable=False)
+
+    # Relationship
+    session = relationship("ChatSession", back_populates="messages")
