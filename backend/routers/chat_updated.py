@@ -261,6 +261,9 @@ async def process_clarity_flow(
         next_phase = "naming"
     elif phase == "naming":
         crud.update_chat_session_enhanced(db, session_id, schemas.ChatSessionUpdate(title=user_input))
+        next_phase = "pin"
+    elif phase == "pin":
+        crud.update_chat_session_enhanced(db, session_id, schemas.ChatSessionUpdate(pin=user_input))
         next_phase = "clarification"
 
     # Update session

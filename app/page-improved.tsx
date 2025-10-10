@@ -233,10 +233,10 @@ export default function PasalkuLandingPage() {
         </div>
       )}
 
-      {/* Enhanced Chat Interface */}
+      {/* Enhanced Chat Interface Placeholder */}
       {showChat && (
         <div className="fixed bottom-4 right-4 w-full max-w-md h-[600px] bg-white rounded-2xl shadow-2xl border border-gray-200 z-50 overflow-hidden">
-          <div className="bg-gradient-to-r from-blue-600 via-blue-700 to-blue-800 text-white p-4 flex justify-between items-center">
+          <div className="bg-gradient-to-r from-orange-600 via-orange-700 to-orange-800 text-white p-4 flex justify-between items-center">
             <div>
               <h3 className="font-bold text-lg">Pasalku.ai</h3>
               <p className="text-sm opacity-90">Konsultasi Hukum Profesional</p>
@@ -249,12 +249,9 @@ export default function PasalkuLandingPage() {
               ✕
             </button>
           </div>
-          <ChatInterface
-            isAuthenticated={isAuthenticated}
-            userRole={userRole}
-            onClose={() => setShowChat(false)}
-            onLoginRequired={() => window.location.href = '/login'}
-          />
+          <div className="flex-1 overflow-hidden">
+            <p className="p-4 text-center text-gray-600">Chat interface akan segera dimuat...</p>
+          </div>
         </div>
       )}
 
