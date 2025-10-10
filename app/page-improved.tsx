@@ -8,14 +8,13 @@ import { TestimonialsSection } from '@/components/testimonials-section';
 import { CTASection } from '@/components/cta-section';
 import { Footer } from '@/components/footer';
 import { useEffect, useState } from 'react';
-import Link from 'next/link';
-
-import ChatInterface from '@/components/ChatInterfaceFixed';
+import { MessageCircle, X, Sparkles } from 'lucide-react';
 
 export default function PasalkuLandingPage() {
   const [isAuthenticated, setIsAuthenticated] = useState(false);
   const [userRole, setUserRole] = useState<'public' | 'legal_professional' | 'admin'>('public');
   const [showChat, setShowChat] = useState(false);
+  const [showWelcomePopup, setShowWelcomePopup] = useState(false);
 
   useEffect(() => {
     // Check authentication status
@@ -30,6 +29,17 @@ export default function PasalkuLandingPage() {
       } catch (error) {
         console.error('Error parsing user data:', error);
       }
+    }
+
+    // Check welcome popup - show only once
+    const hasSeenWelcome = localStorage.getItem('hasSeenWelcome');
+    if (!hasSeenWelcome) {
+      // Show welcome popup after a short delay
+      const timer = setTimeout(() => {
+        setShowWelcomePopup(true);
+      }, 2000); // Show after 2 seconds
+
+      return () => clearTimeout(timer);
     }
   }, []);
 
@@ -64,11 +74,27 @@ export default function PasalkuLandingPage() {
   };
 
   const handleChatClick = () => {
-    if (isAuthenticated) {
-      setShowChat(true);
-    } else {
-      window.location.href = '/login';
-    }
+    // Direct demo mode - bypass authentication
+    console.log("Demo Mode: Direct access to chat from landing page");
+    localStorage.setItem('token', 'demo-jwt-token-mvp');
+    localStorage.setItem('user', JSON.stringify({
+      email: 'demo@pasalku.ai',
+      name: 'Pengguna Demo',
+      role: 'user',
+      isAuthenticated: true
+    }));
+    window.location.href = '/chat';
+  };
+
+  const handleWelcomeClose = () => {
+    setShowWelcomePopup(false);
+    localStorage.setItem('hasSeenWelcome', 'true');
+  };
+
+  const handleWelcomeStart = () => {
+    setShowWelcomePopup(false);
+    localStorage.setItem('hasSeenWelcome', 'true');
+    handleChatClick();
   };
 
   return (
@@ -149,6 +175,64 @@ export default function PasalkuLandingPage() {
 
       <Footer />
 
+      {/* Welcome Popup */}
+      {showWelcomePopup && (
+        <div className="fixed inset-0 bg-black/50 backdrop-blur-sm z-[100] flex items-center justify-center p-4 animate-fade-in">
+          <div className="bg-white rounded-3xl shadow-2xl max-w-md w-full p-8 text-center relative transform animate-scale-in border border-orange-200">
+            {/* Close button */}
+            <button
+              onClick={handleWelcomeClose}
+              className="absolute top-4 right-4 text-gray-400 hover:text-gray-600 transition-colors duration-300"
+              aria-label="Tutup popup"
+            >
+              <X className="w-6 h-6" />
+            </button>
+
+            {/* Welcome emoji */}
+            <div className="mb-6">
+              <div className="w-20 h-20 bg-gradient-to-br from-orange-100 to-yellow-100 rounded-full flex items-center justify-center mx-auto mb-4 shadow-lg">
+                <span className="text-4xl animate-bounce">👋</span>
+              </div>
+            </div>
+
+            {/* Welcome message */}
+            <h3 className="text-2xl font-bold text-gray-900 mb-4">
+              Selamat Datang di Pasalku.ai!
+            </h3>
+
+            <p className="text-gray-600 mb-6 leading-relaxed">
+              Siap mencari kejelasan hukum Anda?
+              <span className="block text-orange-600 font-medium animate-pulse">
+                Konsultasi gratis sekarang!
+              </span>
+            </p>
+
+            {/* CTA Buttons */}
+            <div className="flex flex-col sm:flex-row gap-3 justify-center">
+              <button
+                onClick={handleWelcomeStart}
+                className="flex-1 bg-gradient-to-r from-orange-500 to-orange-600 text-white px-6 py-3 rounded-xl font-semibold hover:from-orange-600 hover:to-orange-700 transition-all duration-300 transform hover:scale-105 shadow-lg"
+              >
+                <div className="flex items-center justify-center gap-2">
+                  <Sparkles className="w-4 h-4" />
+                  Mulai Sekarang
+                </div>
+              </button>
+              <button
+                onClick={handleWelcomeClose}
+                className="px-6 py-3 text-gray-600 hover:text-gray-800 transition-colors duration-300 font-medium"
+              >
+                Nanti Saja
+              </button>
+            </div>
+
+            {/* Decorative elements */}
+            <div className="absolute -top-2 -right-2 w-8 h-8 bg-orange-400 rounded-full opacity-20 animate-ping"></div>
+            <div className="absolute -bottom-2 -left-2 w-6 h-6 bg-yellow-400 rounded-full opacity-20 animate-ping animation-delay-500"></div>
+          </div>
+        </div>
+      )}
+
       {/* Enhanced Chat Interface */}
       {showChat && (
         <div className="fixed bottom-4 right-4 w-full max-w-md h-[600px] bg-white rounded-2xl shadow-2xl border border-gray-200 z-50 overflow-hidden">
@@ -174,21 +258,37 @@ export default function PasalkuLandingPage() {
         </div>
       )}
 
-      {/* Enhanced Floating Chat Button */}
+      {/* Sticky Chat Support Button */}
       {!showChat && (
         <button
           onClick={() => setShowChat(true)}
-          className="fixed bottom-6 right-6 bg-gradient-to-r from-blue-600 to-blue-700 text-white p-4 rounded-full shadow-lg hover:from-blue-700 hover:to-blue-800 transition-all duration-300 z-40 hover:shadow-xl group"
-          aria-label="Buka Chat"
+          className="fixed bottom-6 right-6 bg-gradient-to-r from-orange-500 to-orange-600 text-white p-4 rounded-full shadow-xl hover:from-orange-600 hover:to-orange-700 transition-all duration-300 z-40 hover:shadow-2xl group animate-bounce hover:animate-none"
+          aria-label="Buka Chat Support"
         >
-          <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" className="group-hover:scale-110 transition-transform">
-            <path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"></path>
-          </svg>
-          <div className="absolute -top-2 -right-2 bg-red-500 text-white text-xs rounded-full w-6 h-6 flex items-center justify-center animate-pulse">
+          <MessageCircle className="w-6 h-6 group-hover:scale-110 transition-transform" />
+          <div className="absolute -top-2 -right-2 bg-red-500 text-white text-xs rounded-full w-7 h-7 flex items-center justify-center animate-pulse font-bold shadow-lg">
             AI
           </div>
+          {/* Pulsing rings for attention */}
+          <div className="absolute inset-0 rounded-full border-2 border-orange-400 opacity-0 group-hover:opacity-50 animate-ping"></div>
+          <div className="absolute inset-0 rounded-full border border-yellow-400 opacity-0 group-hover:opacity-30 animate-ping animation-delay-300"></div>
         </button>
       )}
+
+      {/* Loading Spinner (shown briefly on page load) */}
+      <div className="fixed top-4 right-4 z-50 pointer-events-none">
+        <div className="w-8 h-8 border-2 border-orange-500 border-t-transparent rounded-full opacity-0 animate-spin"
+             style={{ animation: 'spin 1s linear infinite, fadeOut 0.5s ease-in-out 1.5s forwards' }}>
+        </div>
+      </div>
+
+      <style jsx>{`
+        @keyframes fadeOut {
+          to {
+            opacity: 0;
+          }
+        }
+      `}</style>
     </div>
   )
 }
