@@ -22,7 +22,6 @@ def get_ai_response(query: str) -> schemas.ChatResponse:
     Sends a query to the BytePlus AI model with the AI Constitution and returns a structured response.
     """
     try:
-        # Send chat completion request to the model
         completion = client.chat.completions.create(
             model=settings.ARK_MODEL_ID,
             messages=[

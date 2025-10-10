@@ -1,5 +1,5 @@
 import React, { FC } from 'react'
-import { MessageSquare, Brain, Search, FileText, ChevronRight } from 'lucide-react'
+import { Keyboard, MessageSquare, FilePlus, Tablet, ChevronRight } from 'lucide-react'
 
 interface HowItWorksSectionProps {
   className?: string
@@ -9,35 +9,39 @@ export const HowItWorksSection: FC<HowItWorksSectionProps> = ({ className = '' }
   const steps = [
     {
       step: "01",
-      title: "Input Pertanyaan",
+      title: "Uraikan Perkara Anda.",
       description:
-        "Masukkan pertanyaan hukum Anda dalam bahasa natural. AI kami memahami konteks dan nuansa bahasa Indonesia dengan sempurna.",
-      icon: MessageSquare,
+        "Sampaikan permasalahan hukum Anda dalam bahasa sehari-hari. Kecerdasan artifisial kami siap menyimak setiap detailnya.",
+      icon: Keyboard,
       color: "from-blue-500 to-cyan-500",
+      philosophy: "Menggambarkan kesederhanaan proses berbagi masalah pribadi."
     },
     {
       step: "02",
-      title: "AI Processing",
+      title: "Jawab Klarifikasi Artifisial.",
       description:
-        "Sistem AI menganalisis pertanyaan menggunakan database hukum terlengkap dan algoritma machine learning terdepan.",
-      icon: Brain,
+        "AI akan mengajukan pertanyaan-pertanyaan krusial untuk menggali konteks, layaknya dialog dengan konsultan hukum.",
+      icon: MessageSquare,
       color: "from-purple-500 to-pink-500",
+      philosophy: "Menekankan interaksi cerdas dan pengumpulan informasi yang mendalam."
     },
     {
       step: "03",
-      title: "Legal Research",
+      title: "Unggah Bukti Pendukung.",
       description:
-        "Pencarian mendalam di ribuan dokumen hukum, yurisprudensi, dan peraturan terkini untuk menemukan referensi yang relevan.",
-      icon: Search,
+        "Sertakan dokumen, foto, atau bukti lain yang relevan secara aman untuk analisis yang lebih komprehensif.",
+      icon: FilePlus,
       color: "from-green-500 to-emerald-500",
+      philosophy: "Menekankan keamanan data dan pentingnya bukti dalam konteks hukum."
     },
     {
       step: "04",
-      title: "Hasil Komprehensif",
+      title: "Terima Analisis Berdasar Hukum.",
       description:
-        "Dapatkan jawaban lengkap dengan analisis, referensi hukum, dan rekomendasi tindakan yang dapat langsung diimplementasikan.",
-      icon: FileText,
+        "Dapatkan ringkasan masalah, opsi penyelesaian, dan rujukan hukum relevan, disajikan dalam bahasa yang mudah dipahami.",
+      icon: Tablet,
       color: "from-orange-500 to-red-500",
+      philosophy: "Menunjukkan hasil akhir berupa kejelasan dan informasi yang tervalidasi."
     },
   ]
 
@@ -46,11 +50,10 @@ export const HowItWorksSection: FC<HowItWorksSectionProps> = ({ className = '' }
       <div className="max-w-7xl mx-auto">
         <div className="text-center mb-12 md:mb-20">
           <h2 className="text-4xl md:text-6xl font-black mb-6 md:mb-8 animate-text-shimmer">
-            Cara <span className="text-primary">Kerja</span> Platform
+            Bagaimana Pasalku.ai <span className="text-primary">Mendampingi Anda</span>
           </h2>
           <p className="text-lg md:text-2xl text-muted-foreground max-w-4xl mx-auto leading-relaxed animate-slide-in-bottom">
-            Proses sederhana namun powerful yang mengubah pertanyaan hukum kompleks menjadi jawaban yang jelas dan
-            actionable dalam hitungan detik
+            Tiga Langkah Mudah Menuju Kejelasan Hukum.
           </p>
         </div>
 
@@ -64,6 +67,7 @@ export const HowItWorksSection: FC<HowItWorksSectionProps> = ({ className = '' }
               <div className="glass-card rounded-2xl md:rounded-3xl p-6 md:p-8 border border-border hover:shadow-xl transition-all duration-300 hover-lift">
                 <div
                   className={`w-16 h-16 md:w-20 md:h-20 bg-gradient-to-r ${step.color} rounded-xl md:rounded-2xl flex items-center justify-center mb-4 md:mb-6 group-hover:scale-110 transition-transform duration-300 legal-shadow`}
+                  title={step.philosophy}
                 >
                   <step.icon className="w-8 h-8 md:w-10 md:h-10 text-white" />
                 </div>
