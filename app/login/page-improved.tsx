@@ -11,6 +11,13 @@ export default function LoginPage() {
     password: ''
   });
 
+  const [useBypass, setUseBypass] = useState(false);
+
+  const [fieldErrors, setFieldErrors] = useState({
+    email: '',
+    password: ''
+  });
+
   const [isLoading, setIsLoading] = useState(false);
   const [error, setError] = useState('');
   const router = useRouter();
@@ -19,6 +26,21 @@ export default function LoginPage() {
     e.preventDefault();
     setIsLoading(true);
     setError('');
+
+    // Bypass mode for development
+    if (useBypass) {
+      console.log("Bypass Login Aktif: Langsung masuk ke chat.");
+      localStorage.setItem('token', 'dummy-jwt-token-for-dev');
+      localStorage.setItem('user', JSON.stringify({
+        email: formData.email || 'demo@pasalku.ai',
+        name: 'Pengguna Demo',
+        role: 'user',
+        isAuthenticated: true
+      }));
+      router.push('/dashboard');
+      setIsLoading(false);
+      return;
+    }
 
     try {
       // Call backend API for authentication
@@ -50,8 +72,8 @@ export default function LoginPage() {
           isAuthenticated: true
         }));
 
-        // Redirect to chat page
-        router.push('/chat');
+        // Redirect to dashboard page
+        router.push('/dashboard');
       } else {
         let errorMessage = 'Login gagal. Periksa email dan password Anda.';
         try {
@@ -72,11 +94,31 @@ export default function LoginPage() {
     setIsLoading(false);
   };
 
+  const validateField = (name: string, value: string) => {
+    let error = '';
+    if (name === 'email') {
+      const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+      if (!emailRegex.test(value)) {
+        error = 'Format email tidak valid';
+      }
+    } else if (name === 'password') {
+      if (value.length < 6) {
+        error = 'Password minimal 6 karakter';
+      }
+    }
+    setFieldErrors(prev => ({
+      ...prev,
+      [name]: error
+    }));
+  };
+
   const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    const { name, value } = e.target;
     setFormData({
       ...formData,
-      [e.target.name]: e.target.value
+      [name]: value
     });
+    validateField(name, value);
   };
 
   return (
@@ -138,6 +180,9 @@ export default function LoginPage() {
                   </svg>
                 </div>
               </div>
+              {fieldErrors.email && (
+                <p className="mt-1 text-sm text-red-600">{fieldErrors.email}</p>
+              )}
             </div>
 
             <div>
@@ -151,7 +196,27 @@ export default function LoginPage() {
                 onChange={handleChange}
                 required
               />
+              {fieldErrors.password && (
+                <p className="mt-1 text-sm text-red-600">{fieldErrors.password}</p>
+              )}
             </div>
+
+            {/* Development Bypass Checkbox */}
+            {process.env.NODE_ENV === 'development' && (
+              <div className="flex items-center">
+                <input
+                  id="useBypass"
+                  name="useBypass"
+                  type="checkbox"
+                  checked={useBypass}
+                  onChange={(e) => setUseBypass(e.target.checked)}
+                  className="h-4 w-4 text-blue-600 focus:ring-blue-500 border-gray-300 rounded"
+                />
+                <label htmlFor="useBypass" className="ml-2 block text-sm text-gray-900">
+                  Gunakan Mode Demo (Bypass Backend)
+                </label>
+              </div>
+            )}
 
             <div className="flex items-center justify-between">
               <div className="text-sm">

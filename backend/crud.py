@@ -7,6 +7,10 @@ from datetime import datetime
 from uuid import UUID
 import logging
 import json
+from passlib.context import CryptContext
+from cryptography.fernet import Fernet
+import base64
+import os
 
 logger = logging.getLogger(__name__)
 
@@ -204,3 +208,111 @@ def get_chat_history(db: Session, session_id: UUID, user_id: UUID):
         "messages": messages,
         "session": session
     }
+
+# PIN and Encryption utilities
+pwd_context = CryptContext(schemes=["bcrypt"], deprecated="auto")
+
+def hash_pin(pin: str) -> str:
+    """Hash a PIN for storage."""
+    return pwd_context.hash(pin)
+
+def verify_pin(plain_pin: str, hashed_pin: str) -> bool:
+    """Verify a PIN against its hash."""
+    return pwd_context.verify(plain_pin, hashed_pin)
+
+def get_encryption_key() -> bytes:
+    """Get or generate encryption key. In production, use a secure key management system."""
+    key = os.getenv("ENCRYPTION_KEY")
+    if not key:
+        # Generate a key (in production, store this securely)
+        key = base64.urlsafe_b64encode(os.urandom(32)).decode()
+        logger.warning("Using generated encryption key. Set ENCRYPTION_KEY environment variable in production.")
+    return base64.urlsafe_b64decode(key)
+
+def encrypt_text(text: str) -> str:
+    """Encrypt text using Fernet."""
+    f = Fernet(get_encryption_key())
+    return f.encrypt(text.encode()).decode()
+
+def decrypt_text(encrypted_text: str) -> str:
+    """Decrypt text using Fernet."""
+    f = Fernet(get_encryption_key())
+    return f.decrypt(encrypted_text.encode()).decode()
+
+# Enhanced Chat Session operations
+def update_chat_session_enhanced(db: Session, session_id: UUID, update_data: schemas.ChatSessionUpdate):
+    """Update chat session with enhanced fields."""
+    db_session = db.query(models.ChatSession).filter(models.ChatSession.id == session_id).first()
+    if not db_session:
+        return None
+
+    update_dict = update_data.dict(exclude_unset=True)
+
+    # Handle PIN hashing
+    if "pin" in update_dict and update_dict["pin"]:
+        db_session.pin_hash = hash_pin(update_dict["pin"])
+        del update_dict["pin"]
+
+    # Handle consultation_data JSON
+    if "consultation_data" in update_dict and update_dict["consultation_data"]:
+        db_session.consultation_data = json.dumps(update_dict["consultation_data"].dict())
+        del update_dict["consultation_data"]
+
+    # Update other fields
+    for field, value in update_dict.items():
+        setattr(db_session, field, value)
+
+    db.commit()
+    db.refresh(db_session)
+    return db_session
+
+def verify_session_pin(db: Session, session_id: UUID, pin: str) -> bool:
+    """Verify PIN for session access."""
+    session = db.query(models.ChatSession).filter(models.ChatSession.id == session_id).first()
+    if not session or not session.pin_hash:
+        return False
+    return verify_pin(pin, session.pin_hash)
+
+def get_session_with_access(db: Session, session_id: UUID, user_id: UUID, pin: Optional[str] = None):
+    """Get session with PIN verification if required."""
+    session = get_chat_session(db, session_id, user_id)
+    if not session:
+        return None
+
+    # If PIN is set, require verification
+    if session.pin_hash and not verify_pin(pin or "", session.pin_hash):
+        return None
+
+    messages = get_chat_messages(db, session_id)
+
+    # Parse consultation_data
+    consultation_data = None
+    if session.consultation_data:
+        try:
+            consultation_data = schemas.ConsultationData(**json.loads(session.consultation_data))
+        except:
+            consultation_data = None
+
+    return {
+        "session": session,
+        "messages": messages,
+        "consultation_data": consultation_data
+    }
+
+def get_user_sessions_with_pin_status(db: Session, user_id: UUID, skip: int = 0, limit: int = 10):
+    """Get user sessions with PIN status indicator."""
+    sessions = get_user_chat_sessions(db, user_id, skip, limit)
+    for session in sessions:
+        session.has_pin = bool(session.pin_hash)
+    return sessions
+
+def save_session_feedback(db: Session, session_id: UUID, rating: int, feedback: Optional[str] = None):
+    """Save feedback for a session."""
+    db_session = db.query(models.ChatSession).filter(models.ChatSession.id == session_id).first()
+    if not db_session:
+        return False
+
+    db_session.rating = rating
+    db_session.feedback = feedback
+    db.commit()
+    return True

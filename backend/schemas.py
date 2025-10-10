@@ -96,6 +96,54 @@ class ChatHistory(BaseModel):
     class Config:
         from_attributes = True
 
+# New schemas for enhanced features
+class ConsultationData(BaseModel):
+    problem: Optional[str] = None
+    category: Optional[str] = None
+    answers: Optional[List[str]] = None
+    evidence: Optional[str] = None
+
+class ChatSessionUpdate(BaseModel):
+    title: Optional[str] = None
+    status: Optional[str] = None
+    pin: Optional[str] = None  # For setting PIN
+    category: Optional[str] = None
+    phase: Optional[str] = None
+    consultation_data: Optional[ConsultationData] = None
+    rating: Optional[int] = None
+    feedback: Optional[str] = None
+
+class ChatSessionWithAccess(BaseModel):
+    id: UUID
+    user_id: UUID
+    title: Optional[str] = None
+    status: str = "active"
+    category: Optional[str] = None
+    phase: str = "initial"
+    rating: Optional[int] = None
+    created_at: datetime
+    updated_at: datetime
+    has_pin: bool = False  # Indicate if PIN is set
+
+    class Config:
+        from_attributes = True
+
+class PINVerification(BaseModel):
+    pin: str
+
+class SessionAccessRequest(BaseModel):
+    session_id: UUID
+    pin: str
+
+class SessionAccessResponse(BaseModel):
+    session: ChatSession
+    messages: List[ChatMessage]
+    consultation_data: Optional[ConsultationData] = None
+
+class FeedbackRequest(BaseModel):
+    rating: int  # 1-5
+    feedback: Optional[str] = None
+
 # API Response formats
 class APIResponse(BaseModel):
     status: str

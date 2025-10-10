@@ -32,6 +32,12 @@ class ChatSession(Base):
     user_id = Column(UUID(as_uuid=True), ForeignKey("users.id"), nullable=False)
     title = Column(String, nullable=True)
     status = Column(String, default="active")  # active/archived
+    pin_hash = Column(String, nullable=True)  # Hashed PIN for access
+    category = Column(String, nullable=True)  # Legal category (Hukum Pidana, etc.)
+    phase = Column(String, default="initial")  # Current consultation phase
+    consultation_data = Column(Text, nullable=True)  # JSON string of consultation data
+    rating = Column(Integer, nullable=True)  # User rating 1-5
+    feedback = Column(Text, nullable=True)  # User feedback
     created_at = Column(DateTime, default=datetime.utcnow, nullable=False)
     updated_at = Column(DateTime, default=datetime.utcnow, onupdate=datetime.utcnow, nullable=False)
 

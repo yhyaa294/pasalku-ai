@@ -258,5 +258,269 @@ Instruksi:
             logger.error(f"Error generating conversation summary: {str(e)}")
             return "Ringkasan tidak tersedia"
 
+    def classify_legal_problem(self, query: str) -> str:
+        """Classify legal problem into categories."""
+        lower_query = query.lower()
+        if any(word in lower_query for word in ['phk', 'pemutusan', 'kerja', 'karyawan', 'buruh']):
+            return 'Hukum Ketenagakerjaan'
+        elif any(word in lower_query for word in ['pidana', 'penjara', 'kriminal', 'kejahatan']):
+            return 'Hukum Pidana'
+        elif any(word in lower_query for word in ['perdata', 'kontrak', 'perjanjian', 'gugatan']):
+            return 'Hukum Perdata'
+        elif any(word in lower_query for word in ['keluarga', 'cerai', 'waris', 'perceraian']):
+            return 'Hukum Keluarga'
+        elif any(word in lower_query for word in ['tanah', 'properti', 'sertifikat', 'tanah']):
+            return 'Hukum Pertanahan'
+        else:
+            return 'Hukum Perdata'  # default
+
+    def get_structured_questions(self, category: str) -> List[str]:
+        """Get structured questions based on legal category."""
+        questions_map = {
+            'Hukum Ketenagakerjaan': [
+                'Kapan kejadian PHK atau pemutusan hubungan kerja terjadi?',
+                'Apakah Anda memiliki kontrak kerja tertulis?',
+                'Berapa lama Anda bekerja di perusahaan tersebut?',
+                'Apakah perusahaan memberikan pesangon atau kompensasi?',
+                'Apakah ada alasan yang diberikan perusahaan untuk PHK?'
+            ],
+            'Hukum Pidana': [
+                'Kapan kejadian pidana terjadi?',
+                'Siapa saja pihak yang terlibat?',
+                'Apakah sudah ada laporan polisi?',
+                'Apakah ada saksi mata atau bukti lainnya?',
+                'Apakah Anda korban atau tersangka?'
+            ],
+            'Hukum Perdata': [
+                'Kapan kejadian atau perselisihan terjadi?',
+                'Siapa saja pihak yang terlibat?',
+                'Apakah ada perjanjian tertulis?',
+                'Apa nilai kerugian atau jumlah yang dipersengketakan?',
+                'Apakah sudah ada upaya mediasi atau negosiasi?'
+            ],
+            'Hukum Keluarga': [
+                'Kapan kejadian atau perselisihan keluarga terjadi?',
+                'Siapa saja anggota keluarga yang terlibat?',
+                'Apakah ada anak yang terlibat?',
+                'Apakah ada harta bersama yang perlu dibagi?',
+                'Apakah sudah ada upaya mediasi keluarga?'
+            ],
+            'Hukum Pertanahan': [
+                'Kapan masalah tanah atau properti terjadi?',
+                'Apakah Anda memiliki sertifikat tanah?',
+                'Siapa saja pihak yang mengklaim hak atas tanah tersebut?',
+                'Apakah ada bukti kepemilikan lainnya?',
+                'Apakah sudah ada pengaduan ke BPN?'
+            ]
+        }
+        return questions_map.get(category, questions_map['Hukum Perdata'])
+
+    async def generate_legal_analysis(self, consultation_data: Dict[str, Any]) -> Dict[str, Any]:
+        """Generate structured legal analysis with options and estimates."""
+        try:
+            category = consultation_data.get('category', 'Hukum Perdata')
+            problem = consultation_data.get('problem', '')
+            answers = consultation_data.get('answers', [])
+            evidence = consultation_data.get('evidence', '')
+
+            analysis_prompt = f"""
+Berdasarkan informasi konsultasi hukum berikut:
+
+Kategori: {category}
+Masalah: {problem}
+Jawaban pertanyaan: {'; '.join(answers)}
+Bukti: {evidence}
+
+Berikan analisis hukum terstruktur dalam format JSON dengan field:
+- analysis: Analisis singkat situasi hukum
+- options: Array 2-4 opsi solusi, masing-masing dengan field:
+  - solution: Nama solusi
+  - description: Penjelasan singkat
+  - duration_estimate: "cepat" | "sedang" | "lama"
+  - cost_estimate: "rendah" | "sedang" | "tinggi"
+- recommendations: Rekomendasi utama
+- citations: Array referensi hukum (minimal 1)
+"""
+
+            payload = {
+                "model": self.model_id,
+                "messages": [
+                    {"role": "system", "content": "Anda adalah AI hukum Indonesia. Berikan analisis dalam format JSON yang valid."},
+                    {"role": "user", "content": analysis_prompt}
+                ],
+                "max_tokens": 1000
+            }
+
+            response_data = await self._make_request(payload)
+
+            if "choices" in response_data and response_data["choices"]:
+                ai_response = response_data["choices"][0]["message"]["content"]
+
+                # Try to parse JSON
+                try:
+                    analysis = json.loads(ai_response)
+                    return analysis
+                except json.JSONDecodeError:
+                    # Fallback analysis
+                    return {
+                        "analysis": f"Berdasarkan informasi yang diberikan, masalah ini terkait {category}.",
+                        "options": [
+                            {
+                                "solution": "Konsultasi Pengacara",
+                                "description": "Konsultasikan dengan pengacara profesional untuk penanganan lebih lanjut",
+                                "duration_estimate": "sedang",
+                                "cost_estimate": "sedang"
+                            }
+                        ],
+                        "recommendations": "Segera konsultasikan dengan pengacara yang berkompeten",
+                        "citations": ["UU No. 2 Tahun 2004 tentang Penyelesaian Perselisihan Hubungan Industrial"]
+                    }
+            else:
+                raise Exception("Invalid response from AI service")
+
+        except Exception as e:
+            logger.error(f"Error generating legal analysis: {str(e)}")
+            return {
+                "analysis": "Terjadi kesalahan dalam analisis. Silakan coba lagi.",
+                "options": [],
+                "recommendations": "Konsultasikan dengan pengacara",
+                "citations": []
+            }
+
+    async def get_clarity_flow_response(
+        self,
+        phase: str,
+        user_input: str,
+        consultation_data: Dict[str, Any],
+        session_history: Optional[List[Dict[str, str]]] = None
+    ) -> Dict[str, Any]:
+        """
+        Get response for Clarity Flow phases.
+
+        Phases: initial, classification, questions, evidence, summary, analysis, naming, clarification
+        """
+        try:
+            if phase == "initial":
+                return {
+                    "message": """Halo! Saya Pasalku.ai, asisten informasi hukum Anda. Saya akan memandu Anda memahami permasalahan hukum dengan cara yang terstruktur dan jelas.
+
+**Sebelum kita mulai:**
+- Saya TIDAK memberikan nasihat hukum
+- Saya memberikan INFORMASI HUKUM berdasarkan peraturan yang berlaku
+- Setiap jawaban akan disertai dengan SITASI hukum
+- Jawaban akan diakhiri dengan DISCLAIMER
+
+**Langkah-langkah yang akan kita lalui:**
+1. Anda menceritakan permasalahan hukum
+2. Saya akan mengajukan beberapa pertanyaan klarifikasi
+3. Kita akan membahas bukti pendukung
+4. Saya berikan analisis dan opsi solusi
+
+Silakan ceritakan permasalahan hukum Anda.""",
+                    "citations": [],
+                    "disclaimer": "Informasi ini bukan merupakan nasihat hukum. Untuk nasihat hukum yang spesifik, harap konsultasikan dengan profesional hukum yang berkualifikasi."
+                }
+
+            elif phase == "classification":
+                category = self.classify_legal_problem(user_input)
+                return {
+                    "message": f"Apakah masalah Anda ini lebih terkait dengan **{category}**? Mohon konfirmasi dengan menjawab 'Ya' atau 'Tidak'. Jika tidak sesuai, silakan sebutkan kategori yang benar.",
+                    "category": category,
+                    "citations": [],
+                    "disclaimer": "Informasi ini bukan merupakan nasihat hukum. Untuk nasihat hukum yang spesifik, harap konsultasikan dengan profesional hukum yang berkualifikasi."
+                }
+
+            elif phase == "questions":
+                category = consultation_data.get('category', 'Hukum Perdata')
+                questions = self.get_structured_questions(category)
+                current_index = consultation_data.get('current_question_index', 0)
+
+                if current_index < len(questions):
+                    return {
+                        "message": f"Pertanyaan {current_index + 1}: {questions[current_index]}",
+                        "citations": [],
+                        "disclaimer": "Informasi ini bukan merupakan nasihat hukum. Untuk nasihat hukum yang spesifik, harap konsultasikan dengan profesional hukum yang berkualifikasi."
+                    }
+                else:
+                    return {
+                        "message": "Terima kasih atas jawaban Anda. Sekarang, mari kita bahas bukti pendukung yang Anda miliki untuk memperkuat kasus Anda.\n\nSilakan jelaskan bukti-bukti yang relevan (misal: dokumen, foto, saksi, dll.).",
+                        "citations": [],
+                        "disclaimer": "Informasi ini bukan merupakan nasihat hukum. Untuk nasihat hukum yang spesifik, harap konsultasikan dengan profesional hukum yang berkualifikasi."
+                    }
+
+            elif phase == "evidence":
+                return {
+                    "message": "Baik, saya telah mencatat bukti yang Anda sebutkan. Sekarang saya akan menyusun ringkasan dari semua informasi yang telah dikumpulkan.",
+                    "citations": [],
+                    "disclaimer": "Informasi ini bukan merupakan nasihat hukum. Untuk nasihat hukum yang spesifik, harap konsultasikan dengan profesional hukum yang berkualifikasi."
+                }
+
+            elif phase == "summary":
+                # Generate summary
+                summary = f"""**Ringkasan Konsultasi Hukum**
+
+**Masalah:** {consultation_data.get('problem', '')}
+
+**Kategori:** {consultation_data.get('category', '')}
+
+**Jawaban Pertanyaan:**
+{chr(10).join(f"{i+1}. {answer}" for i, answer in enumerate(consultation_data.get('answers', [])))}
+
+**Bukti Pendukung:** {consultation_data.get('evidence', '')}
+
+Apakah ringkasan ini akurat? Jawab 'Ya' untuk melanjutkan ke analisis, atau 'Tidak' untuk memperbaiki."""
+
+                return {
+                    "message": summary,
+                    "citations": [],
+                    "disclaimer": "Informasi ini bukan merupakan nasihat hukum. Untuk nasihat hukum yang spesifik, harap konsultasikan dengan profesional hukum yang berkualifikasi."
+                }
+
+            elif phase == "analysis":
+                analysis = await self.generate_legal_analysis(consultation_data)
+                return {
+                    "message": f"""**Analisis Hukum**
+
+{analysis.get('analysis', '')}
+
+**Opsi Solusi:**
+{chr(10).join(f"- **{opt['solution']}**: {opt['description']} (Durasi: {opt['duration_estimate']}, Biaya: {opt['cost_estimate']})" for opt in analysis.get('options', []))}
+
+**Rekomendasi:** {analysis.get('recommendations', '')}
+
+**Sumber Hukum:**
+{chr(10).join(f"- {citation}" for citation in analysis.get('citations', []))}
+
+**Disclaimer:** Informasi ini bukan merupakan nasihat hukum. Untuk nasihat hukum yang spesifik, harap konsultasikan dengan profesional hukum yang berkualifikasi.""",
+                    "citations": analysis.get('citations', []),
+                    "disclaimer": "Informasi ini bukan merupakan nasihat hukum. Untuk nasihat hukum yang spesifik, harap konsultasikan dengan profesional hukum yang berkualifikasi."
+                }
+
+            elif phase == "naming":
+                return {
+                    "message": "Untuk menyimpan konsultasi ini dengan aman, silakan berikan nama untuk sesi konsultasi ini.",
+                    "citations": [],
+                    "disclaimer": "Informasi ini bukan merupakan nasihat hukum. Untuk nasihat hukum yang spesifik, harap konsultasikan dengan profesional hukum yang berkualifikasi."
+                }
+
+            elif phase == "clarification":
+                return {
+                    "message": f"Sesi konsultasi '{user_input}' telah disimpan. Apakah ada yang ingin Anda tanyakan lebih lanjut atau butuh klarifikasi?",
+                    "citations": [],
+                    "disclaimer": "Informasi ini bukan merupakan nasihat hukum. Untuk nasihat hukum yang spesifik, harap konsultasikan dengan profesional hukum yang berkualifikasi."
+                }
+
+            else:
+                # Default response
+                return await self.get_legal_response(user_input, session_history=session_history)
+
+        except Exception as e:
+            logger.error(f"Error in clarity flow response: {str(e)}")
+            return {
+                "message": "Maaf, terjadi kesalahan. Silakan coba lagi.",
+                "citations": [],
+                "disclaimer": "Informasi ini bukan merupakan nasihat hukum. Untuk nasihat hukum yang spesifik, harap konsultasikan dengan profesional hukum yang berkualifikasi."
+            }
+
 # Global AI service instance
 ai_service_enhanced = AIService()
