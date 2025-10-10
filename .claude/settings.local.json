@@ -9,7 +9,9 @@
       "Bash(npm install -g vercel)",
       "Bash(git add .)",
       "Bash(git commit -m \"feat: prepare for Vercel deployment\n\n- Fix syntax errors and corrupted files\n- Remove problematic next-auth integration temporarily \n- Add vercel.json configuration for deployment\n- Create .env.example for environment setup\n- Build fully working and ready for production\")",
-      "Bash(git push origin main)"
+      "Bash(git push origin main)",
+      "Bash(git commit -m \"feat: add demo mode for MVP - direct chat access without login\n\n- Add prominent ''COBA DEMO GRATIS'' button on login page\n- Demo button bypasses authentication and goes straight to chat\n- Uses localStorage with mock user data for demo session\n- Ready for immediate deployment and showcase\")",
+      "Bash(npm run dev)"
     ],
     "deny": [],
     "ask": []
