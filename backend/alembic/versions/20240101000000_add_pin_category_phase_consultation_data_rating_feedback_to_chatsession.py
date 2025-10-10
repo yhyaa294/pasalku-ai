@@ -1,3 +1,4 @@
+
 """Add PIN, category, phase, consultation_data, rating, feedback to ChatSession
 
 Revision ID: 20240101000000
