@@ -7,7 +7,7 @@ interface FooterProps {
 
 export const Footer: FC<FooterProps> = ({ className = '' }) => {
   return (
-    <footer className={`bg-gradient-to-b from-gray-900 via-slate-800 to-gray-900 text-white ${className}`}>
+    <footer className={`bg-secondary text-white ${className}`}>
       <div className="max-w-7xl mx-auto px-4 py-16">
         <div className="grid md:grid-cols-2 lg:grid-cols-4 gap-8">
           {/* Company Info */}
@@ -25,6 +25,10 @@ export const Footer: FC<FooterProps> = ({ className = '' }) => {
               Platform AI terdepan untuk konsultasi hukum di Indonesia.
               Didirikan oleh Muhammad Syarifuddin Yahya untuk memberikan
               analisis hukum yang akurat dan mudah dipahami.
+            </p>
+            <p className="text-gray-300 text-sm leading-relaxed">
+              AI ini mendapat nominasi 20 besar dalam ajang AI Talent Hub yang diselenggarakan oleh UI x Pertamina Persero.
+              Pencipta merupakan satu-satunya siswa SMA yang lolos dan mendapat nominasi 20 besar.
             </p>
             <div className="flex space-x-4">
               <a

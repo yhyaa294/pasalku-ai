@@ -3,9 +3,9 @@
 import { Navigation } from '@/components/navigation';
 import { HeroSection } from '@/components/hero-section';
 import { StatisticsSection } from '@/components/statistics-section';
-import { FeaturesSection } from '@/components/features-section';
 import { HowItWorksSection } from '@/components/how-it-works-section';
-import { PricingSection } from '@/components/pricing-section';
+import { TestimonialsSection } from '@/components/testimonials-section';
+import { CTASection } from '@/components/cta-section';
 import { Footer } from '@/components/footer';
 import { useEffect, useState } from 'react';
 import Link from 'next/link';
@@ -140,77 +140,11 @@ export default function PasalkuLandingPage() {
       />
 
       <main>
-        {/* Enhanced Hero Section */}
-        <section className="relative py-20 px-4 sm:px-6 lg:px-8 overflow-hidden">
-          <div className="max-w-7xl mx-auto">
-            <div className="text-center">
-              <div className="inline-flex items-center px-4 py-2 rounded-full bg-blue-100 text-blue-800 text-sm font-medium mb-8">
-                <span className="w-2 h-2 bg-blue-500 rounded-full mr-2 animate-pulse"></span>
-                AI Legal Assistant Terpercaya
-              </div>
-
-              <h1 className="text-4xl sm:text-6xl lg:text-7xl font-bold text-gray-900 mb-6 leading-tight">
-                Konsultasi Hukum
-                <span className="block text-blue-600">Cerdas & Cepat</span>
-              </h1>
-
-              <p className="text-xl text-gray-600 mb-8 max-w-3xl mx-auto leading-relaxed">
-                Dapatkan jawaban hukum Indonesia yang akurat dengan teknologi AI terkini.
-                Semua jawaban disertai sumber hukum terverifikasi dan disclaimer profesional.
-              </p>
-
-              <div className="flex flex-col sm:flex-row gap-4 justify-center items-center mb-12">
-                <button
-                  onClick={handleChatClick}
-                  className="group bg-gradient-to-r from-blue-600 to-blue-700 text-white px-8 py-4 rounded-xl font-semibold text-lg hover:from-blue-700 hover:to-blue-800 transition-all duration-300 transform hover:scale-105 shadow-lg hover:shadow-xl"
-                >
-                  <span className="flex items-center">
-                    Mulai Konsultasi
-                    <svg className="w-5 h-5 ml-2 group-hover:translate-x-1 transition-transform" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                      <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M17 8l4 4m0 0l-4 4m4-4H3" />
-                    </svg>
-                  </span>
-                </button>
-
-                <button className="group text-gray-700 hover:text-blue-600 px-8 py-4 rounded-xl font-semibold text-lg border-2 border-gray-200 hover:border-blue-300 transition-all duration-300">
-                  <span className="flex items-center">
-                    Pelajari Lebih Lanjut
-                    <svg className="w-5 h-5 ml-2 group-hover:translate-y-1 transition-transform" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                      <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M19 14l-7 7m0 0l-7-7m7 7V3" />
-                    </svg>
-                  </span>
-                </button>
-              </div>
-
-              {/* Trust indicators */}
-              <div className="flex flex-wrap justify-center items-center gap-8 text-sm text-gray-500">
-                <div className="flex items-center">
-                  <svg className="w-5 h-5 text-green-500 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M5 13l4 4L19 7" />
-                  </svg>
-                  Sumber Hukum Terverifikasi
-                </div>
-                <div className="flex items-center">
-                  <svg className="w-5 h-5 text-green-500 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 15v2m-6.906-6.906L12 8.5l6.906 2.594M12 8.5L5.094 11.094M12 8.5v-2m0 2l6.906-2.594M5.094 11.094L12 8.5m0 0l6.906 2.594M12 15v2m0-2l-6.906-2.594M12 15l6.906 2.594" />
-                  </svg>
-                  AI yang Akurat
-                </div>
-                <div className="flex items-center">
-                  <svg className="w-5 h-5 text-green-500 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 15v2m-6.906-6.906L12 8.5l6.906 2.594M12 8.5L5.094 11.094M12 8.5v-2m0 2l6.906-2.594M5.094 11.094L12 8.5m0 0l6.906 2.594M12 15v2m0-2l-6.906-2.594M12 15l6.906 2.594" />
-                  </svg>
-                  Privasi Terjamin
-                </div>
-              </div>
-            </div>
-          </div>
-        </section>
-
+        <HeroSection onGetStarted={handleChatClick} />
         <StatisticsSection />
-        <FeaturesSection />
         <HowItWorksSection />
-        <PricingSection />
+        <TestimonialsSection />
+        <CTASection onGetStarted={handleChatClick} />
       </main>
 
       <Footer />

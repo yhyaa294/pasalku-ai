@@ -1,0 +1,15 @@
+{
+  "permissions": {
+    "allow": [
+      "Bash(npm run build)",
+      "Bash(npm install --save-dev eslint eslint-config-next)",
+      "Bash(npm install eslint eslint-config-next --save-dev --timeout=30000)",
+      "Bash(npm install next-auth@latest)",
+      "Bash(vercel link --yes)",
+      "Bash(npm install -g vercel)",
+      "Bash(git add .)"
+    ],
+    "deny": [],
+    "ask": []
+  }
+}

@@ -1,4 +1,4 @@
- dan warna teks hitam ahar bisa di lihat ke'use client';
+'use client';
 
 import { useState } from 'react';
 import { useRouter } from 'next/navigation';
