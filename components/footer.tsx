@@ -190,9 +190,7 @@ export const Footer: FC<FooterProps> = ({ className = '' }) => {
               <div className="flex items-start gap-3">
                 <MapPin className="w-5 h-5 text-primary mt-1" />
                 <div className="text-gray-300">
-                  <p>Jl. Teknologi No. 123</p>
-                  <p>Jakarta Pusat, 10230</p>
-                  <p>Indonesia</p>
+                  <p>dsn.krenggan ds.kauman kec.ngoro kab . jombang  jawatimur</p>
                 </div>
               </div>
             </div>
