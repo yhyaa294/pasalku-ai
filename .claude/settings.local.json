@@ -7,7 +7,9 @@
       "Bash(npm install next-auth@latest)",
       "Bash(vercel link --yes)",
       "Bash(npm install -g vercel)",
-      "Bash(git add .)"
+      "Bash(git add .)",
+      "Bash(git commit -m \"feat: prepare for Vercel deployment\n\n- Fix syntax errors and corrupted files\n- Remove problematic next-auth integration temporarily \n- Add vercel.json configuration for deployment\n- Create .env.example for environment setup\n- Build fully working and ready for production\")",
+      "Bash(git push origin main)"
     ],
     "deny": [],
     "ask": []
