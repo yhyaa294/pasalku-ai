@@ -1,14 +1,16 @@
 {
   "permissions": {
     "allow": [
-      "Bash(awk '{print $2}')",
-      "Bash(xargs -r kill -9)",
-      "Bash(curl -s \"http://localhost:8000/api/health\")",
-      "Bash(pkill -f uvicorn)",
-      "Bash(curl -s -X POST \"http://localhost:8000/api/structured-consult/initiate\" -H \"Content-Type: application/json\" -d '{\"\"\"\"problem_description\"\"\"\":\"\"\"\"Saya masalah pembayaran gaji tidak sesuai kontrak di perusahaan saya\"\"\"\"}')",
-      "Bash(curl -s -X POST \"http://localhost:8000/api/structured-consult/process-evidence\" -H \"Content-Type: application/json\" -d '{\"\"\"\"evidence_description\"\"\"\":\"\"\"\"Saya memiliki kontrak kerja tertulis dan slip gaji yang menunjukkan selisih pembayaran sebesar 2 juta rupiah per bulan selama 6 bulan\"\"\"\"}')",
-      "Bash(curl -s \"http://localhost:3000\")",
-      "Bash(git add -A)"
+      "Bash(PYTHONPATH=/backend:/backend/backend python -m uvicorn app:app --reload --port 8001 --host 0.0.0.0)",
+      "Bash(curl -s http://localhost:8001/health)",
+      "Bash(python -m json.tool)",
+      "Bash(python -m pip install -r backend/requirements.txt)",
+      "Bash(curl -s http://localhost:8001/docs)",
+      "Bash(python -m uvicorn server:app --reload --host 127.0.0.1 --port 8001 --timeout-graceful-shutdown 2)",
+      "Bash(python -m uvicorn backend.server:app --reload --host 127.0.0.1 --port 8001 --timeout-graceful-shutdown 10)",
+      "Bash(python -m pip install byteplus-python-sdk-v2)",
+      "Bash(python security_audit.py)",
+      "Bash(git add .)"
     ],
     "deny": [],
     "ask": []

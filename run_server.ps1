@@ -3,4 +3,4 @@
 & ".\backend\venv\Scripts\Activate.ps1"
 
 # Run the FastAPI server
-python -m uvicorn backend.main:app --reload --host 0.0.0.0 --port 8000
+python -m uvicorn backend.app:app --reload --host 0.0.0.0 --port 8000

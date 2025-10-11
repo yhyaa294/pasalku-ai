@@ -52,7 +52,7 @@ class EvidenceRecord(Base):
     evidence_type = Column(String(50))  # document, image, audio, etc.
     description = Column(Text)
     file_path = Column(String(255))  # If we store files
-    metadata = Column(Text)  # JSON string for additional metadata
+    additional_metadata = Column(Text)  # JSON string for additional metadata
     created_at = Column(DateTime(timezone=True), server_default=func.now())
 
     # Relationship

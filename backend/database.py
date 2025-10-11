@@ -1,11 +1,9 @@
 """
 Database configuration and connection management for multiple databases
 """
-import os
 import logging
 from contextlib import contextmanager
 from typing import Generator, Optional
-from pathlib import Path
 from functools import lru_cache
 
 import motor.motor_asyncio
@@ -15,7 +13,6 @@ from sqlalchemy.orm import sessionmaker, scoped_session
 from sqlalchemy.exc import SQLAlchemyError
 from pymongo import MongoClient
 from pymongo.errors import ConnectionFailure
-from dotenv import load_dotenv
 
 try:
     import libsql_experimental as libsql
@@ -27,24 +24,25 @@ try:
 except ImportError:
     edgedb = None
 
+# Import settings
+from .core.config import get_settings
+
 # Setup logging
 logger = logging.getLogger(__name__)
 
-# Load environment variables from project root
-env_path = Path(__file__).resolve().parent.parent / ".env"
-load_dotenv(dotenv_path=env_path)
-
 class DatabaseConnections:
     """Manage all database connections."""
-    
+
     def __init__(self):
         """Initialize database connections."""
-        # PostgreSQL (Main Application Database)
-        self.pg_url = os.getenv("DATABASE_URL", "sqlite:///./sql_app.db")
-        
+        settings = get_settings()
+
+        # PostgreSQL (Main Application Database) - Neon Instance
+        self.pg_url = settings.DATABASE_URL
+
         # Handle SQLite specific configuration
         connect_args = {"check_same_thread": False} if self.pg_url.startswith("sqlite") else {}
-        
+
         # Create PostgreSQL engine
         self.pg_engine = create_engine(
             self.pg_url,
@@ -52,7 +50,7 @@ class DatabaseConnections:
             pool_recycle=300,
             connect_args=connect_args
         )
-        
+
         # Create PostgreSQL session maker
         self.PostgresSession = scoped_session(
             sessionmaker(
@@ -61,13 +59,13 @@ class DatabaseConnections:
                 bind=self.pg_engine
             )
         )
-        
-        # MongoDB (Analytics Database)
-        self.mongodb_url = os.getenv("MONGODB_URI")
-        self.mongodb_name = os.getenv("MONGO_DB_NAME", "pasalku_ai")
+
+        # MongoDB (Analytics Database) - Unstructured Data Block
+        self.mongodb_url = settings.MONGODB_URI
+        self.mongodb_name = settings.MONGO_DB_NAME
         self.mongodb_client = None
         self.mongodb_db = None
-        
+
         if self.mongodb_url:
             try:
                 # Async MongoDB client for background tasks
@@ -84,16 +82,16 @@ class DatabaseConnections:
                 self.mongodb_client = None
                 self.mongodb_db = None
 
-        # Supabase (Realtime & Edge Functions) - adjusted for real-time
-        self.supabase_url = os.getenv("SUPABASE_URL")
-        self.supabase_anon_key = os.getenv("SUPABASE_ANON_KEY")
-        self.supabase_service_role_key = os.getenv("SUPABASE_SERVICE_ROLE_KEY")
-        self.supabase_jwt_secret = os.getenv("SUPABASE_JWT_SECRET")
+        # Supabase (Realtime & Edge Functions) - Edge Computing Block
+        self.supabase_url = settings.SUPABASE_URL
+        self.supabase_anon_key = settings.SUPABASE_ANON_KEY
+        self.supabase_service_role_key = settings.SUPABASE_SERVICE_ROLE_KEY
+        self.supabase_jwt_secret = settings.SUPABASE_JWT_SECRET
         self.supabase_engine = None
         if self.supabase_url:
             try:
-                # Treat Supabase as Postgres for simplicity, but note it's for real-time/public data
-                supabase_db_url = f"postgresql://postgres:{self.supabase_anon_key}@{self.supabase_url.replace('https://', '')}:5432/postgres?sslmode=require"
+                # Use direct Supabase Postgres URL if available, otherwise construct from components
+                supabase_db_url = settings.PASALKU_AI_POSTGRES_URL or f"postgresql://postgres:{self.supabase_anon_key}@{self.supabase_url.replace('https://', '')}:5432/postgres?sslmode=require"
                 self.supabase_engine = create_engine(
                     supabase_db_url,
                     pool_pre_ping=True,
@@ -107,9 +105,9 @@ class DatabaseConnections:
                 logger.warning(f"Failed to connect to Supabase: {str(e)}")
                 self.supabase_engine = None
 
-        # Turso (Edge SQL / SQLite)
-        self.turso_auth_token = os.getenv("TURSO_AUTH_TOKEN")
-        self.turso_db_url = os.getenv("TURSO_DATABASE_URL")
+        # Turso (Edge SQL / SQLite) - Ephemeral Cache Block
+        self.turso_auth_token = settings.TURSO_AUTH_TOKEN
+        self.turso_db_url = settings.TURSO_DATABASE_URL
         self.turso_client = None
         if self.turso_db_url and libsql:
             try:
@@ -119,9 +117,9 @@ class DatabaseConnections:
                 logger.warning(f"Failed to connect to Turso: {str(e)}")
                 self.turso_client = None
 
-        # EdgeDB (Graph-like Data)
-        self.edgedb_instance = os.getenv("EDGEDB_INSTANCE")
-        self.edgedb_secret_key = os.getenv("EDGEDB_SECRET_KEY")
+        # EdgeDB (Graph-like Data) - Semantic Knowledge Graph Block
+        self.edgedb_instance = settings.EDGEDB_INSTANCE
+        self.edgedb_secret_key = settings.EDGEDB_SECRET_KEY
         self.edgedb_client = None
         if self.edgedb_instance and edgedb:
             try:

@@ -375,6 +375,271 @@ async def generate_final_analysis(payload: Dict[str, Any]):
         logger.error(f"Error generating final analysis: {str(e)}")
         raise HTTPException(status_code=500, detail="Failed to generate final analysis")
 
+# ===== ADVANCED AI FEATURES =====
+
+from backend.services.ai_service import advanced_ai_service
+
+@app.post("/api/ai/duaI-consensus", tags=["Advanced AI"])
+async def dual_ai_consensus(payload: Dict[str, Any]):
+    """
+    Dual AI Consensus Verification endpoint.
+
+    Compare responses from BytePlus Ark (primary) and Groq (fallback) AIs.
+    Returns confidence score and differences analysis.
+
+    Request body:
+        - query (required): The user's legal question
+        - user_context (optional): Additional user context
+
+    Returns:
+        Consensus response with confidence analysis
+    """
+    try:
+        query = payload.get("query", "").strip()
+        if not query:
+            raise HTTPException(
+                status_code=status.HTTP_400_BAD_REQUEST,
+                detail="Query is required"
+            )
+
+        user_context = payload.get("user_context", "")
+
+        result = await advanced_ai_service.get_multi_ai_consensus(
+            query=query,
+            user_context=user_context
+        )
+
+        return result
+
+    except Exception as e:
+        logger.error(f"Error in dual AI consensus: {str(e)}")
+        raise HTTPException(
+            status_code=500,
+            detail="Failed to generate dual AI consensus response"
+        )
+
+@app.post("/api/ai/reasoning-chain", tags=["Advanced AI"])
+async def ai_reasoning_chain(payload: Dict[str, Any]):
+    """
+    AI Reasoning Chain with Knowledge Graph.
+
+    Generate response with EdgeDB knowledge graph integration
+    and semantic relationship analysis.
+
+    Request body:
+        - query (required): The user's legal question
+        - user_context (optional): Additional user context
+
+    Returns:
+        Response with reasoning chain and knowledge sources
+    """
+    try:
+        query = payload.get("query", "").strip()
+        if not query:
+            raise HTTPException(
+                status_code=status.HTTP_400_BAD_REQUEST,
+                detail="Query is required"
+            )
+
+        user_context = payload.get("user_context", "")
+
+        result = await advanced_ai_service.get_reasoning_chain_response(
+            query=query,
+            user_context=user_context
+        )
+
+        return result
+
+    except Exception as e:
+        logger.error(f"Error in AI reasoning chain: {str(e)}")
+        raise HTTPException(
+            status_code=500,
+            detail="Failed to generate reasoning chain response"
+        )
+
+@app.post("/api/ai/persona-adaptive", tags=["Advanced AI"])
+async def ai_adaptive_persona(payload: Dict[str, Any]):
+    """
+    Adaptive AI Persona Response.
+
+    Generate response adapted to user role/persona:
+    - general: General public with simple explanations
+    - legal_professional: Detailed analysis for lawyers
+    - business_owner: Business-focused legal advice
+    - student: Academic learning approach
+
+    Request body:
+        - query (required): The user's legal question
+        - user_role (optional): User persona/role (defaults to "general")
+        - user_context (optional): Additional user context
+
+    Returns:
+        Role-adapted AI response
+    """
+    try:
+        query = payload.get("query", "").strip()
+        if not query:
+            raise HTTPException(
+                status_code=status.HTTP_400_BAD_REQUEST,
+                detail="Query is required"
+            )
+
+        user_role = payload.get("user_role", "general")
+        user_context = payload.get("user_context", "")
+
+        result = await advanced_ai_service.get_adaptive_persona_response(
+            query=query,
+            user_role=user_role
+        )
+
+        return result
+
+    except Exception as e:
+        logger.error(f"Error in adaptive persona response: {str(e)}")
+        raise HTTPException(
+            status_code=500,
+            detail="Failed to generate adaptive persona response"
+        )
+
+@app.post("/api/ai/sentiment-adaptive", tags=["Advanced AI"])
+async def ai_sentiment_adaptive(payload: Dict[str, Any]):
+    """
+    Sentiment-Adaptive AI Response.
+
+    Analyzes user sentiment and adapts tone/response:
+    - Urgent: Priority on quick solutions
+    - Confused: Step-by-step explanations
+    - Neutral: Balanced standard response
+
+    Request body:
+        - query (required): The user's legal question
+        - user_context (optional): Additional user context
+
+    Returns:
+        Sentiment-adapted AI response
+    """
+    try:
+        query = payload.get("query", "").strip()
+        if not query:
+            raise HTTPException(
+                status_code=status.HTTP_400_BAD_REQUEST,
+                detail="Query is required"
+            )
+
+        user_context = payload.get("user_context", "")
+
+        result = await advanced_ai_service.analyze_sentiment_and_adapt(
+            query=query
+        )
+
+        return result
+
+    except Exception as e:
+        logger.error(f"Error in sentiment adaptive response: {str(e)}")
+        raise HTTPException(
+            status_code=500,
+            detail="Failed to generate sentiment-adaptive response"
+        )
+
+@app.post("/api/ai/strategic-assessment", tags=["Advanced AI"])
+async def strategic_legal_assessment(payload: Dict[str, Any]):
+    """
+    Comprehensive Strategic Assessment for Complex Legal Cases.
+
+    Uses parallel processing of BytePlus Ark (deep analysis) and Groq AI (quick assessment)
+    for emergency legal consulting scenarios.
+
+    Request body:
+        - legal_query (required): The complex legal problem requiring strategic assessment
+        - context_documents (optional): List of context documents
+        - urgency_level (optional): 'low', 'medium', 'high' (default: 'medium')
+
+    Returns:
+        Comprehensive dual AI strategic assessment with risk analysis
+    """
+    try:
+        legal_query = payload.get("legal_query", "").strip()
+        context_documents = payload.get("context_documents", [])
+        urgency_level = payload.get("urgency_level", "medium")
+
+        if not legal_query:
+            raise HTTPException(
+                status_code=status.HTTP_400_BAD_REQUEST,
+                detail="legal_query is required"
+            )
+
+        if urgency_level not in ["low", "medium", "high"]:
+            raise HTTPException(
+                status_code=status.HTTP_400_BAD_REQUEST,
+                detail="urgency_level must be one of: low, medium, high"
+            )
+
+        result = await advanced_ai_service.strategic_assessment(
+            legal_query=legal_query,
+            context_documents=context_documents,
+            urgency_level=urgency_level
+        )
+
+        return result
+
+    except Exception as e:
+        logger.error(f"Error in strategic assessment: {str(e)}")
+        raise HTTPException(
+            status_code=500,
+            detail="Failed to generate strategic assessment"
+        )
+
+@app.get("/api/ai/status", tags=["Advanced AI"])
+async def ai_services_status():
+    """
+    Check status of all AI services and blockchain-inspired databases.
+
+    Returns availability status of:
+    - BytePlus Ark (primary AI)
+    - Groq (fallback AI)
+    - EdgeDB (knowledge graph)
+    - Turso (edge cache)
+    - MongoDB (unstructured data)
+    """
+    try:
+        db_connections = get_db_connections()
+
+        # Check AI services
+        ark_available = await ai_service.test_connection()
+        groq_available = await advanced_ai_service.fallback_ai.test_connection()
+
+        # Check databases
+        edgedb_available = db_connections.get_edgedb_client() is not None
+        turso_available = db_connections.get_turso_db() is not None
+        mongodb_available = db_connections.get_mongodb() is not None
+
+        return {
+            "ai_services": {
+                "byteplus_ark": ark_available,
+                "groq_fallback": groq_available,
+                "dual_ai_available": ark_available and groq_available
+            },
+            "knowledge_systems": {
+                "edgedb_knowledge_graph": edgedb_available,
+                "turso_edge_cache": turso_available,
+                "mongodb_unstructured": mongodb_available
+            },
+            "blockchain_inspired_architecture": {
+                "identity_ledger": bool(db_connections.pg_engine),  # Neon
+                "realtime_edge": db_connections.supabase_engine is not None,
+                "semantic_graph": edgedb_available,
+                "ephemeral_cache": turso_available
+            },
+            "timestamp": datetime.utcnow().isoformat()
+        }
+
+    except Exception as e:
+        logger.error(f"Error checking AI services status: {str(e)}")
+        raise HTTPException(
+            status_code=500,
+            detail="Failed to check services status"
+        )
+
 # ===== LEGACY CONSULTATION ENDPOINT =====
 # Public consultation endpoint (no auth required)
 @app.post("/api/consult", tags=["Consultation"])

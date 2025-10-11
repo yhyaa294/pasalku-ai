@@ -69,10 +69,12 @@ async def global_exception_handler(request, exc):
 from .routers.auth_updated import router as auth_router
 from .routers.chat_updated import router as chat_router
 from .routers.users import router as users_router
+from .routers.advanced_ai import router as advanced_ai_router
 
 app.include_router(auth_router, prefix="/api/auth", tags=["Authentication"])
 app.include_router(users_router, prefix="/api/users", tags=["Users"])
 app.include_router(chat_router, prefix="/api/chat", tags=["Chat"])
+app.include_router(advanced_ai_router, tags=["AI Advanced"])
 
 # Health check endpoint
 @app.get("/health")

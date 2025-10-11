@@ -6,6 +6,8 @@ from abc import ABC, abstractmethod
 from typing import Dict, List, Any, Optional
 import logging
 import httpx
+import asyncio
+from concurrent.futures import ThreadPoolExecutor
 from fastapi import HTTPException
 
 from backend.core.config import settings
@@ -1117,6 +1119,240 @@ class AdvancedAIService(BaseAIService):
         intersection = words1.intersection(words2)
         union = words1.union(words2)
         return len(intersection) / len(union) if union else 0.0
+
+    async def strategic_assessment(
+        self,
+        legal_query: str,
+        context_documents: List[str] = None,
+        urgency_level: str = "medium"
+    ) -> Dict[str, Any]:
+        """
+        Dual AI Strategic Assessment untuk konsultasi hukum yang kompleks
+        Menggunakan paralel processing antara BytePlus Ark dan Groq AI
+        """
+        import time
+        start_time = time.time()
+
+        # Prepare comprehensive context
+        full_context = f"""
+        KONSULTASI HUKUM STRATEGIC - LEVEL URGENCY: {urgency_level.upper()}
+
+        PERTANYAAN KLIEN:
+        {legal_query}
+
+        {"DOKUMEN KONTEXT TERSEDIA:"
+        for i, doc in enumerate(context_documents, 1):
+            f"\n{i}. {doc[:200]}..." if len(doc) > 200 else f"\n{i}. {doc}"
+        if context_documents else ""}
+        """
+
+        # Define prompts berdasarkan urgency
+        urgency_prompts = {
+            "low": {
+                "ark": "Berikan analisis mendalam, komprehensif, dan akademis untuk masalah hukum ini. Fokus pada pemahaman fundamental, preseden, dan implikasi jangka panjang.",
+                "groq": "Berikan gambaran overview dan initial assessment yang informatif namun tidak urgent."
+            },
+            "medium": {
+                "ark": "Analisis masalah hukum ini dengan teliti, perhatikan semua aspek hukum, risiko, dan solusi praktis. Sertakan timeline dan prioritas handling.",
+                "groq": "Berikan assessment cepat namun akurat dengan fokus pada actionable next steps dalam 2-4 minggu."
+            },
+            "high": {
+                "ark": "PRIORITAS TINGGI: Analisis mendalam semua aspek hukum, identifikasi risiko kritikal, dan rekomendasi tindakan segera. Fokus pada langkah-langkah pencegahan dan mitigasi kerugian.",
+                "groq": "URGENT: Berikan assessment kilat dengan fokus pada immediate actions, deadline kritis, dan langkah-langkah pencegahan eskalasi masalah."
+            }
+        }
+
+        ark_system_prompt = f"""
+        Anda adalah Konsultan Hukum Senior dengan pengalaman 20+ tahun di Indonesia.
+        {urgency_prompts[urgency_level]["ark"]}
+
+        Berikan respons terstruktur dengan format JSON:
+        {{
+            "deep_analysis": "Analisis mendalam tentang kondisi hukum saat ini",
+            "risk_assessment": "Penilaian risiko secara detail",
+            "legal_opinions": ["Pendapat hukum 1", "Pendapat hukum 2"],
+            "recommendations": ["Rekomendasi strategis 1", "Rekomendasi 2"],
+            "timeline": "Estimasi timeline dalam minggu/bulan",
+            "cost_implications": "Estimasi dampak biaya"
+        }}
+        """
+
+        groq_system_prompt = f"""
+        Anda adalah Konsultan Hukum Emergency Response Team.
+        {urgency_prompts[urgency_level]["groq"]}
+
+        Berikan respons terstruktur dengan format JSON:
+        {{
+            "quick_assessment": "Assessment cepat 2-3 paragraph",
+            "immediate_actions": ["Action 1", "Action 2", "Action 3"],
+            "risk_level": "HIGH/MEDIUM/LOW",
+            "next_milestone": "Next critical step dalam 24-48 jam",
+            "notification_needed": "Orang/institusi yang perlu diberitahu"
+        }}
+        """
+
+        # Parallel execution with different prompts
+        try:
+            # Use asyncio.gather for concurrent async execution
+            ark_task = asyncio.create_task(
+                self._execute_ai_async(self.primary_ai, full_context, ark_system_prompt)
+            )
+            groq_ai_service = self.fallback_ai if self.fallback_ai.api_key else self.primary_ai
+            groq_task = asyncio.create_task(
+                self._execute_ai_async(groq_ai_service, full_context, groq_system_prompt)
+            )
+
+            # Get results concurrently
+            ark_result, groq_result = await asyncio.gather(ark_task, groq_task, return_exceptions=True)
+
+            # Handle exceptions in results
+            if isinstance(ark_result, Exception):
+                logger.error(f"Ark AI failed: {str(ark_result)}")
+                ark_result = {"answer": f"Ark AI gagal: {str(ark_result)}", "error": str(ark_result)}
+            if isinstance(groq_result, Exception):
+                logger.error(f"Groq AI failed: {str(groq_result)}")
+                groq_result = {"answer": f"Groq AI gagal: {str(groq_result)}", "error": str(groq_result)}
+
+        except Exception as e:
+            logger.error(f"Parallel AI execution failed: {str(e)}")
+            # Fallback ke primary AI saja
+            ark_result = await self.primary_ai.get_legal_response(legal_query, "", {})
+            groq_result = {"response": "Tidak dapat mendapatkan quick assessment", "error": str(e)}
+
+        processing_time = time.time() - start_time
+        logger.info(f"Dual AI Strategic Assessment completed in {processing_time:.2f} seconds")
+
+        # AI Fusion & Decision Making
+        final_assessment = self._comprehensive_ai_fusion(
+            ark_response=ark_result.get("answer", "") if isinstance(ark_result, dict) else str(ark_result),
+            groq_response=groq_result.get("answer", "") if isinstance(groq_result, dict) else str(groq_result),
+            urgency_level=urgency_level,
+            legal_query=legal_query
+        )
+
+        # Generate final recommendations
+        final_recommendations = self._generate_final_recommendations(
+            final_assessment,
+            urgency_level,
+            ark_result,
+            groq_result
+        )
+
+        return {
+            "status": "success",
+            "processing_time": round(processing_time, 2),
+            "dual_ai_results": {
+                "ark_deep_analysis": ark_result,
+                "groq_quick_assessment": groq_result
+            },
+            "final_strategic_assessment": final_assessment,
+            "final_recommendations": final_recommendations,
+            "citations": self._extract_citations(final_assessment.get("consolidated_analysis", "")),
+            "disclaimer": "Assessment strategis dari dual AI system. Rekomendasi ini bersifat informatif dan bukan pengganti konsultasi dengan advokat profesional."
+        }
+
+    async def _execute_ai_async(self, ai_service: BaseAIService, context: str, system_prompt: str) -> Dict[str, Any]:
+        """Execute AI dengan custom system prompt secara asynchronous"""
+        try:
+            # Create a comprehensive query dengan system prompt embedded
+            enhanced_query = f"INSTRUCTIONS: {system_prompt}\n\nKASUS/SITUASI YANG DIHADAPI:\n{context}"
+
+            # Use the AI service's standard method dengan comprehensive context
+            result = await ai_service.get_legal_response(
+                query=enhanced_query,
+                user_context="Strategic assessment with specific analytical requirements"
+            )
+
+            return result
+
+        except Exception as e:
+            logger.error(f"AI async execution error: {str(e)}")
+            return {"answer": f"AI execution gagal: {str(e)}", "error": str(e)}
+
+    def _comprehensive_ai_fusion(
+        self,
+        ark_response: str,
+        groq_response: str,
+        urgency_level: str,
+        legal_query: str
+    ) -> Dict[str, Any]:
+        """Comprehensive AI fusion untuk decision making"""
+        # Risk level assessment
+        risk_indicators = ["urgensi tinggi", "risiko tinggi", "segera", "critical", "bahaya", "krisis"]
+        high_risk_found = any(indicator in ark_response.lower() or indicator in groq_response.lower()
+                             for indicator in risk_indicators)
+
+        # Consensus assessment
+        ark_words = set(ark_response.lower().split())
+        groq_words = set(groq_response.lower().split())
+        overlap = len(ark_words.intersection(groq_words))
+        consensus_score = overlap / max(len(ark_words), len(groq_words)) if max(len(ark_words), len(groq_words)) > 0 else 0
+
+        final_risk = "HIGH" if high_risk_found else ("MEDIUM" if urgency_level == "medium" else "LOW")
+        confidence = "HIGH" if consensus_score > 0.6 else ("MEDIUM" if consensus_score > 0.3 else "LOW")
+
+        return {
+            "risk_level": final_risk,
+            "confidence_score": round(consensus_score * 100, 2),
+            "consensus_level": confidence,
+            "consolidated_analysis": f"ANALISIS TERPADU: {ark_response[:500]}... [Ditambah dengan assessment cepat: {groq_response[:300]}...]",
+            "key_insights": [
+                f"Risk Level: {final_risk} (Consensus: {confidence})",
+                f"Urgency: {urgency_level.upper()}",
+                f"Dual AI Processing: COMPLETED"
+            ],
+            "next_critical_steps": self._extract_next_steps(groq_response),
+            "long_term_strategy": self._extract_long_term_strategy(ark_response)
+        }
+
+    def _generate_final_recommendations(
+        self,
+        assessment: Dict[str, Any],
+        urgency_level: str,
+        ark_result: Dict[str, Any],
+        groq_result: Dict[str, Any]
+    ) -> List[str]:
+        """Generate final recommendations based on dual AI analysis"""
+        recommendations = []
+
+        risk_level = assessment.get("risk_level", "MEDIUM")
+
+        if urgency_level == "high" and risk_level == "HIGH":
+            recommendations.extend([
+                "DARURAT: Konsultasi pengacara dalam 24 jam",
+                "Jaga semua bukti dan dokumentasi kerahasiaan",
+                "Hindari tindakan yang dapat memperburuk situasi",
+                "Kirim pemberitahuan formal ke pihak terkait dalam 48 jam"
+            ])
+        elif risk_level == "HIGH":
+            recommendations.extend([
+                "Konsultasi pengacara dalam 1 minggu",
+                "Persiapkan dokumen lengkap sebelum konsultasi",
+                "Catat semua komunikasi terkait masalah ini",
+                "Evaluasi opsi penyelesaian di luar pengadilan"
+            ])
+        else:
+            recommendations.extend([
+                "Konsultasi pengacara untuk mendapatkan nasihat profesional",
+                "Lanjutkan pengumpulan informasi yang relevan",
+                "Monitor perkembangan situasi hukum terkait",
+                "Pertimbangkan diskusi informal untuk penyelesaian damai"
+            ])
+
+        return recommendations
+
+    def _extract_next_steps(self, groq_response: str) -> List[str]:
+        """Extract immediate next steps dari groq response"""
+        # Simple extraction - dalam production bisa pakai NLP
+        if "immediate" in groq_response.lower() or "action" in groq_response.lower():
+            return ["Immediate legal consultation", "Document collection", "Formal communication"]
+        return ["Legal consultation within appropriate timeframe", "Further information gathering"]
+
+    def _extract_long_term_strategy(self, ark_response: str) -> str:
+        """Extract long-term strategy dari ark response"""
+        if len(ark_response) > 200:
+            return f"Strategy: {ark_response[:150]}... (analysis terstruktur tersedia)"
+        return "Comprehensive legal strategy analysis completed"
 
     async def get_reasoning_chain_response(
         self,

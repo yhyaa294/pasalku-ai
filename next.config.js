@@ -11,7 +11,7 @@ const nextConfig = {
   
   // Environment Variables
   env: {
-    NEXT_PUBLIC_API_URL: process.env.NEXT_PUBLIC_API_URL || 'https://dfe0f919-b1d5-42cd-814c-67d4bdacd335-00-2jswrntu9rksa.pike.replit.dev:8000',
+    NEXT_PUBLIC_API_URL: process.env.NEXT_PUBLIC_API_URL || 'http://localhost:8000',
   },
 
   // Experimental Features
@@ -93,7 +93,7 @@ const nextConfig = {
     return [
       {
         source: '/api/:path*',
-        destination: `https://dfe0f919-b1d5-42cd-814c-67d4bdacd335-00-2jswrntu9rksa.pike.replit.dev:8000/api/:path*`,
+        destination: `http://localhost:8000/api/:path*`,
       },
     ];
   },
