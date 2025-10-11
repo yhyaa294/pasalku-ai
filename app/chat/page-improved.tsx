@@ -88,7 +88,7 @@ Silakan ceritakan permasalahan hukum Anda.`,
   const loadChatHistory = async () => {
     try {
       const token = localStorage.getItem('token');
-      const response = await fetch('http://localhost:8001/api/chat/history-enhanced', {
+      const response = await fetch('/api/chat/history-enhanced', {
         headers: {
           'Authorization': `Bearer ${token}`
         }
@@ -200,7 +200,7 @@ Silakan ceritakan permasalahan hukum Anda.`,
 
       // If no session, start new session
       if (!sessionId) {
-        const startResponse = await fetch('http://localhost:8001/api/chat/start', {
+        const startResponse = await fetch('/api/chat/start', {
           method: 'POST',
           headers: {
             'Content-Type': 'application/json',
@@ -218,7 +218,7 @@ Silakan ceritakan permasalahan hukum Anda.`,
       }
 
       // Call flow with current phase and input
-      const flowResponse = await fetch('http://localhost:8001/api/chat/flow', {
+      const flowResponse = await fetch('/api/chat/flow', {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',
@@ -279,7 +279,7 @@ Silakan ceritakan permasalahan hukum Anda.`,
     setIsLoading(true);
 
     try {
-      const saveResponse = await fetch('http://localhost:8001/api/chat/save', {
+      const saveResponse = await fetch('/api/chat/save', {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',

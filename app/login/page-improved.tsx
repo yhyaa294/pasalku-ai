@@ -44,7 +44,7 @@ export default function LoginPage() {
 
     try {
       // Call backend API for authentication
-      const apiUrl = process.env.NEXT_PUBLIC_API_URL || 'http://localhost:8001';
+      const apiUrl = process.env.NEXT_PUBLIC_API_URL || 'http://localhost:8000';
       const response = await fetch(`${apiUrl}/api/auth/login`, {
         method: 'POST',
         headers: {
@@ -88,7 +88,7 @@ export default function LoginPage() {
       }
     } catch (error) {
       console.error('Login request failed:', error);
-      setError('Terjadi kesalahan koneksi. Pastikan backend server berjalan di port 8001.');
+      setError('Terjadi kesalahan koneksi. Pastikan backend server berjalan.');
     }
 
     setIsLoading(false);

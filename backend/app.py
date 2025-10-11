@@ -79,6 +79,20 @@ from .routers.ai_debate import router as debate_router
 from .routers.cross_validation import router as cross_val_router
 from .routers.predictive_analytics import router as predictive_router
 from .routers.language_translator import router as translator_router
+from .routers.contract_engine import router as contract_router
+from .routers.adaptive_personas import router as adaptive_persona_router
+from .routers.reasoning_chain import router as reasoning_chain_router
+from .routers.sentiment_analysis import router as sentiment_analysis_router
+from .routers.research_assistant import router as research_router
+from .routers.template_generator import router as template_router
+from .routers.ethics_monitor import router as ethics_router
+from .routers.virtual_court import router as virtual_court_router
+from .routers.legal_prediction import router as legal_prediction_router
+from .routers.multi_party_negotiator import router as multi_party_router
+from .routers.business_intelligence import router as bi_router
+from .routers.voice_assistant import router as voice_router
+from .routers.startup_accelerator import router as startup_router
+from .routers.international_bridge import router as international_router
 
 app.include_router(auth_router, prefix="/api/auth", tags=["Authentication"])
 app.include_router(users_router, prefix="/api/users", tags=["Users"])
@@ -86,9 +100,27 @@ app.include_router(chat_router, prefix="/api/chat", tags=["Chat"])
 app.include_router(advanced_ai_router, tags=["AI Advanced"])
 app.include_router(documents_router, tags=["Documents"])
 app.include_router(case_study_router, tags=["Case Studies"])
+app.include_router(template_router, tags=["Template Generator"])
 app.include_router(knowledge_router, tags=["Knowledge Base"])
 app.include_router(scheduler_router, tags=["AI Scheduler"])
 app.include_router(risk_router, tags=["Risk Calculator"])
+app.include_router(debate_router, tags=["AI Debate System"])
+app.include_router(cross_val_router, tags=["Cross Validation"])
+app.include_router(predictive_router, tags=["Predictive Analytics"])
+app.include_router(translator_router, tags=["Language Translator"])
+app.include_router(contract_router, tags=["Contract Intelligence"])
+app.include_router(adaptive_persona_router, tags=["Adaptive Persona System"])
+app.include_router(reasoning_chain_router, tags=["Reasoning Chain Analyzer"])
+app.include_router(sentiment_analysis_router, tags=["Sentiment Analysis"])
+app.include_router(research_router, tags=["Research Assistant"])
+app.include_router(ethics_router, tags=["Ethics & Compliance"])
+app.include_router(virtual_court_router, tags=["Virtual Court Simulation"])
+app.include_router(legal_prediction_router, tags=["Legal Prediction Engine"])
+app.include_router(multi_party_router, tags=["Multi-Party Negotiation"])
+app.include_router(bi_router, tags=["Business Intelligence"])
+app.include_router(voice_router, tags=["AI Voice Assistant"])
+app.include_router(startup_router, tags=["Startup Accelerator"])
+app.include_router(international_router, tags=["International Legal Bridge"])
 
 # Health check endpoint
 @app.get("/health")

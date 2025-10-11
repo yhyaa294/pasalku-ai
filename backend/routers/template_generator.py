@@ -3,13 +3,28 @@ AI-Powered Document Template Generator
 Membuat dan menyesuaikan template dokumen hukum Indonesia dengan AI
 """
 import logging
+import io
+import os
+import tempfile
 from datetime import datetime
 from typing import List, Dict, Any, Optional
 from pydantic import BaseModel, Field
 from bson import ObjectId
 
 from fastapi import APIRouter, Depends, HTTPException, BackgroundTasks, Response
-from fastapi.responses import StreamingResponse
+from fastapi.responses import StreamingResponse, FileResponse
+
+# PDF generation
+from reportlab.lib.pagesizes import letter, A4
+from reportlab.lib.styles import getSampleStyleSheet, ParagraphStyle
+from reportlab.platypus import SimpleDocTemplate, Paragraph, Spacer, PageBreak
+from reportlab.lib.units import inch
+
+# DOCX generation
+from docx import Document
+from docx.shared import Pt, Inches
+from docx.enum.text import WD_ALIGN_PARAGRAPH
+from docx.enum.style import WD_STYLE_TYPE
 
 from ..services.blockchain_databases import get_mongodb_cursor
 from ..services.ai_service import AdvancedAIService
@@ -416,13 +431,35 @@ async def download_generated_document(
         if doc.get("status") != "completed":
             raise HTTPException(status_code=202, detail="Document still processing")
 
-        # Return document file (placeholder - in real implementation, retrieve from storage)
-        # For now, return JSON response
-        return {
-            "message": "Document generation completed",
-            "download_url": "https://example.com/download/document.pdf",
-            "filename": doc.get("filename", "generated_document.pdf")
-        }
+        # Get file buffer from database
+        file_buffer = doc.get("file_buffer")
+        if not file_buffer:
+            raise HTTPException(status_code=500, detail="Document file not available")
+
+        filename = doc.get("filename", "generated_document.pdf")
+
+        # Determine content type based on file extension
+        if filename.lower().endswith('.pdf'):
+            media_type = "application/pdf"
+        elif filename.lower().endswith('.docx'):
+            media_type = "application/vnd.openxmlformats-officedocument.wordprocessingml.document"
+        elif filename.lower().endswith('.html'):
+            media_type = "text/html"
+        else:
+            media_type = "application/octet-stream"
+
+        # Create buffer from stored bytes
+        buffer = io.BytesIO(file_buffer)
+
+        # Return StreamingResponse for in-memory file
+        return StreamingResponse(
+            buffer,
+            media_type=media_type,
+            headers={
+                "Content-Disposition": f"attachment; filename*=UTF-8''{filename}",
+                "Content-Length": str(len(file_buffer))
+            }
+        )
 
     except HTTPException:
         raise
@@ -530,15 +567,37 @@ async def generate_document_background(generation_data: Dict[str, Any]):
             enhanced_content = await enhance_document_with_ai(document_content, template, variables)
             document_content = enhanced_content
 
-        # Generate final document (placeholder - in real implementation, create PDF/DOCX)
-        document_size = len(document_content.encode('utf-8'))
+        # Generate final document based on format
+        doc_format = generation_data.get("format", "pdf")
+        file_buffer = None
+        filename = ""
+        document_size = 0
+
+        try:
+            if doc_format == "pdf":
+                file_buffer, filename = generate_pdf_document(document_content, template, variables)
+            elif doc_format == "docx":
+                file_buffer, filename = generate_docx_document(document_content, template, variables)
+            elif doc_format == "html":
+                file_buffer, filename = generate_html_document(document_content, template, variables)
+            else:
+                # Default to PDF
+                file_buffer, filename = generate_pdf_document(document_content, template, variables)
+
+            document_size = len(file_buffer.getvalue()) if hasattr(file_buffer, 'getvalue') else len(file_buffer)
+            file_buffer.seek(0)  # Reset buffer position
+
+        except Exception as gen_error:
+            logger.error(f"Document generation error: {str(gen_error)}")
+            await update_generation_status(generation_data["document_id"], "failed", f"Generation error: {str(gen_error)}")
+            return
 
         # Save generated document
         generated_doc = {
             **generation_data,
-            "content": document_content,
+            "file_buffer": file_buffer.getvalue() if hasattr(file_buffer, 'getvalue') else file_buffer,
+            "filename": filename,
             "size_bytes": document_size,
-            "filename": f"generated_{template['template_id']}_{generation_data['document_id']}.pdf",
             "status": "completed",
             "completed_at": datetime.utcnow()
         }
@@ -631,6 +690,171 @@ def generate_html_preview(template: Dict, variables: Dict[str, Any]) -> str:
     """
 
     return html_preview
+
+def generate_pdf_document(content: str, template: Dict, variables: Dict) -> tuple:
+    """Generate PDF document menggunakan ReportLab"""
+    # Create buffer for PDF
+    buffer = io.BytesIO()
+
+    # Create PDF document
+    doc = SimpleDocTemplate(buffer, pagesize=A4, rightMargin=72, leftMargin=72, topMargin=72, bottomMargin=72)
+
+    # Create styles
+    styles = getSampleStyleSheet()
+    styles.add(ParagraphStyle(name='CenteredTitle', fontSize=16, leading=18, alignment=1, fontName='Helvetica-Bold'))
+    styles.add(ParagraphStyle(name='Centered', fontSize=12, leading=14, alignment=1))
+    styles.add(ParagraphStyle(name='Justified', fontSize=11, leading=14, alignment=4))
+
+    # Split content into sections
+    sections = content.split('\n\n')
+    story = []
+
+    # Add title
+    title = template["name"]
+    story.append(Paragraph(title, styles['CenteredTitle']))
+    story.append(Spacer(1, 0.5*inch))
+
+    # Add generation info
+    generation_date = datetime.utcnow().strftime("%d %B %Y")
+    generation_info = f"Dokumen dibuat pada: {generation_date}"
+    story.append(Paragraph(generation_info, styles['Centered']))
+    story.append(Spacer(1, 0.3*inch))
+
+    # Process content sections
+    for section in sections:
+        if section.strip():
+            # Clean and format the section
+            section_cleaned = section.replace('\n', ' ').strip()
+            story.append(Paragraph(section_cleaned, styles['Justified']))
+            story.append(Spacer(1, 0.2*inch))
+
+    # Build PDF
+    doc.build(story)
+
+    # Generate filename
+    timestamp = datetime.utcnow().strftime("%Y%m%d_%H%M%S")
+    filename = f"{template['name'].replace(' ', '_')}_{timestamp}.pdf"
+
+    return buffer, filename
+
+def generate_docx_document(content: str, template: Dict, variables: Dict) -> tuple:
+    """Generate DOCX document menggunakan python-docx"""
+    # Create DOCX document
+    doc = Document()
+
+    # Set page margins
+    sections = doc.sections
+    for section in sections:
+        section.top_margin = Inches(1)
+        section.bottom_margin = Inches(1)
+        section.left_margin = Inches(1)
+        section.right_margin = Inches(1)
+
+    # Add title
+    title = doc.add_heading(template["name"], 0)
+    title.alignment = WD_ALIGN_PARAGRAPH.CENTER
+
+    # Add generation info
+    generation_date = datetime.utcnow().strftime("%d %B %Y")
+    generation_info = doc.add_paragraph(f"Dokumen dibuat pada: {generation_date}")
+    generation_info.alignment = WD_ALIGN_PARAGRAPH.CENTER
+
+    doc.add_paragraph()  # Add spacing
+
+    # Process content
+    sections = content.split('\n\n')
+    for section in sections:
+        if section.strip():
+            # Clean the section
+            section_cleaned = section.replace('\n', ' ').strip()
+
+            # Add paragraph
+            p = doc.add_paragraph(section_cleaned)
+
+            # Set font
+            for run in p.runs:
+                run.font.name = 'Times New Roman'
+                run.font.size = Pt(11)
+
+    # Save to buffer
+    buffer = io.BytesIO()
+    doc.save(buffer)
+
+    # Generate filename
+    timestamp = datetime.utcnow().strftime("%Y%m%d_%H%M%S")
+    filename = f"{template['name'].replace(' ', '_')}_{timestamp}.docx"
+
+    return buffer, filename
+
+def generate_html_document(content: str, template: Dict, variables: Dict) -> tuple:
+    """Generate HTML document"""
+    # Generate HTML content
+    timestamp = datetime.utcnow().strftime("%d %B %Y %H:%M:%S")
+    html_content = f"""
+    <!DOCTYPE html>
+    <html lang="id">
+    <head>
+        <meta charset="UTF-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+        <title>{template["name"]}</title>
+        <style>
+            body {{
+                font-family: 'Times New Roman', serif;
+                line-height: 1.6;
+                margin: 40px auto;
+                max-width: 800px;
+                padding: 20px;
+                color: #333;
+            }}
+            h1 {{
+                text-align: center;
+                font-size: 24px;
+                margin-bottom: 10px;
+            }}
+            .metadata {{
+                text-align: center;
+                font-size: 12px;
+                color: #666;
+                margin-bottom: 30px;
+            }}
+            .content {{
+                text-align: justify;
+            }}
+            .section {{
+                margin-bottom: 15px;
+            }}
+        </style>
+    </head>
+    <body>
+        <h1>{template["name"]}</h1>
+        <div class="metadata">
+            Dokumen dibuat dengan Pasalku.ai pada {timestamp}<br>
+            Template ID: {template["template_id"]}
+        </div>
+        <div class="content">
+    """
+
+    # Process sections
+    sections = content.split('\n\n')
+    for section in sections:
+        if section.strip():
+            section_cleaned = section.replace('\n', ' ').strip()
+            html_content += f'\n            <div class="section">{section_cleaned}</div>'
+
+    # Close HTML
+    html_content += """
+        </div>
+    </body>
+    </html>"""
+
+    # Encode to bytes
+    buffer = io.BytesIO(html_content.encode('utf-8'))
+
+    # Generate filename
+    timestamp_short = datetime.utcnow().strftime("%Y%m%d_%H%M%S")
+    filename = f"{template['name'].replace(' ', '_')}_{timestamp_short}.html"
+
+    return buffer, filename
 
 # Template Analytics
 @router.get("/stats")
