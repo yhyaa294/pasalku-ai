@@ -1,7 +1,7 @@
 from sqlalchemy.orm import Session
 from backend import models
 from backend import schemas
-from backend.core.security import get_password_hash, verify_password
+from backend.core.security_updated import get_password_hash, verify_password
 from typing import List, Optional
 from datetime import datetime
 from uuid import UUID
@@ -160,12 +160,16 @@ def delete_chat_session(db: Session, session_id: UUID, user_id: UUID):
 
 # Chat Message CRUD operations
 def create_chat_message(db: Session, session_id: UUID, role: str, content: str, citations: Optional[List[str]] = None):
-    """Create a new chat message."""
+    """Create a new chat message with encrypted content."""
     citations_json = json.dumps(citations) if citations else None
+
+    # Encrypt the message content
+    encrypted_content = encrypt_text(content)
+
     db_message = models.ChatMessage(
         session_id=session_id,
         role=role,
-        content=content,
+        content=encrypted_content,  # Store encrypted content
         citations=citations_json
     )
     db.add(db_message)
@@ -181,13 +185,21 @@ def create_chat_message(db: Session, session_id: UUID, role: str, content: str, 
     return db_message
 
 def get_chat_messages(db: Session, session_id: UUID, skip: int = 0, limit: int = 50):
-    """Get messages for a chat session."""
+    """Get messages for a chat session with decrypted content."""
     messages = db.query(models.ChatMessage).filter(
         models.ChatMessage.session_id == session_id
     ).order_by(models.ChatMessage.created_at.asc()).offset(skip).limit(limit).all()
 
-    # Parse citations JSON
+    # Decrypt content and parse citations JSON
     for message in messages:
+        # Decrypt the content
+        try:
+            message.content = decrypt_text(message.content)
+        except Exception as e:
+            logger.error(f"Failed to decrypt message {message.id}: {str(e)}")
+            message.content = "[Encrypted content unavailable]"
+
+        # Parse citations JSON
         if message.citations:
             try:
                 message.citations = json.loads(message.citations)

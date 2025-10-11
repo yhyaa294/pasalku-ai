@@ -1,0 +1,12 @@
+{
+  "permissions": {
+    "allow": [
+      "Bash(pip install backoff)",
+      "Bash(python test_server.py)",
+      "Bash(python test_login.py)",
+      "Bash(PYTHONPATH=/c/Users/YAHYA/pasalku-ai-3/backend python server_simple.py)"
+    ],
+    "deny": [],
+    "ask": []
+  }
+}

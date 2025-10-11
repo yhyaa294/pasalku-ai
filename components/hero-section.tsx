@@ -52,8 +52,8 @@ export const HeroSection: FC<HeroSectionProps> = ({ onGetStarted }) => {
           {/* Left Content */}
           <div className="text-center lg:text-left space-y-8 animate-fade-in">
             {/* Badge */}
-            <div className="inline-flex items-center px-6 py-3 rounded-full bg-gray-100/80 backdrop-blur-sm border border-gray-200 text-sm font-semibold text-gray-800 animate-bounce">
-              <span className="mr-2">⚖️</span>
+            <div className="inline-flex items-center px-6 py-3 rounded-full bg-gray-100/80 backdrop-blur-sm border border-gray-200 text-sm font-semibold text-gray-800 animate-bounce hover:animate-shake">
+              <span className="mr-2 animate-spin-slow">⚖️</span>
               Asisten Hukum AI Terpercaya #1 di Indonesia
             </div>
 
@@ -77,7 +77,7 @@ export const HeroSection: FC<HeroSectionProps> = ({ onGetStarted }) => {
             <div className="animate-scale-in">
               <button
                 onClick={onGetStarted}
-                className="group relative inline-flex items-center justify-center px-8 py-5 bg-gradient-to-r from-orange-500 to-orange-600 text-white rounded-xl font-black text-xl hover:from-orange-600 hover:to-orange-700 transition-all duration-300 transform hover:scale-105 hover:shadow-2xl overflow-hidden shadow-lg"
+                className="group relative inline-flex items-center justify-center px-8 py-5 bg-gradient-to-r from-orange-500 to-orange-600 text-white rounded-xl font-black text-xl hover:from-orange-600 hover:to-orange-700 transition-all duration-300 transform hover:scale-105 hover:shadow-2xl overflow-hidden shadow-lg animate-heartbeat"
               >
                 <div className="absolute inset-0 bg-gradient-to-r from-orange-400 to-yellow-500 opacity-0 group-hover:opacity-100 transition-opacity duration-300"></div>
                 <span className="relative flex items-center gap-3">
@@ -128,10 +128,12 @@ export const HeroSection: FC<HeroSectionProps> = ({ onGetStarted }) => {
                       </div>
                     </div>
 
-                    {/* Central Legal Element */}
+                    {/* Central Legal Element - Puzzle Pieces */}
                     <div className="relative z-10 transform hover:scale-110 transition-transform duration-500">
-                      <div className="w-24 h-24 bg-gradient-to-br from-yellow-300 via-orange-300 to-orange-400 rounded-2xl flex items-center justify-center shadow-xl border-4 border-white">
-                        <span className="text-3xl animate-pulse">⚖️</span>
+                      <div className="w-24 h-24 bg-gradient-to-br from-yellow-300 via-orange-300 to-orange-400 rounded-2xl flex items-center justify-center shadow-xl border-4 border-white relative">
+                        <span className="text-3xl animate-pulse">🧩</span>
+                        <div className="absolute -top-1 -right-1 w-6 h-6 bg-orange-500 rounded-full animate-ping opacity-75"></div>
+                        <div className="absolute -bottom-1 -left-1 w-4 h-4 bg-yellow-500 rounded-full animate-pulse opacity-60"></div>
                       </div>
                     </div>
                   </div>

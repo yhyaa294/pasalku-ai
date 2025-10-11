@@ -22,8 +22,9 @@ class User(Base):
     created_at = Column(DateTime, default=datetime.utcnow, nullable=False)
     updated_at = Column(DateTime, default=datetime.utcnow, onupdate=datetime.utcnow, nullable=False)
 
-    # Relationship with chat sessions
+    # Relationships
     chat_sessions = relationship("ChatSession", back_populates="user")
+    payments = relationship("Payment", back_populates="user")
 
 class ChatSession(Base):
     __tablename__ = "chat_sessions"
@@ -57,3 +58,28 @@ class ChatMessage(Base):
 
     # Relationship
     session = relationship("ChatSession", back_populates="messages")
+
+class Payment(Base):
+    __tablename__ = "payments"
+
+    id = Column(UUID(as_uuid=True), primary_key=True, default=uuid.uuid4, index=True)
+    user_id = Column(UUID(as_uuid=True), ForeignKey("users.id"), nullable=True)  # Can be null for anonymous payments
+
+    stripe_payment_intent_id = Column(String, unique=True, nullable=False)
+    stripe_subscription_id = Column(String, unique=True, nullable=True)
+    stripe_customer_id = Column(String, nullable=True)
+
+    amount = Column(Integer, nullable=False)  # Amount in cents
+    currency = Column(String, nullable=False, default="usd")
+    status = Column(String, nullable=False)  # succeeded, failed, pending, canceled
+
+    payment_type = Column(String, nullable=False)  # subscription, one_time
+    product_id = Column(String, nullable=True)  # Stripe product/price ID
+
+    description = Column(Text, nullable=True)
+
+    created_at = Column(DateTime, default=datetime.utcnow, nullable=False)
+    updated_at = Column(DateTime, default=datetime.utcnow, onupdate=datetime.utcnow, nullable=False)
+
+    # Relationships
+    user = relationship("User", back_populates="payments")

@@ -4,6 +4,7 @@ File inisialisasi utama untuk aplikasi Pasalku AI Backend.
 import os
 import logging
 import traceback
+import sentry_sdk
 from fastapi import FastAPI
 from fastapi.middleware.cors import CORSMiddleware
 
@@ -24,6 +25,13 @@ app = FastAPI(
     version="1.0.0",
     docs_url="/docs",
     redoc_url="/redoc"
+)
+
+# Inisialisasi Sentry
+sentry_sdk.init(
+    dsn=os.getenv("NEXT_PUBLIC_SENTRY_DSN"),
+    traces_sample_rate=1.0,
+    environment=os.getenv("ENVIRONMENT", "development")
 )
 
 # Konfigurasi CORS

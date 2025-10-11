@@ -1,0 +1,47 @@
+# Use Node.js 18 Alpine image for smaller size
+FROM node:18-alpine
+
+# Set working directory
+WORKDIR /app
+
+# Install system dependencies
+RUN apk add --no-cache \
+    git \
+    && rm -rf /var/cache/apk/*
+
+# Copy package files first for better caching
+COPY package*.json ./
+COPY pnpm-lock.yaml ./
+
+# Use pnpm if lock file exists, otherwise npm
+RUN if [ -f pnpm-lock.yaml ]; then \
+        npm install -g pnpm && pnpm install --frozen-lockfile; \
+    else \
+        npm ci; \
+    fi
+
+# Copy source code
+COPY . .
+
+# Create Next.js standalone build for production
+RUN npm run build
+
+# Create non-root user
+RUN addgroup -g 1001 -S nodejs && \
+    adduser -S nextjs -u 1001
+
+# Set correct permissions
+RUN chown -R nextjs:nodejs /app
+USER nextjs
+
+# Expose port
+EXPOSE 3000
+
+# Health check
+HEALTHCHECK --interval=30s --timeout=30s --start-period=5s --retries=3 \
+    CMD node -e "require('http').get('http://localhost:3000/api/health', (res) => { \
+        process.exit(res.statusCode === 200 ? 0 : 1) \
+    }).on('error', () => process.exit(1))"
+
+# Start the application
+CMD ["npm", "start"]
