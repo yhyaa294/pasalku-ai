@@ -47,8 +47,8 @@ except ImportError:
 except Exception as e:
     sentry_available = False
     logger.warning(f"Sentry initialization failed: {str(e)}")
-from backend.database import init_db, get_db, SessionLocal
-from backend.routers import auth_router, users_router, chat_router, payments, analytics
+from backend.database import init_db, get_db, get_db_connections
+from backend.routers import auth_router, users_router, chat_router, consultation_router, payments, analytics
 from backend.services.ai_service import ai_service
 from backend.services.analytics_service import AnalyticsService
 
@@ -136,6 +136,7 @@ async def on_shutdown():
 app.include_router(auth_router, prefix="/api/auth", tags=["Authentication"])
 app.include_router(users_router, prefix="/api/users", tags=["Users"])
 app.include_router(chat_router, prefix="/api/chat", tags=["Chat"])
+app.include_router(consultation_router, prefix="/api/consultation", tags=["Consultation"])
 app.include_router(payments.router, prefix="/api/payments", tags=["Payments"])
 app.include_router(analytics.router, prefix="/api/analytics", tags=["Analytics"])
 
@@ -143,13 +144,21 @@ app.include_router(analytics.router, prefix="/api/analytics", tags=["Analytics"]
 @app.get("/api/health", tags=["Health"])
 async def health():
     """Health check endpoint to verify the API is running."""
+    db_connections = get_db_connections()
     return {
         "status": "ok",
         "timestamp": datetime.utcnow().isoformat(),
         "environment": settings.ENVIRONMENT,
         "mongo_available": mongo_available,
         "sentry_available": sentry_available,
-        "ai_service_available": await ai_service.test_connection()
+        "ai_service_available": await ai_service.test_connection(),
+        "databases": {
+            "postgresql": bool(db_connections.pg_engine),
+            "mongodb": db_connections.mongodb_client is not None,
+            "supabase": db_connections.supabase_engine is not None,
+            "turso": db_connections.turso_client is not None,
+            "edgedb": db_connections.edgedb_client is not None
+        }
     }# ===== STRUCTURED LEGAL CONSULTATION FLOW =====
 
 @app.post("/api/structured-consult/initiate", tags=["Structured Consultation"])
@@ -224,6 +233,8 @@ async def generate_structured_questions(payload: Dict[str, Any]):
     Returns:
         List of structured questions
     """
+    logger.info(f"[ENDPOINT] generate-questions called with payload: {payload}")
+
     try:
         category = payload.get("category", "")
         current_data = payload.get("current_data", {})
@@ -231,7 +242,33 @@ async def generate_structured_questions(payload: Dict[str, Any]):
         if not category:
             raise HTTPException(status_code=400, detail="category is required")
 
-        questions = await ai_service.generate_questions(category, current_data)
+        logger.info(f"[ENDPOINT] Calling ai_service.generate_questions for category: {category}")
+        # Temporarily return static questions for testing
+        questions = [
+            {
+                "id": "fallback_question_1",
+                "text": f"Jelaskan lebih detail tentang masalah hukum Anda di kategori {category}:",
+                "type": "text",
+                "required": True
+            },
+            {
+                "id": "fallback_question_2",
+                "text": "Berapa lama masalah ini terjadi?",
+                "type": "text",
+                "required": True
+            },
+            {
+                "id": "fallback_question_3",
+                "text": "Siapa saja pihak yang terlibat dalam masalah ini?",
+                "type": "text",
+                "required": True
+            }
+        ]
+
+        logger.info(f"[ENDPOINT] Generated {len(questions)} questions - Type: {type(questions)}")
+        logger.info(f"[ENDPOINT] Questions data: {questions}")
+        for i, q in enumerate(questions):
+            logger.info(f"[ENDPOINT] Question {i+1}: {q['text'][:100]}...")
 
         return {
             "questions": questions,
@@ -240,7 +277,9 @@ async def generate_structured_questions(payload: Dict[str, Any]):
         }
 
     except Exception as e:
-        logger.error(f"Error generating questions: {str(e)}")
+        logger.error(f"[ENDPOINT] Error generating questions: {str(e)}")
+        import traceback
+        logger.error(f"[ENDPOINT] Traceback: {traceback.format_exc()}")
         raise HTTPException(status_code=500, detail="Failed to generate questions")
 
 @app.post("/api/structured-consult/process-evidence", tags=["Structured Consultation"])

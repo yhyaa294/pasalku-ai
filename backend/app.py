@@ -29,7 +29,7 @@ app = FastAPI(
 
 # Inisialisasi Sentry
 sentry_sdk.init(
-    dsn=os.getenv("NEXT_PUBLIC_SENTRY_DSN"),
+    dsn=os.getenv("SENTRY_DSN"),
     traces_sample_rate=1.0,
     environment=os.getenv("ENVIRONMENT", "development")
 )
@@ -39,7 +39,9 @@ allowed_origins = [
     "http://localhost:5000",
     "http://127.0.0.1:5000",
     "http://localhost:3000",
-    "http://127.0.0.1:3000"
+    "http://127.0.0.1:3000",
+    "https://pasalku-ai.vercel.app",
+    "https://pasalku-ai-3.vercel.app"
 ]
 
 app.add_middleware(
@@ -64,9 +66,9 @@ async def global_exception_handler(request, exc):
     }
 
 # Import dan include router
-from backend.routers.auth import router as auth_router
-from backend.routers.chat import router as chat_router
-from backend.routers.users import router as users_router
+from .routers.auth_updated import router as auth_router
+from .routers.chat_updated import router as chat_router
+from .routers.users import router as users_router
 
 app.include_router(auth_router, prefix="/api/auth", tags=["Authentication"])
 app.include_router(users_router, prefix="/api/users", tags=["Users"])
@@ -78,7 +80,7 @@ async def health_check():
     """Endpoint untuk mengecek status server"""
     try:
         # Test database connection
-    from backend.database import SessionLocal
+        from .database import SessionLocal
         from sqlalchemy import text
         db = SessionLocal()
         db.execute(text("SELECT 1"))
@@ -103,8 +105,8 @@ async def startup_event():
 
     # Inisialisasi database
     try:
-    from backend.database import init_db
-    init_db()
+        from .database import init_db
+        init_db()
         logger.info("Database initialization successful")
     except Exception as e:
         logger.error(f"Database initialization failed: {str(e)}")
@@ -123,4 +125,4 @@ async def shutdown_event():
 if __name__ == "__main__":
     import uvicorn
     port = int(os.getenv("PORT", 8000))
-    uvicorn.run("app:app", host="0.0.0.0", port=port, reload=True)
+    uvicorn.run("backend.app:app", host="0.0.0.0", port=port, reload=True)

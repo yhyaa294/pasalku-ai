@@ -1,13 +1,14 @@
 {
   "permissions": {
     "allow": [
-      "Bash(python -c \"\ntry:\n    from server import app\n    print(''Server import successful'')\n    print(f''Server title: {app.title}'')\n    print(''Backend imports and initialization successful'')\nexcept ImportError as e:\n    print(f''Import error: {e}'')\nexcept Exception as e:\n    print(f''Error: {e}'')\n\")",
-      "Bash(PYTHONPATH=/c/Users/YAHYA/pasalku-ai-3 python -c \"from backend.routers.auth_updated import router; print(''Import successful'')\")",
-      "Bash(PYTHONPATH=/c/Users/YAHYA/pasalku-ai-3 python -m uvicorn backend.server:app --host 127.0.0.1 --port 8000 --reload)",
-      "Bash(PYTHONPATH=/c/Users/YAHYA/pasalku-ai-3:$PYTHONPATH python -c \"from server import app; print(''Server import successful''); print(app.title)\")",
-      "Bash(PYTHONPATH=/c/Users/YAHYA/pasalku-ai-3 python -c \"from backend.server import app; print(''Server import successful''); print(app.title)\")",
-      "Bash(curl -s http://localhost:8000/api/health)",
-      "Bash(timeout 10 PYTHONPATH=/c/Users/YAHYA/pasalku-ai-3 python -m uvicorn backend.server:app --host 127.0.0.1 --port 8000 --log-level info)"
+      "Bash(awk '{print $2}')",
+      "Bash(xargs -r kill -9)",
+      "Bash(curl -s \"http://localhost:8000/api/health\")",
+      "Bash(pkill -f uvicorn)",
+      "Bash(curl -s -X POST \"http://localhost:8000/api/structured-consult/initiate\" -H \"Content-Type: application/json\" -d '{\"\"\"\"problem_description\"\"\"\":\"\"\"\"Saya masalah pembayaran gaji tidak sesuai kontrak di perusahaan saya\"\"\"\"}')",
+      "Bash(curl -s -X POST \"http://localhost:8000/api/structured-consult/process-evidence\" -H \"Content-Type: application/json\" -d '{\"\"\"\"evidence_description\"\"\"\":\"\"\"\"Saya memiliki kontrak kerja tertulis dan slip gaji yang menunjukkan selisih pembayaran sebesar 2 juta rupiah per bulan selama 6 bulan\"\"\"\"}')",
+      "Bash(curl -s \"http://localhost:3000\")",
+      "Bash(git add -A)"
     ],
     "deny": [],
     "ask": []
