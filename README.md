@@ -1,127 +1,455 @@
 # Pasalku.ai - AI Legal Assistant
 
-Sistem AI asisten hukum Indonesia yang membantu pengguna dengan konsultasi hukum berbasis kecerdasan buatan.
+🧠✨ **Sistem AI asisten hukum Indonesia terkemuka** yang membantu pengguna dengan konsultasi hukum berbasis kecerdasan buatan canggih. Platform enterprise-grade dengan payment, analytics, dan multi-provider AI support.
 
-## Fitur Utama
+## 🚀 Fitur Unggulan
 
-### 🔐 Autentikasi & Otorisasi
-- Registrasi dan login pengguna
-- JWT token dengan refresh mechanism
-- Role-based access control (Public, Legal Professional, Admin)
-- Rate limiting dan keamanan input
+### 💳 **Payment Processing** (Stripe Integration)
+- **One-time payments** untuk konsultasi individual
+- **Subscription plans** dengan berbagai tier
+- **Subscription management** (upgrade/downgrade/cancel)
+- **Payment history** dan invoice tracking
+- **Webhook handling** untuk real-time payment updates
+- **Secure payment forms** dengan Stripe Elements
 
-### 💬 Konsultasi AI
-- Chat dengan AI untuk pertanyaan hukum
-- Session-based conversation management
-- Riwayat chat yang tersimpan
-- Streaming response (dalam pengembangan)
-- Citations dan disclaimer hukum
+### 🤖 **Multi-Provider AI System**
+- **Primary**: BytePlus Ark (High-accuracy legal analysis)
+- **Alternative**: Groq AI (Ultra-fast responses)
+- **Auto-routing**: Intelligent provider selection
+- **Failover**: Automatic switching saat provider down
+- **Performance tracking**: Response time & success rate monitoring
+- **Provider comparison**: Cost-benefit analysis tools
 
-### 🛡️ Keamanan
-- Rate limiting per IP dan per user
-- Input validation dan sanitization
-- XSS protection
-- SQL injection prevention
-- CORS configuration
+### 📊 **Advanced Analytics & Dashboard**
+- **User behavior analytics** dengan MongoDB
+- **Revenue tracking** dan financial insights
+- **AI performance monitoring** (response times, success rates)
+- **System health dashboard** real-time
+- **Custom analytics widgets** dan visualizations
+- **Export capabilities** untuk reporting
 
-### 📊 Database
-- PostgreSQL/SQLite support
-- UUID-based primary keys
-- Audit trails (created_at, updated_at)
-- Relationship management
+### 🔄 **Workflow Automation (Inngest)**
+- **Automated email campaigns** untuk user engagement
+- **Scheduled database maintenance**
+- **Payment recovery workflows**
+- **User onboarding sequences**
+- **Batch processing** untuk large datasets
+- **Smart retry mechanisms**
 
-## Teknologi Stack
+### 💰 **Sentry Error Monitoring**
+- **Real-time error tracking** across all services
+- **Performance monitoring** dengan APM
+- **Error categorization** dan prioritization
+- **Environment-specific monitoring**
+- **Integration dengan logging system**
 
-- **Backend**: FastAPI (Python)
-- **Database**: SQLAlchemy + Alembic migrations
-- **AI Service**: BytePlus Ark API
-- **Authentication**: JWT tokens
-- **Security**: Rate limiting, input validation
-- **Testing**: Pytest
-- **Documentation**: OpenAPI/Swagger
+### 🔐 **Enhanced Authentication**
+- **Clerk authentication** integration
+- **Multi-provider SSO** support
+- **Advanced security features**
+- **User profile management**
+- **Session management**
+
+### 🎯 **Structured Legal Consultation**
+- **AI-guided consultation flows**
+- **Problem classification** otomatis
+- **Evidence processing** dan analysis
+- **Pre-analysis summaries**
+- **Structured legal recommendations**
+- **Citation extraction** dan legal reference tracking
+
+## 🛠️ **Teknologi Enterprise Stack**
+
+### **Backend & Architecture**
+- **Framework**: FastAPI (Python async framework)
+- **Database**: PostgreSQL (primary) + MongoDB (analytics)
+- **ORM**: SQLAlchemy dengan UUID support
+- **Migration**: Alembic untuk database versioning
+- **API Documentation**: OpenAPI/Swagger auto-generated
+
+### **AI & Machine Learning**
+- **Primary AI**: BytePlus Ark (High-accuracy legal models)
+- **Secondary AI**: Groq (Ultra-fast Llama models)
+- **AI Routing**: Intelligent failover & load balancing
+- **Response Processing**: Citation extraction, disclaimer generation
+- **Performance Monitoring**: Response time & success rate tracking
+
+### **Payment & Commercial**
+- **Payment Processor**: Stripe (Global payment processing)
+- **Payment Methods**: Credit cards, subscriptions, one-time payments
+- **Webhook Handling**: Real-time payment status updates
+- **Subscription Management**: Plan upgrades, cancellations, billing
+- **Invoice Generation**: Automated receipting & reporting
+
+### **Analytics & Monitoring**
+- **Analytics Database**: MongoDB untuk user behavior tracking
+- **Reporting**: Real-time dashboards & KPI monitoring
+- **Error Tracking**: Sentry untuk production monitoring
+- **Performance Metrics**: APM (Application Performance Monitoring)
+- **Health Checks**: Automated system status monitoring
+
+### **Automation & Workflow**
+- **Workflow Engine**: Inngest untuk background processing
+- **Job Scheduling**: Cron-based & event-triggered workflows
+- **Email Automation**: User engagement & notification campaigns
+- **Database Maintenance**: Automated cleanup & optimization
+- **Batch Processing**: Large-scale data operations
+
+### **Security & Authentication**
+- **Auth Provider**: Clerk (Multi-provider SSO)
+- **API Security**: JWT tokens dengan refresh mechanism
+- **Rate Limiting**: Per-user & per-IP throttling
+- **Input Validation**: Comprehensive sanitization & validation
+- **XSS Protection**: Client-side & server-side prevention
+- **CORS**: Configurable cross-origin resource sharing
+
+### **Frontend & UI/UX**
+- **Framework**: Next.js 14 (React)
+- **Styling**: Tailwind CSS dengan custom animations
+- **State Management**: React hooks & context API
+- **Charts**: Recharts untuk data visualization
+- **Icons**: Lucide React untuk consistent iconography
+- **Accessibility**: Radix UI components (WCAG compliant)
+
+### **DevOps & Deployment**
+- **Containerization**: Docker containers
+- **Orchestration**: Docker Compose untuk local development
+- **Cloud**: Vercel/Railway untuk scalable deployment
+- **CI/CD**: GitHub Actions dengan automated testing
+- **Monitoring**: Sentry + custom health dashboards
+- **Backup**: Automated database backups (PostgreSQL & MongoDB)
 
 ## Instalasi
 
 ### Prerequisites
-- Python 3.8+
-- pip
-- Git
+- **Python 3.9+** (Backend)
+- **Node.js 18+** (Frontend)
+- **PostgreSQL 15+** (Database)
+- **MongoDB 5.0+** (Analytics)
+- **Git**
+- **Docker** (Optional untuk development)
 
 ### Setup Development Environment
 
-1. **Clone repository**
+#### 1. Clone Repository
 ```bash
 git clone https://github.com/your-username/pasalku-ai.git
 cd pasalku-ai
 ```
 
-2. **Install dependencies**
+#### 2. Backend Setup (Python/FastAPI)
 ```bash
+# Install Python dependencies
 pip install -r backend/requirements.txt
-```
 
-3. **Environment configuration**
-```bash
+# Environment configuration
 cp .env.example .env
-# Edit .env dengan konfigurasi Anda
+# Edit .env dengan semua konfigurasi yang diperlukan
 ```
 
-4. **Database setup**
+#### 3. Database Setup
 ```bash
+# PostgreSQL setup (primary database)
 cd backend
-alembic upgrade head
+# Initialize database tables
+python -c "
+from backend.database import init_db
+init_db()
+print('Database initialized!')
+"
+
+# MongoDB untuk analytics (pastikan MongoDB running)
+# Default connection akan menggunakan MongoDB local atau Atlas
 ```
 
-5. **Run application**
+#### 4. Frontend Setup (Next.js)
 ```bash
-uvicorn backend.main:app --reload
+# Install Node.js dependencies
+npm install
+# atau jika menggunakan pnpm
+pnpm install
+
+# Start development servers
+# Terminal 1: Backend server
+npm run dev:backend
+
+# Terminal 2: Frontend server
+npm run dev
+# Server akan berjalan di http://localhost:5000 (frontend)
 ```
 
-## API Endpoints
-
-### Authentication
-- `POST /api/auth/register` - Registrasi pengguna baru
-- `POST /api/auth/login` - Login dan dapatkan token
-- `POST /api/auth/refresh-token` - Refresh access token
-- `POST /api/auth/logout` - Logout
-- `GET /api/auth/me` - Info pengguna saat ini
-
-### Chat
-- `POST /api/chat/consult` - Konsultasi dengan AI
-- `GET /api/chat/history` - Riwayat sesi chat
-- `GET /api/chat/session/{session_id}` - Detail sesi chat
-- `DELETE /api/chat/session/{session_id}` - Hapus sesi chat
-
-## Testing
-
+#### 5. Testing Setup
 ```bash
+# Run integration tests
+npm run test:integration
+
+# Run component tests
+npm run test:components
+
+# Run payment flow tests
+npm run test:payment
+```
+
+---
+
+## 📡 **API Documentation Lengkap**
+
+### 🔓 **Public Consultations**
+```http
+POST /api/consult
+```
+Konsultasi hukum langsung dengan AI (tidak butuh login)
+
+**Request Body:**
+```json
+{
+  "query": "Pertanyaan hukum Anda",
+  "session_id": "optional-session-id",
+  "context": "optional-user-context"
+}
+```
+
+---
+
+### 💳 **Payment System**
+```http
+GET    /api/payments/subscription-plans     # List semua subscription plans
+POST   /api/payments/create-payment-intent  # Create one-time payment
+POST   /api/payments/create-subscription    # Create subscription payment
+GET    /api/payments/payment-history/:id    # Payment history per user
+POST   /api/payments/webhook                 # Stripe webhook handler
+```
+
+---
+
+### 🤖 **AI Services**
+```http
+POST /api/structured-consult/initiate       # Start structured consultation
+POST /api/structured-consult/generate-questions
+POST /api/structured-consult/process-evidence
+POST /api/structured-consult/generate-pre-analysis
+POST /api/structured-consult/final-analysis
+```
+
+---
+
+### 📊 **Analytics & Monitoring**
+```http
+GET    /api/analytics/dashboard-overview   # Complete analytics dashboard
+GET    /api/analytics/global              # Global platform statistics
+GET    /api/analytics/user/:userId        # User-specific analytics
+POST   /api/analytics/log-activity        # Log user activities
+GET    /api/health                         # System health status
+```
+
+---
+
+### 🔐 **Authentication (Clerk)**
+```http
+# Managed by Clerk authentication
+# /api/auth/* endpoints handled by Clerk middleware
+```
+
+---
+
+### 🔄 **Workflow Automation (Inngest)**
+```http
+# Background workflows dikontrol melalui Inngest dashboard
+# Webhook endpoints untuk event processing
+POST   /api/workflows/webhook              # Inngest webhook receiver
+```
+
+---
+
+### 💬 **Legacy Chat System**
+```http
+POST   /api/chat/consult                   # Basic AI consultation
+GET    /api/chat/history                   # Chat session history
+GET    /api/chat/session/:id              # Session details
+DELETE /api/chat/session/:id              # Delete session
+```
+
+## 🧪 **Comprehensive Testing**
+
+### Unit Tests
+```bash
+# Backend unit tests
 cd backend
-pytest tests/
+python -m pytest tests/ -v --cov=.
+
+# Frontend component tests
+cd ..
+npm run test:components
+
+# TypeScript type checking
+npm run type-check
 ```
 
-## Environment Variables
+### Integration Tests
+```bash
+# Full integration test suite
+npm run test:integration    # Backend APIs + Frontend integration
+
+# Payment flow testing
+npm run test:payment        # Stripe payment flows
+
+# AI provider testing
+npm run test:ai-providers   # Multi-provider AI routing
+
+# Load testing
+npm run test:load          # Performance under load
+```
+
+### Manual Testing Checklists
+
+#### ▶️ Payment Flow Testing
+- [ ] Subscription plan selection
+- [ ] Stripe payment intent creation
+- [ ] Payment form loading
+- [ ] Successful payment completion
+- [ ] Failed payment handling
+- [ ] Webhook event processing
+- [ ] Payment history display
+
+#### ▶️ AI Provider Testing
+- [ ] BytePlus Ark responses
+- [ ] Groq AI responses
+- [ ] Auto-routing functionality
+- [ ] Fallback when provider down
+- [ ] Structured consultation flow
+
+#### ▶️ Analytics Testing
+- [ ] Dashboard data loading
+- [ ] User activity logging
+- [ ] Revenue tracking
+- [ ] System health monitoring
+
+---
+
+## ⚙️ **Environment Variables Lengkap**
 
 ```env
-# Environment
-ENVIRONMENT=development
-DEBUG=True
+# =============================================================================
+# ENVIRONMENT CONFIGURATION
+# =============================================================================
 
-# BytePlus Ark Configuration
-ARK_API_KEY=your-api-key-here
+# Application Environment
+ENVIRONMENT=development  # development|production|staging
+DEBUG=True               # Debug mode (development only)
+
+# =============================================================================
+# AI PROVIDER CONFIGURATION
+# =============================================================================
+
+# BytePlus Ark (Primary AI Provider)
+ARK_API_KEY=your-byteplus-api-key
 ARK_BASE_URL=https://ark.ap-southeast.bytepluses.com/api/v3
 ARK_MODEL_ID=ep-20250830093230-swczp
 ARK_REGION=ap-southeast
 
-# Database
-DATABASE_URL=sqlite:///sql_app.db
+# Groq AI (Secondary/Fallback AI Provider)
+GROQ_API_KEY=your-groq-api-key
 
-# Security
-SECRET_KEY=your-secret-key-here
+# =============================================================================
+# DATABASE CONFIGURATION
+# =============================================================================
+
+# PostgreSQL (Primary Database)
+DATABASE_URL=postgresql://user:password@localhost:5432/pasalku_ai
+DATABASE_URL_UNPOOLED=postgresql://user:password@localhost:5432/pasalku_ai
+
+# MongoDB (Analytics Database)
+MONGODB_URI=mongodb://localhost:27017/pasalku_analytics
+MONGO_DB_NAME=pasalku_ai
+
+# Database Connection Parameters
+PGHOST=localhost
+PGUSER=user
+PGPASSWORD=password
+PGDATABASE=pasalku_ai
+
+# =============================================================================
+# PAYMENT PROCESSING (STRIPE)
+# =============================================================================
+
+# Stripe Configuration
+NEXT_PUBLIC_STRIPE_PUBLISHABLE_KEY=pk_test_your_publishable_key
+STRIPE_SECRET_KEY=sk_test_your_secret_key
+STRIPE_WEBHOOK_SECRET=whsec_your_webhook_secret
+
+# Stripe Additional Settings
+STRIPE_MCP_KEY=your-webhook-endpoint-key
+
+# =============================================================================
+# AUTHENTICATION (CLERK)
+# =============================================================================
+
+NEXT_PUBLIC_CLERK_PUBLISHABLE_KEY=pk_test_your_clerk_key
+CLERK_SECRET_KEY=sk_test_your_clerk_secret
+
+# =============================================================================
+# MONITORING & ERROR TRACKING
+# =============================================================================
+
+# Sentry Configuration
+NEXT_PUBLIC_SENTRY_DSN=https://your-sentry-dsn@sentry.io/project
+SENTRY_ORG=your-sentry-org
+SENTRY_PROJECT=pasalku-ai
+SENTRY_AUTH_TOKEN=your-sentry-auth-token
+
+# =============================================================================
+# WORKFLOW AUTOMATION (INGEST)
+# =============================================================================
+
+INNGEST_EVENT_KEY=ingest_event_key_here
+INNGEST_SIGNING_KEY=signkey-prod_your_signing_key
+
+# =============================================================================
+# SECURITY CONFIGURATION
+# =============================================================================
+
+# JWT Security
+SECRET_KEY=your-very-strong-secret-key-change-this-in-production-123456789
 ALGORITHM=HS256
 ACCESS_TOKEN_EXPIRE_MINUTES=30
 
-# CORS
-CORS_ORIGINS=http://localhost:3000
+# CORS Settings (comma-separated origins)
+CORS_ORIGINS=http://localhost:3000,http://127.0.0.1:3000,http://localhost:5000
+
+# Rate Limiting (optional)
+RATE_LIMIT_REQUESTS_PER_MINUTE=60
+
+# =============================================================================
+# FEATURE FLAGS & CONFIGURATION
+# =============================================================================
+
+# Feature Toggles
+ENABLE_AI_FALLBACK=True
+ENABLE_ERROR_LOGGING=True
+ENABLE_ANALYTICS_TRACKING=True
+ENABLE_PAYMENT_PROCESSING=True
+
+# API Timeouts (seconds)
+AI_REQUEST_TIMEOUT=30
+DB_CONNECTION_TIMEOUT=10
+EXT_API_TIMEOUT=60
+
+# =============================================================================
+# DEVELOPMENT & DEBUG
+# =============================================================================
+
+# Frontend Development
+NEXT_PUBLIC_API_URL=http://localhost:3001/api
+
+# Email Service (Development)
+SMTP_HOST=localhost
+SMTP_PORT=587
+SMTP_USER=test
+SMTP_PASS=test
+
+# Development Logging
+LOG_LEVEL=INFO          # DEBUG|INFO|WARNING|ERROR
+LOG_FORMAT=json         # json|text|colored
 ```
 
 ## Development Guidelines

@@ -1,11 +1,15 @@
+'use client'
+
 import { FC } from 'react'
 import { Award, CheckCircle } from 'lucide-react'
+import { useRouter } from 'next/navigation'
 
 interface PricingSectionProps {
   className?: string
 }
 
 export const PricingSection: FC<PricingSectionProps> = ({ className = '' }) => {
+  const router = useRouter()
   const plans = [
     {
       name: "Free",
@@ -114,11 +118,12 @@ export const PricingSection: FC<PricingSectionProps> = ({ className = '' }) => {
                 }`}
                 onClick={() => {
                   if (plan.name === 'Pro') {
-                    // Handle Stripe payment
-                    window.location.href = '/api/create-checkout-session'
-                  } else {
+                    // Redirect to payment page with plan
+                    router.push('/payment?plan=premium_monthly')
+                  } else if (plan.name === 'Free') {
                     // Handle free signup
-                    alert('Free plan selected!')
+                    alert('Free plan selected! Redirecting to signup...')
+                    router.push('/signup')
                   }
                 }}
               >

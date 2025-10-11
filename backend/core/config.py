@@ -1,5 +1,5 @@
 from typing import List
-from pydantic import BaseModel, Field
+from pydantic import BaseModel, Field, field_validator
 from pydantic_settings import BaseSettings, SettingsConfigDict
 from functools import lru_cache
 from dotenv import load_dotenv
@@ -18,7 +18,8 @@ class Settings(BaseSettings):
         env_file=env_path,
         env_file_encoding='utf-8',
         case_sensitive=True,
-        extra='ignore'
+        extra='ignore',
+        env_parse_mode='auto'  # Let pydantic handle parsing automatically
     )
     
     # Application
@@ -43,15 +44,53 @@ class Settings(BaseSettings):
     )
     ARK_MODEL_ID: str = Field(default="ep-20250830093230-swczp")
     
-    # CORS - Menggunakan Field dengan default value berupa list
-    CORS_ORIGINS: List[str] = Field(
-        default_factory=lambda: ["http://localhost:3000"],
-        description="List of allowed CORS origins"
+    # CORS Origins (comma-separated string)
+    CORS_ORIGINS_STR: str = Field(
+        default="http://localhost:3000,https://pasalku-ai.vercel.app",
+        env="CORS_ORIGINS",
+        description="Comma-separated list of allowed CORS origins"
     )
+
+    @property
+    def CORS_ORIGINS(self) -> List[str]:
+        """Return CORS origins as a list, parsed from the string."""
+        return [origin.strip() for origin in self.CORS_ORIGINS_STR.split(',')]
     
     # Optional Services
     MONGODB_URL: str = Field(default="")
     GOOGLE_API_KEY: str = Field(default="")
+
+    # Statsig Configuration
+    STATSIG_CLIENT_KEY: str = Field(default="")
+    STATSIG_SERVER_API_KEY: str = Field(default="")
+    EXPERIMENTATION_CONFIG_ITEM_KEY: str = Field(default="")
+
+    # Clerk Authentication
+    CLERK_PUBLISHABLE_KEY: str = Field(default="")
+    CLERK_SECRET_KEY: str = Field(default="")
+
+    # Stripe Payment Processing
+    STRIPE_PUBLISHABLE_KEY: str = Field(default="")
+    STRIPE_SECRET_KEY: str = Field(default="")
+    STRIPE_MCP_KEY: str = Field(default="")
+    NEXT_PUBLIC_STRIPE_PUBLISHABLE_KEY: str = Field(default="")
+
+    # MongoDB Configuration
+    MONGODB_URI: str = Field(default="")
+    MONGO_DB_NAME: str = Field(default="pasalku_ai")
+
+    # Inngest Workflow Automation
+    INNGEST_EVENT_KEY: str = Field(default="")
+    INNGEST_SIGNING_KEY: str = Field(default="")
+
+    # Groq AI Configuration
+    GROQ_API_KEY: str = Field(default="")
+
+    # Sentry Error Monitoring
+    SENTRY_PROJECT: str = Field(default="")
+    SENTRY_AUTH_TOKEN: str = Field(default="")
+    SENTRY_ORG: str = Field(default="")
+    NEXT_PUBLIC_SENTRY_DSN: str = Field(default="")
 
 @lru_cache()
 def get_settings() -> Settings:
@@ -61,39 +100,5 @@ def get_settings() -> Settings:
     """
     return Settings()
 
-class Settings(BaseSettings):
-    # Application
-    PROJECT_NAME: str = "Pasalku.ai"
-    VERSION: str = "1.0.0"
-    DESCRIPTION: str = "Asisten hukum AI untuk masyarakat Indonesia"
-    
-    # Environment
-    ENVIRONMENT: str = os.getenv("ENVIRONMENT", "development")
-    DEBUG: bool = os.getenv("DEBUG", "True").lower() == "true"
-    
-    # Database
-    DATABASE_URL: str = os.getenv("DATABASE_URL", "sqlite:///sql_app.db")
-    
-    # Security
-    SECRET_KEY: str = os.getenv("SECRET_KEY", "your-secret-key-here")
-    ALGORITHM: str = os.getenv("ALGORITHM", "HS256")
-    ACCESS_TOKEN_EXPIRE_MINUTES: int = int(os.getenv("ACCESS_TOKEN_EXPIRE_MINUTES", "30"))
-    
-    # BytePlus Ark
-    ARK_API_KEY: str = os.getenv("ARK_API_KEY", "863f6a1b-e0ed-4cff-a198-26b92dec48c2")
-    ARK_BASE_URL: str = os.getenv("ARK_BASE_URL", "https://ark.ap-southeast.bytepluses.com/api/v3")
-    ARK_MODEL_ID: str = os.getenv("ARK_MODEL_ID", "ep-20250830093230-swczp")
-    
-    # CORS
-    CORS_ORIGINS: List[str] = get_cors_origins()
-    
-    # Optional Services
-    MONGODB_URL: str = os.getenv("MONGODB_URL", "")
-    GOOGLE_API_KEY: str = os.getenv("GOOGLE_API_KEY", "")
-    
-    class Config:
-        case_sensitive = True
-        env_file = env_path
-        extra = "ignore"  # Ignore extra fields in .env
+settings = get_settings()
 
-settings = Settings()

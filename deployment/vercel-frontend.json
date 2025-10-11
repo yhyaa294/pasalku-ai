@@ -1,0 +1,64 @@
+{
+  "buildCommand": "npm run build",
+  "devCommand": "npm run dev",
+  "installCommand": "npm install",
+  "framework": "nextjs",
+  "outputDirectory": ".next",
+  "functions": {
+    "app/api/**/*.js": {
+      "runtime": "nodejs18.x"
+    }
+  },
+  "rewrites": [
+    {
+      "source": "/api/:path*",
+      "destination": "https://your-railway-backend-url.railway.app/api/:path*"
+    }
+  ],
+  "headers": [
+    {
+      "source": "/(.*)",
+      "headers": [
+        {
+          "key": "X-Frame-Options",
+          "value": "DENY"
+        },
+        {
+          "key": "X-Content-Type-Options",
+          "value": "nosniff"
+        },
+        {
+          "key": "X-XSS-Protection",
+          "value": "1; mode=block"
+        },
+        {
+          "key": "Referrer-Policy",
+          "value": "strict-origin-when-cross-origin"
+        }
+      ]
+    }
+  ],
+  "images": {
+    "domains": [
+      "localhost",
+      "vercel.app",
+      "railway.app",
+      "js.stripe.com"
+    ],
+    "formats": ["image/webp", "image/avif"],
+    "minimumCacheTTL": 31536000
+  },
+  "env": {
+    "NODE_ENV": "production",
+    "NEXT_TELEMETRY_DISABLED": "0"
+  },
+  "crons": [],
+  "regions": ["sin1"],
+  "build": {
+    "env": {
+      "SENTRY_PROJECT": "@sentry_project",
+      "SENTRY_ORG": "@sentry_org",
+      "NEXT_PUBLIC_SENTRY_DSN": "@sentry_dsn"
+    }
+  }
+}

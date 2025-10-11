@@ -1,19 +1,13 @@
 {
   "permissions": {
     "allow": [
-      "Bash(npm run build)",
-      "Bash(npm install --save-dev eslint eslint-config-next)",
-      "Bash(npm install eslint eslint-config-next --save-dev --timeout=30000)",
-      "Bash(npm install next-auth@latest)",
-      "Bash(vercel link --yes)",
-      "Bash(npm install -g vercel)",
-      "Bash(git add .)",
-      "Bash(git commit -m \"feat: prepare for Vercel deployment\n\n- Fix syntax errors and corrupted files\n- Remove problematic next-auth integration temporarily \n- Add vercel.json configuration for deployment\n- Create .env.example for environment setup\n- Build fully working and ready for production\")",
-      "Bash(git push origin main)",
-      "Bash(git commit -m \"feat: add demo mode for MVP - direct chat access without login\n\n- Add prominent ''COBA DEMO GRATIS'' button on login page\n- Demo button bypasses authentication and goes straight to chat\n- Uses localStorage with mock user data for demo session\n- Ready for immediate deployment and showcase\")",
-      "Bash(npm run dev)",
-      "Bash(git commit -m \"feat: implement complete dynamic landing page Pasalku.ai\n\n- Add welcome popup with one-time-display functionality\n- Implement sticky chat support button with animations\n- Create comprehensive hero section with typing effect and AI-human collaboration illustration  \n- Build interactive timeline section with scroll-based progress indicators\n- Add dramatic statistics section with animated numbers and illustrations\n- Implement testimonials carousel with auto-play and random display\n- Create parallax CTA section with urgency animations and timer effects\n- Update footer with newsletter form, animated social icons, and responsive columns\n- Add global micro-interactions and loading spinners\n- Ensure full responsive design for mobile and tablet devices\n- Optimized performance with emoji-based illustrations and efficient animations\n\n🤖 Generated with [Claude Code](https://claude.com/claude-code)\n\nCo-Authored-By: Claude <noreply@anthropic.com>\")",
-      "Bash(git add -A)"
+      "Bash(python -c \"\ntry:\n    from server import app\n    print(''Server import successful'')\n    print(f''Server title: {app.title}'')\n    print(''Backend imports and initialization successful'')\nexcept ImportError as e:\n    print(f''Import error: {e}'')\nexcept Exception as e:\n    print(f''Error: {e}'')\n\")",
+      "Bash(PYTHONPATH=/c/Users/YAHYA/pasalku-ai-3 python -c \"from backend.routers.auth_updated import router; print(''Import successful'')\")",
+      "Bash(PYTHONPATH=/c/Users/YAHYA/pasalku-ai-3 python -m uvicorn backend.server:app --host 127.0.0.1 --port 8000 --reload)",
+      "Bash(PYTHONPATH=/c/Users/YAHYA/pasalku-ai-3:$PYTHONPATH python -c \"from server import app; print(''Server import successful''); print(app.title)\")",
+      "Bash(PYTHONPATH=/c/Users/YAHYA/pasalku-ai-3 python -c \"from backend.server import app; print(''Server import successful''); print(app.title)\")",
+      "Bash(curl -s http://localhost:8000/api/health)",
+      "Bash(timeout 10 PYTHONPATH=/c/Users/YAHYA/pasalku-ai-3 python -m uvicorn backend.server:app --host 127.0.0.1 --port 8000 --log-level info)"
     ],
     "deny": [],
     "ask": []

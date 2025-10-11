@@ -8,7 +8,7 @@ from typing import List
 from backend import crud
 from backend import schemas
 from backend import models
-from backend.core.security import get_current_user, get_current_active_superuser
+from backend.core.security_updated import get_current_user, get_current_active_superuser
 from backend.database import get_db
 
 router = APIRouter()

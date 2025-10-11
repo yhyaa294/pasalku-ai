@@ -5,9 +5,15 @@ from sqlalchemy.orm import sessionmaker, scoped_session
 from sqlalchemy.exc import SQLAlchemyError
 import logging
 from contextlib import contextmanager
+from dotenv import load_dotenv
+from pathlib import Path
 
 # Setup logging
 logger = logging.getLogger(__name__)
+
+# Load environment variables from project root
+env_path = Path(__file__).resolve().parent.parent / ".env"
+load_dotenv(dotenv_path=env_path)
 
 # Get database URL from environment variable with fallback
 DATABASE_URL = os.getenv("DATABASE_URL", "sqlite:///./sql_app.db")

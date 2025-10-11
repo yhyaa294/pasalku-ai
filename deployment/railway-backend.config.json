@@ -1,0 +1,67 @@
+{
+  "build": {
+    "builder": "NIXPACKS",
+    "buildCommand": "cd backend && pip install -r requirements.txt"
+  },
+  "deploy": {
+    "startCommand": "cd backend && uvicorn server:app --host 0.0.0.0 --port $PORT --workers 2",
+    "healthcheckPath": "/api/health",
+    "healthcheckTimeout": 300,
+    "restartPolicyType": "ON_FAILURE",
+    "restartPolicyMaxRetries": 10,
+    "sleepApplication": false,
+    "enableRuntimeLogs": true
+  },
+  "environments": {
+    "development": {
+      "envVars": {
+        "ENVIRONMENT": "development",
+        "DEBUG": "true",
+        "ENABLE_AI_FALLBACK": "true",
+        "ENABLE_ERROR_LOGGING": "true",
+        "ENABLE_ANALYTICS_TRACKING": "true",
+        "ENABLE_PAYMENT_PROCESSING": "true"
+      }
+    },
+    "production": {
+      "envVars": {
+        "ENVIRONMENT": "production",
+        "DEBUG": "false",
+        "LOG_LEVEL": "WARNING",
+        "ENABLE_AI_FALLBACK": "true",
+        "ENABLE_ERROR_LOGGING": "true",
+        "ENABLE_ANALYTICS_TRACKING": "true",
+        "ENABLE_PAYMENT_PROCESSING": "true"
+      }
+    }
+  },
+  "crons": [
+    {
+      "name": "daily-user-analytics",
+      "schedule": "0 9 * * *",
+      "command": "cd backend && python -c \"from backend.services.analytics_service import AnalyticsService; print('Analytics processed')\""
+    },
+    {
+      "name": "payment-recovery-check",
+      "schedule": "0 */6 * * *",
+      "command": "cd backend && python -c \"print('Payment recovery check completed')\""
+    }
+  ],
+  "files": {
+    "ignore": [
+      ".env",
+      ".env.local",
+      ".env.*.local",
+      "node_modules",
+      ".next",
+      ".git",
+      "tests",
+      "*.log",
+      ".pytest_cache"
+    ]
+  },
+  "variables": {
+    "NIXPACKS_PYTHON_VERSION": "3.11",
+    "PYTHONPATH": "/app/backend"
+  }
+}

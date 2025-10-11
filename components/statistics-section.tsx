@@ -153,7 +153,7 @@ export const StatisticsSection: FC<StatisticsSectionProps> = ({ className = '' }
 
                 {/* Dramatic Illustration */}
                 <div className="flex justify-center mb-6 md:mb-8 relative">
-                  <div className="w-20 h-20 md:w-28 md:h-28 rounded-2xl bg-gradient-to-br from-gray-100 to-orange-100 flex items-center justify-center shadow-xl group-hover:scale-110 transition-all duration-300 border-4 border-orange-200 group-hover:border-orange-300">
+                  <div className="w-20 h-20 md:w-28 md:h-28 rounded-2xl bg-gradient-to-br from-gray-100 to-orange-100 flex items-center justify-center shadow-xl group-hover:scale-110 transition-all duration-300 border-4 border-orange-200 group-hover:border-orange-300 animate-twinkle">
                     {stat.illustration}
                   </div>
 
@@ -193,9 +193,14 @@ export const StatisticsSection: FC<StatisticsSectionProps> = ({ className = '' }
                 </p>
 
                 {/* Source with subtle styling */}
-                <div className="text-xs md:text-sm text-gray-500 border-t border-gray-200 pt-4">
+                <div className="text-xs md:text-sm text-gray-500 border-t border-gray-200 pt-4 mb-4">
                   <span className="font-medium">Sumber:</span> {stat.source}
                 </div>
+
+                {/* Pelajari Lebih Lanjut Button */}
+                <button className="w-full px-6 py-3 bg-gradient-to-r from-orange-500 to-red-500 text-white rounded-xl font-semibold hover:from-orange-600 hover:to-red-600 transition-all duration-300 transform hover:scale-105 hover:shadow-lg">
+                  Pelajari Lebih Lanjut
+                </button>
 
                 {/* Animated bottom accent */}
                 <div className="absolute bottom-0 left-0 right-0 h-1 bg-gradient-to-r from-orange-400 via-red-500 to-orange-400 rounded-b-3xl opacity-0 group-hover:opacity-100 transition-opacity duration-500"></div>

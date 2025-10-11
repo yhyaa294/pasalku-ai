@@ -1,0 +1,92 @@
+version: '3.8'
+
+services:
+  # PostgreSQL Database
+  postgres:
+    image: postgres:15
+    environment:
+      POSTGRES_DB: pasalku_ai
+      POSTGRES_USER: pasalku_user
+      POSTGRES_PASSWORD: pasalku_password
+    volumes:
+      - postgres_data:/var/lib/postgresql/data
+    ports:
+      - "5432:5432"
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U pasalku_user -d pasalku_ai"]
+      interval: 30s
+      timeout: 10s
+      retries: 5
+
+  # MongoDB for Analytics
+  mongo:
+    image: mongo:5.0
+    environment:
+      MONGO_INITDB_DATABASE: pasalku_analytics
+    volumes:
+      - mongo_data:/data/db
+    ports:
+      - "27017:27017"
+    healthcheck:
+      test: ["CMD", "mongosh", "--eval", "db.adminCommand('ping')"]
+      interval: 30s
+      timeout: 10s
+      retries: 5
+
+  # Redis for caching (optional)
+  redis:
+    image: redis:7-alpine
+    ports:
+      - "6379:6379"
+    healthcheck:
+      test: ["CMD", "redis-cli", "ping"]
+      interval: 30s
+      timeout: 10s
+      retries: 5
+
+  # Backend API
+  api:
+    build:
+      context: .
+      dockerfile: Dockerfile.backend
+    environment:
+      - ENVIRONMENT=development
+      - DATABASE_URL=postgresql://pasalku_user:pasalku_password@postgres:5432/pasalku_ai
+      - MONGODB_URI=mongodb://mongo:27017/pasalku_analytics
+      - REDIS_URL=redis://redis:6379
+    ports:
+      - "8000:8000"
+    depends_on:
+      postgres:
+        condition: service_healthy
+      mongo:
+        condition: service_healthy
+    healthcheck:
+      test: ["CMD", "python", "-c", "from backend.core.config import get_settings; print('Config OK')"]
+      interval: 30s
+      timeout: 10s
+      retries: 5
+    volumes:
+      - ./backend:/app/backend
+      - ./tests:/app/tests
+
+  # Frontend
+  web:
+    build:
+      context: .
+      dockerfile: Dockerfile.frontend
+    environment:
+      - NEXT_PUBLIC_API_URL=http://localhost:8000/api
+    ports:
+      - "3000:3000"
+    depends_on:
+      - api
+    volumes:
+      - ./components:/app/components
+      - ./pages:/app/pages
+      - ./public:/app/public
+      - ./styles:/app/styles
+
+volumes:
+  postgres_data:
+  mongo_data:

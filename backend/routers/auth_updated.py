@@ -3,10 +3,10 @@ Router untuk handle autentikasi pengguna - Updated Version
 """
 import logging
 from fastapi import APIRouter, Depends, HTTPException, status
-from fastapi.security import OAuth2PasswordRequestForm
+from fastapi.security import OAuth2PasswordRequestForm, OAuth2PasswordBearer
 from sqlalchemy.orm import Session
 from datetime import timedelta
-from typing import Any
+from typing import Any, Optional
 
 from backend import crud
 from backend import schemas
@@ -18,6 +18,11 @@ from backend.core.security_updated import (
     verify_password,
     verify_token
 )
+from backend.core.clerk_service import (
+    clerk_service,
+    get_clerk_user
+)
+from fastapi import Request, Form
 from backend.core.config import settings
 from backend.database import get_db
 
@@ -25,6 +30,23 @@ from backend.database import get_db
 logger = logging.getLogger(__name__)
 
 router = APIRouter()
+
+# Clerk authentication dependency
+oauth2_scheme = OAuth2PasswordBearer(tokenUrl="/api/auth/login")
+
+async def get_current_clerk_user(
+    token: str = Depends(oauth2_scheme),
+    db: Session = Depends(get_db)
+) -> Optional[dict]:
+    """Dependency for Clerk authenticated users"""
+    user_data = await get_clerk_user(token, db)
+    if not user_data:
+        raise HTTPException(
+            status_code=status.HTTP_401_UNAUTHORIZED,
+            detail="Could not validate Clerk credentials",
+            headers={"WWW-Authenticate": "Bearer"},
+        )
+    return user_data
 
 @router.post("/login", response_model=schemas.TokenPair)
 async def login_for_access_token(
@@ -196,3 +218,85 @@ async def update_user_me(
     """
     user = crud.update_user(db=db, user_id=current_user.id, user_in=user_in)
     return user
+
+# ===== CLERK AUTHENTICATION ENDPOINTS =====
+
+@router.post("/clerk-webhook", tags=["Clerk"])
+async def clerk_webhook(request: Request):
+    """
+    Handle Clerk webhooks for user events (registration, profile updates, etc.)
+    """
+    try:
+        body = await request.body()
+        webhook_data = json.loads(body)
+
+        event_type = webhook_data.get("type", "unknown")
+        logger.info(f"Received Clerk webhook: {event_type}")
+
+        # In production, verify webhook signature and handle different event types
+        # For now, just acknowledge receipt
+        return {"status": "ok", "event": event_type}
+
+    except Exception as e:
+        logger.error(f"Clerk webhook error: {str(e)}")
+        raise HTTPException(status_code=400, detail="Webhook processing failed")
+
+@router.post("/clerk-login", response_model=schemas.Token, tags=["Clerk Authentication"])
+async def clerk_login(
+    clerk_jwt_token: str = Form(..., description="Clerk JWT token from frontend"),
+    db: Session = Depends(get_db)
+):
+    """
+    Authenticate user with Clerk JWT token and create local session
+    """
+    try:
+        # Verify Clerk token
+        token_data = clerk_service.verify_token(clerk_jwt_token)
+        if not token_data:
+            raise HTTPException(
+                status_code=status.HTTP_401_UNAUTHORIZED,
+                detail="Invalid Clerk token"
+            )
+
+        clerk_user_id = token_data.get("sub")
+        if not clerk_user_id:
+            raise HTTPException(status_code=400, detail="Invalid token payload")
+
+        # Sync user data to local database
+        synced_user = await clerk_service.sync_user_to_database(clerk_user_id, db)
+        if not synced_user:
+            raise HTTPException(
+                status_code=status.HTTP_500_INTERNAL_SERVER_ERROR,
+                detail="Failed to sync user data"
+            )
+
+        # Create local JWT token
+        access_token_expires = timedelta(minutes=settings.ACCESS_TOKEN_EXPIRE_MINUTES)
+        access_token = create_access_token(
+            subject=synced_user['email'],
+            expires_delta=access_token_expires
+        )
+
+        logger.info(f"Successful Clerk login for: {synced_user['email']}")
+        return {
+            "access_token": access_token,
+            "token_type": "bearer"
+        }
+
+    except HTTPException:
+        raise
+    except Exception as e:
+        logger.error(f"Clerk login error: {str(e)}")
+        raise HTTPException(
+            status_code=status.HTTP_500_INTERNAL_SERVER_ERROR,
+            detail="Clerk authentication failed"
+        )
+
+@router.get("/clerk-user", tags=["Clerk Authentication"])
+async def get_clerk_user_profile(
+    current_clerk_user = Depends(get_current_clerk_user)
+):
+    """
+    Get Clerk user profile information (for enhanced authentication flows)
+    """
+    return current_clerk_user

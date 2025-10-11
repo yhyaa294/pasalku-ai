@@ -66,8 +66,8 @@ export const Navigation: FC<NavigationProps> = ({
           <div className="flex items-center gap-3 cursor-pointer select-none hover:scale-105 transition-transform duration-300"
                onClick={() => window.location.href = '/'}
                onMouseDown={createRipple}>
-            <div className="w-10 h-10 bg-gradient-to-br from-gray-800 to-gray-900 rounded-lg flex items-center justify-center shadow-lg">
-              <span className="text-white text-xl">⚖️</span>
+            <div className="w-10 h-10 bg-gradient-to-br from-gray-800 to-gray-900 rounded-lg flex items-center justify-center shadow-lg animate-glow">
+              <span className="text-white text-xl animate-bounce-in">⚖️</span>
             </div>
             <div className="text-xl font-black text-gray-900 bg-gradient-to-r from-gray-900 to-gray-700 bg-clip-text text-transparent">
               Pasalku.ai
@@ -141,7 +141,7 @@ export const Navigation: FC<NavigationProps> = ({
                   <button
                     onClick={onChatClick}
                     onMouseDown={createRipple}
-                    className="relative px-6 py-2 bg-gray-800 text-white rounded-lg font-medium hover:bg-gray-900 transition-all duration-300 hover:scale-105 hover:shadow-lg overflow-hidden"
+                    className="relative px-6 py-2 bg-gradient-to-r from-orange-500 to-orange-600 text-white rounded-lg font-medium hover:from-orange-600 hover:to-orange-700 transition-all duration-300 hover:scale-105 hover:shadow-lg overflow-hidden"
                   >
                     Masuk
                   </button>
