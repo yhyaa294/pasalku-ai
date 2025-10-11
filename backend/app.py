@@ -70,11 +70,25 @@ from .routers.auth_updated import router as auth_router
 from .routers.chat_updated import router as chat_router
 from .routers.users import router as users_router
 from .routers.advanced_ai import router as advanced_ai_router
+from .routers.documents import router as documents_router
+from .routers.case_study import router as case_study_router
+from .routers.knowledge_base import router as knowledge_router
+from .routers.scheduler import router as scheduler_router
+from .routers.risk_calculator import router as risk_router
+from .routers.ai_debate import router as debate_router
+from .routers.cross_validation import router as cross_val_router
+from .routers.predictive_analytics import router as predictive_router
+from .routers.language_translator import router as translator_router
 
 app.include_router(auth_router, prefix="/api/auth", tags=["Authentication"])
 app.include_router(users_router, prefix="/api/users", tags=["Users"])
 app.include_router(chat_router, prefix="/api/chat", tags=["Chat"])
 app.include_router(advanced_ai_router, tags=["AI Advanced"])
+app.include_router(documents_router, tags=["Documents"])
+app.include_router(case_study_router, tags=["Case Studies"])
+app.include_router(knowledge_router, tags=["Knowledge Base"])
+app.include_router(scheduler_router, tags=["AI Scheduler"])
+app.include_router(risk_router, tags=["Risk Calculator"])
 
 # Health check endpoint
 @app.get("/health")

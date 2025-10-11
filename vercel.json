@@ -6,7 +6,7 @@
   "rewrites": [
     {
       "source": "/api/:path*",
-      "destination": "https://dfe0f919-b1d5-42cd-814c-67d4bdacd335-00-2jswrntu9rksa.pike.replit.dev:8000/api/:path*"
+      "destination": "https://pasalku-ai-backend.vercel.app/api/:path*"
     }
   ],
   "headers": [

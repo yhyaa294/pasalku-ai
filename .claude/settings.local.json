@@ -1,16 +1,24 @@
 {
   "permissions": {
     "allow": [
-      "Bash(PYTHONPATH=/backend:/backend/backend python -m uvicorn app:app --reload --port 8001 --host 0.0.0.0)",
-      "Bash(curl -s http://localhost:8001/health)",
+      "Bash(PYTHONPATH=/backend:/backend/backend python -m uvicorn app:app --reload --port 8000 --host 0.0.0.0)",
+      "Bash(curl -s http://localhost:8000/health)",
       "Bash(python -m json.tool)",
       "Bash(python -m pip install -r backend/requirements.txt)",
-      "Bash(curl -s http://localhost:8001/docs)",
-      "Bash(python -m uvicorn server:app --reload --host 127.0.0.1 --port 8001 --timeout-graceful-shutdown 2)",
-      "Bash(python -m uvicorn backend.server:app --reload --host 127.0.0.1 --port 8001 --timeout-graceful-shutdown 10)",
+      "Bash(curl -s http://localhost:8000/docs)",
+      "Bash(python -m uvicorn server:app --reload --host 127.0.0.1 --port 8000 --timeout-graceful-shutdown 2)",
+      "Bash(python -m uvicorn backend.server:app --reload --host 127.0.0.1 --port 8000 --timeout-graceful-shutdown 10)",
       "Bash(python -m pip install byteplus-python-sdk-v2)",
       "Bash(python security_audit.py)",
-      "Bash(git add .)"
+      "Bash(git add .)",
+      "Bash(git commit -m \"$(cat <<''EOF''\nfeat: Implement comprehensive production deployment\n\n✅ Restructured 94 environment variables into blockchain-inspired architecture\n✅ Implemented Dual AI Strategic Assessment with BytePlus Ark + Groq fusion\n✅ Added multi-database support (PostgreSQL, MongoDB, Supabase, Turso, EdgeDB) \n✅ Created enterprise security audit system achieving Grade A (80.0%)\n✅ Built advanced AI router with 5 innovative endpoints (strategic assessment, consensus, adaptive persona, reasoning chain, sentiment analysis)\n✅ Generated comprehensive deployment documentation\n✅ Configured Sentry monitoring, Checkly uptime, and analytics integration\n✅ Updated configuration management and testing scripts\n\nProduction-ready infrastructure for legal AI consultation platform.\n🤖 Generated with [Claude Code](https://claude.com/claude-code)\n\nCo-Authored-By: Claude <noreply@anthropic.com>\nEOF\n)\")",
+      "Bash(git push origin main)",
+      "Bash(git add backend/DEPLOYMENT_README.md)",
+      "Bash(git commit --amend --no-edit)",
+      "Bash(vercel --version)",
+      "Bash(npm install -g vercel)",
+      "Bash(vercel --prod)",
+      "Bash(vercel --prod --yes)"
     ],
     "deny": [],
     "ask": []

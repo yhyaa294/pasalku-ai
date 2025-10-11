@@ -200,6 +200,40 @@ GET  /ai/advanced/capabilities          # AI capabilities info
 GET  /ai/advanced/health               # AI health check
 ```
 
+### **Smart Document Analysis**
+```
+POST /api/documents/upload               # Upload dokumen hukum
+GET  /api/documents/{id}                 # Get analysis results
+GET  /api/documents/                     # List user documents
+DELETE /api/documents/{id}               # Delete document
+```
+
+### **Legal Knowledge Base**
+```
+POST /api/knowledge/search              # Search Indonesian law database
+GET  /api/knowledge/{id}                # Get law detail
+GET  /api/knowledge/popular/trending    # Trending topics
+GET  /api/knowledge/updates/recent      # Recent legal updates
+POST /api/knowledge/admin/trigger-update # Admin: trigger update
+```
+
+### **AI Consultation Scheduler**
+```
+POST /api/scheduler/book-consultation   # AI-powered appointment booking
+GET  /api/scheduler/availability/{id}   # Check specialist availability
+GET  /api/scheduler/stats               # Scheduler statistics
+GET  /api/scheduler/specialists         # List available specialists
+POST /api/scheduler/reschedule/{id}     # Reschedule appointment
+```
+
+### **Legal Risk Matrix Calculator**
+```
+POST /api/risk-calculator/calculate-risk    # Risk matrix assessment
+POST /api/risk-calculator/compliance-check  # Compliance analysis
+POST /api/risk-calculator/risk-prediction   # Risk trend prediction
+POST /api/risk-calculator/action-plan       # Generate action plan
+```
+
 ### **Legal Consultation Workflow**
 ```
 POST /api/consultation/start            # Initialize consultation

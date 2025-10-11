@@ -11,7 +11,9 @@ const nextConfig = {
   
   // Environment Variables
   env: {
-    NEXT_PUBLIC_API_URL: process.env.NEXT_PUBLIC_API_URL || 'http://localhost:8000',
+    NEXT_PUBLIC_API_URL: process.env.NEXT_PUBLIC_API_URL || process.env.VERCEL_URL 
+      ? `https://${process.env.VERCEL_URL}` 
+      : 'http://localhost:8000',
   },
 
   // Experimental Features
@@ -93,7 +95,9 @@ const nextConfig = {
     return [
       {
         source: '/api/:path*',
-        destination: `http://localhost:8000/api/:path*`,
+        destination: process.env.VERCEL_URL 
+          ? `https://pasalku-ai-backend.vercel.app/api/:path*`
+          : `http://localhost:8000/api/:path*`,
       },
     ];
   },

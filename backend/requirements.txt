@@ -71,3 +71,13 @@ urllib3==2.5.0
 uvicorn==0.27.1
 watchfiles==1.1.0
 sentry-sdk==2.19.2
+
+# Document processing libraries
+PyMuPDF==1.23.25  # For PDF processing (Fitz)
+Pillow==10.2.0    # For image processing
+pytesseract==0.3.10  # For OCR
+docx2txt==0.8     # For DOCX processing
+
+# Additional AI/ML libraries for document analysis
+transformers==4.35.2
+torch==2.1.2
