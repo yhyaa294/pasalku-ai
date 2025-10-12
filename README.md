@@ -1,444 +1,348 @@
-# 🚀🎯 Pasalku.ai - **Supreme Legal AI Platform** | World-Leading Legal Technology Revolution
+# ⚖️ Pasalku.ai - AI-Powered Legal Consultation Platform
 
-[![GitHub stars](https://img.shields.io/github/stars/yourusername/pasalku-ai-3.svg?style=for-the-badge&logo=github)](https://github.com/yourusername/pasalku-ai-3/stargazers)
+[![GitHub stars](https://img.shields.io/github/stars/yhyaa294/pasalku-ai.svg?style=for-the-badge&logo=github)](https://github.com/yhyaa294/pasalku-ai/stargazers)
 [![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg?style=for-the-badge)](https://opensource.org/licenses/MIT)
-[![Next.js](https://img.shields.io/badge/Next.js-000000?style=for-the-badge&logo=next.js&logoColor=white)](https://nextjs.org/)
-[![FastAPI](https://img.shields.io/badge/FastAPI-005571?style=for-the-badge&logo=fastapi)](https://fastapi.tiangolo.com/)
-[![PostgreSQL](https://img.shields.io/badge/PostgreSQL-316192?style=for-the-badge&logo=postgresql&logoColor=white)](https://www.postgresql.org/)
+[![Next.js](https://img.shields.io/badge/Next.js-14-000000?style=for-the-badge&logo=next.js&logoColor=white)](https://nextjs.org/)
+[![FastAPI](https://img.shields.io/badge/FastAPI-Python-005571?style=for-the-badge&logo=fastapi)](https://fastapi.tiangolo.com/)
+[![TypeScript](https://img.shields.io/badge/TypeScript-007ACC?style=for-the-badge&logo=typescript&logoColor=white)](https://www.typescriptlang.org/)
 
 ---
 
-## 🌍 **The Most Comprehensive Legal AI Platform on Earth** | 96+ Advanced AI Features
+## 🚀 Platform AI Hukum Terlengkap di Indonesia
 
-<div align="center">
-  <img src="https://raw.githubusercontent.com/yahya294/pasalku-ai-3/main/docs/pasalku-ai-hero.png" alt="Pasalku.ai Hero" width="800" />
+**Pasalku.ai** adalah platform konsultasi hukum berbasis AI yang menggabungkan teknologi dual AI (BytePlus Ark + Groq) untuk memberikan solusi hukum yang akurat, cepat, dan terpercaya.
 
-  <p align="center">
-    <strong>Dual AI Fusion Technology | Indonesian Legal Expertise | Enterprise-Grade Security</strong>
-    <br />
-    <br />
-    <strong>🔬 94.1% AI Accuracy | ⚡ 28s Response Time | 🏆 World's Most Advanced Negotiation AI</strong>
-  </p>
+### ✨ Fitur Utama
 
-  <div align="center">
-    <table>
-      <tr>
-        <td align="center">
-          <strong>96+</strong><br/>AI Features
-        </td>
-        <td align="center">
-          <strong>50+</strong><br/>Production APIs
-        </td>
-        <td align="center">
-          <strong>94.1%</strong><br/>Accuracy Rate
-        </td>
-        <td align="center">
-          <strong>99.9%</strong><br/>Uptime
-        </td>
-        <td align="center">
-          <strong>Grade A</strong><br/>Security Score
-        </td>
-      </tr>
-    </table>
-  </div>
-</div>
+- **🧠 Konsultasi Hukum Instan** - AI-powered legal consultation dengan akurasi tinggi
+- **📄 Analisis Dokumen Cerdas** - OCR dan analisis kontrak otomatis
+- **🗄️ Knowledge Graph Hukum** - Database hukum Indonesia yang komprehensif
+- **✅ Verifikasi Profesional** - Sistem verifikasi untuk praktisi hukum
+- **🔒 Keamanan Enterprise** - Enkripsi AES-256 dan compliance PDPA
+- **🌐 Multi-Bahasa** - Dukungan Bahasa Indonesia dan Inggris
+
+### 📊 Status Platform
+
+| Metric | Value |
+|--------|-------|
+| **Total Features** | 22+ API Endpoints |
+| **Database** | 5-Block Architecture |
+| **Security** | Enterprise-Grade |
+| **Uptime Target** | 99.9% |
+| **Response Time** | <200ms |
 
 ---
 
-## 🎯 **4 Revolutionary AI Sub-Systems** | Game-Changing Innovation
+## 🎯 Fitur Inti Platform
 
-### 🧠 **1. ADAPTIVE PERSONA SYSTEM** - Negotiation Intelligence Revolution
-```
-🎭 DYNAMIC PERSONA SWITCHING | 4 Advanced Negotiation Personas | Real-Time Behavioral Adaptation
-```
-**Core Features:**
-- **🔄 Diplomatic Zara**: Win-win collaboration & relationship building
-- **📊 Analytical Dr. Voss**: Data-driven precision & logical frameworks
-- **🏆 Competitive Marcus**: Strategic victory maximization & leverage tactics
-- **🤝 Collaborative Isabella**: Consensus-building & harmony creation
+### 🧠 1. Konsultasi Hukum AI
 
-**🌟 Revolutionary Capabilities:**
-- Real-time opponent behavior analysis
-- Contextual persona adaptation algorithms
-- 87.5% negotiation success rate enhancement
-- Indonesian cultural intelligence integration
+Sistem konsultasi berbasis dual AI yang memberikan jawaban hukum akurat dengan sitasi pasal dan UU yang relevan.
 
----
+**Kemampuan:**
+- Dual AI consensus (BytePlus Ark + Groq)
+- Confidence scoring untuk setiap jawaban
+- Sitasi otomatis ke peraturan Indonesia
+- Riwayat konsultasi terenkripsi
 
-### 🔍 **2. REASONING CHAIN ANALYZER** - Logic Intelligence Supreme
-```
-🧬 LOGICAL VALIDATION ENGINE | 15+ Fallacy Detection | Evidence Chain Analysis
-```
-**Advanced Logic Analysis:**
-- **15+ Logical Fallacies** detection & classification
-- **Cross-Verification Algorithms** with bias elimination
-- **Counter-Argument Generation** with persuasion optimization
-- **Legal Reasoning Frameworks** - Indonesian & International standards
+### 📄 2. Analisis Dokumen
 
-**🎯 Performance Metrics:**
-- **94% Logic Flaw Detection** accuracy
-- **91% Argument Strength Assessment** precision
-- **96% Cultural Reasoning Adaptation** score
+Analisis dokumen hukum otomatis dengan OCR dan AI processing.
 
----
+**Fitur:**
+- OCR untuk PDF, DOCX, gambar
+- Analisis kontrak dan perjanjian
+- Deteksi risiko klausul
+- Ekstraksi informasi penting
 
-### 🎨 **3. SENTIMENT ANALYSIS ENGINE** - Language Intelligence Mastery
-```
-🌈 8 Tone Categories | Cultural Tone Recognition | Risk Assessment Algorithms
-```
-**Tone Detection Intelligence:**
-- **8 Advanced Categories**: Aggressive, Defensive, Collaborative, Neutral, Formal, Casual, Optimistic, Pessimistic
-- **Cultural Coefficients** - Indonesian business communication norms
-- **Risk Pattern Recognition** - Liability exposure identification
-- **Tone Optimization System** - Relationship preservation while maintaining legal strength
+### 🗄️ 3. Knowledge Graph Hukum
 
-**📊 Performance Excellence:**
-- **94% Tone Detection Accuracy** across categories
-- **89% Risk Assessment Precision** for threat prediction
-- **96% Cultural Context Interpretation**
+Database hukum Indonesia yang terstruktur dengan semantic search.
+
+**Cakupan:**
+- Peraturan perundang-undangan Indonesia
+- Putusan pengadilan (jurisprudensi)
+- Semantic search dengan AI
+- Relasi antar peraturan
+
+### ✅ 4. Verifikasi Profesional
+
+Sistem verifikasi untuk praktisi hukum dengan fitur premium.
+
+**Benefit:**
+- Badge profesional terverifikasi
+- Akses fitur advanced
+- Priority support
+- Analytics dashboard
 
 ---
 
-### 🤝 **4. CONTRACT INTELLIGENCE ENGINE** - Optimization Revolution
-```
-📄 DUAL AI MATRIX | 87% Risk Reduction | 200+ Optimization Suggestions
-```
-**Ultimate Contract Optimization:**
-- **Dual AI Fusion**: Ark (Legal Compliance) + Groq (Business Optimization)
-- **87% Risk Mitigation** potential through optimized clause structures
-- **82% Negotiation Success Rate** improvement
-- **Multi-Language Transliteration** - Indonesian legal terminology optimization
+## 💼 Paket Harga
 
-**🚀 Advanced Features:**
-- Intelligent template generation
-- Clause-by-clause risk assessment
-- Performance prediction modeling
-- Multi-party negotiation optimization
+### 🆓 Gratis
 
----
+**Rp 0/bulan**
 
-## 🎪 **Complete Feature Ecosystem** | 96+ AI Capabilities
+- 10 konsultasi per bulan
+- Analisis dokumen dasar
+- Akses knowledge base
+- Chat support
 
-### 🤖 **Core Intelligence Suite** (25 Features)
-#### 🎯 **Strategic Assessment Intelligence**
-- Dual AI consensus analysis for complex cases
-- Risk matrix automation with 87% reduction potential
-- Decision frameworks with 82% prediction accuracy
-- Enterprise-grade confidence scoring
+### ⭐ Premium
 
-#### 🤝 **Consensus Consulting System**
-- Multi-perspective analysis synthesis
-- Cross-validation elimination for consistency
-- Collaborative intelligence with Bayesian confidence
+**Rp 99.000/bulan**
 
-#### 🧬 **Ethics & Compliance Monitoring**
-- **Real-time Ethics Dashboards** - Enterprise governance
-- **94.2% Bias Detection Rate** - Multi-dimensional analysis
-- **PII Protection System** - Advanced data safeguarding
-- **Transparent Audit Trails** - Complete monitoring history
-- **Multi-jurisdictional Compliance** - PDPA/LGDPR standards
+- Konsultasi unlimited
+- Analisis dokumen advanced
+- Priority support
+- Dashboard analytics
+- Verifikasi profesional
+- API access (terbatas)
+
+### 🏢 Professional
+
+**Rp 397.000/bulan**
+
+- Semua fitur Premium
+- API access penuh
+- White-label option
+- Dedicated support
+- Custom integrations
+- SLA guarantee
 
 ---
 
-### 📊 **Advanced Analytics & Research** (18 Features)
-#### 📋 **Smart Document Analysis Engine**
-- 96% accuracy OCR processing for legal documents
-- Multi-format support: PDF, DOCX, TIFF, JPG
-- Legal context awareness & risk factor identification
-- Citation extraction with validation protocols
+## 🏗️ **Arsitektur Teknis**
 
-#### 🏛️ **Legal Knowledge Base Indonesia**
-- **100% Coverage** - Comprehensive Indonesian legal database
-- **89% Relevance** - Semantic search with precision
-- Real-time legal updates from authoritative sources
-- Cross-referencing with jurisprudence precedents
-- Multi-jurisdictional research capabilities
+### Frontend (Next.js 14)
 
-#### 📈 **Predictive Legal Analytics Pro**
-- Monte Carlo simulations for outcome forecasting
-- Risk trajectory modeling (30-90 day predictions)
-- Scenario planning with probability distributions
-- Economic impact assessment algorithms
+```typescript
+// Tech Stack
+- Next.js 14 (App Router)
+- React + TypeScript
+- TailwindCSS + shadcn/ui
+- Framer Motion (animations)
+- Lucide Icons
+```
+
+**Halaman Utama:**
+- Landing page (8 sections)
+- Pricing page dengan Stripe checkout
+- Features page
+- FAQ page
+- Contact page
+- About page
+
+### Backend (FastAPI)
+
+```python
+# Tech Stack
+- FastAPI (Python async)
+- Pydantic (validation)
+- SQLAlchemy (ORM)
+- Alembic (migrations)
+```
+
+**API Endpoints:**
+- `/api/v1/auth/*` - Authentication
+- `/api/v1/chat/*` - AI consultation
+- `/api/v1/documents/*` - Document analysis
+- `/api/v1/verification/*` - Professional verification
+- `/api/v1/health` - Health check
+
+### Database (Multi-Database)
+
+**1. Neon PostgreSQL** (Primary)
+- User accounts & authentication
+- Subscription data
+- Audit logs
+
+**2. MongoDB** (Conversations)
+- Chat history
+- AI responses
+- Document metadata
+
+**3. Supabase** (Realtime)
+- Public profiles
+- Notifications
+- Edge functions
+
+**4. Turso** (Cache)
+- AI response cache
+- Session data
+
+**5. EdgeDB** (Knowledge Graph)
+- Legal knowledge base
+- Semantic relationships
 
 ---
 
-### 🤖 **AI Debate & Cross-Validation** (12 Features)
-#### 🗣️ **AI Legal Debate System**
-- Structured dual AI argumentation framework
-- 98% consensus accuracy in complex scenarios
-- Cross-examination logic with bias elimination
-- Real-time debate moderation protocols
+## 🔒 Keamanan & Monitoring
 
-#### 🔍 **Dual AI Cross-Validation Engine**
-- Parallel fact-checking across AI providers
-- 94% validation accuracy with hallucination detection
-- Citation credibility scoring with source verification
+### Authentication
 
-#### 🌐 **Multi-Lingual Legal Translator**
-- **95% Accuracy** - Indonesian-International legal translation
-- Cultural adaptation for legal terminology contexts
-- USPTO & EU patent language compatibility
-- Regulatory compliance harmonization
+- **Clerk** - Primary authentication provider
+- **StackAuth** - Alternative auth (optional)
+- **JWT** - Token-based sessions
+- **RBAC** - Role-based access control
 
----
+### Encryption
 
-### 🏆 **Enterprise Business Solutions** (25 Features)
-#### 🎪 **Virtual Court Simulation**
-- AI Judge & Lawyers in simulated court environments
-- Legal argumentation practice modules
-- Outcome prediction algorithms with confidence intervals
+- **AES-256** - Data at rest
+- **TLS 1.3** - Data in transit
+- **bcrypt** - Password hashing
+- **PIN Protection** - Session security
 
-#### 📊 **Legal Business Intelligence Dashboard**
-- Enterprise analytics with performance tracking
-- ROI measurement for legal investments
-- Client satisfaction forecasting models
+### Monitoring & Analytics
 
-#### 🎤 **AI Voice Assistant**
-- Natural language legal consultation interface
-- Multi-language voice recognition capabilities
-- Automated case intake and triage systems
+- **Sentry** - Error tracking & APM
+- **Checkly** - Uptime monitoring
+- **Statsig** - A/B testing & feature flags
+- **Hypertune** - Config management
 
-#### 🚀 **Startup Accelerator Hub**
-- Business validation algorithms for entrepreneurs
-- Regulatory compliance planning frameworks
-- Investment readiness assessment tools
+### Compliance
 
-#### 🌍 **International Legal Bridge**
-- Cross-border legal harmonization systems
-- Multi-jurisdictional compliance mapping
-- Cultural adaptation algorithms for global businesses
+- PDPA (Personal Data Protection Act)
+- GDPR-ready architecture
+- Audit logging
+- Data encryption
 
 ---
 
-## 🏗️ **Enterprise-Grade Architecture** | 5-Block Database System
+## 🚀 API Endpoints
 
-### **🏗️ Technical Foundation**
-```
-🎯 FRONTEND:
-├── Next.js 14 + React + TypeScript
-├── TailwindCSS + Framer Motion animations
-├── Recharts for advanced visualizations
-├── Accessibility (WCAG 2.1 Level AA)
-└── Progressive Web App (PWA) capabilities
+### Authentication
 
-🚀 BACKEND:
-├── FastAPI (Python Async) - 28ms ultra-fast responses
-├── Dual AI Fusion: BytePlus Ark + Groq AI
-├── Comprehensive Security Middleware
-├── Real-time Websocket Support
-└── Enterprise API Rate Limiting
-```
-
-### **🗄️ 5-Block Database Architecture**
-```
-🌐 BLOCK 1: PostgreSQL (Core Ledger)
-- User management & authentication
-- Payment processing transactions
-- Audit trails & compliance records
-- ACID transaction guarantees
-
-🌐 BLOCK 2: MongoDB (Content Archive)
-- AI conversation logs & history
-- Document analysis results storage
-- Complex analytics data structures
-- Flexible schema capabilities
-
-🌐 BLOCK 3: Supabase (Real-time Services)
-- Live notification delivery systems
-- Edge computing for global distribution
-- Instant synchronization protocols
-- Real-time collaboration features
-
-🌐 BLOCK 4: Turso (Fast Cache Layer)
-- AI response optimization cache
-- Ephemeral data management
-- Lightning-fast read operations
-- Global edge distribution network
-
-🌐 BLOCK 5: EdgeDB (Knowledge Graph)
-- Legal relationship mapping system
-- Semantic search capabilities
-- Complex query optimization engine
-- Graph-based recommendation algorithms
-```
-
----
-
-## 🔬 **Performance & Security Excellence**
-
-### **⚡ Superior Performance Metrics**
-```
-📊 AI ACCURACY:      94.1% (vs 78% industry average)
-⚡ RESPONSE TIME:    28 seconds (17x faster than competitors)
-✅ SUCCESS RATE:     98.9% (confidence intervals ±1.2%)
-🏆 RISK REDUCTION:   87.0% potential risk elimination
-👥 SATISFACTION:     96.5% user satisfaction rating
-💰 COST EFFICIENCY:  82.0% operational cost reduction
-```
-
-### **🔒 Enterprise Security Framework** *(Grade A - 80.0% Security Score)*
-```
-🛡️ AUTHENTICATION:
-├── JWT + Clerk SSO integration
-├── Multi-factor authentication support
-├── Role-based access control (RBAC)
-├── Session management & rotation
-
-🔐 ENCRYPTION:
-├── AES-256 encryption at rest
-├── TLS 1.3 transport security
-├── PIN hashing with bcrypt+salt
-├── End-to-end communication encryption
-
-🕵️ MONITORING:
-├── Sentry error tracking & APM
-├── Real-time performance monitoring
-├── Automated security scanning
-├── Comprehensive audit logging
-└── Threat intelligence integration
-```
-
----
-
-## 🚀 **Complete API Ecosystem** | 50+ Production Endpoints
-
-### **Core Intelligence APIs** (Strategic Suite)
 ```http
-# Advanced AI Intelligence Endpoints
-POST /ai/advanced/strategic-assessment    # Dual AI consensus analysis
-POST /ai/advanced/consensus-consultation   # Multi-perspective synthesis
-POST /ai/advanced/adaptive-persona         # Context-driven persona switching
-POST /ai/advanced/reasoning-chain          # Logic flaw detection
-POST /ai/advanced/sentiment-analysis       # Tone analysis (8 categories)
-
-# Real-time Performance Monitoring
-GET  /ai/advanced/health                   # AI system health dashboard
-GET  /ai/advanced/capabilities             # Current AI capabilities matrix
+POST /api/v1/auth/register      # User registration
+POST /api/v1/auth/login         # User login
+POST /api/v1/auth/logout        # User logout
+GET  /api/v1/auth/me            # Get current user
 ```
 
-### **Enterprise Document Intelligence**
-```http
-# Document Processing & Analysis
-POST /api/documents/upload                 # Multi-format document processing
-GET  /api/documents/{documentId}/analysis  # Comprehensive analysis results
-POST /api/documents/generate-contract      # AI-powered contract creation
+### AI Consultation
 
-# Knowledge Base Integration
-GET  /api/knowledge/search                 # Semantic legal search (89% relevance)
-GET  /api/knowledge/{lawId}/details        # Detailed law explanations
-POST /api/knowledge/precedent-discovery    # Automated precedent finding
+```http
+POST /api/v1/chat/konsultasi    # AI legal consultation
+GET  /api/v1/chat/history       # Chat history
+GET  /api/v1/chat/sessions      # User sessions
 ```
 
-### **Advanced Research & Analytics**
-```http
-# Research Assistant Suite
-POST /api/research-assistant/comprehensive-search # Full research automation
-POST /api/research-assistant/gap-analysis         # Emerging issue identification
-POST /api/research-assistant/cross-jurisdictional  # Comparative research
+### Documents
 
-# Predictive Modeling
-POST /api/predictive-analytics/legal-forecasting  # Outcome probability modeling
-POST /api/predictive-analytics/scenario-analysis  # Decision optimization
-GET  /api/predictive-analytics/risk-trajectories  # 30-90 day predictions
+```http
+POST /api/v1/documents/upload   # Upload document
+POST /api/v1/documents/analyze  # Analyze document
+GET  /api/v1/documents/list     # List documents
 ```
 
-### **Contract Intelligence Engine** *(Most Advanced Contract AI)*
+### Verification
+
 ```http
-# Dual AI Contract Optimization
-POST /api/contract-engine/full-analysis           # Comprehensive contract review
-POST /api/contract-engine/risk-mitigation         # Clause optimization (87% risk reduction)
-POST /api/contract-engine/negotiation-support     # Bargaining zone analysis
-POST /api/contract-engine/performance-prediction  # Outcome forecasting
+POST /api/v1/verification/submit    # Submit verification
+GET  /api/v1/verification/status    # Check status
+POST /api/v1/verification/approve   # Approve (admin)
+```
+
+### Health & Monitoring
+
+```http
+GET  /api/v1/health             # Health check
+GET  /api/v1/metrics            # System metrics
 ```
 
 ---
 
-## 📦 **Quick Start Installation**
+## 📦 Quick Start
 
-### **🖥️ System Requirements**
+### Prerequisites
+
+- Node.js 18+
+- Python 3.9+
+- PostgreSQL 15+
+- MongoDB (optional)
+
+### Installation
+
 ```bash
-✅ Ubuntu 20.04+ / macOS 12+ / Windows 11+
-✅ Python 3.9+ (Backend processing engine)
-✅ Node.js 18+ (Frontend framework)
-✅ PostgreSQL 15+ (Core data persistence)
-✅ MongoDB Atlas (Advanced analytics storage)
-✅ Supabase Account (Real-time features)
-✅ Docker Desktop (Optional but recommended)
+# Clone repository
+git clone https://github.com/yhyaa294/pasalku-ai.git
+cd pasalku-ai
+
+# Install frontend dependencies
+npm install
+
+# Setup environment variables
+cp .env.example .env.local
+# Edit .env.local with your API keys
+
+# Run development server
+npm run dev
+# Visit http://localhost:3000
 ```
 
-### **⚡ One-Click Setup**
-```bash
-# Clone the Revolutionary AI Platform
-git clone https://github.com/yahya294/pasalku-ai-3.git
-cd pasalku-ai-3
+### Backend Setup
 
-# Backend Environment Configuration
+```bash
+# Navigate to backend
 cd backend
+
+# Create virtual environment
 python -m venv venv
 source venv/bin/activate  # Windows: venv\Scripts\activate
-cp .env.example .env      # Configure your API keys
+
+# Install dependencies
 pip install -r requirements.txt
 
-# Frontend Development Environment
-cd ..
-npm install
-cp .env.example .env.local
+# Setup database
+alembic upgrade head
 
-# Launch the Supreme AI Platform
-npm run dev               # Starts development servers
-# Visit http://localhost:3000 - AI Platform Active!
-```
-
-### **🐳 Docker Production Deployment**
-```bash
-# Build and deploy with Docker orchestration
-docker-compose up -d
-# AI Platform scales to handle enterprise workload
+# Run backend server
+uvicorn main:app --reload --port 8000
+# Visit http://localhost:8000/docs for API docs
 ```
 
 ---
 
-## ⚙️ **Environment Configuration Guide**
+## ⚙️ Environment Variables
 
-### **🚀 Dual AI Provider Setup**
+### Required Variables
+
 ```env
-# PRIMARY AI - Legal Depth & Reasoning
-ARK_API_KEY=your-byteplus-ark-api-key
-ARK_BASE_URL=https://ark.ap-southeast.bytepluses.com/api/v3
-ARK_MODEL_ID=ep-20250830093230-swczp
-ARK_MAX_TOKENS=4096
-ARK_TEMPERATURE=0.3
+# AI Services
+ARK_API_KEY=your_ark_api_key
+GROQ_API_KEY=your_groq_api_key
 
-# SECONDARY AI - Strategic Optimization
-GROQ_API_KEY=your-groq-api-key
-GROQ_MODEL=llama2-70b-4096
-GROQ_MAX_TOKENS=4096
-GROQ_TEMPERATURE=0.7
+# Database
+DATABASE_URL=postgresql://user:pass@host:5432/db
+MONGODB_URI=mongodb+srv://user:pass@cluster/db
 
-# Fusion Engine Configuration
-AI_FAILOVER_ENABLED=True
-AI_LOAD_BALANCING=weighted
-AI_RATE_LIMIT_REQUESTS=100
+# Authentication
+CLERK_SECRET_KEY=your_clerk_secret
+NEXT_PUBLIC_CLERK_PUBLISHABLE_KEY=your_clerk_public
+
+# Payments
+STRIPE_SECRET_KEY=your_stripe_secret
+NEXT_PUBLIC_STRIPE_PUBLISHABLE_KEY=your_stripe_public
+NEXT_PUBLIC_STRIPE_PRICE_ID=price_xxx
+
+# App
+NEXT_PUBLIC_APP_URL=https://pasalku.ai
 ```
 
-### **🗄️ Database Configuration**
+### Optional Variables
+
 ```env
-# PostgreSQL - Core Ledger
-DATABASE_URL=postgresql://user:password@localhost:5432/pasalku_ai
-DB_POOL_SIZE=20
-DB_MAX_OVERFLOW=30
+# Monitoring
+SENTRY_DSN=your_sentry_dsn
+CHECKLY_API_KEY=your_checkly_key
 
-# MongoDB - Advanced Analytics
-MONGODB_URI=mongodb+srv://user:password@cluster.mongodb.net/pasalku_ai
-MONGO_MAX_POOL_SIZE=50
+# Analytics
+STATSIG_SERVER_API_KEY=your_statsig_key
+NEXT_PUBLIC_HYPERTUNE_TOKEN=your_hypertune_token
 
-# Supabase - Real-time Features
-SUPABASE_URL=https://your-project.supabase.co
-SUPABASE_ANON_KEY=your-anon-key
-
-# Turso - Lightning-Fast Caching
-TURSO_DATABASE_URL=your-turso-url
-TURSO_AUTH_TOKEN=your-turso-token
+# Email
+RESEND_API_KEY=your_resend_key
 ```
 
 ---
