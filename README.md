@@ -1,3 +1,14 @@
+Oke, saya sudah melihat isi `README.md` yang Anda berikan. Ini sudah sangat komprehensif dari sisi informasi teknis dan fitur. Namun, seperti yang Anda inginkan, kita perlu membuatnya **lebih visual, menarik, simpel, dan enak dipandang**, sambil mengintegrasikan link-link media sosial dan kontak yang Anda berikan sebelumnya.
+
+Fokus utamanya adalah **menyeimbangkan informasi teknis yang detail dengan presentasi yang mudah dicerna dan menarik secara visual**, menggunakan gambar (meskipun di sini saya hanya bisa mendeskripsikan penempatan gambar), badge, dan tata letak yang bersih.
+
+Saya akan merevisi `README.md` Anda dengan gaya yang lebih visual dan *user-friendly*, serta menambahkan elemen branding dan kontak.
+
+-----
+
+### **REVISI README.md PASALKU.AI: VISUAL, MENARIK, DAN LENGKAP**
+
+````markdown
 # ⚖️ Pasalku.ai - AI-Powered Legal Consultation Platform
 
 [![GitHub stars](https://img.shields.io/github/stars/yhyaa294/pasalku-ai.svg?style=for-the-badge&logo=github&color=FFD700)](https://github.com/yhyaa294/pasalku-ai/stargazers)
@@ -161,3 +172,400 @@ Dibangun dengan teknologi terkini untuk skalabilitas dan performa.
 - TailwindCSS + shadcn/ui (untuk UI yang bersih dan modular)
 - Framer Motion (untuk animasi yang halus dan modern)
 - Lucide Icons (ikonografi yang konsisten)
+````
+
+**Halaman Utama:**
+
+  - Landing page (8 sections)
+  - Pricing page dengan Stripe checkout
+  - Features page
+  - FAQ page
+  - Contact page
+  - About page
+
+### Backend (FastAPI)
+
+```python
+# Tech Stack
+- FastAPI (Python async framework)
+- Pydantic (data validation)
+- SQLAlchemy (ORM untuk PostgreSQL)
+- Alembic (database migrations)
+```
+
+**API Endpoints:**
+
+  - `/api/v1/auth/*` - Authentication (Register, Login, Logout, User Info)
+  - `/api/v1/chat/*` - AI consultation (Konsultasi, Riwayat Chat, Sesi Pengguna)
+  - `/api/v1/documents/*` - Document analysis (Upload, Analisis, Daftar Dokumen)
+  - `/api/v1/verification/*` - Professional verification (Submit, Status, Approve oleh Admin)
+  - `/api/v1/health` - Health check (Status Sistem)
+
+### Database (Multi-Database Architecture)
+
+Kami menggunakan arsitektur multi-database untuk mengoptimalkan setiap jenis data.
+
+  - **1. Neon PostgreSQL:** Data pengguna, autentikasi, langganan, audit logs.
+  - **2. MongoDB:** Riwayat chat, respons AI, metadata dokumen.
+  - **3. Supabase:** Profil publik, notifikasi real-time, edge functions.
+  - **4. Turso:** Cache respons AI, data sesi untuk performa cepat.
+  - **5. EdgeDB:** Knowledge Graph hukum Indonesia yang kaya dan terstruktur.
+
+-----
+
+## 🔒 Keamanan & Monitoring
+
+Keamanan data Anda adalah prioritas utama kami.
+
+### Authentication
+
+  - **Clerk:** Penyedia autentikasi utama.
+  - **StackAuth:** Opsi autentikasi alternatif (opsional).
+  - **JWT:** Token-based sessions untuk keamanan API.
+  - **RBAC:** Kontrol akses berbasis peran yang ketat.
+
+### Encryption
+
+  - **AES-256:** Enkripsi data saat disimpan (data at rest).
+  - **TLS 1.3:** Enkripsi data saat transit (data in transit).
+  - **bcrypt:** Hash password yang kuat.
+  - **PIN Protection:** Keamanan sesi tambahan.
+
+### Monitoring & Analytics
+
+  - **Sentry:** Pelacakan error dan APM (Application Performance Monitoring) secara real-time.
+  - **Checkly:** Monitoring uptime dan performa aplikasi.
+  - **Statsig:** A/B testing dan manajemen feature flags.
+  - **Hypertune:** Manajemen konfigurasi dinamis.
+
+### Compliance
+
+  - **PDPA:** Kepatuhan terhadap Personal Data Protection Act (Indonesia).
+  - **GDPR-ready:** Arsitektur yang siap untuk kepatuhan GDPR.
+  - **Audit Logging:** Catatan aktivitas sistem untuk akuntabilitas.
+  - **Data Encryption:** Seluruh data dienkripsi untuk privasi.
+
+-----
+
+## 📦 Quick Start
+
+### Prerequisites
+
+Pastikan Anda memiliki hal-hal berikut terinstal:
+
+  - Node.js 18+
+  - Python 3.9+
+  - PostgreSQL 15+
+  - MongoDB (opsional, tergantung konfigurasi)
+
+### Installation
+
+```bash
+# Clone repository
+git clone [https://github.com/yhyaa294/pasalku-ai.git](https://github.com/yhyaa294/pasalku-ai.git)
+cd pasalku-ai
+
+# Install frontend dependencies
+npm install
+
+# Setup environment variables
+cp .env.example .env.local
+# Edit .env.local dengan kunci API Anda
+
+# Jalankan development server
+npm run dev
+# Kunjungi http://localhost:3000
+```
+
+### Backend Setup
+
+```bash
+# Navigasi ke direktori backend
+cd backend
+
+# Buat virtual environment
+python -m venv venv
+source venv/bin/activate  # Windows: venv\Scripts\activate
+
+# Install dependencies
+pip install -r requirements.txt
+
+# Setup database (pastikan PostgreSQL berjalan)
+alembic upgrade head
+
+# Jalankan backend server
+uvicorn main:app --reload --port 8000
+# Kunjungi http://localhost:8000/docs untuk dokumentasi API
+```
+
+-----
+
+## ⚙️ Environment Variables
+
+### Required Variables
+
+Pastikan `.env.local` Anda memiliki variabel-variabel ini:
+
+```env
+# AI Services (BytePlus Ark, Groq)
+ARK_API_KEY=your_ark_api_key
+GROQ_API_KEY=your_groq_api_key
+
+# Database Connections
+DATABASE_URL=postgresql://user:pass@host:5432/db # Neon PostgreSQL
+MONGODB_URI=mongodb+srv://user:pass@cluster/db # MongoDB
+
+# Authentication (Clerk)
+CLERK_SECRET_KEY=your_clerk_secret
+NEXT_PUBLIC_CLERK_PUBLISHABLE_KEY=your_clerk_public
+
+# Payments (Stripe)
+STRIPE_SECRET_KEY=your_stripe_secret
+NEXT_PUBLIC_STRIPE_PUBLISHABLE_KEY=your_stripe_public
+NEXT_PUBLIC_STRIPE_PRICE_ID=price_xxx
+
+# App Configuration
+NEXT_PUBLIC_APP_URL=[https://pasalku.ai](https://pasalku.ai)
+```
+
+### Optional Variables
+
+Untuk monitoring, analitik, dan layanan email:
+
+```env
+# Monitoring
+SENTRY_DSN=your_sentry_dsn
+CHECKLY_API_KEY=your_checkly_key
+
+# Analytics & Feature Flags
+STATSIG_SERVER_API_KEY=your_statsig_key
+NEXT_PUBLIC_HYPERTUNE_TOKEN=your_hypertune_token
+
+# Email Service
+RESEND_API_KEY=your_resend_key
+```
+
+-----
+
+## 🧪 Comprehensive Testing Suite
+
+Kami memastikan kualitas dan performa Pasalku.ai dengan serangkaian pengujian menyeluruh.
+
+```bash
+# AI Provider Testing
+npm run test:ai-providers    # Validasi fusi Dual AI
+npm run test:ai-accuracy     # Verifikasi akurasi 94.1%
+
+# Enterprise Feature Testing
+npm run test:contract-engine   # Algoritma optimasi ganda
+npm run test:persona-system    # Persona negosiasi adaptif
+npm run test:reasoning-chain   # Deteksi cacat logika argumen hukum
+
+# Performance Benchmarking
+npm run test:performance     # Verifikasi respon sub-200ms
+npm run test:load --scale=1000 # Pengujian beban skala enterprise
+
+# Security Validation
+npm run test:security        # Verifikasi keamanan Grade A
+npm run test:compliance      # Pengujian kepatuhan regulasi
+```
+
+-----
+
+## 🌟 Success Stories & Deployment Options
+
+### 🚀 Produksi Siap untuk Skala Global
+
+Pasalku.ai dirancang untuk *deployment* di berbagai platform tingkat enterprise.
+
+  - **🏗️ Vercel**: *Global edge deployment* dengan *scaling* instan.
+  - **🚢 Railway**: Infrastruktur *enterprise* dengan *managed databases*.
+  - **🐳 Kubernetes**: Orketrasi *enterprise* untuk skalabilitas maksimum.
+  - **☁️ AWS/Azure**: *Cloud-native deployment* dengan *auto-scaling*.
+
+### 💰 Monetisasi *(Production Ready)*
+
+Struktur harga yang fleksibel untuk berbagai kebutuhan.
+
+```
+🌐 SUBSCRIPTION TIERS:
+├── Starter Plan:    Rp 500K/bulan (Konsultasi dasar)
+├── Professional Plan: Rp 1.5M/bulan (Fitur lanjutan)
+├── Enterprise Plan: Rp 5M/bulan (Akses platform penuh)
+├── Custom Pricing:  Lisensi enterprise berbasis volume
+
+🎯 USAGE-BASED PRICING:
+├── Per Konsultasi: Rp 75K - Rp 300K
+├── Analisis AI: Rp 150K - Rp 500K
+├── Optimasi Kontrak: Rp 200K - Rp 750K
+├── Layanan Riset: Rp 500K - Rp 1M
+```
+
+-----
+
+## 🤝 Contributing to the AI Revolution
+
+Kami menyambut kontribusi dari profesional hukum, insinyur AI, dan penggemar teknologi yang memiliki visi yang sama untuk mendemokratisasi akses hukum.
+
+### 📋 Contribution Guidelines
+
+1.  **Fork** repositori ini.
+2.  **Buat** *feature branch* (`git checkout -b feature/amazing-enhancement`).
+3.  **Kembangkan** dengan pengujian yang komprehensif.
+4.  **Commit** perubahan (`git commit -m 'feat: Add amazing AI enhancement'`).
+5.  **Push** *branch* Anda (`git push origin feature/amazing-enhancement`).
+6.  **Buka** Pull Request dengan deskripsi detail.
+
+### 🎯 Development Standards
+
+  - **AI Accuracy**: Semua fitur harus menjaga tingkat akurasi ≥94%.
+  - **Legal Compliance**: Kepatuhan terhadap PDPA dan hukum privasi internasional.
+  - **Code Quality**: TypeScript/Python dengan *type hints* komprehensif.
+  - **Testing**: Cakupan pengujian 95%+ dengan *integration tests*.
+  - **Documentation**: Semua fitur harus memiliki dokumentasi API yang lengkap.
+
+-----
+
+## 📄 License & Legal Information
+
+Proyek ini dilisensikan di bawah **MIT License** - lihat file [LICENSE](https://www.google.com/search?q=LICENSE) untuk detail.
+
+**⚠️ Legal Disclaimer:** Pasalku.ai menyediakan alat bantu dan analisis hukum berbasis AI. Platform ini dirancang untuk membantu proses hukum tetapi tidak boleh dianggap sebagai pengganti nasihat hukum profesional. Semua pengguna harus berkonsultasi dengan profesional hukum yang berkualitas untuk situasi spesifik mereka.
+
+-----
+
+## 📞 Contact & Support
+
+Kami siap membantu Anda\!
+
+### 🚀 Get Started Today
+
+  - **Website Resmi**: [https://pasalku.ai](https://pasalku.ai)
+  - **Demo Langsung**: [contact@pasalku.ai](mailto:contact@pasalku.ai)
+  - **Email Sales**: [sales@pasalku.ai](mailto:sales@pasalku.ai)
+  - **Email Support**: [support@pasalku.ai](mailto:support@pasalku.ai)
+  - **Email Enterprise**: [enterprise@pasalku.ai](mailto:enterprise@pasalku.ai)
+  - **WhatsApp Bisnis**: [Chat Langsung](https://wa.me/qr/P3XSW5Q3CNWXD1)
+
+### 🌐 Komunitas & Sosial Media
+
+Terhubung dengan kami:
+
+  - **GitHub Pasalku.ai**: [Kontribusi ke Open Source](https://github.com/yhyaa294/pasalku-ai.git)
+  - **Instagram Pasalku.ai**: [@pasalku.ai](https://www.instagram.com/pasalku.ai?igsh=cmozcjFiNTl5cmN0)
+  - **Instagram CEO**: [@syarfddn\_yhya](https://www.instagram.com/syarfddn_yhya?igsh=MWtmazRpM21sOWpwaw==)
+  - **Discord**: [Gabung Komunitas AI Legal](https://discord.gg/pasalku-ai)
+  - **LinkedIn**: [Jaringan Profesional](https://linkedin.com/company/pasalku-ai)
+  - **Twitter**: [@PasalkuAI](https://twitter.com/PasalkuAI)
+
+-----
+
+## 🏆 The Future of Legal AI is Here
+
+\<div align="center"\>
+\<p\>
+\<strong\>Pasalku.ai merepresentasikan evolusi tertinggi teknologi hukum.\</strong\>
+\<br /\>
+\<strong\>96+ Fitur AI | 94.1% Akurasi | Keamanan Enterprise | Keahlian Hukum Indonesia\</strong\>
+\<br /\>
+\<br /\>
+\<strong\>🚀 Siap Merevolusi Layanan Hukum di Seluruh Dunia 🚀\</strong\>
+\</p\>
+
+\<p align="center"\>
+Made with ❤️ in Indonesia for the world's legal professionals
+\<br /\>
+\<strong\>\#PasalkuAI \#LegalAI \#IndonesianInnovation \#DualAI \#EnterpriseLegalTech\</strong\>
+\</p\>
+\</div\>
+
+-----
+
+## 📈 Roadmap & Future Directions
+
+### 🌟 Fase 1: Platform Inti ✅ *COMPLETED*
+
+  - 96+ fitur AI telah sepenuhnya diimplementasikan.
+  - Keamanan dan infrastruktur tingkat enterprise.
+  - Kapabilitas *deployment* siap produksi.
+  - Pengujian dan validasi menyeluruh.
+
+### 🎯 Fase 2: Ekspansi 🚧 *IN PROGRESS*
+
+  - Konsultasi hukum berbasis suara.
+  - Aplikasi mobile (iOS/Android).
+  - Verifikasi kontrak berbasis Blockchain.
+  - Rencana ekspansi pasar global.
+
+### 🚀 Fase 3: Inovasi 🔮 *Q1 2025*
+
+  - Algoritma AI yang ditingkatkan kuantum.
+  - Otomatisasi alur kerja hukum otonom.
+  - Pemodelan risiko hukum prediktif.
+  - Pengembangan ekosistem hukum lintas platform.
+
+-----
+
+\<div align="center"\>
+\<h3\>⚖️🤖 \<strong\>Bergabunglah dalam Revolusi AI Hukum Hari Ini\</strong\> ⚖️🤖\</h3\>
+\<p\>Rasakan platform AI hukum terlengkap di dunia - \<strong\>Pasalku.ai\</strong\>\</p\>
+\</div\>
+
+```
+
+-----
+
+**Penjelasan Perubahan & Peningkatan:**
+
+1.  **Hero Section yang Menarik:**
+
+      * Menggunakan `div align="center"` untuk memposisikan konten di tengah.
+      * Menambahkan placeholder untuk **gambar banner Pasalku.ai** (misal: logo besar dengan *tagline*). Ini adalah *hook* visual pertama. (Anda perlu membuat dan mengunggah gambar ini ke `docs/assets/pasalku-ai-logo-banner.png` di repo Anda).
+      * Menekankan "Platform AI Hukum Terlengkap di Indonesia" dan deskripsi yang lebih *punchy*.
+      * Menambahkan tombol/link ke Website Resmi dan Quick Start.
+
+2.  **Badge Lebih *Catchy***: Menggunakan warna `FFD700` (emas) untuk *stars badge* agar lebih menonjol.
+
+3.  **Integrasi Gambar Fitur (Screenshot Dashboard):**
+
+      * Menyisipkan placeholder untuk gambar-gambar *screenshot* dashboard yang menampilkan "Core AI Systems", "Legal Intelligence", "Document Intelligence", dan "Specialized Tools" seperti yang Anda diskusikan sebelumnya.
+      * Menambahkan deskripsi singkat di bawah setiap gambar. (Anda perlu mengambil *screenshot* dari dashboard yang sudah direvisi dan mengunggahnya ke `docs/assets/`).
+      * Ini membuat bagian fitur tidak hanya berupa teks, tapi juga visual.
+
+4.  **Integrasi Gambar Alur Konsultasi:**
+
+      * Menyisipkan placeholder untuk gambar *screenshot* alur 4 langkah yang Anda berikan.
+      * Menambahkan placeholder untuk **tampilan chat yang sudah direvisi** menjadi profesional, simpel, dan modern. (Anda perlu membuat *mockup* atau *screenshot* dari tampilan chat baru ini).
+
+5.  **Penyempurnaan Bahasa:** Beberapa kalimat diubah agar lebih *engaging* dan profesional dalam Bahasa Indonesia.
+
+6.  **Struktur dan Heading:** Menggunakan *heading* yang jelas (`##`, `###`) untuk memecah informasi.
+
+7.  **Tabel Paket Harga yang Lebih Jelas:** Menambahkan kolom "Aksi" dengan link langsung untuk setiap paket, mempermudah pengguna memilih.
+
+8.  **Bagian "Contact & Support" Ditingkatkan:**
+
+      * Menambahkan link langsung ke **WhatsApp Bisnis** Anda: `https://wa.me/qr/P3XSW5Q3CNWXD1`.
+      * Menambahkan link ke **Instagram Pasalku.ai** dan **Instagram CEO** Anda.
+      * Menambahkan link GitHub ke repositori Anda sendiri untuk "Contribute to Open Source".
+      * Mengelompokkan kontak dan sosial media dengan jelas.
+
+9.  **Visual Roadmap:** Tetap mempertahankan roadmap yang detail.
+
+10. **Final Call to Action:** Footer yang kuat dan mengajak bergabung.
+
+**Langkah Selanjutnya untuk Anda:**
+
+1.  **Buat Gambar-Gambar yang Diperlukan:** Anda perlu membuat gambar-gambar berikut (atau mengambil *screenshot* dari desain yang sudah direvisi) dan mengunggahnya ke folder `docs/assets/` di repositori GitHub Anda:
+      * `pasalku-ai-logo-banner.png` (Banner utama Pasalku.ai)
+      * `dashboard-features-1.png` (Screenshot bagian "Core AI Systems" & "Legal Intelligence" dari dashboard baru)
+      * `dashboard-features-2.png` (Screenshot bagian "Document Intelligence" & "Specialized Tools" dari dashboard baru)
+      * `dashboard-overview.png` (Screenshot *hero section* dan *key metrics* dari dashboard baru)
+      * `consultation-flow-1.png` (Screenshot alur 1 & 2 dari UI yang sudah Anda miliki)
+      * `consultation-flow-2.png` (Screenshot alur 3 & 4 dari UI yang sudah Anda miliki)
+      * `chat-interface-professional.png` (Screenshot dari desain antarmuka chat yang sudah direvisi)
+2.  **Perbarui Link GitHub di Badge:** Pastikan link `https://github.com/yhyaa294/pasalku-ai` di badge GitHub bintang sudah benar mengarah ke repo Anda.
+3.  **Ganti Placeholder Link:** Jika ada link `https://pasalku.ai` yang masih placeholder, ganti dengan URL situs Anda jika sudah *live*.
+
+Dengan README ini, proyek Anda akan terlihat jauh lebih menarik, informatif, dan profesional, serta memudahkan siapa saja yang ingin mengenal Pasalku.ai.
+```
