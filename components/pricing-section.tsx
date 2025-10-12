@@ -12,40 +12,36 @@ export const PricingSection: FC<PricingSectionProps> = ({ className = '' }) => {
   const router = useRouter()
   const plans = [
     {
-      name: "Free",
-      price: "0",
-      period: "",
-      description: "Cocok untuk individu dan penggunaan personal",
+      name: 'Free',
+      price: '0',
+      period: '',
+      description: 'Cocok untuk individu dan penggunaan personal',
       features: [
-        "10 Analisis AI per bulan",
-        "Database hukum dasar",
-        "Email support",
-        "Template dokumen standar",
-        "Mobile app access",
+        '10 AI queries per bulan',
+        'Konsultasi hukum dasar',
+        'Riwayat chat 30 hari',
+        'Akses knowledge base',
       ],
       popular: false,
-      color: "from-gray-500 to-gray-600",
-      buttonText: "Mulai Gratis"
+      color: 'from-gray-500 to-gray-600',
+      buttonText: 'Mulai Gratis'
     },
     {
-      name: "Pro",
-      price: "10",
-      period: "/bulan",
-      description: "Ideal untuk lawyer dan konsultan hukum",
+      name: 'Premium',
+      price: '99000',
+      period: '/bulan',
+      description: 'Untuk pengguna aktif dan profesional',
       features: [
-        "Unlimited analisis AI",
-        "Database hukum lengkap",
-        "Priority support 24/7",
-        "Advanced document generator",
-        "API access",
-        "Custom templates",
-        "Analytics dashboard",
-        "Export hasil analisis",
-        "Konsultasi prioritas"
+        'Unlimited AI queries',
+        'Analisis dokumen',
+        'Dual-AI verification (opsional)',
+        'Priority support',
+        'Export chat history',
+        'PIN-protected sessions'
       ],
       popular: true,
-      color: "from-purple-500 to-pink-500",
-      buttonText: "Upgrade to Pro"
+      color: 'from-purple-500 to-pink-500',
+      buttonText: 'Lihat Paket Lengkap'
     },
   ]
 
@@ -90,10 +86,10 @@ export const PricingSection: FC<PricingSectionProps> = ({ className = '' }) => {
 
               <div className="mb-4 md:mb-6">
                 <span className="text-3xl md:text-5xl font-black text-foreground">
-                  {plan.price === "0" ? "Free" : `$${plan.price}`}
+                  {plan.price === '0' ? 'Free' : `Rp ${Number(plan.price).toLocaleString('id-ID')}`}
                 </span>
                 <span className="text-lg md:text-xl text-muted-foreground">
-                  {plan.price === "0" ? "" : plan.period}
+                  {plan.price === '0' ? '' : plan.period}
                 </span>
               </div>
 
@@ -117,14 +113,8 @@ export const PricingSection: FC<PricingSectionProps> = ({ className = '' }) => {
                     : "bg-transparent border-primary text-primary hover:bg-primary hover:text-white"
                 }`}
                 onClick={() => {
-                  if (plan.name === 'Pro') {
-                    // Redirect to payment page with plan
-                    router.push('/payment?plan=premium_monthly')
-                  } else if (plan.name === 'Free') {
-                    // Handle free signup
-                    alert('Free plan selected! Redirecting to signup...')
-                    router.push('/signup')
-                  }
+                  // Arahkan ke halaman pricing detail untuk checkout
+                  router.push('/pricing')
                 }}
               >
                 {plan.buttonText}

@@ -1,16 +1,19 @@
 'use client';
 
-import { Navigation } from '@/components/navigation';
+import { EnhancedNavigation } from '@/components/enhanced-navigation';
 import { HeroSection } from '@/components/hero-section';
 import { StatisticsSection } from '@/components/statistics-section';
 import { FeaturesSection } from '@/components/features-section';
 import { HowItWorksSection } from '@/components/how-it-works-section';
 import { PricingSection } from '@/components/pricing-section';
-import { Footer } from '@/components/footer';
+import { EnhancedFooter } from '@/components/enhanced-footer';
 import { useEffect, useState } from 'react';
 import Link from 'next/link';
 
-import ChatInterface from '@/components/ChatInterfaceFixed';
+import ChatInterface from '@/components/ChatInterfaceFixed'
+import { TestimonialsSection } from '@/components/testimonials-section'
+import { CTASection } from '@/components/cta-section'
+import { FAQSection } from '@/components/faq-section'
 
 export default function PasalkuLandingPage() {
   const [isAuthenticated, setIsAuthenticated] = useState(false);
@@ -122,7 +125,7 @@ export default function PasalkuLandingPage() {
         })}
       </div>
 
-      <Navigation
+      <EnhancedNavigation
         isAuthenticated={isAuthenticated}
         userRole={userRole}
         onLogin={handleLogin}
@@ -135,9 +138,12 @@ export default function PasalkuLandingPage() {
         <FeaturesSection />
         <HowItWorksSection />
         <PricingSection />
+        <FAQSection />
+        <TestimonialsSection />
+        <CTASection onGetStarted={handleChatClick} />
       </main>
 
-      <Footer />
+      <EnhancedFooter />
 
       {/* Chat Interface */}
       {showChat && (

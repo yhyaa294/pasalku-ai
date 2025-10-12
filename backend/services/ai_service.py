@@ -822,13 +822,7 @@ Berikan respons dalam format JSON:
 
             Berikan penilaian komprehensif dalam konteks hukum Indonesia:
 
-            {"""
-            Khusus untuk bukti digital/surat:
-            - Validitas formil (legalitas dokumen)
-            - Chain of custody (asal-usul bukti)
-            - Authenticity (keaslian)
-            - Relevance (relevansi dengan kasus)
-            """ if evidence_type in ["document", "image"] else "Kh sus untuk bukti non-digital: Evaluasi narasi dan kredibilitas saksi."}
+            """ + ("KhUSUS UNTUK BUKTI DIGITAL/SURAT: Formil (legalitas dokumen), Chain of custody (asal-usul bukti), Keaslian (Authenticity), Relevansi dengan kasus. " if evidence_type in ["document", "image"] else "KHUSUS UNTUK BUKTI NON-DIGITAL: Evaluasi narasi dan kredibilitas saksi.")
 
             BERIKAN RESPON DALAM FORMAT JSON:
             {{

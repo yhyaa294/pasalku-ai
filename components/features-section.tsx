@@ -1,5 +1,5 @@
 import { FC } from 'react'
-import { Brain, Search, FileText, Shield, Globe, TrendingUp, CheckCircle } from 'lucide-react'
+import { Brain, FileText, Shield, Globe, Users, Database, CheckCircle } from 'lucide-react'
 
 interface FeaturesSectionProps {
   className?: string
@@ -9,45 +9,45 @@ export const FeaturesSection: FC<FeaturesSectionProps> = ({ className = '' }) =>
   const features = [
     {
       icon: Brain,
-      title: "AI Legal Analysis",
+      title: 'Konsultasi Hukum Instan',
       description:
-        "Analisis mendalam menggunakan machine learning terdepan dengan database hukum Indonesia terlengkap. Mampu memahami konteks dan nuansa hukum yang kompleks.",
-      features: ["Natural Language Processing", "Deep Learning Algorithm", "Contextual Understanding"],
-    },
-    {
-      icon: Search,
-      title: "Smart Legal Search",
-      description:
-        "Pencarian cerdas yang memahami intent pengguna dan memberikan hasil yang relevan dari ribuan dokumen hukum, peraturan, dan yurisprudensi terkini.",
-      features: ["Semantic Search", "Auto-Complete", "Filtered Results"],
+        'Jawaban cepat dan akurat didukung AI (BytePlus Ark) dengan pemahaman konteks hukum Indonesia.',
+      features: ['4 persona AI', 'Citation extraction (Pasal/UU)', 'Confidence score'],
     },
     {
       icon: FileText,
-      title: "Document Generator",
+      title: 'Analisis Dokumen Cerdas',
       description:
-        "Generator dokumen hukum otomatis yang dapat membuat kontrak, surat kuasa, dan dokumen legal lainnya sesuai standar hukum Indonesia.",
-      features: ["Template Library", "Custom Fields", "Legal Compliance"],
+        'Unggah dokumen untuk dianalisis (kontrak, surat, bukti). Ekstraksi poin penting dan isu hukum.',
+      features: ['Dukungan PDF/DOCX/Gambar', 'OCR & NER', 'Ringkasan & rekomendasi'],
+    },
+    {
+      icon: Database,
+      title: 'Basis Pengetahuan Hukum',
+      description:
+        'Knowledge Graph (EdgeDB) berisi peraturan, pasal, yurisprudensi, dan terminologi hukum.',
+      features: ['KUHP & regulasi', 'Preseden pengadilan', 'Terminologi hukum'],
+    },
+    {
+      icon: Users,
+      title: 'Verifikasi Profesional Hukum',
+      description:
+        'Upgrade akun untuk lencana profesional dan akses fitur premium dengan proses verifikasi aman.',
+      features: ['Upload dokumen', 'Review admin', 'Badge terverifikasi'],
     },
     {
       icon: Shield,
-      title: "Security & Privacy",
+      title: 'Keamanan Data Terjamin',
       description:
-        "Keamanan tingkat enterprise dengan enkripsi end-to-end, compliance GDPR, dan perlindungan data pribadi yang ketat sesuai standar internasional.",
-      features: ["256-bit Encryption", "GDPR Compliant", "Zero-Log Policy"],
+        'Keamanan tingkat enterprise: enkripsi, PIN-protected sessions, dan audit logging menyeluruh.',
+      features: ['TLS/HTTPS', 'Audit trail', 'RBAC & PIN'],
     },
     {
       icon: Globe,
-      title: "Multi-Jurisdiction",
+      title: 'Dukungan Multi-Bahasa',
       description:
-        "Dukungan untuk berbagai yurisdiksi hukum Indonesia dari tingkat daerah hingga nasional, termasuk hukum adat dan peraturan khusus.",
-      features: ["National Law", "Regional Regulations", "Customary Law"],
-    },
-    {
-      icon: TrendingUp,
-      title: "Analytics & Insights",
-      description:
-        "Dashboard analitik yang memberikan insights mendalam tentang tren hukum, statistik kasus, dan prediksi outcome berdasarkan data historis.",
-      features: ["Trend Analysis", "Case Prediction", "Success Rate"],
+        'Antarmuka dan jawaban AI siap mendukung Bahasa Indonesia; ekspansi multi-bahasa ke depan.',
+      features: ['Bahasa Indonesia', 'Terminologi hukum lokal', 'Rencana multi-bahasa'],
     },
   ]
 
@@ -56,11 +56,10 @@ export const FeaturesSection: FC<FeaturesSectionProps> = ({ className = '' }) =>
       <div className="max-w-7xl mx-auto">
         <div className="text-center mb-12 md:mb-20">
           <h2 className="text-4xl md:text-6xl font-black mb-6 md:mb-8 animate-text-shimmer">
-            Fitur <span className="text-primary">Revolusioner</span>
+            Kekuatan <span className="text-primary">Pasalku.ai</span> di Tangan Anda
           </h2>
           <p className="text-lg md:text-2xl text-muted-foreground max-w-4xl mx-auto leading-relaxed animate-slide-in-bottom">
-            Teknologi AI terdepan yang menghadirkan solusi hukum komprehensif dengan akurasi tinggi dan kemudahan
-            penggunaan yang luar biasa
+            Sorotan kemampuan inti yang membuat pengalaman konsultasi hukum Anda cepat, akurat, dan aman.
           </p>
         </div>
 

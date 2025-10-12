@@ -42,7 +42,13 @@
       "Bash(git add fix_gitignore.sh)",
       "Bash(git commit -m \"Add git ignore fix script\")",
       "Bash(git add .claude/settings.local.json fix_gitignore.sh)",
-      "Bash(git commit -m \"$(cat <<''EOF''\nfix: Perbaikan konfigurasi terakhir untuk deployment\n\n🛠️ FINAL TOUCHES SEBELUM LAUNCH:\n• Optimasi settings Claude untuk development workflow\n• Script cleanup git untuk keamanan environment files\n• Preparation untuk production deployment\n\n✨ SIAP LAUNCH: Pasalku.ai Enterprise Legal Platform\n64+ APIs | 15 Core Features | Accuracy 94.1%\n\n🤖 Generated with [Claude Code](https://claude.com/claude-code)\nCo-Authored-By: Claude <noreply@anthropic.com>\nEOF\n)\")"
+      "Bash(git commit -m \"$(cat <<''EOF''\nfix: Perbaikan konfigurasi terakhir untuk deployment\n\n🛠️ FINAL TOUCHES SEBELUM LAUNCH:\n• Optimasi settings Claude untuk development workflow\n• Script cleanup git untuk keamanan environment files\n• Preparation untuk production deployment\n\n✨ SIAP LAUNCH: Pasalku.ai Enterprise Legal Platform\n64+ APIs | 15 Core Features | Accuracy 94.1%\n\n🤖 Generated with [Claude Code](https://claude.com/claude-code)\nCo-Authored-By: Claude <noreply@anthropic.com>\nEOF\n)\")",
+      "Bash(./clean_push.sh)",
+      "Bash(python -m uvicorn app:app --reload --port 8000 --host 0.0.0.0)",
+      "Bash(PYTHONPATH=/backend python -m uvicorn backend.app:app --reload --port 8000 --host 0.0.0.0)",
+      "Bash(python backend/security_audit.py)",
+      "Bash(find . -type f -exec ls -l {})",
+      "Bash(awk '{sum += $5} END {print sum \"\"\"\" bytes\"\"\"\"}')"
     ],
     "deny": [],
     "ask": []
