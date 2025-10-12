@@ -13,6 +13,9 @@ interface DocumentItem {
   upload_timestamp?: string;
   status: string;
   analysis_status: string;
+  summary?: string;
+  risk_assessment?: string;
+  recommendations?: string[];
 }
 
 const DocumentsPage = () => {

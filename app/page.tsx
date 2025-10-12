@@ -10,7 +10,7 @@ import { EnhancedFooter } from '@/components/enhanced-footer';
 import { useEffect, useState } from 'react';
 import Link from 'next/link';
 
-import ChatInterface from '@/components/ChatInterfaceFixed'
+import ChatInterface from '@/components/ChatInterface';
 import { TestimonialsSection } from '@/components/testimonials-section'
 import { CTASection } from '@/components/cta-section'
 import { FAQSection } from '@/components/faq-section'
