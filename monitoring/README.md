@@ -207,25 +207,21 @@ Access Sentry dashboard untuk:
 ## Monitoring Best Practices
 
 ### 1. Response Time Thresholds
-
 - **Healthy**: < 2 seconds
 - **Degraded**: 2-5 seconds
 - **Critical**: > 5 seconds
 
 ### 2. Database Connection Monitoring
-
 - Monitor semua database connections secara berkala
 - Alert jika ada database yang tidak terhubung
 - Track connection pool usage
 
 ### 3. External Service Monitoring
-
 - Verify API keys configured
 - Monitor API rate limits
 - Track external service failures
 
 ### 4. Log Aggregation
-
 - Centralize logs dari semua services
 - Use structured logging (JSON format)
 - Implement log levels (DEBUG, INFO, WARNING, ERROR, CRITICAL)
@@ -233,6 +229,34 @@ Access Sentry dashboard untuk:
 ## Troubleshooting
 
 ### Checkly Check Failing
-
 1. Verify backend URL is correct
 2. Check if backend is running
+3. Verify firewall/security group rules
+4. Check SSL certificate validity
+
+### Database Connection Issues
+1. Check database credentials
+2. Verify network connectivity
+3. Check database server status
+4. Review connection pool settings
+
+### High Response Times
+1. Check database query performance
+2. Review API endpoint logic
+3. Monitor external API calls
+4. Check server resources (CPU, memory)
+
+## Maintenance
+
+### Regular Tasks
+- Review monitoring alerts weekly
+- Update alert thresholds based on trends
+- Test failover scenarios monthly
+- Review and optimize slow endpoints
+- Update monitoring checks when adding new features
+
+## Support
+For issues or questions:
+- Checkly Documentation: https://www.checklyhq.com/docs/
+- Sentry Documentation: https://docs.sentry.io/
+- Internal Support: [Your support channel]

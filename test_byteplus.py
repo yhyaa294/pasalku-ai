@@ -8,7 +8,7 @@ import requests
 
 def test_byteplus_direct():
     """Test BytePlus API langsung dengan curl-style request"""
-    print("🧪 Testing BytePlus API connection...")
+    print("[TEST] Testing BytePlus API connection...")
 
     api_key = "863f6a1b-e0ed-4cff-a198-26b92dec48c2"
     url = "https://ark.ap-southeast.bytepluses.com/api/v3/chat/completions"
@@ -27,35 +27,35 @@ def test_byteplus_direct():
     }
 
     try:
-        print("📡 Sending request to BytePlus API...")
+        print("[SEND] Sending request to BytePlus API...")
         response = requests.post(url, headers=headers, json=data, timeout=10)
 
-        print(f"📊 Status Code: {response.status_code}")
+        print(f"[STATUS] Status Code: {response.status_code}")
 
         if response.status_code == 200:
             result = response.json()
             answer = result["choices"][0]["message"]["content"]
-            print("✅ BytePlus API Working!")
-            print(f"🤖 Response: {answer[:100]}...")
+            print("[SUCCESS] BytePlus API Working!")
+            print(f"[RESPONSE] Response: {answer[:100]}...")
             return True
         else:
-            print(f"❌ API Error: {response.status_code}")
+            print(f"[ERROR] API Error: {response.status_code}")
             print(f"Response: {response.text}")
             return False
 
     except requests.exceptions.Timeout:
-        print("❌ Request timeout - check internet connection")
+        print("[ERROR] Request timeout - check internet connection")
         return False
     except requests.exceptions.ConnectionError:
-        print("❌ Connection error - check internet connection")
+        print("[ERROR] Connection error - check internet connection")
         return False
     except Exception as e:
-        print(f"❌ Error: {e}")
+        print(f"[ERROR] Error: {e}")
         return False
 
 def test_with_sdk():
     """Test dengan BytePlus SDK"""
-    print("\n🔧 Testing with BytePlus SDK...")
+    print("\n[SDK] Testing with BytePlus SDK...")
 
     try:
         # Set environment variable
@@ -65,7 +65,7 @@ def test_with_sdk():
         import byteplussdkcore
         from byteplussdkarkruntime import Ark
 
-        print("✅ SDK imports successful")
+        print("[SUCCESS] SDK imports successful")
 
         # Configure SDK
         configuration = byteplussdkcore.Configuration()
@@ -75,7 +75,7 @@ def test_with_sdk():
         configuration.logger_file = "sdk.log"
         byteplussdkcore.Configuration.set_default(configuration)
 
-        print("✅ SDK configuration successful")
+        print("[SUCCESS] SDK configuration successful")
 
         # Initialize client
         client = Ark(
@@ -84,7 +84,7 @@ def test_with_sdk():
             region="ap-southeast"
         )
 
-        print("✅ Client initialization successful")
+        print("[SUCCESS] Client initialization successful")
 
         # Test API call
         completion = client.chat.completions.create(
@@ -98,20 +98,20 @@ def test_with_sdk():
         )
 
         answer = completion.choices[0].message.content
-        print("✅ BytePlus SDK Working!")
-        print(f"🤖 SDK Response: {answer}")
+        print("[SUCCESS] BytePlus SDK Working!")
+        print(f"[RESPONSE] SDK Response: {answer}")
         return True
 
     except ImportError as e:
-        print(f"❌ Import Error: {e}")
-        print("💡 Solution: pip install byteplus-python-sdk-v2")
+        print(f"[ERROR] Import Error: {e}")
+        print("[HINT] Solution: pip install byteplus-python-sdk-v2")
         return False
     except Exception as e:
-        print(f"❌ SDK Error: {e}")
+        print(f"[ERROR] SDK Error: {e}")
         return False
 
 if __name__ == "__main__":
-    print("🚀 BytePlus API Test Script")
+    print("[TEST SCRIPT] BytePlus API Test Script")
     print("=" * 40)
 
     # Test 1: Direct API call
@@ -122,8 +122,8 @@ if __name__ == "__main__":
 
     print("\n" + "=" * 40)
     if direct_success and sdk_success:
-        print("🎉 ALL TESTS PASSED! BytePlus API is working!")
+        print("[SUCCESS] ALL TESTS PASSED! BytePlus API is working!")
         sys.exit(0)
     else:
-        print("⚠️  Some tests failed. Check the errors above.")
+        print("[WARNING] Some tests failed. Check the errors above.")
         sys.exit(1)
