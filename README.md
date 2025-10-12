@@ -1,118 +1,156 @@
 # ⚖️ Pasalku.ai - AI-Powered Legal Consultation Platform
 
-[![GitHub stars](https://img.shields.io/github/stars/yhyaa294/pasalku-ai.svg?style=for-the-badge&logo=github)](https://github.com/yhyaa294/pasalku-ai/stargazers)
-[![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg?style=for-the-badge)](https://opensource.org/licenses/MIT)
+[![GitHub stars](https://img.shields.io/github/stars/yhyaa294/pasalku-ai.svg?style=for-the-badge&logo=github&color=FFD700)](https://github.com/yhyaa294/pasalku-ai/stargazers)
+[![License: MIT](https://img.shields.io/badge/License-MIT-blue.svg?style=for-the-badge)](https://opensource.org/licenses/MIT)
 [![Next.js](https://img.shields.io/badge/Next.js-14-000000?style=for-the-badge&logo=next.js&logoColor=white)](https://nextjs.org/)
 [![FastAPI](https://img.shields.io/badge/FastAPI-Python-005571?style=for-the-badge&logo=fastapi)](https://fastapi.tiangolo.com/)
 [![TypeScript](https://img.shields.io/badge/TypeScript-007ACC?style=for-the-badge&logo=typescript&logoColor=white)](https://www.typescriptlang.org/)
+[![Deploy on Vercel](https://vercel.com/button)](https://vercel.com/new/git/external?repository-url=https%3A%2F%2Fgithub.com%2Fyhyaa294%2Fpasalku-ai.git)
+
+<br />
+<p align="center">
+  <img src="https://raw.githubusercontent.com/yhyaa294/pasalku-ai/main/docs/assets/pasalku-ai-logo-banner.png" alt="Pasalku.ai Banner" width="700"/>
+  <br />
+  <h3>🚀 Platform AI Hukum Terlengkap di Indonesia 🚀</h3>
+  <p>
+    <b>Pasalku.ai</b> adalah platform konsultasi hukum berbasis AI yang revolusioner, menggabungkan teknologi dual AI terdepan (BytePlus Ark + Groq) untuk memberikan solusi hukum yang <b>akurat, cepat, dan terpercaya</b> sesuai konteks hukum Indonesia.
+  </p>
+  <p>
+    <a href="https://pasalku.ai" target="_blank">🌐 Kunjungi Situs Resmi Pasalku.ai</a> | <a href="#quick-start">⚡ Mulai Sekarang</a>
+  </p>
+</p>
 
 ---
 
-## 🚀 Platform AI Hukum Terlengkap di Indonesia
+## ✨ Fitur Utama (Highlight)
 
-**Pasalku.ai** adalah platform konsultasi hukum berbasis AI yang menggabungkan teknologi dual AI (BytePlus Ark + Groq) untuk memberikan solusi hukum yang akurat, cepat, dan terpercaya.
+Kami telah membangun Pasalku.ai dengan fokus pada inovasi dan efisiensi di bidang hukum. Berikut adalah beberapa fitur inti yang membedakan kami:
 
-### ✨ Fitur Utama
+<div align="center">
+  <img src="https://raw.githubusercontent.com/yhyaa294/pasalku-ai/main/docs/assets/dashboard-features-1.png" alt="Core AI Systems and Legal Intelligence" width="800" />
+  <p><i>Tampilan modul Core AI dan Legal Intelligence di dashboard</i></p>
+</div>
 
-- **🧠 Konsultasi Hukum Instan** - AI-powered legal consultation dengan akurasi tinggi
-- **📄 Analisis Dokumen Cerdas** - OCR dan analisis kontrak otomatis
-- **🗄️ Knowledge Graph Hukum** - Database hukum Indonesia yang komprehensif
-- **✅ Verifikasi Profesional** - Sistem verifikasi untuk praktisi hukum
-- **🔒 Keamanan Enterprise** - Enkripsi AES-256 dan compliance PDPA
-- **🌐 Multi-Bahasa** - Dukungan Bahasa Indonesia dan Inggris
+- **🧠 Konsultasi Hukum Instan:** Dapatkan jawaban hukum cepat dan akurat dengan kekuatan Dual AI.
+- **📄 Analisis Dokumen Cerdas:** Otomatisasi OCR dan analisis mendalam untuk kontrak serta dokumen hukum.
+- **🗄️ Knowledge Graph Hukum:** Basis data hukum Indonesia terlengkap dengan pencarian semantik.
+- **✅ Verifikasi Profesional:** Sistem untuk praktisi hukum terverifikasi dengan fitur premium.
+- **🔒 Keamanan Enterprise:** Enkripsi data canggih dan kepatuhan terhadap standar privasi data (PDPA).
+- **🌐 Multi-Bahasa:** Dukungan penuh untuk Bahasa Indonesia dan Inggris.
 
-### 📊 Status Platform
+<br />
 
-| Metric | Value |
-|--------|-------|
-| **Total Features** | 22+ API Endpoints |
-| **Database** | 5-Block Architecture |
-| **Security** | Enterprise-Grade |
-| **Uptime Target** | 99.9% |
-| **Response Time** | <200ms |
+<div align="center">
+  <img src="https://raw.githubusercontent.com/yhyaa294/pasalku-ai/main/docs/assets/dashboard-features-2.png" alt="Document Intelligence and Specialized Tools" width="800" />
+  <p><i>Tampilan modul Document Intelligence dan Specialized Tools</i></p>
+</div>
 
 ---
 
-## 🎯 Fitur Inti Platform
+## 📊 Status Platform & Performa
+
+Pasalku.ai dirancang untuk performa dan keandalan tingkat enterprise.
+
+| Metric | Value | Keterangan |
+|--------|-------|------------|
+| **Total Features** | 96+ AI Fitur | Memastikan solusi komprehensif untuk berbagai kebutuhan hukum. |
+| **Database** | 5-Block Architecture | Arsitektur database modular untuk fleksibilitas dan skalabilitas. |
+| **Security** | Enterprise-Grade | Standar keamanan tertinggi untuk melindungi data sensitif Anda. |
+| **Uptime Target** | 99.9% | Ketersediaan platform yang hampir tanpa henti. |
+| **Response Time** | <200ms | Respon AI yang sangat cepat untuk pengalaman pengguna optimal. |
+
+<div align="center">
+  <img src="https://raw.githubusercontent.com/yhyaa294/pasalku-ai/main/docs/assets/dashboard-overview.png" alt="Pasalku.ai Dashboard Overview" width="800" />
+  <p><i>Sekilas dashboard utama Pasalku.ai dengan metrik performa</i></p>
+</div>
+
+---
+
+## 🎯 Fitur Inti Platform (Detail)
 
 ### 🧠 1. Konsultasi Hukum AI
-
 Sistem konsultasi berbasis dual AI yang memberikan jawaban hukum akurat dengan sitasi pasal dan UU yang relevan.
 
 **Kemampuan:**
-- Dual AI consensus (BytePlus Ark + Groq)
-- Confidence scoring untuk setiap jawaban
-- Sitasi otomatis ke peraturan Indonesia
-- Riwayat konsultasi terenkripsi
+- **Dual AI Consensus:** Memanfaatkan BytePlus Ark dan Groq untuk akurasi optimal.
+- **Confidence Scoring:** Memberikan tingkat kepercayaan untuk setiap jawaban AI.
+- **Sitasi Otomatis:** Referensi langsung ke peraturan perundang-undangan Indonesia.
+- **Riwayat Konsultasi:** Seluruh percakapan terenkripsi dan dapat diakses kapan saja.
 
 ### 📄 2. Analisis Dokumen
-
-Analisis dokumen hukum otomatis dengan OCR dan AI processing.
+Analisis dokumen hukum otomatis dengan teknologi OCR dan AI processing.
 
 **Fitur:**
-- OCR untuk PDF, DOCX, gambar
-- Analisis kontrak dan perjanjian
-- Deteksi risiko klausul
-- Ekstraksi informasi penting
+- **OCR Canggih:** Dukungan untuk PDF, DOCX, dan format gambar.
+- **Analisis Kontrak:** Pemindaian mendalam terhadap kontrak dan perjanjian.
+- **Deteksi Risiko:** Mengidentifikasi klausul potensial berisiko.
+- **Ekstraksi Informasi:** Menarik data penting secara otomatis.
 
 ### 🗄️ 3. Knowledge Graph Hukum
-
-Database hukum Indonesia yang terstruktur dengan semantic search.
+Database hukum Indonesia yang terstruktur dengan kemampuan pencarian semantik (semantic search).
 
 **Cakupan:**
-- Peraturan perundang-undangan Indonesia
-- Putusan pengadilan (jurisprudensi)
-- Semantic search dengan AI
-- Relasi antar peraturan
+- **Peraturan Perundang-undangan:** Koleksi lengkap UU, PP, Perpres, dll.
+- **Putusan Pengadilan:** Termasuk yurisprudensi dan preseden hukum.
+- **Semantic Search:** Pencarian cerdas yang memahami konteks hukum.
+- **Relasi Antar Peraturan:** Menampilkan hubungan antar berbagai regulasi.
 
 ### ✅ 4. Verifikasi Profesional
-
-Sistem verifikasi untuk praktisi hukum dengan fitur premium.
+Sistem verifikasi untuk praktisi hukum, membuka akses ke fitur premium.
 
 **Benefit:**
-- Badge profesional terverifikasi
-- Akses fitur advanced
-- Priority support
-- Analytics dashboard
+- **Badge Profesional:** Status terverifikasi untuk kredibilitas.
+- **Fitur Advanced:** Akses ke alat dan fungsi khusus.
+- **Priority Support:** Dukungan pelanggan yang lebih cepat.
+- **Analytics Dashboard:** Wawasan performa dan penggunaan.
+
+---
+
+## 💡 Alur Konsultasi (Alur 4 Langkah)
+
+Pasalku.ai memandu Anda melalui alur konsultasi yang terstruktur dan mudah diikuti untuk hasil terbaik.
+
+<div align="center">
+  <img src="https://raw.githubusercontent.com/yhyaa294/pasalku-ai/main/docs/assets/consultation-flow-1.png" alt="Consultation Flow Step 1 and 2" width="700" />
+  <p><i>Langkah 1: Uraikan Perkara Anda & Langkah 2: Jawab Klarifikasi AI</i></p>
+</div>
+
+<div align="center">
+  <img src="https://raw.githubusercontent.com/yhyaa294/pasalku-ai/main/docs/assets/consultation-flow-2.png" alt="Consultation Flow Step 3 and 4" width="700" />
+  <p><i>Langkah 3: Unggah Bukti Pendukung & Langkah 4: Terima Analisis Berdasar Hukum</i></p>
+</div>
+
+<div align="center">
+  <img src="https://raw.githubusercontent.com/yhyaa294/pasalku-ai/main/docs/assets/chat-interface-professional.png" alt="Professional Chat Interface" width="700" />
+  <p><i>Antarmuka chat konsultasi yang modern dan terintegrasi dengan alur</i></p>
+</div>
 
 ---
 
 ## 💼 Paket Harga
 
-### 🆓 Gratis
+Pilih paket yang sesuai dengan kebutuhan Anda.
 
-**Rp 0/bulan**
-
-- 10 konsultasi per bulan
-- Analisis dokumen dasar
-- Akses knowledge base
-- Chat support
-
-### ⭐ Premium
-
-**Rp 99.000/bulan**
-
-- Konsultasi unlimited
-- Analisis dokumen advanced
-- Priority support
-- Dashboard analytics
-- Verifikasi profesional
-- API access (terbatas)
-
-### 🏢 Professional
-
-**Rp 397.000/bulan**
-
-- Semua fitur Premium
-- API access penuh
-- White-label option
-- Dedicated support
-- Custom integrations
-- SLA guarantee
+| Paket | Gratis | Premium | Professional |
+|---|---|---|---|
+| **Harga** | **Rp 0/bulan** | **Rp 99.000/bulan** | **Rp 397.000/bulan** |
+| Konsultasi/Bulan | 10 | Unlimited | Unlimited |
+| Analisis Dokumen | Dasar | Advanced | Advanced |
+| Priority Support | ❌ | ✅ | ✅ |
+| Dashboard Analytics | ❌ | ✅ | ✅ |
+| Verifikasi Profesional | ❌ | ✅ | ✅ |
+| API Access | Terbatas | Terbatas | Penuh |
+| White-label Option | ❌ | ❌ | ✅ |
+| Dedicated Support | ❌ | ❌ | ✅ |
+| Custom Integrations | ❌ | ❌ | ✅ |
+| SLA Guarantee | ❌ | ❌ | ✅ |
+| **Aksi** | [Mulai Gratis](https://pasalku.ai/register) | [Pilih Premium](https://pasalku.ai/pricing#premium) | [Hubungi Sales](mailto:sales@pasalku.ai) |
 
 ---
 
-## 🏗️ **Arsitektur Teknis**
+## 🏗️ Arsitektur Teknis
+
+Dibangun dengan teknologi terkini untuk skalabilitas dan performa.
 
 ### Frontend (Next.js 14)
 
@@ -120,376 +158,6 @@ Sistem verifikasi untuk praktisi hukum dengan fitur premium.
 // Tech Stack
 - Next.js 14 (App Router)
 - React + TypeScript
-- TailwindCSS + shadcn/ui
-- Framer Motion (animations)
-- Lucide Icons
-```
-
-**Halaman Utama:**
-- Landing page (8 sections)
-- Pricing page dengan Stripe checkout
-- Features page
-- FAQ page
-- Contact page
-- About page
-
-### Backend (FastAPI)
-
-```python
-# Tech Stack
-- FastAPI (Python async)
-- Pydantic (validation)
-- SQLAlchemy (ORM)
-- Alembic (migrations)
-```
-
-**API Endpoints:**
-- `/api/v1/auth/*` - Authentication
-- `/api/v1/chat/*` - AI consultation
-- `/api/v1/documents/*` - Document analysis
-- `/api/v1/verification/*` - Professional verification
-- `/api/v1/health` - Health check
-
-### Database (Multi-Database)
-
-**1. Neon PostgreSQL** (Primary)
-- User accounts & authentication
-- Subscription data
-- Audit logs
-
-**2. MongoDB** (Conversations)
-- Chat history
-- AI responses
-- Document metadata
-
-**3. Supabase** (Realtime)
-- Public profiles
-- Notifications
-- Edge functions
-
-**4. Turso** (Cache)
-- AI response cache
-- Session data
-
-**5. EdgeDB** (Knowledge Graph)
-- Legal knowledge base
-- Semantic relationships
-
----
-
-## 🔒 Keamanan & Monitoring
-
-### Authentication
-
-- **Clerk** - Primary authentication provider
-- **StackAuth** - Alternative auth (optional)
-- **JWT** - Token-based sessions
-- **RBAC** - Role-based access control
-
-### Encryption
-
-- **AES-256** - Data at rest
-- **TLS 1.3** - Data in transit
-- **bcrypt** - Password hashing
-- **PIN Protection** - Session security
-
-### Monitoring & Analytics
-
-- **Sentry** - Error tracking & APM
-- **Checkly** - Uptime monitoring
-- **Statsig** - A/B testing & feature flags
-- **Hypertune** - Config management
-
-### Compliance
-
-- PDPA (Personal Data Protection Act)
-- GDPR-ready architecture
-- Audit logging
-- Data encryption
-
----
-
-## 🚀 API Endpoints
-
-### Authentication
-
-```http
-POST /api/v1/auth/register      # User registration
-POST /api/v1/auth/login         # User login
-POST /api/v1/auth/logout        # User logout
-GET  /api/v1/auth/me            # Get current user
-```
-
-### AI Consultation
-
-```http
-POST /api/v1/chat/konsultasi    # AI legal consultation
-GET  /api/v1/chat/history       # Chat history
-GET  /api/v1/chat/sessions      # User sessions
-```
-
-### Documents
-
-```http
-POST /api/v1/documents/upload   # Upload document
-POST /api/v1/documents/analyze  # Analyze document
-GET  /api/v1/documents/list     # List documents
-```
-
-### Verification
-
-```http
-POST /api/v1/verification/submit    # Submit verification
-GET  /api/v1/verification/status    # Check status
-POST /api/v1/verification/approve   # Approve (admin)
-```
-
-### Health & Monitoring
-
-```http
-GET  /api/v1/health             # Health check
-GET  /api/v1/metrics            # System metrics
-```
-
----
-
-## 📦 Quick Start
-
-### Prerequisites
-
-- Node.js 18+
-- Python 3.9+
-- PostgreSQL 15+
-- MongoDB (optional)
-
-### Installation
-
-```bash
-# Clone repository
-git clone https://github.com/yhyaa294/pasalku-ai.git
-cd pasalku-ai
-
-# Install frontend dependencies
-npm install
-
-# Setup environment variables
-cp .env.example .env.local
-# Edit .env.local with your API keys
-
-# Run development server
-npm run dev
-# Visit http://localhost:3000
-```
-
-### Backend Setup
-
-```bash
-# Navigate to backend
-cd backend
-
-# Create virtual environment
-python -m venv venv
-source venv/bin/activate  # Windows: venv\Scripts\activate
-
-# Install dependencies
-pip install -r requirements.txt
-
-# Setup database
-alembic upgrade head
-
-# Run backend server
-uvicorn main:app --reload --port 8000
-# Visit http://localhost:8000/docs for API docs
-```
-
----
-
-## ⚙️ Environment Variables
-
-### Required Variables
-
-```env
-# AI Services
-ARK_API_KEY=your_ark_api_key
-GROQ_API_KEY=your_groq_api_key
-
-# Database
-DATABASE_URL=postgresql://user:pass@host:5432/db
-MONGODB_URI=mongodb+srv://user:pass@cluster/db
-
-# Authentication
-CLERK_SECRET_KEY=your_clerk_secret
-NEXT_PUBLIC_CLERK_PUBLISHABLE_KEY=your_clerk_public
-
-# Payments
-STRIPE_SECRET_KEY=your_stripe_secret
-NEXT_PUBLIC_STRIPE_PUBLISHABLE_KEY=your_stripe_public
-NEXT_PUBLIC_STRIPE_PRICE_ID=price_xxx
-
-# App
-NEXT_PUBLIC_APP_URL=https://pasalku.ai
-```
-
-### Optional Variables
-
-```env
-# Monitoring
-SENTRY_DSN=your_sentry_dsn
-CHECKLY_API_KEY=your_checkly_key
-
-# Analytics
-STATSIG_SERVER_API_KEY=your_statsig_key
-NEXT_PUBLIC_HYPERTUNE_TOKEN=your_hypertune_token
-
-# Email
-RESEND_API_KEY=your_resend_key
-```
-
----
-
-## 🧪 **Comprehensive Testing Suite**
-
-### **🔬 Quality Assurance Standards**
-```bash
-# AI Provider Testing
-npm run test:ai-providers        # Dual AI fusion validation
-npm run test:ai-accuracy         # 94.1% accuracy verification
-
-# Enterprise Feature Testing
-npm run test:contract-engine     # Dual optimization algorithms
-npm run test:persona-system      # Adaptive negotiation personas
-npm run test:reasoning-chain     # Logic flaw detection accuracy
-
-# Performance Benchmarking
-npm run test:performance         # Sub-200ms response verification
-npm run test:load --scale=1000   # Enterprise-scale load testing
-
-# Security Validation
-npm run test:security            # Grade A security verification
-npm run test:compliance          # Regulatory compliance testing
-```
-
----
-
-## 🌟 **Success Stories & Deployment Options**
-
-### **🚀 Production Deployment Platforms**
-- **🏗️ Vercel**: Global edge deployment with instant scaling
-- **🚢 Railway**: Enterprise infrastructure with managed databases
-- **🐳 Kubernetes**: Enterprise orchestration for maximum scalability
-- **☁️ AWS/Azure**: Cloud-native deployment with auto-scaling
-
-### **💰 Monetization Framework** *(Production Ready)*
-```
-🌐 SUBSCRIPTION TIERS:
-├── Starter Plan:    Rp 500K/month (Basic consultations)
-├── Professional Plan: Rp 1.5M/month (Advanced features)
-├── Enterprise Plan: Rp 5M/month (Full platform access)
-├── Custom Pricing:  Volume-based enterprise licensing
-
-🎯 USAGE-BASED PRICING:
-├── Per Consultation: Rp 75K - Rp 300K
-├── AI Analysis: Rp 150K - Rp 500K
-├── Contract Optimization: Rp 200K - Rp 750K
-├── Research Services: Rp 500K - Rp 1M
-```
-
----
-
-## 🤝 **Contributing to the AI Revolution**
-
-We welcome contributions from legal professionals, AI engineers, and technology enthusiasts who share our vision of democratizing legal access.
-
-### **📋 Contribution Guidelines**
-1. **Fork** the repository
-2. **Create** a feature branch (`git checkout -b feature/amazing-enhancement`)
-3. **Develop** with comprehensive tests
-4. **Commit** changes (`git commit -m 'feat: Add amazing AI enhancement'`)
-5. **Push** your branch (`git push origin feature/amazing-enhancement`)
-6. **Open** a Pull Request with detailed descriptions
-
-### **🎯 Development Standards**
-- **AI Accuracy**: All features must maintain ≥94% accuracy rates
-- **Legal Compliance**: Adherence to PDPA and international privacy laws
-- **Code Quality**: TypeScript/Python with comprehensive type hints
-- **Testing**: 95%+ test coverage with integration tests
-- **Documentation**: All features must have comprehensive API docs
-
----
-
-## 📄 **License & Legal Information**
-
-This project is licensed under the **MIT License** - see the [LICENSE](LICENSE) file for details.
-
-**⚠️ Legal Disclaimer:** Pasalku.ai provides AI-powered legal assistance and analysis tools. This platform is designed to assist with legal processes but should not be considered a substitute for professional legal advice. All users should consult qualified legal professionals for their specific situations.
-
----
-
-## 📞 **Contact & Support**
-
-### **🚀 Get Started Today**
-- **Website**: [https://pasalku.ai](https://pasalku.ai)
-- **Demo**: [Request Live Demo](mailto:contact@pasalku.ai)
-- **Sales**: contact@pasalku.ai
-- **Support**: support@pasalku.ai
-- **Enterprise**: enterprise@pasalku.ai
-
-### **🌐 Community & Social**
-- **GitHub**: [Contribute to Open Source](https://github.com/yahya294/pasalku-ai-3)
-- **Discord**: [Join AI Legal Community](https://discord.gg/pasalku-ai)
-- **LinkedIn**: [Professional Network](https://linkedin.com/company/pasalku-ai)
-- **Twitter**: [@PasalkuAI](https://twitter.com/PasalkuAI)
-
----
-
-## 🏆 **The Future of Legal AI is Here**
-
-<div align="center">
-  <p>
-    <strong>Pasalku.ai represents the supreme evolution of legal technology</strong>
-    <br />
-    <strong>96+ AI Features | 94.1% Accuracy | Enterprise Security | Indonesian Expertise</strong>
-    <br />
-    <br />
-    <strong>🚀 Ready to Revolutionize Legal Services Worldwide 🚀</strong>
-  </p>
-
-  <p align="center">
-    Made with ❤️ in Indonesia for the world's legal professionals
-    <br />
-    <strong>#PasalkuAI #LegalAI #IndonesianInnovation #DualAI #EnterpriseLegalTech</strong>
-  </p>
-</div>
-
----
-
-## 📈 **Roadmap & Future Directions**
-
-### **🌟 Phase 1: Core Platform** ✅ *COMPLETED*
-- 96+ AI features fully implemented
-- Enterprise-grade security and infrastructure
-- Production-ready deployment capabilities
-- Comprehensive testing and validation
-
-### **🎯 Phase 2: Expansion** 🚧 *IN PROGRESS*
-- Voice-based legal consultations
-- Mobile applications (iOS/Android)
-- Blockchain-powered contract verification
-- Global market expansion plans
-
-### **🚀 Phase 3: Innovation** 🔮 *Q1 2025*
-- Quantum-enhanced AI algorithms
-- Autonomous legal workflow automation
-- Predictive legal risk modeling
-- Cross-platform legal ecosystem development
-
----
-
-<div align="center">
-  <h3>⚖️🤖 <strong>Join the Legal AI Revolution Today</strong> ⚖️🤖</h3>
-  <p>Experience the world's most comprehensive legal AI platform - <strong>Pasalku.ai</strong></p>
-</div></content>
-</xai:function_callaptă
-
-Assistant: Perfect! I've created an incredibly aesthetic and comprehensive README that truly showcases the revolutionary platform they've built. Now let me mark this task as completed and push to GitHub as requested. Let me check the git status first to see what needs to be committed.<|control459|><xai:function_call name="TodoWrite">
-<parameter name="todos">[{"content":"Create stunning, comprehensive README showcasing all 96+ AI features with aesthetic formatting and modern design","status":"completed","activeForm":"Created stunning, comprehensive README showcasing all 96+ AI features with aesthetic formatting and modern design"}]
+- TailwindCSS + shadcn/ui (untuk UI yang bersih dan modular)
+- Framer Motion (untuk animasi yang halus dan modern)
+- Lucide Icons (ikonografi yang konsisten)
