@@ -541,6 +541,3 @@ export default function ProfessionalUpgradePage() {
     </div>
   )
 }
-
-// Import statement untuk useState
-import { useState } from 'react'

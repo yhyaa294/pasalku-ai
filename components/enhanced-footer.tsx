@@ -11,7 +11,7 @@ import {
   Facebook,
   Twitter,
   Instagram,
-  LinkedIn,
+  Linkedin,
   Youtube,
   FileText,
   Shield,
@@ -68,7 +68,7 @@ export function EnhancedFooter() {
   const socialLinks = [
     { icon: Facebook, href: '#', label: 'Facebook', color: 'hover:text-blue-600' },
     { icon: Twitter, href: '#', label: 'Twitter', color: 'hover:text-sky-500' },
-    { icon: LinkedIn, href: '#', label: 'LinkedIn', color: 'hover:text-blue-700' },
+    { icon: Linkedin, href: '#', label: 'LinkedIn', color: 'hover:text-blue-700' },
     { icon: Instagram, href: '#', label: 'Instagram', color: 'hover:text-pink-600' },
     { icon: Youtube, href: '#', label: 'YouTube', color: 'hover:text-red-600' }
   ]
@@ -93,7 +93,9 @@ export function EnhancedFooter() {
     <footer className="bg-gradient-to-br from-gray-900 via-blue-900 to-purple-900 text-white relative overflow-hidden">
       {/* Background Pattern */}
       <div className="absolute inset-0 opacity-10">
-        <div className="absolute inset-0 bg-[url('data:image/svg+xml;base64,PHN2ZyB3aWR0aD0iNjAiIGhlaWdodD0iNjAiIHZpZXdCb3g9IjAgMCA2MCA2MCIgeG1sbnM9Imh0dHA6Ly93d3cudzMub3JnLzIwMDAvc3ZnIj4KPGcgZmlsbD0ibm9uZSIgZmlsbC1ydWxlPSJldmVub2RkIj4KPGRlZnMvPgogIDxwYXRoIGQ9Ik0zNiAxOGMtMS4wNSAwLTIgLjgtMiAxbC0xOCA1YzAtMS41LTEgMi41LTEgMi41cy0xLTEtMS0yLjU3TDE1IDVjMC0uOC0uOTUtMS0yLTEtMS4wNSAwLTIgLjgtMiAxbC0xOCA1YzAtMS41LTEgMi41LTEgMi41cy0xLTEtMS0yLjU3TDE2IDVjMC0uOC0uMjMtMS0xLjY1LTEtLjggMC0xLjUgLjktMS41IDEuNWwtOC41IDI2YzAtMS defesa4LTEgMi0xIDJzLTEgMS0xIDEuNDRsOS41LTI5YzAtMS41IDEtMi41IDEtMi41cyAxIDEgMSAyLjU3bDE4LTVjMC0uOC45NS0xIDItMXMxLjA1IDAgMi0xbDE4LTZjMC0xLjUgMS0yLjUgMS0yLjVzIDEgMSAxIDIuNTdsLTE4IDZjMC0uOC0uOTUtMS0yLTFzLTEuMDUtIDAtMi41IDEiIGZpbGw9InJnYmEoMjU1LDI1NSwyNTUsMC4xKSIvPgo8L2c+Cjwvc3ZnPg==')]"></div>
+        <div className="absolute inset-0" style={{
+          backgroundImage: `url("data:image/svg+xml,%3Csvg width='60' height='60' viewBox='0 0 60 60' xmlns='http://www.w3.org/2000/svg'%3E%3Cg fill='none' fill-rule='evenodd'%3E%3Cg fill='rgba(255,255,255,0.1)'%3E%3Cpath d='M36 34v-4h-2v4h-4v2h4v4h2v-4h4v-2h-4zm0-30V0h-2v4h-4v2h4v4h2V6h4V4h-4zM6 34v-4H4v4H0v2h4v4h2v-4h4v-2H6zM6 4V0H4v4H0v2h4v4h2V6h4V4H6z'/%3E%3C/g%3E%3C/g%3E%3C/svg%3E")`
+        }}></div>
       </div>
 
       <div className="relative">
@@ -153,7 +155,7 @@ export function EnhancedFooter() {
                   </div>
                   <div className="flex items-center gap-3">
                     <Phone className="w-5 h-5 text-blue-300" />
-                    <a href={callto:+622112345678} className="text-sm text-gray-300 hover:text-white transition-colors">
+                    <a href="tel:+622112345678" className="text-sm text-gray-300 hover:text-white transition-colors">
                       {contactInfo.phone}
                     </a>
                   </div>
