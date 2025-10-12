@@ -48,7 +48,11 @@
       "Bash(PYTHONPATH=/backend python -m uvicorn backend.app:app --reload --port 8000 --host 0.0.0.0)",
       "Bash(python backend/security_audit.py)",
       "Bash(find . -type f -exec ls -l {})",
-      "Bash(awk '{sum += $5} END {print sum \"\"\"\" bytes\"\"\"\"}')"
+      "Bash(awk '{sum += $5} END {print sum \"\"\"\" bytes\"\"\"\"}')",
+      "Bash(powershell -Command \"Get-ChildItem -Recurse -File | Measure-Object -Property Length -Sum | Select-Object -ExpandProperty Sum\")",
+      "Bash(python -m pip install requests)",
+      "Bash(source .venv/bin/activate)",
+      "Bash(pip install requests)"
     ],
     "deny": [],
     "ask": []
