@@ -166,6 +166,7 @@ const QUICK_STATS = [
 export default function DashboardPage() {
   const [user, setUser] = useState<any>(null);
   const [recentActivity, setRecentActivity] = useState<any[]>([]);
+  const [isLoading, setIsLoading] = useState(true);
   const router = useRouter();
 
   useEffect(() => {
@@ -186,6 +187,8 @@ export default function DashboardPage() {
       }
     } catch (error) {
       router.push('/login');
+    } finally {
+      setIsLoading(false);
     }
   }, [router]);
 

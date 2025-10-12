@@ -17,7 +17,8 @@ import {
   Building2,
   Users,
   CheckCircle2,
-  AlertCircle
+  AlertCircle,
+  HelpCircle
 } from 'lucide-react'
 
 export default function ContactPage() {

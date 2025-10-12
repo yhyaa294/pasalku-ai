@@ -516,7 +516,7 @@ export default function FeaturesPage() {
                   <span className="text-sm text-gray-300">Semua Sistem Online</span>
                 </div>
                 <div className="text-sm text-gray-400">
-                  Response Time: <20ms<br/>
+                  Response Time: &lt;20ms<br/>
                   AI Accuracy: 94.1%<br/>
                   Uptime: 99.9%
                 </div>

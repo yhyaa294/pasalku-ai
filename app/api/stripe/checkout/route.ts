@@ -16,7 +16,7 @@ export async function POST(req: NextRequest) {
     // Import stripe only if key exists
     const stripeModule = await import('stripe')
     const stripe = new stripeModule.default(process.env.STRIPE_SECRET_KEY as string, {
-      apiVersion: '2024-06-20',
+      apiVersion: '2025-09-30.clover',
     })
 
     const baseUrl = process.env.NEXT_PUBLIC_APP_URL || 'http://localhost:5000'

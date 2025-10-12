@@ -4,9 +4,9 @@ import React, { useState, useEffect } from 'react';
 import { useRouter } from 'next/navigation';
 import {
   BriefcaseIcon,
-  AcademicCap,
+  GraduationCap,
   TrendingUp,
-  LightBulb,
+  Lightbulb,
   Users,
   BarChart3,
   Brain,
@@ -572,7 +572,7 @@ const CaseComparisonModal: React.FC<{
               {/* Insights */}
               <div>
                 <h4 className="font-semibold mb-3 flex items-center">
-                  <LightBulb className="w-5 h-5 text-purple-500 mr-2" />
+                  <Lightbulb className="w-5 h-5 text-purple-500 mr-2" />
                   Cross-Case Insights
                 </h4>
                 <div className="space-y-2">
@@ -631,7 +631,7 @@ const CaseArenaModal: React.FC<{
     { id: 'strategic', label: 'Strategic Assessment', icon: Target },
     { id: 'consensus', label: 'AI Consensus', icon: Users },
     { id: 'reasoning', label: 'Reasoning Chain', icon: Brain },
-    { id: 'adaptive', label: 'Adaptive Analysis', icon: AcademicCap },
+    { id: 'adaptive', label: 'Adaptive Analysis', icon: GraduationCap },
     { id: 'sentiment', label: 'AI Sentiment', icon: TrendingUp },
     { id: 'predictions', label: 'Predictions', icon: BarChart3 }
   ];
