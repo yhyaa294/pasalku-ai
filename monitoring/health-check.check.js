@@ -19,7 +19,7 @@ new ApiCheck('health-check-api', {
   environmentVariables: [],
   request: {
     method: 'GET',
-    url: process.env.BACKEND_URL || 'http://localhost:8001',
+    url: process.env.BACKEND_URL || 'http://localhost:8000',
     followRedirects: true,
     skipSSL: false,
     assertions: [

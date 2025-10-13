@@ -142,7 +142,7 @@ async def health_check():
         "environment": os.getenv("ENVIRONMENT", "development"),
         "message": "Pasalku AI API is running",
         "database": db_status,
-        "port": os.getenv("PORT", "8001")
+        "port": os.getenv("PORT", "8000")
     }
 
 # Event handler untuk startup

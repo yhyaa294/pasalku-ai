@@ -86,14 +86,60 @@ async def check_sentry():
         logger.error(f"❌ Sentry check failed: {str(e)}")
         return False
 
+async def check_translation_service():
+    """Verifikasi translation service."""
+    try:
+        from backend.services.translation_service import translation_service
+        
+        # Test text
+        test_text = "Halo, apa kabar?"
+        
+        # Test translation to primary (should be no-op for id->id)
+        result_primary = await translation_service.translate_to_primary(test_text, source_lang="id")
+        
+        # Test translation from primary to English (if Groq available)
+        result_en = await translation_service.translate_to_user(test_text, target_lang="en")
+        
+        logger.info(f"✅ Translation service initialized")
+        logger.info(f"   Available providers: {translation_service.providers or ['identity (dev mode)']}")
+        logger.info(f"   Primary provider: {translation_service.primary_provider}")
+        logger.info(f"   Test translation (id): {result_primary}")
+        logger.info(f"   Test translation (en): {result_en}")
+        
+        return True
+    except Exception as e:
+        logger.error(f"❌ Translation service check failed: {str(e)}")
+        return False
+
+async def check_mongodb():
+    """Verifikasi koneksi MongoDB."""
+    try:
+        from backend.database import get_mongo_client
+        
+        mongo_client = get_mongo_client()
+        if not mongo_client:
+            logger.warning("⚠️ MongoDB not configured (optional)")
+            return True  # Not critical, so return True
+        
+        # Test connection with ping
+        mongo_client.admin.command('ping')
+        
+        logger.info("✅ MongoDB connection successful")
+        return True
+    except Exception as e:
+        logger.warning(f"⚠️ MongoDB connection check failed (optional): {str(e)}")
+        return True  # Not critical, so return True
+
 async def main():
     """Jalankan semua pemeriksaan sistem."""
     logger.info("🔍 Starting system verification...")
     
     # Run all checks
     checks = [
-        ("Database", check_database()),
+        ("Database (PostgreSQL)", check_database()),
         ("AI Service", check_ai_service()),
+        ("Translation Service", check_translation_service()),
+        ("MongoDB (Optional)", check_mongodb()),
         ("Sentry", check_sentry())
     ]
     

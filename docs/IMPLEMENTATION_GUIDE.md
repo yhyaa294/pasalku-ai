@@ -27,8 +27,8 @@ cd monitoring
 checkly deploy
 
 # Verify health endpoints
-curl http://localhost:8001/api/health
-curl http://localhost:8001/api/health/detailed
+curl http://localhost:8000/api/health
+curl http://localhost:8000/api/health/detailed
 ```
 
 ---
@@ -435,7 +435,7 @@ python backend/tests/test_api.py
 ## Support & Resources
 
 - **Documentation**: `/docs` directory
-- **API Docs**: `http://localhost:8001/docs` (Swagger UI)
+- **API Docs**: `http://localhost:8000/docs` (Swagger UI)
 - **Database Schema**: `docs/DATABASE_ARCHITECTURE.md`
 - **Monitoring**: `monitoring/README.md`
 

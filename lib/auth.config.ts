@@ -37,13 +37,16 @@ export const authConfig = {
           });
 
           if (response.ok) {
-            const data = await response.json();
-            return {
-              id: data.user.email,
-              email: data.user.email,
-              name: data.user.email.split('@')[0],
-              role: data.user.role,
-            };
+            const data = await response.json(); // Expects { access_token: '...', user: { ... } }
+            if (data && data.access_token && data.user) {
+              return {
+                id: data.user.email, // Or data.user.id if available
+                email: data.user.email,
+                name: data.user.name || data.user.email.split('@')[0],
+                role: data.user.role,
+                accessToken: data.access_token,
+              };
+            }
           }
           return null;
         } catch (error) {
@@ -54,9 +57,10 @@ export const authConfig = {
     })
   ],
   callbacks: {
-    async jwt({ token, user, account }: any) {
+    async jwt({ token, user }: any) {
       if (user) {
         token.role = user.role;
+        token.accessToken = user.accessToken;
       }
       return token;
     },
@@ -64,6 +68,7 @@ export const authConfig = {
       if (token) {
         session.user.id = token.sub!;
         session.user.role = token.role as string;
+        session.accessToken = token.accessToken as string;
       }
       return session;
     },

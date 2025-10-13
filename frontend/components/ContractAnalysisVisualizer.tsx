@@ -679,5 +679,4 @@ const CustomizedContent = (props: any) => {
       ) : null}
     </g>
   )
-}</content>
-</xai:function_call">Contract Analysis Visualizer
+}

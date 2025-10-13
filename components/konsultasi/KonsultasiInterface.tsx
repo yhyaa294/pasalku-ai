@@ -44,6 +44,7 @@ export const KonsultasiInterface = ({ kategoriHukum }: KonsultasiProps) => {
   const [messages, setMessages] = useState<Message[]>([])
   const [input, setInput] = useState("")
   const [sesiId, setSesiId] = useState<string | null>(null)
+  const [language, setLanguage] = useState('id')
   const messagesEndRef = useRef<HTMLDivElement>(null)
   
   const scrollToBottom = () => {
@@ -69,6 +70,7 @@ export const KonsultasiInterface = ({ kategoriHukum }: KonsultasiProps) => {
         },
         body: JSON.stringify({
           kategori: selectedKategori,
+          language,
         }),
       })
 

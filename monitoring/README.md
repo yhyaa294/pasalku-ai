@@ -64,7 +64,7 @@ Monitoring setup untuk Pasalku.ai menggunakan Checkly untuk uptime monitoring da
     "uptime": 12345.67,
     "services": {
       "api": "operational",
-      "port": "8001"
+      "port": "8000"
     }
   }
   ```
@@ -131,7 +131,7 @@ Monitoring setup untuk Pasalku.ai menggunakan Checkly untuk uptime monitoring da
     "system_info": {
       "python_version": "3.11.0",
       "platform": "linux",
-      "port": "8001",
+      "port": "8000",
       "workers": "4"
     }
   }

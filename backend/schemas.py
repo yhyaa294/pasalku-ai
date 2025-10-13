@@ -8,6 +8,7 @@ from uuid import UUID
 class UserBase(BaseModel):
     email: EmailStr
     full_name: Optional[str] = None
+    preferred_language: Optional[str] = "id"
 
 # Properties to receive via API on creation
 class UserCreate(UserBase):
@@ -29,6 +30,7 @@ class UserUpdate(BaseModel):
     email: Optional[EmailStr] = None
     full_name: Optional[str] = None
     password: Optional[str] = None
+    preferred_language: Optional[str] = None
 
 # Properties for token
 class Token(BaseModel):
@@ -52,12 +54,14 @@ class TokenData(BaseModel):
 class ChatRequest(BaseModel):
     query: str
     session_id: Optional[UUID] = None
+    language: Optional[str] = "id"
 
 class ChatResponse(BaseModel):
     session_id: UUID
     message: str
     citations: List[str]
     disclaimer: str
+    language: str = "id"
 
 class ChatSessionBase(BaseModel):
     title: Optional[str] = None

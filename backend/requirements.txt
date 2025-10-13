@@ -72,6 +72,11 @@ uvicorn==0.27.1
 watchfiles==1.1.0
 sentry-sdk==2.19.2
 
+# Translation services
+google-cloud-translate==3.15.3  # Google Cloud Translate API
+deepl==1.17.0                   # DeepL translation API
+googletrans==4.0.0rc1           # Dev fallback (unofficial Google Translate)
+
 # Document processing libraries
 PyMuPDF==1.23.25  # For PDF processing (Fitz)
 Pillow==10.2.0    # For image processing

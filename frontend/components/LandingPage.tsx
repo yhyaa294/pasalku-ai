@@ -822,5 +822,4 @@ export default function LandingPage() {
       </footer>
     </div>
   )
-}</content>
-</xai:function_call">Comprehensive Landing Page
+}

@@ -1,0 +1,6 @@
+"copilot.mcpServers"; [
+  {
+    "name": "Local MCP",
+    "url": "http://localhost:3000"
+  }
+]

@@ -544,5 +544,4 @@ export default function DocumentVisualizer({ documentId = "doc_001", onAnalyze =
       </AnimatePresence>
     </div>
   )
-}</content>
-</xai:function_call">Interactive Document Visualizer
+}

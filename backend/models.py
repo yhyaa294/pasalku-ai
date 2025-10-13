@@ -21,6 +21,7 @@ class User(Base):
     is_active = Column(Integer, default=1, nullable=False)
     created_at = Column(DateTime, default=datetime.utcnow, nullable=False)
     updated_at = Column(DateTime, default=datetime.utcnow, onupdate=datetime.utcnow, nullable=False)
+    preferred_language = Column(String(10), default="id", nullable=False)
 
     # Relationships
     chat_sessions = relationship("ChatSession", back_populates="user")
@@ -41,6 +42,7 @@ class ChatSession(Base):
     feedback = Column(Text, nullable=True)  # User feedback
     created_at = Column(DateTime, default=datetime.utcnow, nullable=False)
     updated_at = Column(DateTime, default=datetime.utcnow, onupdate=datetime.utcnow, nullable=False)
+    language = Column(String(10), default="id", nullable=False)
 
     # Relationships
     user = relationship("User", back_populates="chat_sessions")
@@ -55,6 +57,8 @@ class ChatMessage(Base):
     content = Column(Text, nullable=False)
     citations = Column(Text, nullable=True)  # JSON string of citations
     created_at = Column(DateTime, default=datetime.utcnow, nullable=False)
+    language = Column(String(10), default="id", nullable=False)
+    metadata = Column(Text, nullable=True)
 
     # Relationship
     session = relationship("ChatSession", back_populates="messages")

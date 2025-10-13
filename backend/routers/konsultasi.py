@@ -16,10 +16,12 @@ router = APIRouter()
 class MulaiKonsultasiRequest(BaseModel):
     kategori: str
     konteks_awal: Optional[str] = None
+    language: Optional[str] = "id"
 
 class KirimPesanRequest(BaseModel):
     pesan: str
     fase: Optional[str] = None
+    language: Optional[str] = "id"
 
 class SelesaiKonsultasiRequest(BaseModel):
     rating: Optional[float] = None

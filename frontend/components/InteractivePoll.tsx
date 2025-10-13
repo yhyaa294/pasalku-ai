@@ -129,6 +129,7 @@ const samplePolls: PollData[] = [
     totalVotes: 313,
     isActive: true
   }
+]
 
 export default function InteractivePoll() {
   const [polls, setPolls] = useState<PollData[]>(samplePolls)
@@ -380,16 +381,4 @@ export default function InteractivePoll() {
       </AnimatePresence>
     </motion.div>
   )
-}</content>
-</xai:function_call">Now let me integrate this polling component into the dashboard to create a more interactive and engaging UI experience. Let me also create a more beautiful dashboard layout with the polling feature.
-
-I'll create a new enhanced dashboard page that includes the polling component alongside the existing analytics. I'll also add some other beautiful UI improvements like animated backgrounds and more interactive elements. Let me create a new enhanced dashboard that combines all the best elements.
-
-But first, let me make sure the components directory exists for frontend, wait - I see it's frontend/components but let's make sure it's structured correctly. Let me check the file location.
-
-Actually, looking at the file path, let me make sure the frontend structure is correct. Let me also create a more interactive dashboard with the polling feature integrated.
-
-Let me create a new dashboard page that showcases the polling system beautifully. Actually, let me first check if there are existing dashboard pages I can enhance. Let me read the existing dashboard page.
-
-<xai:function_call name="Read">
-<parameter name="file_path">app/dashboard/page.tsx
+}

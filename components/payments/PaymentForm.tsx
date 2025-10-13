@@ -126,14 +126,9 @@ export function PaymentForm({
           </div>
         </div>
 
-        {/* Stripe Payment Element */}
-        <div className="mb-4">
-          <PaymentElement
-            options={{
-              layout: 'tabs',
-              business: { name: 'Pasalku.ai' },
-            }}
-          />
+        {/* Stripe Payment Element - Disabled temporarily */}
+        <div className="mb-4 p-4 bg-gray-100 dark:bg-gray-800 rounded-lg text-center text-gray-500">
+          Payment integration temporarily disabled
         </div>
 
         {/* Error/Success message */}

@@ -58,7 +58,7 @@ async def health_check(response: Response):
             "uptime": round(uptime, 2),
             "services": {
                 "api": "operational",
-                "port": os.getenv("PORT", "8001")
+                "port": os.getenv("PORT", "8000")
             }
         }
         
@@ -245,7 +245,7 @@ async def detailed_health_check(response: Response):
     system_info = {
         "python_version": os.sys.version.split()[0],
         "platform": os.sys.platform,
-        "port": os.getenv("PORT", "8001"),
+        "port": os.getenv("PORT", "8000"),
         "workers": os.getenv("WEB_CONCURRENCY", "1")
     }
     

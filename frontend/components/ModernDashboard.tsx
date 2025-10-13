@@ -583,5 +583,4 @@ export default function ModernDashboard() {
       </motion.div>
     </div>
   )
-}</content>
-</xai:function_call">Modern Dashboard
+}

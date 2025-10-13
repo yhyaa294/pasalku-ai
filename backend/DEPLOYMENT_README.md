@@ -44,7 +44,7 @@ python test_db_connections.py
 docker-compose up -d
 
 # Or using uvicorn
-uvicorn app:app --host 0.0.0.0 --port 8001
+uvicorn app:app --host 0.0.0.0 --port 8000
 
 # Or using Vercel
 vercel --prod
@@ -363,7 +363,7 @@ POST /api/subscription/create        # Create subscription
 ```bash
 npm run dev          # Frontend development
 npm run build        # Frontend production build
-uvicorn app:app --reload --port 8001  # Backend with auto-reload
+uvicorn app:app --reload --port 8000  # Backend with auto-reload
 ```
 
 ### **Staging Environment**

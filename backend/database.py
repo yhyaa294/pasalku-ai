@@ -231,6 +231,15 @@ def get_mongodb():
     """Dependency to get MongoDB database instance."""
     return get_db_connections().get_mongodb()
 
+def get_mongo_client():
+    """Get MongoDB client for direct operations (sync).
+    
+    Returns:
+        MongoClient instance or None if MongoDB not available
+    """
+    db_connections = get_db_connections()
+    return db_connections.mongodb_client
+
 def get_turso_db():
     """Dependency to get Turso database instance."""
     return get_db_connections().get_turso_db()
@@ -252,3 +261,6 @@ def init_db():
     except Exception as e:
         logger.error(f"Error creating database tables: {str(e)}")
         raise
+
+# Initialize SessionLocal on module import for backward compatibility
+SessionLocal = get_db_connections().PostgresSession

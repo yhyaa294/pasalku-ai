@@ -242,8 +242,4 @@ export default function EnhancedWelcomeBanner({ user }: { user: any }) {
       </Card>
     </motion.div>
   )
-}</content>
-</xai:function_call">Now let me replace the old welcome section with this enhanced one. I'll update the dashboard to use the new beautiful welcome banner. Let me first check where the old welcome section is and replace it. I need to import this component and replace the existing welcome section.
-
-<xai:function_call name="Edit">
-<parameter name="file_path">app/dashboard/page.tsx
+}

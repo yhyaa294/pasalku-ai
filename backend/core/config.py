@@ -47,6 +47,16 @@ class Settings(BaseSettings):
     PGUSER: str = Field(default="")
     PGDATABASE: str = Field(default="")
     PGPASSWORD: str = Field(default="")
+    
+    # Vercel Postgres aliases (for compatibility)
+    POSTGRES_URL: Optional[str] = Field(default=None)
+    POSTGRES_URL_NON_POOLING: Optional[str] = Field(default=None)
+    POSTGRES_USER: Optional[str] = Field(default=None)
+    POSTGRES_HOST: Optional[str] = Field(default=None)
+    POSTGRES_PASSWORD: Optional[str] = Field(default=None)
+    POSTGRES_DATABASE: Optional[str] = Field(default=None)
+    POSTGRES_URL_NO_SSL: Optional[str] = Field(default=None)
+    POSTGRES_PRISMA_URL: Optional[str] = Field(default=None)
 
     # MongoDB (Conversation Archive)
     MONGODB_URI: str = Field(default="")
@@ -56,6 +66,16 @@ class Settings(BaseSettings):
     SUPABASE_URL: str = Field(default="")
     SUPABASE_ANON_KEY: str = Field(default="")
     SUPABASE_SERVICE_ROLE_KEY: str = Field(default="")
+    SUPABASE_JWT_SECRET: Optional[str] = Field(default=None)
+    
+    # Supabase Postgres URLs
+    PASALKU_AI_POSTGRES_URL: Optional[str] = Field(default=None)
+    PASALKU_AI_POSTGRES_USER: Optional[str] = Field(default=None)
+    PASALKU_AI_POSTGRES_HOST: Optional[str] = Field(default=None)
+    PASALKU_AI_POSTGRES_PRISMA_URL: Optional[str] = Field(default=None)
+    PASALKU_AI_POSTGRES_PASSWORD: Optional[str] = Field(default=None)
+    PASALKU_AI_POSTGRES_DATABASE: Optional[str] = Field(default=None)
+    PASALKU_AI_POSTGRES_URL_NON_POOLING: Optional[str] = Field(default=None)
 
     # Turso (Edge SQL Cache)
     TURSO_AUTH_TOKEN: str = Field(default="")
@@ -74,6 +94,7 @@ class Settings(BaseSettings):
 
     # Clerk Auth
     NEXT_PUBLIC_CLERK_PUBLISHABLE_KEY: str = Field(default="")
+    CLERK_PUBLISHABLE_KEY: str = Field(default="")
     CLERK_SECRET_KEY: str = Field(default="")
 
     # StackAuth
@@ -100,6 +121,11 @@ class Settings(BaseSettings):
     NEXT_PUBLIC_STATSIG_CLIENT_KEY: str = Field(default="")
     STATSIG_SERVER_API_KEY: str = Field(default="")
     EXPERIMENTATION_CONFIG_ITEM_KEY: str = Field(default="")
+    
+    # Additional Statsig keys
+    NEXT_PUBLIC_STATSIG_CLIENT_KEY_1: Optional[str] = Field(default=None)
+    STATSIG_SERVER_API_KEY_1: Optional[str] = Field(default=None)
+    EXPERIMENTATION_CONFIG_ITEM_KEY_1: Optional[str] = Field(default=None)
 
     # Hypertune
     NEXT_PUBLIC_HYPERTUNE_TOKEN: str = Field(default="")
@@ -139,7 +165,13 @@ class Settings(BaseSettings):
         env_file = ".env"
         env_file_encoding = "utf-8"
         case_sensitive = True
+        extra = "allow"  # Allow extra fields from .env that aren't explicitly defined
 
 
 # Global settings instance
 settings = Settings()
+
+
+def get_settings() -> Settings:
+    """Get global settings instance."""
+    return settings

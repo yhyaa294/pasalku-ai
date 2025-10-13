@@ -2,7 +2,7 @@
 
 import { useState, useEffect } from 'react'
 import { useRouter, useSearchParams } from 'next/navigation'
-import { useStripe, useElements } from '@stripe/react-stripe-js'
+// import { useStripe, useElements } from '@stripe/react-stripe-js'
 import { SubscriptionPlans } from './SubscriptionPlans'
 import { PaymentForm } from './PaymentForm'
 import { ArrowLeft, CheckCircle, XCircle } from 'lucide-react'
@@ -22,8 +22,10 @@ export function PaymentPage({
 }: PaymentPageProps) {
   const router = useRouter()
   const searchParams = useSearchParams()
-  const stripe = useStripe()
-  const elements = useElements()
+  // const stripe = useStripe()
+  // const elements = useElements()
+  const stripe = null
+  const elements = null
 
   const [currentStep, setCurrentStep] = useState<PaymentStep>('select-plan')
   const [selectedPlan, setSelectedPlan] = useState<string>('')

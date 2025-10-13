@@ -68,7 +68,22 @@
       "Bash(rm components/hero-section-original.tsx components/ChatInterfaceFixed.tsx)",
       "Bash(rm nul)",
       "Bash(rm PASALKU_MEMORANDUM.md PLATFORM_CAPABILITIES.md)",
-      "Bash(git add README.md)"
+      "Bash(git add README.md)",
+      "Bash(npx tsc --noEmit)",
+      "Bash(npx eslint frontend/components/InteractivePoll.tsx --no-eslintrc --rule \"comma-dangle: error\" --format compact)",
+      "Bash(npx tsc --noEmit frontend/components/InteractivePoll.tsx)",
+      "Bash(npx tsc --noEmit frontend/components/InteractivePoll.tsx --skipLibCheck)",
+      "Bash(python -c \"import backend.app; print(''Backend import successful'')\")",
+      "Bash(python -c \"from backend.core.config import settings; print(''Configuration loaded successfully''); print(''Clerk Keys present:'', bool(settings.CLERK_PUBLISHABLE_KEY), bool(settings.CLERK_SECRET_KEY))\")",
+      "Bash(python -c \"from backend.core import config; from backend.core.clerk_service import clerk_service; print(''Backend imports successful - configuration fixed!'')\")",
+      "Bash(npm run build --silent)",
+      "Bash(npx tsc --noEmit --pretty)",
+      "Bash(npx next build --dry-run)",
+      "Bash(npx --yes typescript tsc --noEmit --strict false)",
+      "Bash(npx tsc --noEmit --skipLibCheck)",
+      "Bash(npm install @stripe/react-stripe-js @stripe/stripe-js)",
+      "Bash(npm install -g markdownlint-cli)",
+      "Bash(markdownlint IMPLEMENTATION_REPORT_LANGUAGE_SUPPORT.md)"
     ],
     "deny": [],
     "ask": []

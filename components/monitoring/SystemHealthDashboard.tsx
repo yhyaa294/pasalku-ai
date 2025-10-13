@@ -23,14 +23,7 @@ import { Button } from '@/components/ui/button'
 import { Badge } from '@/components/ui/badge'
 import { Progress } from '@/components/ui/progress'
 import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs'
-import {
-  AlertDialog,
-  AlertDialogContent,
-  AlertDialogDescription,
-  AlertDialogHeader,
-  AlertDialogTitle,
-  AlertDialogTrigger,
-} from '@/components/ui/alert-dialog'
+import { Dialog, DialogContent, DialogDescription, DialogHeader, DialogTitle, DialogTrigger } from '@/components/ui/dialog'
 
 interface ServiceHealth {
   name: string
@@ -407,19 +400,19 @@ export function SystemHealthDashboard() {
                   )}
 
                   {service.metrics && (
-                    <AlertDialog>
-                      <AlertDialogTrigger asChild>
+                    <Dialog>
+                      <DialogTrigger asChild>
                         <Button variant="outline" size="sm" className="mt-4">
                           View Detailed Metrics
                         </Button>
-                      </AlertDialogTrigger>
-                      <AlertDialogContent>
-                        <AlertDialogHeader>
-                          <AlertDialogTitle>{service.name} - Performance Metrics</AlertDialogTitle>
-                          <AlertDialogDescription>
+                      </DialogTrigger>
+                      <DialogContent>
+                        <DialogHeader>
+                          <DialogTitle>{service.name} - Performance Metrics</DialogTitle>
+                          <DialogDescription>
                             Detailed performance and usage statistics
-                          </AlertDialogDescription>
-                        </AlertDialogHeader>
+                          </DialogDescription>
+                        </DialogHeader>
 
                         <div className="grid grid-cols-2 gap-4 mt-4">
                           <div className="space-y-2">
@@ -444,8 +437,8 @@ export function SystemHealthDashboard() {
                             <Progress value={service.metrics.memory_usage} className="mt-2" />
                           </div>
                         </div>
-                      </AlertDialogContent>
-                    </AlertDialog>
+                      </DialogContent>
+                    </Dialog>
                   )}
                 </CardContent>
               </Card>

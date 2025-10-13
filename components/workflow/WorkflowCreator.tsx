@@ -31,7 +31,7 @@ interface WorkflowConfig {
 
 interface WorkflowAction {
   id: string
-  type: 'email' | 'webhook' | 'database_update' | 'ai_call'
+  type: 'email' | 'webhook' | 'database_update' | 'ai_call' | 'scheduled'
   config: any
 }
 
@@ -182,7 +182,8 @@ export function WorkflowCreator({ isOpen, onClose, onCreate }: WorkflowCreatorPr
       ...template.defaultConfig,
       name: template.defaultConfig.name || '',
       description: template.defaultConfig.description || '',
-      actions: template.defaultConfig.actions || []
+      actions: template.defaultConfig.actions || [],
+      enabled: true
     })
     setCurrentStep('configure')
   }

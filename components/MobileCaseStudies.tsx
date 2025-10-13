@@ -21,7 +21,7 @@ import {
   GitCompare,
   FlaskConical,
   Users,
-  Lightning,
+  Zap,
   Smartphone,
   Tablet
 } from 'lucide-react';
@@ -101,7 +101,7 @@ const MobileCaseCard: React.FC<{
       case 'completed':
         return <CheckCircle className="w-4 h-4" />;
       case 'processing':
-        return <Lightning className="w-4 h-4 animate-pulse" />;
+        return <Zap className="w-4 h-4 animate-pulse" />;
       default:
         return null;
     }
@@ -173,12 +173,31 @@ const MobileCaseCard: React.FC<{
   );
 };
 
+interface ArenaData {
+  strategic_assessment?: {
+    confidence_level?: string;
+    final_recommendations?: string[];
+  };
+  consensus_analysis?: {
+    confidence?: string;
+    citations?: any[];
+    consensus_answer?: string;
+  };
+  reasoning_chain?: string[];
+  predictive_outcomes?: any[];
+  adaptive_responses?: Record<string, any>;
+  sentiment_analysis?: {
+    level?: string;
+    description?: string;
+  };
+}
+
 const MobileCaseArenaView: React.FC<{
   caseStudy: CaseStudy;
   onClose: () => void;
 }> = ({ caseStudy, onClose }) => {
   const [activeTab, setActiveTab] = useState('strategic');
-  const [arenaData, setArenaData] = useState(null);
+  const [arenaData, setArenaData] = useState<ArenaData | null>(null);
   const [loading, setLoading] = useState(false);
 
   useEffect(() => {

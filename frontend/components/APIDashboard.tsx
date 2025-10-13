@@ -822,5 +822,4 @@ export default function APIDashboard() {
       </AnimatePresence>
     </div>
   )
-}</content>
-</xai:function_call">API Dashboard
+}

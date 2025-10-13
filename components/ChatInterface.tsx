@@ -46,6 +46,7 @@ const ChatInterface: React.FC<ChatInterfaceProps> = ({
 }) => {
   const [messages, setMessages] = useState<ChatMessage[]>([]);
   const [input, setInput] = useState('');
+  const [language, setLanguage] = useState('id');
   const [isLoading, setIsLoading] = useState(false);
   const [isTyping, setIsTyping] = useState(false);
   const [attachments, setAttachments] = useState<File[]>([]);
@@ -185,11 +186,12 @@ const ChatInterface: React.FC<ChatInterfaceProps> = ({
 
     try {
       // Kirim pesan ke API
+      // Sertakan language sebagai field tambahan
+      formData.append('language', language);
+
       const response = await fetch('/api/chat', {
         method: 'POST',
         body: formData,
-        // Jangan set Content-Type header, biarkan browser yang mengaturnya
-        // untuk menangani FormData dengan benar
       });
 
       if (!response.ok) {
@@ -317,6 +319,22 @@ const ChatInterface: React.FC<ChatInterfaceProps> = ({
             ))}
           </div>
         )}
+        <div className="flex items-center gap-2 mb-2">
+          <label htmlFor="language" className="text-sm mr-2">Bahasa:</label>
+          <select
+            id="language"
+            value={language}
+            onChange={(e) => setLanguage(e.target.value)}
+            className="border rounded px-2 py-1"
+          >
+            <option value="id">Bahasa Indonesia</option>
+            <option value="jv">Bahasa Jawa</option>
+            <option value="su">Bahasa Sunda</option>
+            <option value="min">Bahasa Minang</option>
+            <option value="ban">Bahasa Bali</option>
+          </select>
+        </div>
+
         <form onSubmit={handleSubmit} className="flex gap-2">
           <div className="relative flex-1">
             <Input
@@ -370,9 +388,9 @@ const ChatInterface: React.FC<ChatInterfaceProps> = ({
         {isTyping && (
           <div className="flex items-center mt-2 text-xs text-gray-500">
             <div className="flex space-x-1 px-3 py-1 bg-gray-100 rounded-full">
-              <div className="w-2 h-2 bg-gray-400 rounded-full animate-bounce" style={{ animationDelay: '0ms' }}></div>
-              <div className="w-2 h-2 bg-gray-400 rounded-full animate-bounce" style={{ animationDelay: '150ms' }}></div>
-              <div className="w-2 h-2 bg-gray-400 rounded-full animate-bounce" style={{ animationDelay: '300ms' }}></div>
+              <div className="w-2 h-2 bg-gray-400 rounded-full animate-bounce" />
+              <div className="w-2 h-2 bg-gray-400 rounded-full animate-bounce" />
+              <div className="w-2 h-2 bg-gray-400 rounded-full animate-bounce" />
             </div>
             <span className="ml-2">AI sedang mengetik...</span>
           </div>

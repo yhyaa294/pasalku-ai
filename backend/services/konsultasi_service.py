@@ -11,6 +11,8 @@ from sqlalchemy.orm import Session
 from ..core.config import settings
 from ..models import ChatSession, ChatMessage
 from . import ai_service
+from .translation_service import translation_service
+from ..database import get_mongo_client
 
 logger = logging.getLogger(__name__)
 
@@ -118,17 +120,21 @@ class KonsultasiHukumService:
             Konteks tambahan: {konteks_awal if konteks_awal else 'Tidak ada'}
             """
 
+            # Translate opening prompt if necessary (user language handled by frontend)
+            # For session start we treat context as primary language (id)
             response = await self.ai_service.get_legal_response(
                 prompt,
                 user_context=str(user_id)
             )
 
             # Simpan pesan pembuka
+            # Store assistant message with language info (primary language)
             pesan = ChatMessage(
                 session_id=sesi.id,
                 role="assistant",
                 content=response["message"],
-                metadata=json.dumps(response.get("metadata", {}))
+                metadata=json.dumps(response.get("metadata", {})),
+                language="id"
             )
             self.db.add(pesan)
             self.db.commit()
@@ -161,27 +167,44 @@ class KonsultasiHukumService:
             # Bangun konteks
             konteks = self._bangun_konteks(sesi, riwayat)
 
-            # Proses dengan AI
+            # Determine language: if session has language set, use it; otherwise default to 'id'
+            user_lang = getattr(sesi, 'language', 'id') or 'id'
+
+            # Translate incoming user message to primary language (id) if necessary
+            translated_input = await translation_service.translate_to_primary(pesan, source_lang=user_lang)
+
+            # Proses dengan AI menggunakan translated input
             hasil = await self.ai_service.get_legal_response(
-                pesan,
+                translated_input,
                 user_context=konteks,
                 phase=fase or sesi.phase
             )
 
             # Simpan pesan pengguna
+            # Save original user message with language metadata
             pesan_user = ChatMessage(
                 session_id=sesi_id,
                 role="user",
-                content=pesan
+                content=pesan,
+                language=user_lang,
+                metadata=json.dumps({"translated_to": "id", "translated_text": translated_input})
             )
             self.db.add(pesan_user)
 
             # Simpan respons AI
+            # Translate AI response back to user's language if necessary
+            ai_response_primary = hasil.get("message", "")
+            ai_response_for_user = await translation_service.translate_to_user(ai_response_primary, target_lang=user_lang)
+
             pesan_ai = ChatMessage(
                 session_id=sesi_id,
                 role="assistant",
-                content=hasil["message"],
-                metadata=json.dumps(hasil.get("metadata", {}))
+                content=ai_response_for_user,
+                language=user_lang,
+                metadata=json.dumps({
+                    "source_message": ai_response_primary,
+                    **(hasil.get("metadata", {}))
+                })
             )
             self.db.add(pesan_ai)
 
@@ -194,6 +217,18 @@ class KonsultasiHukumService:
                 sesi.consultation_data = json.dumps(hasil["analisis"])
 
             self.db.commit()
+
+            # Save multilingual transcript to MongoDB for audit and fine-tuning
+            await self._save_transcript_to_mongo(
+                session_id=sesi_id,
+                user_id=sesi.user_id,
+                user_message=pesan,
+                user_language=user_lang,
+                translated_input=translated_input,
+                ai_response_primary=ai_response_primary,
+                ai_response_translated=ai_response_for_user,
+                metadata=hasil.get("metadata", {})
+            )
 
             return hasil
 
@@ -274,6 +309,64 @@ class KonsultasiHukumService:
             konteks.append(sesi.consultation_data)
 
         return "\n".join(konteks)
+
+    async def _save_transcript_to_mongo(
+        self,
+        session_id: int,
+        user_id: int,
+        user_message: str,
+        user_language: str,
+        translated_input: str,
+        ai_response_primary: str,
+        ai_response_translated: str,
+        metadata: Dict[str, Any]
+    ) -> None:
+        """Save multilingual transcript to MongoDB for audit and fine-tuning.
+        
+        Args:
+            session_id: Chat session ID
+            user_id: User ID
+            user_message: Original user message in user's language
+            user_language: User's language code
+            translated_input: User message translated to primary language (id)
+            ai_response_primary: AI response in primary language (id)
+            ai_response_translated: AI response translated to user's language
+            metadata: Additional metadata from AI response
+        """
+        try:
+            mongo_client = get_mongo_client()
+            if not mongo_client:
+                logger.warning("MongoDB not available, skipping transcript save")
+                return
+            
+            db = mongo_client[settings.MONGO_DB_NAME or "pasalku_ai_conversation_archive"]
+            collection = db["transcripts"]
+            
+            transcript_doc = {
+                "session_id": session_id,
+                "user_id": user_id,
+                "timestamp": datetime.utcnow(),
+                "language": user_language,
+                "user_message": {
+                    "original": user_message,
+                    "language": user_language,
+                    "translated_to_primary": translated_input if user_language != "id" else None
+                },
+                "ai_response": {
+                    "primary_language": ai_response_primary,
+                    "translated_to_user": ai_response_translated if user_language != "id" else None,
+                    "language": user_language
+                },
+                "metadata": metadata,
+                "version": "1.0"
+            }
+            
+            result = collection.insert_one(transcript_doc)
+            logger.info(f"Transcript saved to MongoDB: session={session_id}, doc_id={result.inserted_id}, lang={user_language}")
+            
+        except Exception as e:
+            # Don't fail the request if MongoDB save fails
+            logger.error(f"Failed to save transcript to MongoDB: {e}", exc_info=True)
 
     async def _generate_ringkasan(
         self,
