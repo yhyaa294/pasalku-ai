@@ -88,7 +88,7 @@ DEEPL_API_KEY="your-key-here:fx"  # :fx suffix untuk free tier
 **Status**: ✅ Sudah dikonfigurasi di `.env`
 
 ```bash
-GROQ_API_KEY="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"
+GROQ_API_KEY="your-groq-api-key-here"
 ```
 
 **Note**: Groq akan digunakan sebagai fallback jika Google/DeepL tidak tersedia.
