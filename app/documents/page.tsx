@@ -16,6 +16,9 @@ interface DocumentItem {
   summary?: string;
   risk_assessment?: string;
   recommendations?: string[];
+  ai_insights?: string | Record<string, any>;
+  legal_references?: Array<string | { title: string; link: string }>;
+  extracted_text?: string;
 }
 
 const DocumentsPage = () => {
@@ -335,7 +338,7 @@ const DocumentsPage = () => {
                               key={index}
                               className="px-3 py-1 bg-blue-100 text-blue-800 rounded-full text-sm"
                             >
-                              {ref}
+                              {typeof ref === 'string' ? ref : ref.title}
                             </span>
                           ))}
                         </div>
