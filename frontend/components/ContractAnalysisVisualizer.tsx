@@ -5,10 +5,10 @@ import { motion, AnimatePresence } from 'framer-motion'
 import {
   BarChart, Bar, XAxis, YAxis, CartesianGrid, Tooltip, ResponsiveContainer,
   ScatterChart, Scatter, RadarChart, Radar, PolarGrid, PolarAngleAxis, PolarRadiusAxis,
-  TreeMap, Treemap, PieChart, Pie, Cell
+  Treemap, PieChart, Pie, Cell
 } from 'recharts'
 import {
-  FileContract, Target, AlertTriangle, TrendingUp,
+  FileText, Target, AlertTriangle, TrendingUp,
   Users, Calendar, DollarSign, Shield, CheckCircle,
   XCircle, Clock, Award, Zap, AlertCircle
 } from 'lucide-react'
@@ -182,7 +182,7 @@ export default function ContractAnalysisVisualizer() {
         <div className="flex items-center justify-between">
           <div className="flex items-center gap-4">
             <div className="p-3 bg-gradient-to-r from-blue-500 to-purple-500 rounded-xl text-white">
-              <FileContract size={32} />
+              <FileText size={32} />
             </div>
             <div>
               <h1 className="text-3xl font-bold text-gray-900 dark:text-white">

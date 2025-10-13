@@ -183,7 +183,8 @@ export function WorkflowCreator({ isOpen, onClose, onCreate }: WorkflowCreatorPr
       name: template.defaultConfig.name || '',
       description: template.defaultConfig.description || '',
       actions: template.defaultConfig.actions || [],
-      enabled: true
+      enabled: true,
+      schedule: template.defaultConfig.schedule || '0 9 * * *' // Default to 9 AM daily
     })
     setCurrentStep('configure')
   }
@@ -422,7 +423,7 @@ export function WorkflowCreator({ isOpen, onClose, onCreate }: WorkflowCreatorPr
                       <Label>Action Type</Label>
                       <Select
                         value={action.type}
-                        onValueChange={(type: any) => {
+                        onValueChange={(type: keyof typeof actionTemplates) => {
                           const updatedActions = [...config.actions]
                           updatedActions[index] = {
                             ...action,

@@ -93,6 +93,8 @@ from .routers.business_intelligence import router as bi_router
 from .routers.voice_assistant import router as voice_router
 from .routers.startup_accelerator import router as startup_router
 from .routers.international_bridge import router as international_router
+from .routers.document_review import router as document_review_router
+from .routers.knowledge_graph import router as knowledge_graph_router
 
 app.include_router(auth_router, prefix="/api/auth", tags=["Authentication"])
 app.include_router(users_router, prefix="/api/users", tags=["Users"])
@@ -121,6 +123,7 @@ app.include_router(bi_router, tags=["Business Intelligence"])
 app.include_router(voice_router, tags=["AI Voice Assistant"])
 app.include_router(startup_router, tags=["Startup Accelerator"])
 app.include_router(international_router, tags=["International Legal Bridge"])
+app.include_router(document_review_router, tags=["Document Review"])
 
 # Health check endpoint
 @app.get("/health")

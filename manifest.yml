@@ -1,0 +1,7 @@
+default_permissions:
+  contents: read
+  issues: write
+  checks: write
+default_events:
+  - push
+  - pull_request

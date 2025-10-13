@@ -25,12 +25,17 @@ export const HeroSection: FC<HeroSectionProps> = ({ onGetStarted }) => {
   }, [])
 
   return (
-    <section id="hero" className="relative min-h-screen flex items-center justify-center overflow-hidden bg-gradient-to-b from-white via-gray-50 to-white">
+    <section id="hero" className="relative min-h-screen flex items-center justify-center overflow-hidden bg-gradient-to-br from-slate-50 via-blue-50 to-indigo-50">
       {/* Animated Background Elements */}
       <div className="absolute inset-0">
-        <div className="absolute top-20 left-10 w-48 h-48 md:w-72 md:h-72 bg-gradient-to-br from-gray-100 to-orange-100 rounded-full blur-3xl animate-levitate opacity-60"></div>
-        <div className="absolute bottom-20 right-10 w-64 h-64 md:w-96 md:h-96 bg-gradient-to-br from-orange-100 to-yellow-100 rounded-full blur-3xl animate-ping opacity-40"></div>
-        <div className="absolute top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2 w-32 h-32 bg-gradient-to-br from-orange-200 to-yellow-200 rounded-full blur-2xl animate-pulse opacity-50"></div>
+        {/* Enhanced Floating Orbs with Glassmorphism */}
+        <div className="absolute top-20 left-10 w-56 h-56 md:w-80 md:h-80 bg-gradient-to-br from-indigo-200/30 via-blue-300/40 to-purple-200/30 rounded-full blur-xl animate-float backdrop-blur-sm"></div>
+        <div className="absolute bottom-20 right-10 w-72 h-72 md:w-96 md:h-96 bg-gradient-to-br from-purple-300/40 via-pink-200/30 to-indigo-300/40 rounded-full blur-xl animate-levitate backdrop-blur-sm"></div>
+        <div className="absolute top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2 w-40 h-40 bg-gradient-to-br from-blue-300/50 via-indigo-400/30 to-purple-500/40 rounded-full blur-xl animate-pulse opacity-60"></div>
+
+        {/* Additional Ambient Orbs */}
+        <div className="absolute top-32 right-32 w-24 h-24 bg-gradient-to-br from-cyan-200/60 to-blue-300/60 rounded-full blur-lg animate-bounce opacity-40"></div>
+        <div className="absolute bottom-32 left-32 w-32 h-32 bg-gradient-to-br from-purple-300/50 to-pink-200/40 rounded-full blur-lg animate-ping opacity-50"></div>
 
         {/* Floating Energy Particles */}
         {[...Array(8)].map((_, i) => (

@@ -4,7 +4,7 @@ import React, { useState, useEffect } from 'react'
 import { motion, AnimatePresence } from 'framer-motion'
 import {
   BarChart, Bar, XAxis, YAxis, CartesianGrid, Tooltip, ResponsiveContainer,
-  LineChart, Line, PieChart, Pie, Cell, ScatterChart, Scatter
+  LineChart, Line, PieChart, Pie, Cell, ScatterChart, Scatter, Legend
 } from 'recharts'
 import {
   Globe, Cpu, Brain, Shield, Zap, TrendingUp,
@@ -171,7 +171,7 @@ export default function APIDashboard() {
     visible: {
       opacity: 1,
       scale: 1,
-      transition: { type: "spring", stiffness: 100, damping: 15 }
+      transition: { type: "spring" as const, stiffness: 100, damping: 15 }
     }
   }
 
@@ -456,7 +456,9 @@ export default function APIDashboard() {
                         <YAxis stroke="#6b7280" />
                         <Tooltip
                           formatter={(value, name) => [
-                            name === 'requests' ? value.toLocaleString() + ' requests' : value.toFixed(1) + '%',
+                            name === 'requests'
+                              ? (typeof value === 'number' ? value.toLocaleString() : value) + ' requests'
+                              : (typeof value === 'number' ? value.toFixed(1) : value) + '%',
                             name === 'requests' ? 'Requests' : 'Success Rate'
                           ]}
                         />
@@ -503,7 +505,9 @@ export default function APIDashboard() {
                           labelFormatter={(value) => `Time: ${value}`}
                           formatter={(value, name) => [
                             value + '%',
-                            name.charAt(0).toUpperCase() + name.slice(1)
+                            typeof name === 'string'
+                              ? name.charAt(0).toUpperCase() + name.slice(1)
+                              : String(name)
                           ]}
                         />
                         <Line
@@ -744,7 +748,7 @@ export default function APIDashboard() {
                         </Badge>
                       </div>
                       <div className="w-full bg-gray-200 dark:bg-gray-700 rounded-full h-2">
-                        <div className="bg-green-500 h-2 rounded-full" style={{ width: '78%' }}></div>
+                        <div className="bg-green-500 h-2 rounded-full w-[78%]"></div>
                       </div>
                       <p className="text-xs text-gray-500">78% capacity • Connection pool healthy</p>
                     </div>
@@ -757,7 +761,7 @@ export default function APIDashboard() {
                         </Badge>
                       </div>
                       <div className="w-full bg-gray-200 dark:bg-gray-700 rounded-full h-2">
-                        <div className="bg-blue-500 h-2 rounded-full" style={{ width: '65%' }}></div>
+                        <div className="bg-blue-500 h-2 rounded-full w-[65%]"></div>
                       </div>
                       <p className="text-xs text-gray-500">65% capacity • Async operations active</p>
                     </div>
@@ -770,7 +774,7 @@ export default function APIDashboard() {
                         </Badge>
                       </div>
                       <div className="w-full bg-gray-200 dark:bg-gray-700 rounded-full h-2">
-                        <div className="bg-purple-500 h-2 rounded-full" style={{ width: '42%' }}></div>
+                        <div className="bg-purple-500 h-2 rounded-full w-[42%]"></div>
                       </div>
                       <p className="text-xs text-gray-500">42% utilization • Fast response times</p>
                     </div>
