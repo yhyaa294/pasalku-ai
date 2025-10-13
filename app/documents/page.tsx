@@ -16,6 +16,9 @@ interface DocumentItem {
   summary?: string;
   risk_assessment?: string;
   recommendations?: string[];
+  ai_insights?: string;
+  legal_references?: string[];
+  extracted_text?: string;
 }
 
 const DocumentsPage = () => {

@@ -2,9 +2,12 @@
 
 import { EnhancedNavigation } from '@/components/enhanced-navigation';
 import { HeroSection } from '@/components/hero-section';
+import { ProblemStatementSection } from '@/components/problem-statement-section';
+import { SolutionOverviewSection } from '@/components/solution-overview-section';
 import { StatisticsSection } from '@/components/statistics-section';
 import { FeaturesSection } from '@/components/features-section';
 import { HowItWorksSection } from '@/components/how-it-works-section';
+import { PricingPreviewSection } from '@/components/pricing-preview-section';
 import { PricingSection } from '@/components/pricing-section';
 import { EnhancedFooter } from '@/components/enhanced-footer';
 import { useEffect, useState } from 'react';
@@ -134,12 +137,14 @@ export default function PasalkuLandingPage() {
 
       <main>
         <HeroSection onGetStarted={handleChatClick} />
+        <ProblemStatementSection />
+        <SolutionOverviewSection />
         <StatisticsSection />
         <FeaturesSection />
         <HowItWorksSection />
-        <PricingSection />
-        <FAQSection />
         <TestimonialsSection />
+        <PricingPreviewSection />
+        <FAQSection />
         <CTASection onGetStarted={handleChatClick} />
       </main>
 

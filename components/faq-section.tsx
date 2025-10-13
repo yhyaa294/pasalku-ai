@@ -19,27 +19,32 @@ export const FAQSection: FC<FAQSectionProps> = ({ className = '' }) => {
     {
       question: 'Apa itu Pasalku.ai?',
       answer:
-        'Pasalku.ai adalah platform konsultasi hukum berbasis AI yang memberikan jawaban cepat, analisis dokumen, dan rujukan hukum Indonesia yang relevan.'
+        'Pasalku.ai adalah platform konsultasi hukum berbasis AI yang memberikan jawaban cepat, analisis dokumen, dan rujukan hukum Indonesia yang relevan. Didukung oleh dual AI engine (BytePlus Ark + Groq) untuk akurasi maksimal.'
     },
     {
       question: 'Apakah jawaban AI bisa dipercaya?',
       answer:
-        'Kami melengkapi jawaban AI dengan sitasi (Pasal/UU) dan confidence score. Untuk kasus kompleks, Anda dapat meminta verifikasi Profesional Hukum.'
+        'Kami melengkapi jawaban AI dengan sitasi (Pasal/UU) dan confidence score. Dengan akurasi 94.1%, platform kami telah teruji. Untuk kasus kompleks, Anda dapat meminta verifikasi Profesional Hukum.'
     },
     {
       question: 'Bagaimana sistem harga bekerja?',
       answer:
-        'Ada paket Free (10 query/bulan) dan Premium (Rp 99.000/bulan) dengan fitur lanjutan. Lihat detail di halaman Paket & Harga.'
+        'Ada paket Free (10 query/bulan) dan Premium (Rp 99.000/bulan) dengan fitur lanjutan seperti unlimited queries, analisis dokumen, dan priority support. Lihat detail di halaman Paket & Harga.'
     },
     {
       question: 'Apakah data saya aman?',
       answer:
-        'Ya. Kami menerapkan enkripsi, PIN-protected sessions, dan audit logging. Akses sesuai peran (RBAC) untuk keamanan berlapis.'
+        'Ya. Kami menerapkan enkripsi tingkat enterprise, PIN-protected sessions, dan audit logging menyeluruh. Akses sesuai peran (RBAC) untuk keamanan berlapis. Data Anda sepenuhnya terlindungi.'
     },
     {
       question: 'Bagaimana cara menjadi Profesional Hukum?',
       answer:
-        'Buka halaman Upgrade Profesional, unggah dokumen verifikasi, dan tim kami akan meninjau dalam 1–3 hari kerja.'
+        'Buka halaman Upgrade Profesional, unggah dokumen verifikasi (ijazah, sertifikat, atau kartu anggota), dan tim kami akan meninjau dalam 1–3 hari kerja. Setelah disetujui, Anda akan mendapat badge terverifikasi.'
+    },
+    {
+      question: 'Apakah Pasalku.ai menggantikan pengacara?',
+      answer:
+        'Tidak. Pasalku.ai adalah alat bantu untuk konsultasi hukum awal dan analisis dokumen. Untuk kasus kompleks atau representasi hukum di pengadilan, kami tetap merekomendasikan konsultasi dengan pengacara profesional.'
     }
   ]
 
