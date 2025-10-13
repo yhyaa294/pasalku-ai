@@ -1213,10 +1213,15 @@
   dependencies:
     fast-glob "3.3.1"
 
-"@next/swc-win32-x64-msvc@14.2.16":
+"@next/swc-linux-x64-gnu@14.2.16":
   version "14.2.16"
-  resolved "https://registry.npmjs.org/@next/swc-win32-x64-msvc/-/swc-win32-x64-msvc-14.2.16.tgz"
-  integrity sha512-OA7NtfxgirCjfqt+02BqxC3MIgM/JaGjw9tOe4fyZgPsqfseNiMPnCRP44Pfs+Gpo9zPN+SXaFsgP6vk8d571A==
+  resolved "https://registry.npmjs.org/@next/swc-linux-x64-gnu/-/swc-linux-x64-gnu-14.2.16.tgz"
+  integrity sha512-9AGcX7VAkGbc5zTSa+bjQ757tkjr6C/pKS7OK8cX7QEiK6MHIIezBLcQ7gQqbDW2k5yaqba2aDtaBeyyZh1i6Q==
+
+"@next/swc-linux-x64-musl@14.2.16":
+  version "14.2.16"
+  resolved "https://registry.npmjs.org/@next/swc-linux-x64-musl/-/swc-linux-x64-musl-14.2.16.tgz"
+  integrity sha512-Klgeagrdun4WWDaOizdbtIIm8khUDQJ/5cRzdpXHfkbY91LxBXeejL4kbZBrpR/nmgRrQvmz4l3OtttNVkz2Sg==
 
 "@nodelib/fs.scandir@2.1.5":
   version "2.1.5"
@@ -2187,15 +2192,15 @@
     estree-walker "^2.0.2"
     picomatch "^4.0.2"
 
-"@rollup/rollup-win32-x64-gnu@4.52.4":
+"@rollup/rollup-linux-x64-gnu@4.52.4":
   version "4.52.4"
-  resolved "https://registry.npmjs.org/@rollup/rollup-win32-x64-gnu/-/rollup-win32-x64-gnu-4.52.4.tgz"
-  integrity sha512-UF9KfsH9yEam0UjTwAgdK0anlQ7c8/pWPU2yVjyWcF1I1thABt6WXE47cI71pGiZ8wGvxohBoLnxM04L/wj8mQ==
+  resolved "https://registry.npmjs.org/@rollup/rollup-linux-x64-gnu/-/rollup-linux-x64-gnu-4.52.4.tgz"
+  integrity sha512-Wi6AXf0k0L7E2gteNsNHUs7UMwCIhsCTs6+tqQ5GPwVRWMaflqGec4Sd8n6+FNFDw9vGcReqk2KzBDhCa1DLYg==
 
-"@rollup/rollup-win32-x64-msvc@4.52.4":
+"@rollup/rollup-linux-x64-musl@4.52.4":
   version "4.52.4"
-  resolved "https://registry.npmjs.org/@rollup/rollup-win32-x64-msvc/-/rollup-win32-x64-msvc-4.52.4.tgz"
-  integrity sha512-bf9PtUa0u8IXDVxzRToFQKsNCRz9qLYfR/MpECxl4mRoWYjAeFjgxj1XdZr2M/GNVpT05p+LgQOHopYDlUu6/w==
+  resolved "https://registry.npmjs.org/@rollup/rollup-linux-x64-musl/-/rollup-linux-x64-musl-4.52.4.tgz"
+  integrity sha512-dtBZYjDmCQ9hW+WgEkaffvRRCKm767wWhxsFW3Lw86VXz/uJRuD438/XvbZT//B96Vs8oTA8Q4A0AfHbrxP9zw==
 
 "@rtsao/scc@^1.1.0":
   version "1.1.0"
@@ -2267,10 +2272,10 @@
     magic-string "0.30.8"
     unplugin "1.0.1"
 
-"@sentry/cli-win32-x64@2.56.1":
+"@sentry/cli-linux-x64@2.56.1":
   version "2.56.1"
-  resolved "https://registry.npmjs.org/@sentry/cli-win32-x64/-/cli-win32-x64-2.56.1.tgz"
-  integrity sha512-11cdflajBrDWlRZqI9MOu7ok2vnPzFjKmbU3YvBYWQapNE+HHAsWdsRL/u/P1RmU62vj7Y42iSUcj6x1SNrdPw==
+  resolved "https://registry.npmjs.org/@sentry/cli-linux-x64/-/cli-linux-x64-2.56.1.tgz"
+  integrity sha512-3/BlKe5Vdnia36MeovghHJD8lbcum5TFIxLp+PSfH2sVb09+5Jo0L95oRTI2JkD8Fs+QNssvTqTxJj5eIo/n+A==
 
 "@sentry/cli@^2.51.0":
   version "2.56.1"
@@ -2624,10 +2629,15 @@
     source-map-js "^1.2.1"
     tailwindcss "4.1.13"
 
-"@tailwindcss/oxide-win32-x64-msvc@4.1.13":
+"@tailwindcss/oxide-linux-x64-gnu@4.1.13":
   version "4.1.13"
-  resolved "https://registry.npmjs.org/@tailwindcss/oxide-win32-x64-msvc/-/oxide-win32-x64-msvc-4.1.13.tgz"
-  integrity sha512-3+LKesjXydTkHk5zXX01b5KMzLV1xl2mcktBJkje7rhFUpUlYJy7IMOLqjIRQncLTa1WZZiFY/foAeB5nmaiTw==
+  resolved "https://registry.npmjs.org/@tailwindcss/oxide-linux-x64-gnu/-/oxide-linux-x64-gnu-4.1.13.tgz"
+  integrity sha512-uaZTYWxSXyMWDJZNY1Ul7XkJTCBRFZ5Fo6wtjrgBKzZLoJNrG+WderJwAjPzuNZOnmdrVg260DKwXCFtJ/hWRQ==
+
+"@tailwindcss/oxide-linux-x64-musl@4.1.13":
+  version "4.1.13"
+  resolved "https://registry.npmjs.org/@tailwindcss/oxide-linux-x64-musl/-/oxide-linux-x64-musl-4.1.13.tgz"
+  integrity sha512-oXiPj5mi4Hdn50v5RdnuuIms0PVPI/EG4fxAfFiIKQh5TgQgX7oSuDWntHW7WNIi/yVLAiS+CRGW4RkoGSSgVQ==
 
 "@tailwindcss/oxide@4.1.13":
   version "4.1.13"
@@ -2925,10 +2935,15 @@
     "@typescript-eslint/types" "8.46.0"
     eslint-visitor-keys "^4.2.1"
 
-"@unrs/resolver-binding-win32-x64-msvc@1.11.1":
+"@unrs/resolver-binding-linux-x64-gnu@1.11.1":
   version "1.11.1"
-  resolved "https://registry.npmjs.org/@unrs/resolver-binding-win32-x64-msvc/-/resolver-binding-win32-x64-msvc-1.11.1.tgz"
-  integrity sha512-lrW200hZdbfRtztbygyaq/6jP6AKE8qQN2KvPcJ+x7wiD038YtnYtZ82IMNJ69GJibV7bwL3y9FgK+5w/pYt6g==
+  resolved "https://registry.npmjs.org/@unrs/resolver-binding-linux-x64-gnu/-/resolver-binding-linux-x64-gnu-1.11.1.tgz"
+  integrity sha512-C3ZAHugKgovV5YvAMsxhq0gtXuwESUKc5MhEtjBpLoHPLYM+iuwSj3lflFwK3DPm68660rZ7G8BMcwSro7hD5w==
+
+"@unrs/resolver-binding-linux-x64-musl@1.11.1":
+  version "1.11.1"
+  resolved "https://registry.npmjs.org/@unrs/resolver-binding-linux-x64-musl/-/resolver-binding-linux-x64-musl-1.11.1.tgz"
+  integrity sha512-rV0YSoyhK2nZ4vEswT/QwqzqQXw5I6CjoaYMOX0TqBlWhojUf8P94mvI7nuJTeaCkkds3QE4+zS8Ko+GdXuZtA==
 
 "@vercel/analytics@^1.2.1":
   version "1.5.0"
@@ -5106,10 +5121,15 @@ levn@^0.4.1:
     prelude-ls "^1.2.1"
     type-check "~0.4.0"
 
-lightningcss-win32-x64-msvc@1.30.1:
+lightningcss-linux-x64-gnu@1.30.1:
   version "1.30.1"
-  resolved "https://registry.npmjs.org/lightningcss-win32-x64-msvc/-/lightningcss-win32-x64-msvc-1.30.1.tgz"
-  integrity sha512-PVqXh48wh4T53F/1CCu8PIPCxLzWyCnn/9T5W1Jpmdy5h9Cwd+0YQS6/LwhHXSafuc61/xg9Lv5OrCby6a++jg==
+  resolved "https://registry.npmjs.org/lightningcss-linux-x64-gnu/-/lightningcss-linux-x64-gnu-1.30.1.tgz"
+  integrity sha512-piWx3z4wN8J8z3+O5kO74+yr6ze/dKmPnI7vLqfSqI8bccaTGY5xiSGVIJBDd5K5BHlvVLpUB3S2YCfelyJ1bw==
+
+lightningcss-linux-x64-musl@1.30.1:
+  version "1.30.1"
+  resolved "https://registry.npmjs.org/lightningcss-linux-x64-musl/-/lightningcss-linux-x64-musl-1.30.1.tgz"
+  integrity sha512-rRomAK7eIkL+tHY0YPxbc5Dra2gXlI63HL+v1Pdi1a3sC+tJTcFrHX+E86sulgAXeI7rSzDYhPSeHHjqFhqfeQ==
 
 lightningcss@1.30.1:
   version "1.30.1"

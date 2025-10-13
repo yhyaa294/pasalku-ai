@@ -90,7 +90,7 @@ export function EnhancedFooter() {
   ]
 
   return (
-    <footer className="bg-gradient-to-br from-gray-900 via-blue-900 to-purple-900 text-white relative overflow-hidden">
+    <footer className="bg-gradient-to-br from-secondary via-secondary to-primary text-white relative overflow-hidden">
       {/* Background Pattern */}
       <div className="absolute inset-0 opacity-10">
         <div className="absolute inset-0" style={{
@@ -114,7 +114,7 @@ export function EnhancedFooter() {
                     <span className="text-3xl">⚖️</span>
                   </div>
                   <div>
-                    <div className="text-2xl font-bold">Pasalku.ai</div>
+                    <div className="text-2xl font-display font-bold">Pasalku.ai</div>
                     <div className="text-sm text-blue-200">Solusi AI Hukum Indonesia</div>
                   </div>
                 </div>
@@ -223,9 +223,10 @@ export function EnhancedFooter() {
                 <input
                   type="email"
                   placeholder="Masukkan email Anda..."
-                  className="flex-1 px-4 py-3 rounded-lg bg-white/10 border border-white/20 text-white placeholder-gray-400 focus:outline-none focus:ring-2 focus:ring-white/50"
+                  className="flex-1 px-4 py-3 rounded-lg bg-white/10 border border-white/20 text-white placeholder-gray-400 focus:outline-none focus:ring-2 focus:ring-accent focus:ring-offset-2 focus:ring-offset-secondary"
+                  aria-label="Email untuk newsletter"
                 />
-                <button className="px-6 py-3 bg-gradient-to-r from-blue-500 to-purple-500 hover:from-blue-600 hover:to-purple-600 rounded-lg font-semibold transition-all duration-300 shadow-lg hover:shadow-xl">
+                <button className="px-6 py-3 bg-gradient-to-r from-primary to-accent hover:from-primary/90 hover:to-accent/90 rounded-lg font-semibold transition-all duration-300 shadow-lg hover:shadow-xl focus:outline-none focus:ring-2 focus:ring-accent focus:ring-offset-2 focus:ring-offset-secondary">
                   Subscribe
                 </button>
               </div>
