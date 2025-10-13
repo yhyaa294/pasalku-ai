@@ -12,9 +12,9 @@ export default {
         'display': ['Poppins', 'system-ui', 'sans-serif'],
       },
       colors: {
-        primary: '#1e40af', // Biru Tua untuk kepercayaan & keamanan
-        accent: '#f97316', // Oranye Cerah untuk energi & harapan
-        secondary: '#0f172a', // Hitam untuk otoritas & profesionalisme
+        primary: '#1e40af', // Biru Tua - Professional trust & legal authority
+        accent: '#f97316', // Oranye Enerjik - CTA & highlights
+        secondary: '#0f172a', // Hitam Profesional - Elegant & serious
         neutral: {
           50: '#fafafa',
           100: '#f5f5f5',
