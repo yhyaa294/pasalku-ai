@@ -20,7 +20,8 @@ import {
   Award,
   Phone,
   ArrowRight,
-  Sparkles
+  Sparkles,
+  Building2
 } from 'lucide-react'
 
 export default function PricingPage() {

@@ -21,7 +21,7 @@ import {
   GitCompare,
   FlaskConical,
   Users,
-  Lightning,
+  Zap,
   Smartphone,
   Tablet
 } from 'lucide-react';
@@ -101,7 +101,7 @@ const MobileCaseCard: React.FC<{
       case 'completed':
         return <CheckCircle className="w-4 h-4" />;
       case 'processing':
-        return <Lightning className="w-4 h-4 animate-pulse" />;
+        return <Zap className="w-4 h-4 animate-pulse" />;
       default:
         return null;
     }

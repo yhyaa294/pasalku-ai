@@ -121,6 +121,11 @@ export const EnhancedNavigation: FC<EnhancedNavigationProps> = ({
       icon: HelpCircle,
       children: [
         {
+          name: 'Bantuan & Dukungan',
+          href: '/help',
+          icon: HelpCircle
+        },
+        {
           name: 'FAQ - Pertanyaan Umum',
           href: '/faq',
           icon: HelpCircle
