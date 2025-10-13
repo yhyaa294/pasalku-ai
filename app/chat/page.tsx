@@ -69,7 +69,23 @@ Silakan ajukan pertanyaan Anda tentang hukum Indonesia.`,
     };
 
     setMessages(prev => [...prev, userMessage]);
+    const messageText = inputValue.toLowerCase().trim();
+    const originalMessage = inputValue;
     setInputValue('');
+    
+    // Handle simple greetings locally
+    const greetings = ['hai', 'halo', 'hello', 'hi', 'hei', 'selamat pagi', 'selamat siang', 'selamat malam'];
+    if (greetings.some(greeting => messageText === greeting || messageText.startsWith(greeting + ' ') || messageText.startsWith(greeting + ','))) {
+      const greetingResponse: Message = {
+        id: (Date.now() + 1).toString(),
+        type: 'bot',
+        content: `Hai! Selamat datang kembali di Pasalku.ai 👋\n\nSaya siap membantu Anda dengan pertanyaan hukum Indonesia. Silakan tanyakan apa yang ingin Anda ketahui tentang:\n\n• Peraturan perundang-undangan\n• Kontrak dan perjanjian\n• Hak dan kewajiban hukum\n• Prosedur hukum\n• Dan topik hukum lainnya\n\nApa yang bisa saya bantu hari ini?`,
+        timestamp: new Date()
+      };
+      setMessages(prev => [...prev, greetingResponse]);
+      return;
+    }
+
     setIsLoading(true);
 
     try {
@@ -80,7 +96,7 @@ Silakan ajukan pertanyaan Anda tentang hukum Indonesia.`,
           'Authorization': `Bearer ${token}`
         },
         body: JSON.stringify({
-          message: inputValue
+          message: originalMessage
         })
       });
 
