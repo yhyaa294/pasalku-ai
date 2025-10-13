@@ -256,16 +256,16 @@ export const EnhancedNavigation: FC<EnhancedNavigationProps> = ({
             <div className="flex items-center gap-3 group cursor-pointer select-none">
               <Link href="/" className="flex items-center gap-3 hover:scale-105 transition-transform duration-300">
                 <motion.div
-                  className="w-10 h-10 bg-gradient-to-br from-orange-600 via-purple-600 to-blue-600 rounded-lg flex items-center justify-center shadow-lg"
+                  className="w-10 h-10 bg-gradient-to-br from-primary via-primary to-accent rounded-lg flex items-center justify-center shadow-lg"
                   whileHover={{ rotate: 5 }}
                   transition={{ type: "spring", stiffness: 400, damping: 10 }}
                 >
-                  <span className="text-white text-xl">⚖️</span>
+                  <span className="text-white text-xl" role="img" aria-label="Logo Pasalku.ai">⚖️</span>
                 </motion.div>
-                <div className="text-xl font-black text-gray-900 bg-gradient-to-r from-gray-900 via-purple-600 to-blue-600 bg-clip-text text-transparent">
+                <div className="text-xl font-display font-black bg-gradient-to-r from-secondary via-primary to-secondary bg-clip-text text-transparent">
                   Pasalku.ai
                 </div>
-                <div className="w-2 h-2 bg-green-500 rounded-full animate-pulse shadow-sm"></div>
+                <div className="w-2 h-2 bg-green-500 rounded-full shadow-sm" role="status" aria-label="Online"></div>
               </Link>
             </div>
 
@@ -280,25 +280,25 @@ export const EnhancedNavigation: FC<EnhancedNavigationProps> = ({
                         <button
                           onMouseEnter={() => setOpenDropdown(item.name)}
                           onMouseLeave={() => setOpenDropdown(null)}
-                          className="relative flex items-center gap-1 text-gray-700 hover:text-orange-600 font-medium transition-all duration-300 hover:scale-105 group px-3 py-2 rounded-lg hover:bg-orange-50"
+                          className="relative flex items-center gap-1 text-neutral-700 hover:text-primary font-medium transition-all duration-300 hover:scale-105 group px-3 py-2 rounded-lg hover:bg-primary/5"
                         >
-                          {item.icon && <item.icon className="w-4 h-4" />}
+                          {item.icon && <item.icon className="w-4 h-4" aria-hidden="true" />}
                           <span>{item.name}</span>
-                          <ChevronDown className="w-4 h-4 transition-transform duration-200 group-hover:rotate-180" />
+                          <ChevronDown className="w-4 h-4 transition-transform duration-200 group-hover:rotate-180" aria-hidden="true" />
                         </button>
                       ) : (
                         <Link
                           href={item.href || '#'}
                           onClick={(e) => item.href && handleNavClick(e, item.href)}
-                          className={`relative flex items-center gap-1 font-medium transition-all duration-300 hover:scale-105 group px-3 py-2 rounded-lg hover:bg-orange-50 ${
+                          className={`relative flex items-center gap-1 font-medium transition-all duration-300 hover:scale-105 group px-3 py-2 rounded-lg hover:bg-primary/5 ${
                             (item.href === '/#' + activeSection || (item.href === '/features' && activeSection === 'features') || (item.href === '/pricing' && activeSection === 'pricing'))
-                              ? 'text-orange-600'
-                              : 'text-gray-700 hover:text-orange-600'
+                              ? 'text-primary'
+                              : 'text-neutral-700 hover:text-primary'
                           }`}
                         >
-                          {item.icon && <item.icon className="w-4 h-4" />}
+                          {item.icon && <item.icon className="w-4 h-4" aria-hidden="true" />}
                           <span>{item.name}</span>
-                          <span className="absolute -bottom-1 left-2 w-0 h-0.5 bg-gradient-to-r from-orange-400 to-orange-600 transition-all duration-300 group-hover:w-4/5"></span>
+                          <span className="absolute -bottom-1 left-2 w-0 h-0.5 bg-gradient-to-r from-primary to-accent transition-all duration-300 group-hover:w-4/5"></span>
                         </Link>
                       )}
                     </div>
@@ -325,9 +325,9 @@ export const EnhancedNavigation: FC<EnhancedNavigationProps> = ({
                                 <Link
                                   href={child.href || '#'}
                                   onClick={(e) => child.href && handleNavClick(e, child.href)}
-                                  className="flex items-center gap-3 px-4 py-3 text-gray-700 hover:text-orange-600 hover:bg-orange-50 transition-colors duration-200"
+                                  className="flex items-center gap-3 px-4 py-3 text-neutral-700 hover:text-primary hover:bg-primary/5 transition-colors duration-200"
                                 >
-                                  {child.icon && <child.icon className="w-4 h-4 text-orange-500" />}
+                                  {child.icon && <child.icon className="w-4 h-4 text-accent" aria-hidden="true" />}
                                   <span className="font-medium">{child.name}</span>
                                 </Link>
                               </motion.div>
@@ -346,14 +346,14 @@ export const EnhancedNavigation: FC<EnhancedNavigationProps> = ({
                   <>
                     <Link
                       href="/dashboard"
-                      className="px-4 py-2 text-gray-700 hover:text-orange-600 font-medium transition-colors duration-300 hover:bg-gray-50 rounded-lg"
+                      className="px-4 py-2 text-neutral-700 hover:text-primary font-medium transition-colors duration-300 hover:bg-neutral-50 rounded-lg"
                     >
                       Dashboard
                     </Link>
                     <button
                       onClick={onChatClick}
                       onMouseDown={createRipple}
-                      className="relative px-6 py-2 bg-gradient-to-r from-orange-500 to-orange-600 text-white rounded-lg font-medium hover:from-orange-600 hover:to-orange-700 transition-all duration-300 hover:scale-105 hover:shadow-lg overflow-hidden"
+                      className="relative px-6 py-2 bg-gradient-to-r from-primary to-primary/90 text-white rounded-lg font-medium hover:shadow-lg transition-all duration-300 overflow-hidden focus:outline-none focus:ring-2 focus:ring-primary focus:ring-offset-2"
                     >
                       Mulai Konsultasi Gratis
                     </button>
@@ -362,14 +362,14 @@ export const EnhancedNavigation: FC<EnhancedNavigationProps> = ({
                   <>
                     <Link
                       href="/login"
-                      className="px-4 py-2 border border-gray-300 text-gray-700 font-medium hover:bg-gray-50 hover:border-orange-500 hover:text-orange-600 rounded-lg transition-all duration-300"
+                      className="px-4 py-2 border border-neutral-300 text-neutral-700 font-medium hover:bg-neutral-50 hover:border-primary hover:text-primary rounded-lg transition-all duration-300 focus:outline-none focus:ring-2 focus:ring-primary focus:ring-offset-2"
                     >
                       Masuk
                     </Link>
                     <Link
                       href="/register"
                       onMouseDown={createRipple}
-                      className="relative px-6 py-2 bg-gradient-to-r from-orange-500 to-orange-600 text-white rounded-lg font-medium hover:from-orange-600 hover:to-orange-700 transition-all duration-300 hover:scale-105 hover:shadow-lg overflow-hidden"
+                      className="relative px-6 py-2 bg-gradient-to-r from-accent to-accent/90 text-white rounded-lg font-medium hover:shadow-lg transition-all duration-300 overflow-hidden focus:outline-none focus:ring-2 focus:ring-accent focus:ring-offset-2"
                     >
                       Daftar Gratis
                     </Link>
@@ -378,11 +378,12 @@ export const EnhancedNavigation: FC<EnhancedNavigationProps> = ({
               </div>
             </div>
 
-            {/* Mobile Menu Button */}
             <div className="lg:hidden">
               <button
                 onClick={() => setIsMobileMenuOpen(!isMobileMenuOpen)}
-                className="p-2 rounded-lg text-gray-700 hover:text-orange-600 hover:bg-gray-100 transition-colors"
+                className="p-2 rounded-lg text-neutral-700 hover:text-primary hover:bg-neutral-100 transition-colors focus:outline-none focus:ring-2 focus:ring-primary focus:ring-offset-2"
+                aria-label={isMobileMenuOpen ? "Tutup menu" : "Buka menu"}
+                aria-expanded={isMobileMenuOpen}
               >
                 <AnimatePresence mode="wait">
                   {isMobileMenuOpen ? (
@@ -393,7 +394,7 @@ export const EnhancedNavigation: FC<EnhancedNavigationProps> = ({
                       exit={{ rotate: 90, opacity: 0 }}
                       transition={{ duration: 0.2 }}
                     >
-                      <X className="w-6 h-6" />
+                      <X className="w-6 h-6" aria-hidden="true" />
                     </motion.div>
                   ) : (
                     <motion.div
@@ -403,7 +404,7 @@ export const EnhancedNavigation: FC<EnhancedNavigationProps> = ({
                       exit={{ rotate: 90, opacity: 0 }}
                       transition={{ duration: 0.2 }}
                     >
-                      <Menu className="w-6 h-6" />
+                      <Menu className="w-6 h-6" aria-hidden="true" />
                     </motion.div>
                   )}
                 </AnimatePresence>
@@ -428,17 +429,17 @@ export const EnhancedNavigation: FC<EnhancedNavigationProps> = ({
                         {item.children ? (
                           <button
                             onClick={() => toggleMobileDropdown(item.name)}
-                            className="flex items-center justify-between w-full px-4 py-3 text-gray-700 hover:text-orange-600 hover:bg-orange-50 transition-colors"
+                            className="flex items-center justify-between w-full px-4 py-3 text-neutral-700 hover:text-primary hover:bg-primary/5 transition-colors"
                           >
                             <div className="flex items-center gap-3">
-                              {item.icon && <item.icon className="w-4 h-4" />}
+                              {item.icon && <item.icon className="w-4 h-4" aria-hidden="true" />}
                               <span className="font-medium">{item.name}</span>
                             </div>
                             <motion.div
                               animate={{ rotate: mobileDropdowns.has(item.name) ? 180 : 0 }}
                               transition={{ duration: 0.2 }}
                             >
-                              <ChevronDown className="w-4 h-4" />
+                              <ChevronDown className="w-4 h-4" aria-hidden="true" />
                             </motion.div>
                           </button>
                         ) : (
@@ -448,9 +449,9 @@ export const EnhancedNavigation: FC<EnhancedNavigationProps> = ({
                               item.href && handleNavClick(e, item.href)
                               setIsMobileMenuOpen(false)
                             }}
-                            className="flex items-center gap-3 w-full px-4 py-3 text-gray-700 hover:text-orange-600 hover:bg-orange-50 transition-colors"
+                            className="flex items-center gap-3 w-full px-4 py-3 text-neutral-700 hover:text-primary hover:bg-primary/5 transition-colors"
                           >
-                            {item.icon && <item.icon className="w-4 h-4" />}
+                            {item.icon && <item.icon className="w-4 h-4" aria-hidden="true" />}
                             <span className="font-medium">{item.name}</span>
                           </Link>
                         )}
@@ -462,7 +463,7 @@ export const EnhancedNavigation: FC<EnhancedNavigationProps> = ({
                           initial={{ opacity: 0, height: 0 }}
                           animate={{ opacity: 1, height: 'auto' }}
                           exit={{ opacity: 0, height: 0 }}
-                          className="bg-orange-50/50"
+                          className="bg-primary/5"
                         >
                           {item.children.map((child, childIndex) => (
                             <Link
@@ -472,9 +473,9 @@ export const EnhancedNavigation: FC<EnhancedNavigationProps> = ({
                                 child.href && handleNavClick(e, child.href)
                                 setIsMobileMenuOpen(false)
                               }}
-                              className="flex items-center gap-3 px-8 py-3 text-gray-600 hover:text-orange-600 hover:bg-orange-50 transition-colors"
+                              className="flex items-center gap-3 px-8 py-3 text-neutral-600 hover:text-primary hover:bg-primary/10 transition-colors"
                             >
-                              {child.icon && <child.icon className="w-4 h-4 text-orange-400" />}
+                              {child.icon && <child.icon className="w-4 h-4 text-accent" aria-hidden="true" />}
                               <span>{child.name}</span>
                             </Link>
                           ))}
@@ -489,7 +490,7 @@ export const EnhancedNavigation: FC<EnhancedNavigationProps> = ({
                       <div className="px-4 py-2">
                         <Link
                           href="/dashboard"
-                          className="block w-full px-4 py-2 text-center text-gray-700 hover:text-orange-600 font-medium hover:bg-gray-50 rounded-lg transition-colors"
+                          className="block w-full px-4 py-2 text-center text-neutral-700 hover:text-primary font-medium hover:bg-neutral-50 rounded-lg transition-colors"
                           onClick={() => setIsMobileMenuOpen(false)}
                         >
                           Dashboard
@@ -499,7 +500,7 @@ export const EnhancedNavigation: FC<EnhancedNavigationProps> = ({
                             onChatClick?.()
                             setIsMobileMenuOpen(false)
                           }}
-                          className="w-full mt-2 px-4 py-2 bg-gradient-to-r from-orange-500 to-orange-600 text-white rounded-lg font-medium hover:from-orange-600 hover:to-orange-700 transition-all duration-300"
+                          className="w-full mt-2 px-4 py-2 bg-gradient-to-r from-primary to-primary/90 text-white rounded-lg font-medium hover:shadow-lg transition-all duration-300"
                         >
                           Mulai Konsultasi Gratis
                         </button>
@@ -508,14 +509,14 @@ export const EnhancedNavigation: FC<EnhancedNavigationProps> = ({
                       <div className="px-4 py-2 space-y-2">
                         <Link
                           href="/login"
-                          className="block w-full px-4 py-2 text-center border border-gray-300 text-gray-700 font-medium hover:bg-gray-50 hover:border-orange-500 hover:text-orange-600 rounded-lg transition-all duration-300"
+                          className="block w-full px-4 py-2 text-center border border-neutral-300 text-neutral-700 font-medium hover:bg-neutral-50 hover:border-primary hover:text-primary rounded-lg transition-all duration-300"
                           onClick={() => setIsMobileMenuOpen(false)}
                         >
                           Masuk
                         </Link>
                         <Link
                           href="/register"
-                          className="block w-full px-4 py-2 text-center bg-gradient-to-r from-orange-500 to-orange-600 text-white rounded-lg font-medium hover:from-orange-600 hover:to-orange-700 transition-all duration-300"
+                          className="block w-full px-4 py-2 text-center bg-gradient-to-r from-accent to-accent/90 text-white rounded-lg font-medium hover:shadow-lg transition-all duration-300"
                           onClick={() => setIsMobileMenuOpen(false)}
                         >
                           Daftar Gratis
