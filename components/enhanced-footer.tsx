@@ -77,7 +77,7 @@ export function EnhancedFooter() {
     { icon: Shield, name: 'ISO 27001', description: 'Security Certified' },
     { icon: Award, name: 'PDPA Compliant', description: 'Data Protection' },
     { icon: FileText, name: 'AI Ethics', description: 'Ethical Standards' },
-    { icon: Users, name: '50K+ Users', description: 'Trusted Platform' }
+    { icon: Users, name: 'Trusted Platform', description: 'Community Growing' }
   ]
 
   const bottomLinks = [
@@ -121,7 +121,7 @@ export function EnhancedFooter() {
 
                 <p className="text-gray-300 mb-6 leading-relaxed">
                   Platform kecerdasan buatan hukum pertama di Indonesia yang menggabungkan teknologi terdepan
-                  dengan pemahaman mendalam tentang hukum Indonesia. Dipercaya oleh 50,000+ pengguna aktif.
+                  dengan pemahaman mendalam tentang hukum Indonesia. Dipercaya oleh ribuan pengguna aktif.
                 </p>
 
                 {/* Certifications */}
@@ -233,7 +233,7 @@ export function EnhancedFooter() {
               <div className="flex items-center justify-center gap-4 text-sm text-gray-400">
                 <div className="flex items-center gap-1">
                   <Users className="w-4 h-4" />
-                  <span>50,000+ subscribers</span>
+                  <span>Growing community</span>
                 </div>
                 <div className="flex items-center gap-1">
                   <Shield className="w-4 h-4" />

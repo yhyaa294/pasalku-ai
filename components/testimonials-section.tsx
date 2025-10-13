@@ -116,7 +116,7 @@ export const TestimonialsSection: FC<TestimonialsSectionProps> = ({ className = 
             </span>
           </h2>
           <p className="text-lg md:text-2xl text-gray-600 max-w-4xl mx-auto leading-relaxed">
-            Pengalaman Nyata dengan Pasalku.ai.
+            Bergabunglah dengan ribuan profesional hukum yang mempercayai AI untuk kebutuhan hukum mereka.
           </p>
         </div>
 

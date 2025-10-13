@@ -7,7 +7,7 @@ interface HeroSectionProps {
 export const HeroSection: FC<HeroSectionProps> = ({ onGetStarted }) => {
   const [typedText, setTypedText] = useState('')
   const [isTypingComplete, setIsTypingComplete] = useState(false)
-  const fullText = "Pasalku.ai: Asisten Informasi Hukum Berbasis Kecerdasan Artifisial untuk Masyarakat Indonesia."
+  const fullText = "Dapatkan solusi hukum akurat dalam hitungan detik. Powered by dual AI engine dengan akurasi 94.1%"
 
   useEffect(() => {
     let i = 0
@@ -54,16 +54,16 @@ export const HeroSection: FC<HeroSectionProps> = ({ onGetStarted }) => {
             {/* Badge */}
             <div className="inline-flex items-center px-6 py-3 rounded-full bg-gray-100/80 backdrop-blur-sm border border-gray-200 text-sm font-semibold text-gray-800 animate-bounce hover:animate-shake">
               <span className="mr-2 animate-spin-slow">⚖️</span>
-              Asisten Hukum AI Terpercaya #1 di Indonesia
+              Platform Legal Tech Terdepan di Indonesia
             </div>
 
             {/* Hero Title */}
             <h1 className="text-4xl md:text-6xl lg:text-7xl font-black leading-tight mb-6 animate-slide-in-up">
               <span className="block bg-gradient-to-r from-gray-900 to-gray-700 bg-clip-text text-transparent">
-                Akses Keadilan
+                Analisis Masalah Hukum Anda
               </span>
-              <span className="block bg-gradient-to-r from-gray-800 to-black bg-clip-text text-transparent animate-slide-in-right">
-                Lebih Mudah, Lebih Jelas.
+              <span className="block bg-gradient-to-r from-orange-600 to-orange-500 bg-clip-text text-transparent animate-slide-in-right">
+                dengan AI Terpercaya
               </span>
             </h1>
 
@@ -73,11 +73,36 @@ export const HeroSection: FC<HeroSectionProps> = ({ onGetStarted }) => {
               {!isTypingComplete && <span className="animate-blink">|</span>}
             </div>
 
-            {/* CTA Button with Animations */}
-            <div className="animate-scale-in">
+            {/* Trust Badges */}
+            <div className="flex flex-wrap gap-4 justify-center lg:justify-start mb-6">
+              <div className="flex items-center gap-2 px-4 py-2 bg-white/90 rounded-lg border border-gray-200 shadow-sm">
+                <span className="text-2xl">🤖</span>
+                <div className="text-left">
+                  <div className="text-xs text-gray-500">AI Dual Engine</div>
+                  <div className="text-sm font-bold text-gray-800">BytePlus + Groq</div>
+                </div>
+              </div>
+              <div className="flex items-center gap-2 px-4 py-2 bg-white/90 rounded-lg border border-gray-200 shadow-sm">
+                <span className="text-2xl">📊</span>
+                <div className="text-left">
+                  <div className="text-xs text-gray-500">Legal Accuracy</div>
+                  <div className="text-sm font-bold text-orange-600">94.1%</div>
+                </div>
+              </div>
+              <div className="flex items-center gap-2 px-4 py-2 bg-white/90 rounded-lg border border-gray-200 shadow-sm">
+                <span className="text-2xl">⚡</span>
+                <div className="text-left">
+                  <div className="text-xs text-gray-500">Siap Melayani</div>
+                  <div className="text-sm font-bold text-gray-800">Ribuan Konsultasi</div>
+                </div>
+              </div>
+            </div>
+
+            {/* CTA Buttons with Animations */}
+            <div className="animate-scale-in flex flex-col sm:flex-row gap-4">
               <button
                 onClick={onGetStarted}
-                className="group relative inline-flex items-center justify-center px-8 py-5 bg-gradient-to-r from-orange-500 to-orange-600 text-white rounded-xl font-black text-xl hover:from-orange-600 hover:to-orange-700 transition-all duration-300 transform hover:scale-105 hover:shadow-2xl overflow-hidden shadow-lg animate-heartbeat"
+                className="group relative inline-flex items-center justify-center px-8 py-5 bg-gradient-to-r from-orange-500 to-orange-600 text-white rounded-xl font-black text-xl hover:from-orange-600 hover:to-orange-700 transition-all duration-300 transform hover:scale-105 hover:shadow-2xl overflow-hidden shadow-lg"
               >
                 <div className="absolute inset-0 bg-gradient-to-r from-orange-400 to-yellow-500 opacity-0 group-hover:opacity-100 transition-opacity duration-300"></div>
                 <span className="relative flex items-center gap-3">
@@ -90,7 +115,26 @@ export const HeroSection: FC<HeroSectionProps> = ({ onGetStarted }) => {
                     <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M8 12h.01M12 12h.01M16 12h.01M21 12c0 4.418-4.03 8-9 8a9.863 9.863 0 01-4.255-.949L3 20l1.395-3.72C3.512 15.042 3 13.574 3 12c0-4.418 4.03-8 9-8s9 3.582 9 8z" />
                   </svg>
                   Mulai Konsultasi Gratis
-                  <div className="w-3 h-3 bg-white rounded-full animate-ping"></div>
+                </span>
+              </button>
+              <button
+                onClick={() => {
+                  const demoSection = document.getElementById('how-it-works')
+                  demoSection?.scrollIntoView({ behavior: 'smooth' })
+                }}
+                className="inline-flex items-center justify-center px-8 py-5 bg-white border-2 border-orange-500 text-orange-600 rounded-xl font-bold text-xl hover:bg-orange-50 transition-all duration-300 transform hover:scale-105 shadow-lg"
+              >
+                <span className="flex items-center gap-3">
+                  <svg
+                    className="w-6 h-6"
+                    fill="none"
+                    stroke="currentColor"
+                    viewBox="0 0 24 24"
+                  >
+                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M14.752 11.168l-3.197-2.132A1 1 0 0010 9.87v4.263a1 1 0 001.555.832l3.197-2.132a1 1 0 000-1.664z" />
+                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M21 12a9 9 0 11-18 0 9 9 0 0118 0z" />
+                  </svg>
+                  Lihat Demo
                 </span>
               </button>
             </div>

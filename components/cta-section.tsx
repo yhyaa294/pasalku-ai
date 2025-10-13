@@ -72,10 +72,9 @@ export const CTASection: FC<CTASectionProps> = ({ onGetStarted, className = '' }
 
       <div className="max-w-5xl mx-auto text-center relative z-10">
         {/* Urgency Badge */}
-        <div className="inline-flex items-center px-6 py-3 rounded-full bg-gradient-to-r from-red-500/20 to-orange-500/20 backdrop-blur-sm border border-orange-400/30 text-orange-200 text-sm font-semibold mb-8 animate-pulse">
+        <div className="inline-flex items-center px-6 py-3 rounded-full bg-gradient-to-r from-orange-500/20 to-red-500/20 backdrop-blur-sm border border-orange-400/30 text-orange-200 text-sm font-semibold mb-8 animate-pulse">
           <Timer className="w-4 h-4 mr-2 animate-spin" />
-          WAKTU TERBATAS - Konsultasi Gratis
-          <Timer className="w-4 h-4 ml-2 animate-spin" />
+          Bergabunglah dengan Komunitas Legal Tech Terdepan
         </div>
 
         {/* Main Heading with Parallax */}
@@ -84,20 +83,18 @@ export const CTASection: FC<CTASectionProps> = ({ onGetStarted, className = '' }
           style={{ transform: `translateY(${parallaxOffset * 0.1}px)` }}
         >
           <h2 className="text-4xl md:text-7xl font-black text-white mb-4 md:mb-6 leading-tight">
-            <span className="block bg-gradient-to-r from-orange-300 via-yellow-200 to-orange-300 bg-clip-text text-transparent animate-pulse">
-              Temukan Kejelasan
+            <span className="block bg-gradient-to-r from-orange-300 via-yellow-200 to-orange-300 bg-clip-text text-transparent">
+              Siap Memulai Perjalanan
             </span>
             <span className="block bg-gradient-to-r from-white via-orange-100 to-white bg-clip-text text-transparent">
-              Hukum Anda Hari Ini.
+              Hukum Anda?
             </span>
           </h2>
         </div>
 
         {/* Description with subtle animation */}
         <p className="text-lg md:text-2xl text-gray-200 mb-10 md:mb-16 max-w-3xl mx-auto leading-relaxed animate-fade-in-up">
-          Jangan biarkan ketidakpastian menghambat. Mulai konsultasi pertama Anda
-          <span className="font-bold text-orange-300 animate-pulse"> secara gratis </span>
-          dengan Pasalku.ai.
+          Dapatkan akses ke platform legal AI terdepan. Mulai gratis hari ini dan rasakan kemudahan konsultasi hukum modern.
         </p>
 
         {/* Main CTA Button with Urgency Animation */}
