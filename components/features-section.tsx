@@ -11,43 +11,49 @@ export const FeaturesSection: FC<FeaturesSectionProps> = ({ className = '' }) =>
       icon: Brain,
       title: 'Konsultasi Hukum Instan',
       description:
-        'Jawaban cepat dan akurat didukung AI (BytePlus Ark) dengan pemahaman konteks hukum Indonesia.',
-      features: ['4 persona AI', 'Citation extraction (Pasal/UU)', 'Confidence score'],
+        'Jawaban cepat dan akurat didukung AI (BytePlus Ark + Groq) dengan pemahaman konteks hukum Indonesia yang mendalam.',
+      features: ['4 persona AI berbeda', 'Citation extraction (Pasal/UU)', 'Confidence score real-time'],
+      demoPreview: '💬',
     },
     {
       icon: FileText,
       title: 'Analisis Dokumen Cerdas',
       description:
-        'Unggah dokumen untuk dianalisis (kontrak, surat, bukti). Ekstraksi poin penting dan isu hukum.',
-      features: ['Dukungan PDF/DOCX/Gambar', 'OCR & NER', 'Ringkasan & rekomendasi'],
+        'Unggah dokumen untuk dianalisis (kontrak, surat, bukti). Ekstraksi poin penting dan identifikasi isu hukum potensial.',
+      features: ['Dukungan PDF/DOCX/Gambar', 'OCR & NER technology', 'Ringkasan & rekomendasi'],
+      demoPreview: '📄',
     },
     {
       icon: Database,
       title: 'Basis Pengetahuan Hukum',
       description:
-        'Knowledge Graph (EdgeDB) berisi peraturan, pasal, yurisprudensi, dan terminologi hukum.',
-      features: ['KUHP & regulasi', 'Preseden pengadilan', 'Terminologi hukum'],
+        'Knowledge Graph (EdgeDB) berisi peraturan, pasal, yurisprudensi, dan terminologi hukum Indonesia terlengkap.',
+      features: ['KUHP & regulasi terkini', 'Preseden pengadilan', 'Terminologi hukum lengkap'],
+      demoPreview: '📚',
     },
     {
       icon: Users,
       title: 'Verifikasi Profesional Hukum',
       description:
-        'Upgrade akun untuk lencana profesional dan akses fitur premium dengan proses verifikasi aman.',
-      features: ['Upload dokumen', 'Review admin', 'Badge terverifikasi'],
+        'Upgrade akun untuk lencana profesional dan akses fitur premium dengan proses verifikasi aman dan transparan.',
+      features: ['Upload dokumen verifikasi', 'Review admin profesional', 'Badge terverifikasi eksklusif'],
+      demoPreview: '✅',
     },
     {
       icon: Shield,
       title: 'Keamanan Data Terjamin',
       description:
-        'Keamanan tingkat enterprise: enkripsi, PIN-protected sessions, dan audit logging menyeluruh.',
-      features: ['TLS/HTTPS', 'Audit trail', 'RBAC & PIN'],
+        'Keamanan tingkat enterprise: enkripsi end-to-end, PIN-protected sessions, dan audit logging menyeluruh untuk privasi maksimal.',
+      features: ['TLS/HTTPS encryption', 'Audit trail lengkap', 'RBAC & PIN protection'],
+      demoPreview: '🔒',
     },
     {
       icon: Globe,
       title: 'Dukungan Multi-Bahasa',
       description:
-        'Antarmuka dan jawaban AI siap mendukung Bahasa Indonesia; ekspansi multi-bahasa ke depan.',
-      features: ['Bahasa Indonesia', 'Terminologi hukum lokal', 'Rencana multi-bahasa'],
+        'Antarmuka dan jawaban AI siap mendukung Bahasa Indonesia; ekspansi multi-bahasa dalam roadmap pengembangan.',
+      features: ['Bahasa Indonesia native', 'Terminologi hukum lokal', 'Rencana ekspansi multi-bahasa'],
+      demoPreview: '🌐',
     },
   ]
 
@@ -67,26 +73,42 @@ export const FeaturesSection: FC<FeaturesSectionProps> = ({ className = '' }) =>
           {features.map((feature, index) => (
             <div
               key={index}
-              className="glass-card rounded-2xl md:rounded-3xl p-6 md:p-8 border border-border hover:shadow-xl transition-all duration-300 group hover-lift scroll-animate-scale"
+              className="glass-card rounded-2xl md:rounded-3xl p-6 md:p-8 border border-border hover:shadow-xl transition-all duration-300 group hover-lift scroll-animate-scale relative overflow-hidden"
               style={{ animationDelay: `${index * 0.1}s` }}
             >
-              <div className="w-12 h-12 md:w-16 md:h-16 wood-texture rounded-xl md:rounded-2xl flex items-center justify-center mb-4 md:mb-6 group-hover:scale-110 transition-transform duration-300 legal-shadow animate-cyber-pulse">
-                <feature.icon className="w-6 h-6 md:w-8 md:h-8 text-white" />
+              {/* Hover Demo Preview */}
+              <div className="absolute top-4 right-4 text-4xl opacity-0 group-hover:opacity-100 transition-opacity duration-300 transform group-hover:scale-110 group-hover:rotate-12">
+                {feature.demoPreview}
               </div>
-              <h3 className="text-xl md:text-2xl font-bold mb-3 md:mb-4 text-primary animate-text-shimmer">
+
+              {/* Icon with enhanced animation */}
+              <div className="w-12 h-12 md:w-16 md:h-16 wood-texture rounded-xl md:rounded-2xl flex items-center justify-center mb-4 md:mb-6 group-hover:scale-110 transition-transform duration-300 legal-shadow animate-cyber-pulse relative">
+                <feature.icon className="w-6 h-6 md:w-8 md:h-8 text-white" />
+                <div className="absolute inset-0 bg-gradient-to-r from-orange-400 to-red-400 opacity-0 group-hover:opacity-30 rounded-xl md:rounded-2xl animate-pulse transition-opacity duration-300"></div>
+              </div>
+
+              {/* Title */}
+              <h3 className="text-xl md:text-2xl font-bold mb-3 md:mb-4 text-primary animate-text-shimmer group-hover:scale-105 transition-transform duration-300 origin-left">
                 {feature.title}
               </h3>
+
+              {/* Description */}
               <p className="text-sm md:text-base text-muted-foreground mb-4 md:mb-6 leading-relaxed">
                 {feature.description}
               </p>
+
+              {/* Feature List with enhanced checkmarks */}
               <div className="space-y-2">
                 {feature.features.map((item, idx) => (
-                  <div key={idx} className="flex items-center gap-2 text-xs md:text-sm">
-                    <CheckCircle className="w-3 h-3 md:w-4 md:h-4 text-primary animate-cyber-pulse" />
-                    <span className="text-muted-foreground">{item}</span>
+                  <div key={idx} className="flex items-center gap-2 text-xs md:text-sm group/item">
+                    <CheckCircle className="w-3 h-3 md:w-4 md:h-4 text-primary animate-cyber-pulse group-hover/item:scale-125 transition-transform duration-200" />
+                    <span className="text-muted-foreground group-hover/item:text-primary transition-colors duration-200">{item}</span>
                   </div>
                 ))}
               </div>
+
+              {/* Interactive hover effect */}
+              <div className="absolute bottom-0 left-0 right-0 h-1 bg-gradient-to-r from-orange-400 via-red-500 to-orange-400 opacity-0 group-hover:opacity-100 transition-opacity duration-500"></div>
             </div>
           ))}
         </div>
