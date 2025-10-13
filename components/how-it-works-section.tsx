@@ -12,51 +12,47 @@ export const HowItWorksSection: FC<HowItWorksSectionProps> = ({ className = '' }
   const steps = [
     {
       step: "01",
-      title: "Uraikan Perkara Anda.",
+      title: "Ceritakan Masalah Anda",
       description:
-        "Sampaikan permasalahan hukum Anda dalam bahasa sehari-hari. Kecerdasan artifisial kami siap menyimak setiap detailnya.",
-      illustration: (
-        <div className="w-full h-full flex items-center justify-center">
-          <div className="text-6xl animate-bounce">💭➡️💬</div>
-        </div>
+        "Sampaikan permasalahan hukum Anda dengan bahasa sehari-hari. AI kami siap mendengarkan dan memahami konteks kasus Anda.",
+      icon: (
+        <svg className="w-10 h-10 md:w-12 md:h-12" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+          <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M8 12h.01M12 12h.01M16 12h.01M21 12c0 4.418-4.03 8-9 8a9.863 9.863 0 01-4.255-.949L3 20l1.395-3.72C3.512 15.042 3 13.574 3 12c0-4.418 4.03-8 9-8s9 3.582 9 8z" />
+        </svg>
       ),
-      alt: "Ilustrasi individu dengan pikiran kusut berubah menjadi gelembung bicara jernih"
     },
     {
       step: "02",
-      title: "Jawab Klarifikasi Artifisial.",
+      title: "AI Menganalisis",
       description:
-        "AI akan mengajukan pertanyaan-pertanyaan krusial untuk menggali konteks, layaknya dialog dengan konsultan hukum.",
-      illustration: (
-        <div className="w-full h-full flex items-center justify-center">
-          <div className="text-6xl animate-pulse">💬🤖</div>
-        </div>
+        "Teknologi dual AI engine kami memproses kasus Anda, mencari referensi hukum relevan, dan menganalisis dengan akurasi tinggi.",
+      icon: (
+        <svg className="w-10 h-10 md:w-12 md:h-12" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+          <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9.663 17h4.673M12 3v1m6.364 1.636l-.707.707M21 12h-1M4 12H3m3.343-5.657l-.707-.707m2.828 9.9a5 5 0 117.072 0l-.548.547A3.374 3.374 0 0014 18.469V19a2 2 0 11-4 0v-.531c0-.895-.356-1.754-.988-2.386l-.548-.547z" />
+        </svg>
       ),
-      alt: "Dua gelembung chat modern - manusia dan AI berinteraksi"
     },
     {
       step: "03",
-      title: "Unggah Bukti Pendukung.",
+      title: "Upload Bukti (Opsional)",
       description:
-        "Sertakan dokumen, foto, atau bukti lain yang relevan secara aman untuk analisis yang lebih komprehensif.",
-      illustration: (
-        <div className="w-full h-full flex items-center justify-center">
-          <div className="text-6xl animate-bounce">🔒📄</div>
-        </div>
+        "Tambahkan dokumen, foto, atau bukti pendukung untuk analisis yang lebih komprehensif dan akurat.",
+      icon: (
+        <svg className="w-10 h-10 md:w-12 md:h-12" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+          <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M7 16a4 4 0 01-.88-7.903A5 5 0 1115.9 6L16 6a5 5 0 011 9.9M15 13l-3-3m0 0l-3 3m3-3v12" />
+        </svg>
       ),
-      alt: "Ikon gembok besar dengan dokumen yang masuk ke kotak digital aman"
     },
     {
       step: "04",
-      title: "Terima Analisis Berdasar Hukum.",
+      title: "Dapatkan Solusi Lengkap",
       description:
-        "Dapatkan ringkasan masalah, opsi penyelesaian, dan rujukan hukum relevan, disajikan dalam bahasa yang mudah dipahami.",
-      illustration: (
-        <div className="w-full h-full flex items-center justify-center">
-          <div className="text-6xl animate-pulse">📱⚖️</div>
-        </div>
+        "Terima analisis hukum lengkap dengan referensi UU, saran tindakan, dan confidence score dalam hitungan detik.",
+      icon: (
+        <svg className="w-10 h-10 md:w-12 md:h-12" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+          <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z" />
+        </svg>
       ),
-      alt: "Tangan memegang tablet dengan informasi terstruktur dan sitasi hukum"
     },
   ]
 
@@ -86,104 +82,91 @@ export const HowItWorksSection: FC<HowItWorksSectionProps> = ({ className = '' }
     <section
       id="how-it-works"
       ref={sectionRef}
-      className={`py-16 md:py-32 px-4 bg-gradient-to-b from-gray-50 via-white to-gray-50 scroll-animate ${className}`}
+      className={`py-20 lg:py-32 px-4 bg-gradient-to-b from-white via-neutral-50 to-white scroll-animate ${className}`}
     >
       <div className="max-w-6xl mx-auto">
-        <div className="text-center mb-12 md:mb-20">
-          <h2 className="text-4xl md:text-6xl font-black mb-6 md:mb-8 bg-gradient-to-r from-gray-900 to-gray-700 bg-clip-text text-transparent">
-            Bagaimana Pasalku.ai{' '}
-            <span className="bg-gradient-to-r from-orange-600 to-orange-500 bg-clip-text text-transparent">
-              Mendampingi Anda
-            </span>
+        <div className="text-center mb-16">
+          <h2 className="text-3xl sm:text-4xl lg:text-5xl font-display font-bold mb-6 text-secondary">
+            Cara Kerja <span className="text-primary">Pasalku.ai</span>
           </h2>
-          <p className="text-lg md:text-2xl text-gray-600 max-w-4xl mx-auto leading-relaxed">
-            Empat Langkah Mudah Menuju Kejelasan Hukum.
+          <p className="text-lg lg:text-xl text-gray-600 max-w-3xl mx-auto leading-relaxed">
+            4 langkah mudah untuk mendapatkan solusi hukum yang akurat dan terpercaya
           </p>
         </div>
 
         <div className="relative">
-          {/* Interactive Progress Line */}
-          <div className="absolute left-1/2 transform -translate-x-1/2 w-2 h-full hidden md:block">
-            <div className="w-full h-full bg-gradient-to-b from-gray-200 via-gray-300 to-gray-400 rounded-full relative overflow-hidden">
-              <div
-                className="absolute top-0 left-0 w-full bg-gradient-to-b from-orange-400 via-orange-500 to-orange-600 rounded-full transition-all duration-300 ease-out"
-                style={{ height: `${progress}%` }}
-              ></div>
-            </div>
+          {/* Horizontal Timeline for Desktop */}
+          <div className="hidden md:flex justify-between items-center mb-16">
+            {steps.map((step, index) => (
+              <div key={index} className="flex items-center flex-1">
+                <div className="flex flex-col items-center">
+                  <div className={`w-16 h-16 rounded-full flex items-center justify-center text-white font-bold text-xl transition-all duration-300 ${
+                    index <= activeStep
+                      ? 'bg-gradient-to-br from-primary to-blue-600 shadow-lg scale-110'
+                      : 'bg-gray-300'
+                  }`}>
+                    {step.step}
+                  </div>
+                </div>
+                {index < steps.length - 1 && (
+                  <div className="flex-1 h-1 mx-4">
+                    <div className="h-full bg-gray-200 rounded-full overflow-hidden">
+                      <div
+                        className="h-full bg-gradient-to-r from-primary to-blue-600 transition-all duration-300"
+                        style={{ width: index < activeStep ? '100%' : '0%' }}
+                      ></div>
+                    </div>
+                  </div>
+                )}
+              </div>
+            ))}
           </div>
 
-          <div className="space-y-12 md:space-y-20">
+          {/* Step Cards */}
+          <div className="grid md:grid-cols-2 lg:grid-cols-4 gap-6 lg:gap-8">
             {steps.map((step, index) => (
               <div
                 key={index}
-                className={`relative flex items-center ${index % 2 === 0 ? 'md:flex-row' : 'md:flex-row-reverse'} flex-col md:gap-8 scroll-animate-scale`}
-                style={{ animationDelay: `${index * 0.2}s` }}
-              >
-                {/* Interactive Dot on Line */}
-                <div className={`absolute left-1/2 transform -translate-x-1/2 hidden md:block transition-all duration-500 ${
+                className={`group bg-white rounded-2xl p-6 lg:p-8 border transition-all duration-300 scroll-animate-scale ${
                   index <= activeStep
-                    ? 'w-6 h-6 bg-orange-500 shadow-lg scale-110'
-                    : 'w-4 h-4 bg-gray-300'
-                } rounded-full border-2 border-white shadow-md`}>
-                  {index <= activeStep && (
-                    <div className="w-full h-full bg-orange-500 rounded-full animate-ping"></div>
-                  )}
-                </div>
-
-                {/* Step Card */}
-                <div className={`flex-1 group transition-all duration-500 hover:scale-105 ${
-                  index <= activeStep ? 'shadow-2xl shadow-orange-500/20' : ''
-                } ${index % 2 === 0 ? 'md:mr-8' : 'md:ml-8'}`}>
-                  <div className="bg-white rounded-2xl p-6 md:p-8 border border-gray-200 group-hover:border-orange-300 transition-all duration-300 transform hover:-translate-y-2 shadow-lg group-hover:shadow-2xl">
-                    <div className="flex flex-col md:flex-row items-center gap-6">
-                      {/* Illustration */}
-                      <div className="flex-shrink-0">
-                        <div className={`w-24 h-24 md:w-32 md:h-32 rounded-2xl transition-all duration-300 ${
-                          index <= activeStep
-                            ? 'bg-gradient-to-br from-orange-100 to-yellow-100 shadow-lg'
-                            : 'bg-gray-100'
-                        } flex items-center justify-center`}>
-                          {step.illustration}
-                        </div>
-                      </div>
-
-                      {/* Content */}
-                      <div className="text-center md:text-left flex-1">
-                        <div className={`text-4xl md:text-5xl font-black mb-2 md:mb-3 transition-colors duration-300 ${
-                          index <= activeStep
-                            ? 'text-orange-600 bg-gradient-to-r from-orange-600 to-orange-500 bg-clip-text text-transparent'
-                            : 'text-gray-300'
-                        }`}>
-                          {step.step}
-                        </div>
-                        <h3 className={`text-xl md:text-3xl font-bold mb-3 md:mb-4 transition-colors duration-300 ${
-                          index <= activeStep ? 'text-gray-900' : 'text-gray-500'
-                        }`}>
-                          {step.title}
-                        </h3>
-                        <p className={`text-sm md:text-lg leading-relaxed transition-colors duration-300 ${
-                          index <= activeStep ? 'text-gray-600' : 'text-gray-400'
-                        }`}>
-                          {step.description}
-                        </p>
-
-                        {/* Progress indicator for mobile */}
-                        <div className="md:hidden mt-4">
-                          <div className="flex justify-center">
-                            <div className={`w-3 h-3 rounded-full ${
-                              index <= activeStep ? 'bg-orange-500' : 'bg-gray-300'
-                            }`}></div>
-                          </div>
-                        </div>
-                      </div>
-                    </div>
-
-                    {/* Animated border effect */}
-                    {index <= activeStep && (
-                      <div className="absolute inset-0 rounded-2xl border-2 border-orange-400 opacity-50 animate-pulse"></div>
-                    )}
+                    ? 'border-primary/30 shadow-xl'
+                    : 'border-gray-200 hover:border-primary/20 hover:shadow-lg'
+                }`}
+                style={{ animationDelay: `${index * 0.1}s` }}
+              >
+                {/* Mobile Step Number */}
+                <div className="md:hidden mb-4">
+                  <div className={`inline-flex w-12 h-12 rounded-full items-center justify-center text-white font-bold ${
+                    index <= activeStep
+                      ? 'bg-gradient-to-br from-primary to-blue-600'
+                      : 'bg-gray-300'
+                  }`}>
+                    {step.step}
                   </div>
                 </div>
+
+                {/* Icon */}
+                <div className={`flex items-center justify-center w-16 h-16 lg:w-20 lg:h-20 rounded-2xl mb-6 transition-all duration-300 ${
+                  index <= activeStep
+                    ? 'bg-gradient-to-br from-primary/10 to-blue-100 text-primary'
+                    : 'bg-gray-100 text-gray-400'
+                } group-hover:scale-110`}>
+                  {step.icon}
+                </div>
+
+                {/* Title */}
+                <h3 className={`text-xl lg:text-2xl font-display font-bold mb-3 transition-colors duration-300 ${
+                  index <= activeStep ? 'text-secondary' : 'text-gray-500'
+                }`}>
+                  {step.title}
+                </h3>
+
+                {/* Description */}
+                <p className={`text-sm lg:text-base leading-relaxed transition-colors duration-300 ${
+                  index <= activeStep ? 'text-gray-600' : 'text-gray-400'
+                }`}>
+                  {step.description}
+                </p>
               </div>
             ))}
           </div>
