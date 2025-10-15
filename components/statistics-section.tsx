@@ -14,29 +14,47 @@ export const StatisticsSection: FC<StatisticsSectionProps> = ({ className = '' }
       title: "Akses Terbatas",
       number: 96,
       suffix: "/142",
-      prefix: "Peringkat ",
+      prefix: "#",
       description: "Indonesia berada di peringkat 96 dari 142 negara dalam kategori Akses Keadilan Sipil, menandakan celah besar bagi warga.",
       source: "World Justice Project, 2023",
       illustration: (
-        <div className="text-center">
-          <div className="text-6xl animate-bounce">🇮🇩🔒</div>
+        <div className="text-center relative">
+          <div className="relative inline-block">
+            <div className="text-5xl mb-2">🇮🇩</div>
+            <div className="absolute -top-2 -right-2 w-8 h-8 bg-red-500 rounded-full flex items-center justify-center text-white text-xs font-bold animate-pulse">
+              96
+            </div>
+          </div>
         </div>
       ),
-      alt: "Ikon peta Indonesia yang sebagian tertutup oleh pagar kawat atau gerbang yang menghalangi akses."
+      alt: "Indonesia ranking 96",
+      color: "from-red-500 to-orange-500"
     },
     {
       title: "Pemahaman Rendah",
       number: 56.82,
       suffix: "",
-      prefix: "Indeks ",
+      prefix: "",
       description: "Indeks Kesadaran Hukum masyarakat masih di kategori 'cukup sadar', mengindikasikan banyak yang belum paham hak & prosedur hukum.",
       source: "BPHN, 2022",
       illustration: (
-        <div className="text-center">
-          <div className="text-6xl animate-pulse">🧠❓</div>
+        <div className="text-center relative">
+          <div className="relative">
+            <div className="text-5xl">🧠</div>
+            <div className="absolute -bottom-1 left-1/2 transform -translate-x-1/2">
+              <div className="flex gap-1">
+                <div className="w-2 h-6 bg-yellow-400 rounded-sm"></div>
+                <div className="w-2 h-6 bg-yellow-400 rounded-sm"></div>
+                <div className="w-2 h-6 bg-yellow-400 rounded-sm"></div>
+                <div className="w-2 h-6 bg-gray-300 rounded-sm"></div>
+                <div className="w-2 h-6 bg-gray-300 rounded-sm"></div>
+              </div>
+            </div>
+          </div>
         </div>
       ),
-      alt: "Ilustrasi kepala manusia dengan gelembung pertanyaan yang rumit berubah menjadi tanda tanya sederhana yang besar."
+      alt: "Low legal awareness",
+      color: "from-yellow-500 to-orange-500"
     },
     {
       title: "Biaya Mahal",
@@ -47,11 +65,19 @@ export const StatisticsSection: FC<StatisticsSectionProps> = ({ className = '' }
       description: "Lembaga Bantuan Hukum menegaskan biaya konsultasi menjadi kendala krusial bagi kelompok rentan mengakses keadilan.",
       source: "Laporan LBH Jakarta",
       illustration: (
-        <div className="text-center">
-          <div className="text-6xl animate-bounce">💰🚫</div>
+        <div className="text-center relative">
+          <div className="relative inline-block">
+            <div className="text-5xl">💸</div>
+            <div className="absolute -top-2 -right-2">
+              <svg className="w-8 h-8 text-red-500 animate-pulse" fill="currentColor" viewBox="0 0 20 20">
+                <path fillRule="evenodd" d="M13.477 14.89A6 6 0 015.11 6.524l8.367 8.368zm1.414-1.414L6.524 5.11a6 6 0 018.367 8.367zM18 10a8 8 0 11-16 0 8 8 0 0116 0z" clipRule="evenodd" />
+              </svg>
+            </div>
+          </div>
         </div>
       ),
-      alt: "Ikon dompet kosong dengan koin terbang menjauh"
+      alt: "High cost barrier",
+      color: "from-orange-500 to-red-500"
     },
   ]
 
@@ -109,83 +135,76 @@ export const StatisticsSection: FC<StatisticsSectionProps> = ({ className = '' }
     <section
       id="statistics"
       ref={sectionRef}
-      className={`py-20 md:py-32 px-4 relative scroll-animate bg-gradient-to-b from-white to-gray-50 ${className}`}
+      className={`py-16 md:py-32 px-4 relative scroll-animate bg-gradient-to-b from-white to-gray-50 ${className}`}
     >
       <div className="max-w-7xl mx-auto relative z-10">
-        <div className="text-center mb-16 md:mb-20">
-          <div className="inline-flex items-center gap-2 px-4 py-2 rounded-full bg-red-100 text-red-600 text-sm font-semibold mb-6">
-            <span>📊</span> Data & Fakta
-          </div>
-          <h2 className="text-4xl md:text-5xl font-extrabold mb-6 text-gray-900">
-            Mengapa Kami <span className="text-orange-600">Hadir</span>
+        <div className="text-center mb-12 md:mb-16">
+          <h2 className="text-3xl md:text-5xl font-bold mb-4 text-gray-900">
+            Mengapa <span className="text-orange-600">Pasalku.ai</span> Ada di Sini
           </h2>
-          <p className="text-xl text-gray-600 max-w-4xl mx-auto">
-            Data menunjukkan masih banyak tantangan akses keadilan di Indonesia
+          <p className="text-lg md:text-xl text-gray-600 max-w-3xl mx-auto">
+            Tantangan akses hukum di Indonesia yang ingin kami bantu selesaikan
           </p>
         </div>
 
-        <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
+        <div className="grid grid-cols-1 md:grid-cols-3 gap-6 md:gap-8">
           {stats.map((stat, index) => (
             <div
               key={index}
-              className={`relative bg-white rounded-3xl p-8 border-2 border-gray-200 hover:border-orange-300 transition-all duration-500 shadow-lg hover:shadow-xl ${
+              className={`bg-white rounded-2xl p-8 border-2 border-gray-100 hover:border-orange-200 transition-all duration-300 hover:shadow-lg ${
                 inView ? 'transform translate-y-0 opacity-100' : 'transform translate-y-8 opacity-0'
               }`}
               style={{
-                transitionDelay: `${index * 0.1}s`
+                transitionDelay: `${index * 0.15}s`
               }}
             >
-              {/* Icon */}
+              {/* Icon/Illustration - Simple & Clean */}
               <div className="flex justify-center mb-6">
-                <div className="w-16 h-16 rounded-2xl bg-gradient-to-br from-red-100 to-orange-100 flex items-center justify-center">
+                <div className="w-20 h-20 rounded-xl bg-gradient-to-br from-orange-50 to-red-50 flex items-center justify-center">
                   {stat.illustration}
                 </div>
               </div>
 
-              {/* Number/Text */}
+              {/* Number/Text - Clean Typography */}
               <div className="text-center mb-4">
-                <div className="text-4xl font-black text-red-600 mb-2">
+                <div className="text-4xl font-bold text-orange-600 mb-2">
                   {stat.number !== null ? (
                     <>
                       {inView ? (
                         <>
-                          {stat.prefix}
-                          {animatedNumbers[index].toFixed(stat.number % 1 === 0 ? 0 : 2)}
-                          {stat.suffix}
+                          {stat.prefix}{animatedNumbers[index].toFixed(stat.number % 1 === 0 ? 0 : 2)}{stat.suffix}
                         </>
                       ) : (
                         <span className="text-gray-300">0{stat.suffix}</span>
                       )}
                     </>
                   ) : (
-                    <span className="text-3xl">{stat.text}</span>
+                    <span className="text-2xl">{stat.text}</span>
                   )}
                 </div>
-                <h3 className="text-xl font-bold text-gray-900 mb-3">
+                <h3 className="text-xl font-bold text-gray-900">
                   {stat.title}
                 </h3>
               </div>
 
-              {/* Description */}
-              <p className="text-gray-600 text-center mb-4 leading-relaxed">
+              {/* Description - Readable */}
+              <p className="text-sm text-gray-600 text-center mb-4 leading-relaxed">
                 {stat.description}
               </p>
 
-              {/* Source */}
-              <div className="text-xs text-gray-500 text-center pt-4 border-t border-gray-200">
+              {/* Source - Subtle */}
+              <div className="text-xs text-gray-500 text-center pt-4 border-t border-gray-100">
                 <span className="font-medium">Sumber:</span> {stat.source}
               </div>
             </div>
           ))}
         </div>
 
-        {/* Bottom CTA */}
-        <div className="mt-16 text-center">
-          <div className="inline-flex items-center gap-4 px-8 py-4 bg-orange-50 rounded-2xl border-2 border-orange-200">
-            <div className="w-3 h-3 bg-orange-500 rounded-full animate-pulse"></div>
-            <span className="text-gray-700 font-medium">Kami hadir untuk menjawab tantangan ini</span>
-            <div className="w-3 h-3 bg-orange-500 rounded-full animate-pulse"></div>
-          </div>
+        {/* Simple CTA */}
+        <div className="mt-12 text-center">
+          <p className="text-gray-600 font-medium">
+            💡 Kami hadir untuk membantu mengatasi tantangan ini
+          </p>
         </div>
       </div>
     </section>

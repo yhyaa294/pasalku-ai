@@ -7,33 +7,14 @@ interface CTASectionProps {
 }
 
 export const CTASection: FC<CTASectionProps> = ({ onGetStarted, className = '' }) => {
-  const sectionRef = useRef<HTMLDivElement>(null)
-  const [scrollY, setScrollY] = useState(0)
-
-  useEffect(() => {
-    const handleScroll = () => {
-      if (sectionRef.current) {
-        const rect = sectionRef.current.getBoundingClientRect()
-        const scrollTop = window.pageYOffset || document.documentElement.scrollTop
-        setScrollY(scrollTop - rect.top)
-      }
-    }
-
-    window.addEventListener('scroll', handleScroll)
-    return () => window.removeEventListener('scroll', handleScroll)
-  }, [])
-
-  const parallaxOffset = scrollY * 0.5 // Adjust speed as needed
-
   return (
     <section
       id="cta"
-      ref={sectionRef}
       className={`py-24 md:py-32 px-4 relative overflow-hidden scroll-animate bg-gradient-to-br from-orange-500 via-orange-600 to-orange-700 ${className}`}
     >
       {/* Simple Pattern Overlay */}
       <div className="absolute inset-0 opacity-10">
-        <div className="absolute inset-0 bg-[url('data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHdpZHRoPSI2MCIgaGVpZ2h0PSI2MCIgdmlld0JveD0iMCAwIDYwIDYwIj48ZyBmaWxsPSJub25lIiBmaWxsLXJ1bGU9ImV2ZW5vZGQiPjxnIGZpbGw9IiNmZmZmZmYiIGZpbGwtb3BhY2l0eT0iMC4xIj48cGF0aCBkPSJNMzYgMzR2Mmgydi0yaC0yem0wIDR2Mi0yaDJ2LTJoLTJ6bS0yIDJ2LTJoLTJ2Mmgyem0yLTJoMnYtMmgtMnYyeiIvPjwvZz48L2c+PC9zdmc+')]"></div>
+        <div className="absolute inset-0 bg-[url('data:image/svg+xml;base64,PHN2ZyB3aWR0aD0iNjAiIGhlaWdodD0iNjAiIHZpZXdCb3g9IjAgMCA2MCA2MCIgeG1sbnM9Imh0dHA6Ly93d3cudzMub3JnLzIwMDAvc3ZnIj48ZyBmaWxsPSJub25lIiBmaWxsLXJ1bGU9ImV2ZW5vZGQiPjxnIGZpbGw9IiNmZmZmZmYiIGZpbGwtb3BhY2l0eT0iMC4xIj48cGF0aCBkPSJNMzYgMzR2Mmgydi0yaC0yem0wIDR2Mi0yaDJ2LTJoLTJ6bS0yIDJ2LTJoLTJ2Mmgyem0yLTJoMnYtMmgtMnYyeiIvPjwvZz48L2c+PC9zdmc+')]"></div>
       </div>
 
       <div className="max-w-4xl mx-auto text-center relative z-10">
@@ -48,8 +29,8 @@ export const CTASection: FC<CTASectionProps> = ({ onGetStarted, className = '' }
 
         {/* Main Heading */}
         <h2 className="text-4xl md:text-6xl font-extrabold text-white mb-6 leading-tight">
-          Mulai Konsultasi <br className="hidden md:block" />
-          Hukum Anda Sekarang
+          Mulai Konsultasi Hukum <br className="hidden md:block" />
+          Anda Sekarang
         </h2>
 
         {/* Description */}

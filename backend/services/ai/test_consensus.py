@@ -16,7 +16,7 @@ from services.ai.consensus_engine import (
     get_consensus_engine
 )
 from services.ai.groq_service import get_groq_service
-from services.ark_ai_service import ArkAIService
+from services.ai.byteplus_service import get_byteplus_service
 
 
 async def test_basic_consensus():

@@ -26,17 +26,22 @@ export const HeroSection: FC<HeroSectionProps> = ({ onGetStarted }) => {
 
   return (
     <section id="hero" className="relative min-h-screen flex items-center justify-center overflow-hidden bg-white">
-      {/* Clean Minimalist Background */}
+      {/* Premium Animated Background */}
       <div className="absolute inset-0">
-        {/* Subtle Gradient Overlay */}
-        <div className="absolute inset-0 bg-gradient-to-br from-orange-50/30 via-white to-blue-50/20"></div>
+        {/* Animated Gradient Base */}
+        <div className="absolute inset-0 bg-gradient-to-br from-orange-50/40 via-white to-blue-50/30 gradient-flow"></div>
         
-        {/* Floating Accent Shapes - Minimal */}
-        <div className="absolute top-20 right-20 w-64 h-64 bg-gradient-to-br from-orange-400/10 to-orange-500/5 rounded-full blur-3xl animate-float"></div>
-        <div className="absolute bottom-32 left-20 w-80 h-80 bg-gradient-to-br from-blue-400/10 to-purple-500/5 rounded-full blur-3xl animate-levitate"></div>
+        {/* Floating Orbs with Enhanced Animation */}
+        <div className="absolute top-20 right-20 w-72 h-72 bg-gradient-to-br from-orange-400/15 to-orange-500/8 rounded-full blur-3xl smooth-float" style={{ animationDuration: '6s' }}></div>
+        <div className="absolute bottom-32 left-20 w-96 h-96 bg-gradient-to-br from-blue-400/12 to-purple-500/8 rounded-full blur-3xl smooth-float" style={{ animationDuration: '8s', animationDelay: '1s' }}></div>
+        <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-80 h-80 bg-gradient-to-br from-purple-400/10 to-pink-500/5 rounded-full blur-3xl smooth-float" style={{ animationDuration: '7s', animationDelay: '2s' }}></div>
         
-        {/* Grid Pattern - Very Subtle */}
-        <div className="absolute inset-0 bg-[url('data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHdpZHRoPSI2MCIgaGVpZ2h0PSI2MCIgdmlld0JveD0iMCAwIDYwIDYwIj48ZyBmaWxsPSJub25lIiBmaWxsLXJ1bGU9ImV2ZW5vZGQiPjxnIGZpbGw9IiM5OTk5OTkiIGZpbGwtb3BhY2l0eT0iMC4wMiI+PHBhdGggZD0iTTM2IDM0djItaDJ2LTJoLTJ6bTAgNHYyaC0ydjJoMnYtMmgydi0yaC0yem0tMiAydi0yaC0ydjJoMnptMi0yaDJ2LTJoLTJ2MnoiLz48L2c+PC9nPjwvc3ZnPg==')] opacity-40"></div>
+        {/* Animated Grid Pattern */}
+        <div className="absolute inset-0 bg-[url('data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHdpZHRoPSI2MCIgaGVpZ2h0PSI2MCIgdmlld0JveD0iMCAwIDYwIDYwIj48ZyBmaWxsPSJub25lIiBmaWxsLXJ1bGU9ImV2ZW5vZGQiPjxnIGZpbGw9IiM5OTk5OTkiIGZpbGwtb3BhY2l0eT0iMC4wMiI+PHBhdGggZD0iTTM2IDM0djItaDJ2LTJoLTJ6bTAgNHYyaC0ydjJoMnYtMmgydi0yaC0yem0tMiAydi0yaC0ydjJoMnptMi0yaDJ2LTJoLTJ2MnoiLz48L2c+PC9nPjwvc3ZnPg==')] opacity-40 pattern-flow"></div>
+        
+        {/* Shimmer Light Effect */}
+        <div className="absolute top-0 left-0 right-0 h-px bg-gradient-to-r from-transparent via-orange-500/30 to-transparent animate-slide-right" style={{ top: '30%' }}></div>
+        <div className="absolute top-0 left-0 right-0 h-px bg-gradient-to-r from-transparent via-blue-500/30 to-transparent animate-slide-right" style={{ top: '60%', animationDelay: '2s' }}></div>
       </div>
 
       <div className="relative z-10 max-w-7xl mx-auto px-4 py-16">
@@ -49,7 +54,7 @@ export const HeroSection: FC<HeroSectionProps> = ({ onGetStarted }) => {
                 <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-white opacity-75"></span>
                 <span className="relative inline-flex rounded-full h-2 w-2 bg-white"></span>
               </span>
-              Baru Diluncurkan 2024 🚀
+              Baru Diluncurkan 2025 🚀
             </div>
 
             {/* Hero Title - Startup Style */}
@@ -166,11 +171,11 @@ export const HeroSection: FC<HeroSectionProps> = ({ onGetStarted }) => {
 
         {/* Bottom Stats - Clean */}
         <div className="mt-16 text-center animate-fade-in-up">
-          <p className="text-sm text-gray-500 mb-4">Dipercaya oleh pengguna di Indonesia</p>
+          <p className="text-sm text-gray-500 mb-4">Baru Diluncurkan - Mari Tumbuh Bersama</p>
           <div className="flex justify-center items-center gap-8 flex-wrap">
             <div className="text-center">
-              <div className="text-2xl font-bold text-gray-900">1,000+</div>
-              <div className="text-sm text-gray-500">Pengguna</div>
+              <div className="text-2xl font-bold text-gray-900">Beta</div>
+              <div className="text-sm text-gray-500">Early Access</div>
             </div>
             <div className="w-px h-8 bg-gray-300"></div>
             <div className="text-center">
@@ -180,7 +185,7 @@ export const HeroSection: FC<HeroSectionProps> = ({ onGetStarted }) => {
             <div className="w-px h-8 bg-gray-300"></div>
             <div className="text-center">
               <div className="text-2xl font-bold text-gray-900">24/7</div>
-              <div className="text-sm text-gray-500">Support</div>
+              <div className="text-sm text-gray-500">Siap Membantu</div>
             </div>
           </div>
         </div>

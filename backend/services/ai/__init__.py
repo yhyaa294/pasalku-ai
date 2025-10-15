@@ -13,6 +13,10 @@ from .consensus_engine import (
     AIModelResponse,
     get_consensus_engine
 )
+from .byteplus_service import (
+    BytePlusArkService,
+    get_byteplus_service
+)
 
 from .groq_service import (
     GroqAIService,

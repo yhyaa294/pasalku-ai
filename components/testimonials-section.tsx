@@ -11,44 +11,58 @@ export const TestimonialsSection: FC<TestimonialsSectionProps> = ({ className = 
 
   const testimonials = [
     {
-      quote: "Pasalku.ai benar-benar membantu saya memahami hak-hak saya sebagai karyawan. Jawaban yang diberikan sangat jelas dan didukung oleh undang-undang yang relevan.",
+      quote: "Pasalku.ai membantu saya memahami hak karyawan dengan penjelasan yang mudah dipahami. Tidak perlu lagi bingung soal peraturan ketenagakerjaan!",
       name: "Ahmad Rahman",
       role: "Karyawan Swasta",
       rating: 5,
       avatarEmoji: "👨‍💼",
-      location: "Jakarta"
+      location: "Jakarta",
+      highlight: "Mudah dipahami"
     },
     {
-      quote: "Sebagai ibu rumah tangga, saya sering bingung dengan prosedur hukum keluarga. Dengan Pasalku.ai, saya bisa mendapatkan informasi yang akurat tanpa harus keluar rumah.",
+      quote: "Sebagai ibu rumah tangga, saya butuh informasi hukum keluarga yang cepat. Pasalku.ai menjawab semua pertanyaan saya dengan jelas dan akurat.",
       name: "Siti Nurhaliza",
       role: "Ibu Rumah Tangga",
       rating: 5,
       avatarEmoji: "👩‍👧‍👦",
-      location: "Bandung"
+      location: "Bandung",
+      highlight: "Cepat & Akurat"
     },
     {
-      quote: "Platform ini sangat membantu mahasiswa hukum seperti saya untuk memahami penerapan undang-undang dalam kasus nyata. AI-nya pintar sekali!",
+      quote: "Sebagai mahasiswa hukum, platform ini membantu saya memahami penerapan hukum di kasus nyata. Referensi pasal-pasalnya lengkap banget!",
       name: "Budi Santoso",
       role: "Mahasiswa Hukum",
       rating: 5,
       avatarEmoji: "👨‍🎓",
-      location: "Yogyakarta"
+      location: "Yogyakarta",
+      highlight: "Referensi Lengkap"
     },
     {
-      quote: "Dalam bisnis kecil saya, Pasalku.ai membantu saya memahami kontrak dan perjanjian dengan jelas. Sudah tidak perlu lagi konsultasi mahal.",
+      quote: "Untuk UMKM seperti saya, Pasalku.ai sangat membantu dalam memahami kontrak bisnis tanpa harus konsultasi yang mahal. Hemat budget!",
       name: "Dewi Kartika",
       role: "Pengusaha UMKM",
       rating: 5,
       avatarEmoji: "👩‍💼",
-      location: "Surabaya"
+      location: "Surabaya",
+      highlight: "Hemat Budget"
     },
     {
-      quote: "AI hukum ini mengubah cara saya berpikir tentang akses keadilan. Sempurna untuk konsultasi cepat tanpa biaya tinggi!",
+      quote: "Platform yang benar-benar mengubah cara saya akses informasi hukum. Responsif, akurat, dan yang penting gratis untuk memulai!",
       name: "Rizky Pratama",
       role: "Freelancer",
       rating: 5,
       avatarEmoji: "👨‍💻",
-      location: "Medan"
+      location: "Medan",
+      highlight: "Gratis Memulai"
+    },
+    {
+      quote: "Fitur AI chat-nya interaktif banget! Bisa tanya-jawab sampai paham. Seperti konsultasi langsung dengan lawyer, tapi lebih fleksibel.",
+      name: "Linda Wijaya",
+      role: "Marketing Manager",
+      rating: 5,
+      avatarEmoji: "👩‍💼",
+      location: "Jakarta",
+      highlight: "Interaktif"
     }
   ]
 
@@ -98,39 +112,37 @@ export const TestimonialsSection: FC<TestimonialsSectionProps> = ({ className = 
   return (
     <section
       id="testimonials"
-      className={`py-16 md:py-32 px-4 relative overflow-hidden scroll-animate ${className}`}
+      className={`py-16 md:py-32 px-4 relative overflow-hidden scroll-animate bg-gradient-to-b from-white via-orange-50/30 to-white ${className}`}
     >
-      {/* Animated Background */}
-      <div className="absolute inset-0 -z-10">
-        <div className="absolute top-20 left-10 w-32 h-32 bg-gradient-to-br from-orange-100/50 to-yellow-100/50 rounded-full blur-2xl animate-float"></div>
-        <div className="absolute bottom-20 right-10 w-40 h-40 bg-gradient-to-br from-yellow-100/50 to-orange-100/50 rounded-full blur-2xl animate-float animation-delay-1000"></div>
-        <div className="absolute top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2 w-24 h-24 bg-gradient-to-br from-orange-200/30 to-yellow-200/30 rounded-full blur-xl animate-pulse"></div>
-      </div>
-
       <div className="max-w-6xl mx-auto relative z-10">
-        <div className="text-center mb-12 md:mb-20">
-          <h2 className="text-4xl md:text-6xl font-black mb-6 md:mb-8 bg-gradient-to-r from-gray-900 via-gray-700 to-gray-900 bg-clip-text text-transparent">
-            Suara Mereka yang Telah{' '}
-            <span className="bg-gradient-to-r from-orange-600 to-red-600 bg-clip-text text-transparent">
-              Merasa Terbantu
-            </span>
+        {/* Header */}
+        <div className="text-center mb-12 md:mb-16">
+          <div className="inline-flex items-center gap-2 px-4 py-2 rounded-full bg-orange-100 text-orange-600 text-sm font-bold mb-6">
+            <span>⭐</span> Testimoni Pengguna
+          </div>
+          <h2 className="text-4xl md:text-5xl font-bold mb-4 text-gray-900">
+            Apa Kata <span className="text-orange-600">Mereka?</span>
           </h2>
-          <p className="text-lg md:text-2xl text-gray-600 max-w-4xl mx-auto leading-relaxed">
-            Pengalaman Nyata dengan Pasalku.ai.
+          <p className="text-lg md:text-xl text-gray-600 max-w-2xl mx-auto">
+            Pengalaman nyata dari pengguna yang sudah merasakan manfaat Pasalku.ai
           </p>
         </div>
 
-        <div className="relative max-w-5xl mx-auto">
-          {/* Main Testimonial Card */}
-          <div className="relative bg-white rounded-3xl shadow-2xl p-8 md:p-12 border border-gray-200 transform hover:scale-105 transition-all duration-500 overflow-hidden">
-            {/* Animated Border Gradient */}
-            <div className="absolute inset-0 rounded-3xl bg-gradient-to-r from-orange-400 via-red-500 to-orange-400 opacity-10 animate-pulse"></div>
+        <div className="relative max-w-4xl mx-auto">
+          {/* Main Testimonial Card - dengan fade animation */}
+          <div key={currentIndex} className="relative bg-white rounded-2xl shadow-xl p-8 md:p-12 border-2 border-gray-100 hover:border-orange-200 transition-all duration-300 animate-fade-in">
+            {/* Highlight Badge */}
+            <div className="absolute -top-4 right-8">
+              <div className="bg-gradient-to-r from-orange-500 to-orange-600 text-white px-6 py-2 rounded-full text-sm font-bold shadow-lg">
+                ✨ {testimonials[currentIndex].highlight}
+              </div>
+            </div>
 
             <div className="relative z-10">
-              {/*Quote Icon */}
+              {/* Quote Icon */}
               <div className="flex justify-center mb-6">
-                <div className="w-16 h-16 bg-gradient-to-br from-orange-100 to-yellow-100 rounded-2xl flex items-center justify-center shadow-lg">
-                  <Quote className="w-8 h-8 text-orange-600" />
+                <div className="w-14 h-14 bg-gradient-to-br from-orange-500 to-orange-600 rounded-xl flex items-center justify-center shadow-lg">
+                  <Quote className="w-7 h-7 text-white" />
                 </div>
               </div>
 
@@ -139,51 +151,48 @@ export const TestimonialsSection: FC<TestimonialsSectionProps> = ({ className = 
                 <StarRating rating={testimonials[currentIndex].rating} />
               </div>
 
-              {/* Quote Text */}
-              <blockquote className="text-xl md:text-3xl text-gray-700 mb-8 leading-relaxed text-center italic font-medium">
+              {/* Quote Text - dengan fade animation */}
+              <blockquote className="text-lg md:text-2xl text-gray-700 mb-8 leading-relaxed text-center font-medium">
                 "{testimonials[currentIndex].quote}"
               </blockquote>
 
               {/* Author Info */}
-              <div className="flex flex-col items-center gap-4">
+              <div className="flex flex-col md:flex-row items-center justify-center gap-4">
                 {/* Avatar */}
-                <div className="w-16 h-16 bg-gradient-to-br from-orange-100 to-yellow-100 rounded-full border-4 border-orange-200 flex items-center justify-center text-2xl shadow-lg">
+                <div className="w-16 h-16 bg-gradient-to-br from-orange-100 to-orange-200 rounded-full flex items-center justify-center text-3xl shadow-lg border-4 border-white">
                   {testimonials[currentIndex].avatarEmoji}
                 </div>
 
                 {/* Name and Role */}
-                <div className="text-center">
-                  <div className="font-bold text-xl md:text-2xl text-gray-900 mb-1">
+                <div className="text-center md:text-left">
+                  <div className="font-bold text-xl text-gray-900">
                     {testimonials[currentIndex].name}
                   </div>
-                  <div className="text-gray-600 font-medium mb-1">
-                    {testimonials[currentIndex].role}
-                  </div>
-                  <div className="text-sm text-gray-500">
-                    {testimonials[currentIndex].location}
+                  <div className="text-gray-600 font-medium text-sm">
+                    {testimonials[currentIndex].role} • {testimonials[currentIndex].location}
                   </div>
                 </div>
               </div>
             </div>
           </div>
 
-          {/* Navigation Buttons */}
+          {/* Navigation Buttons - lebih modern */}
           <button
             onClick={prevTestimonial}
-            className="absolute left-4 top-1/2 transform -translate-y-1/2 bg-white rounded-full p-4 shadow-lg hover:shadow-2xl transition-all duration-300 hover:scale-110 border border-gray-200 group hover:border-orange-300"
+            className="absolute -left-4 md:-left-16 top-1/2 transform -translate-y-1/2 bg-white rounded-full p-3 shadow-lg hover:shadow-xl transition-all duration-300 hover:scale-110 border-2 border-gray-200 hover:border-orange-400 group"
             aria-label="Testimoni sebelumnya"
           >
-            <ChevronLeft className="w-6 h-6 text-orange-600 group-hover:scale-110 transition-transform" />
+            <ChevronLeft className="w-5 h-5 text-gray-600 group-hover:text-orange-600 transition-colors" />
           </button>
           <button
             onClick={nextTestimonial}
-            className="absolute right-4 top-1/2 transform -translate-y-1/2 bg-white rounded-full p-4 shadow-lg hover:shadow-2xl transition-all duration-300 hover:scale-110 border border-gray-200 group hover:border-orange-300"
+            className="absolute -right-4 md:-right-16 top-1/2 transform -translate-y-1/2 bg-white rounded-full p-3 shadow-lg hover:shadow-xl transition-all duration-300 hover:scale-110 border-2 border-gray-200 hover:border-orange-400 group"
             aria-label="Testimoni berikutnya"
           >
-            <ChevronRight className="w-6 h-6 text-orange-600 group-hover:scale-110 transition-transform" />
+            <ChevronRight className="w-5 h-5 text-gray-600 group-hover:text-orange-600 transition-colors" />
           </button>
 
-          {/* Dots Indicator */}
+          {/* Dots Indicator - redesigned */}
           <div className="flex justify-center gap-3 mt-8">
             {testimonials.map((_, index) => (
               <button

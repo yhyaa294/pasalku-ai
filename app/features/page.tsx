@@ -1,41 +1,22 @@
 'use client'
 
 import { useState } from 'react'
-import { motion, AnimatePresence } from 'framer-motion'
-import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card'
-import { Button } from '@/components/ui/button'
-import { Badge } from '@/components/ui/badge'
-import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs'
 import Link from 'next/link'
-import {
-  Brain,
-  MessageSquare,
-  FileText,
-  BookOpen,
-  Shield,
-  Zap,
-  Target,
-  Award,
-  Sparkles,
-  CheckCircle,
-  ArrowRight,
-  Scale,
-  Search,
-  Clock,
-  BarChart3,
-  FileCheck,
-  Users,
-  Globe,
-  TrendingUp,
-  Mic,
-  Play,
-  Star
+import { motion, AnimatePresence } from 'framer-motion'
+import { 
+  MessageSquare, FileText, Database, FileCheck, Calendar, Search, Users, PieChart, 
+  ClipboardCheck, Bell, Video, Lock, BookOpen, TrendingUp, Download, Share2, 
+  Calculator, Archive, Edit, Zap, Settings, Shield, Award, Globe, ArrowRight,
+  Scale, CheckCircle, Brain, Play, Star, Sparkles
 } from 'lucide-react'
+import { Button } from '@/components/ui/button'
+import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card'
+import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs'
+import { Badge } from '@/components/ui/badge'
 import { EnhancedFooter } from '@/components/enhanced-footer'
 
 export default function FeaturesPage() {
   const [activeDemo, setActiveDemo] = useState<string | null>(null)
-
   const featureCategories = [
     {
       id: 'ai-consultation',

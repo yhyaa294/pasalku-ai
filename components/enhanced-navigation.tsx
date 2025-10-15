@@ -61,81 +61,28 @@ export const EnhancedNavigation: FC<EnhancedNavigationProps> = ({
     },
     {
       name: 'Fitur',
-      icon: Star,
-      children: [
-        {
-          name: 'AI Konsultasi Hukum',
-          href: '/features#ai-consultation',
-          icon: MessageSquare
-        },
-        {
-          name: 'Analisis Dokumen Cerdas',
-          href: '/features#document-analysis',
-          icon: FileText
-        },
-        {
-          name: 'Knowledge Graph Hukum',
-          href: '/features#knowledge-base',
-          icon: BookOpen
-        },
-        {
-          name: 'Semua Fitur Lengkap',
-          href: '/features',
-          icon: Star
-        }
-      ]
+      href: '/features',
+      icon: Star
     },
     {
-      name: 'Paket Harga',
+      name: 'Harga',
       href: '/pricing',
       icon: CreditCard
     },
     {
-      name: 'Profesional Hukum',
-      icon: Users,
-      children: [
-        {
-          name: 'Manfaat Profesional',
-          href: '/features#professional-benefits',
-          icon: Award
-        },
-        {
-          name: 'Daftar Sebagai Profesional',
-          href: '/professional-upgrade',
-          icon: User
-        }
-      ]
-    },
-    {
-      name: 'Tentang Kami',
+      name: 'Tentang',
       href: '/about',
       icon: Building
     },
     {
-      name: 'Blog & Artikel',
-      href: '/blog',
-      icon: FileText
+      name: 'FAQ',
+      href: '/faq',
+      icon: HelpCircle
     },
     {
-      name: 'Bantuan',
-      icon: HelpCircle,
-      children: [
-        {
-          name: 'FAQ - Pertanyaan Umum',
-          href: '/faq',
-          icon: HelpCircle
-        },
-        {
-          name: 'Kontak Kami',
-          href: '/contact',
-          icon: Phone
-        },
-        {
-          name: 'Security Report',
-          href: '/security-report',
-          icon: Shield
-        }
-      ]
+      name: 'Kontak',
+      href: '/contact',
+      icon: Phone
     }
   ]
 
