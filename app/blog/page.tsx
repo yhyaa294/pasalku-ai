@@ -6,6 +6,7 @@ import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card'
 import { Badge } from '@/components/ui/badge'
 import { EnhancedNavigation } from '@/components/enhanced-navigation'
 import { Button } from '@/components/ui/button'
+import { EnhancedFooter } from '@/components/enhanced-footer'
 import {
   FileText,
   Calendar,
@@ -376,56 +377,7 @@ export default function BlogPage() {
         </div>
       </div>
 
-      {/* Footer */}
-      <footer className="bg-gradient-to-r from-gray-900 via-blue-900 to-purple-900 text-white py-12">
-        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-          <div className="grid grid-cols-1 md:grid-cols-4 gap-8">
-            <div>
-              <div className="flex items-center gap-2 mb-4">
-                <div className="w-10 h-10 bg-white rounded-lg flex items-center justify-center">
-                  <span className="text-2xl">⚖️</span>
-                </div>
-                <span className="text-xl font-bold">Pasalku.ai</span>
-              </div>
-              <p className="text-gray-300 mb-4">
-                Portal edukasi hukum dengan konten terbaru tentang AI dan perkembangan hukum Indonesia.
-              </p>
-            </div>
-
-            <div>
-              <h3 className="text-lg font-semibold mb-4">Artikel Terbaru</h3>
-              <ul className="space-y-2 text-gray-300">
-                <li><a href="#" className="hover:text-white transition-colors">Dual AI Revolution</a></li>
-                <li><a href="#" className="hover:text-white transition-colors">Contract Intelligence</a></li>
-                <li><a href="#" className="hover:text-white transition-colors">Adaptive Persona Guide</a></li>
-                <li><a href="#" className="hover:text-white transition-colors">PDPA Compliance</a></li>
-              </ul>
-            </div>
-
-            <div>
-              <h3 className="text-lg font-semibold mb-4">Kategori</h3>
-              <ul className="space-y-2 text-gray-300">
-                <li><a href="#" className="hover:text-white transition-colors">AI & Teknologi</a></li>
-                <li><a href="#" className="hover:text-white transition-colors">Update Hukum</a></li>
-                <li><a href="#" className="hover:text-white transition-colors">Studi Kasus</a></li>
-                <li><a href="#" className="hover:text-white transition-colors">Tips & Trik</a></li>
-              </ul>
-            </div>
-
-            <div>
-              <h3 className="text-lg font-semibold mb-4">Bergabung Menulis</h3>
-              <div className="space-y-3 text-gray-300">
-                <p>Adakah insight menarik tentang hukum atau AI yang ingin Anda bagi?</p>
-                <Link href="/contact">
-                  <Button className="bg-white text-purple-600 hover:bg-gray-100 w-full">
-                    Ajukan Artikel
-                  </Button>
-                </Link>
-              </div>
-            </div>
-          </div>
-        </div>
-      </footer>
+      <EnhancedFooter />
     </div>
   )
 }

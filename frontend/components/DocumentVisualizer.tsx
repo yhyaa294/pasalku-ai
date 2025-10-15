@@ -4,7 +4,7 @@ import React, { useState, useEffect } from 'react'
 import { motion, AnimatePresence } from 'framer-motion'
 import {
   BarChart, Bar, XAxis, YAxis, CartesianGrid, Tooltip, ResponsiveContainer,
-  PieChart, Pie, Cell, ProgressBar, RadialBarChart, RadialBar
+  PieChart, Pie, Cell, RadialBarChart, RadialBar
 } from 'recharts'
 import {
   FileText, Eye, Search, AlertTriangle, CheckCircle,
@@ -84,7 +84,7 @@ export default function DocumentVisualizer({ documentId = "doc_001", onAnalyze =
     setIsAnalyzing(true)
     setTimeout(() => {
       setIsAnalyzing(false)
-      onAnalyze(mockAnalysis)
+      onAnalyze()
     }, 5000)
   }
 
@@ -99,11 +99,7 @@ export default function DocumentVisualizer({ documentId = "doc_001", onAnalyze =
 
   const cardVariants = {
     hidden: { opacity: 0, scale: 0.95 },
-    visible: {
-      opacity: 1,
-      scale: 1,
-      transition: { type: "spring", stiffness: 100, damping: 15 }
-    }
+    visible: { opacity: 1, scale: 1 }
   }
 
   return (

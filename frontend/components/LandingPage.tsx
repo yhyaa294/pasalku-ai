@@ -13,7 +13,7 @@ import { Badge } from '@/components/ui/badge'
 import { Button } from '@/components/ui/button'
 
 // Animated counter for stats
-const Counter = ({ value, suffix = '', duration = 2000 }) => {
+const Counter = ({ value, suffix = '', duration = 2000 }: { value: number | string; suffix?: string; duration?: number }) => {
   const [count, setCount] = useState(0)
 
   useEffect(() => {

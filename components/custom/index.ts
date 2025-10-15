@@ -1,0 +1,8 @@
+export { LegalCitation } from './LegalCitation'
+export { ConfidenceIndicator } from './ConfidenceIndicator'
+export { AiThinking } from './AiThinking'
+export { FeatureHighlight } from './FeatureHighlight'
+export { ConsultationSteps } from './ConsultationSteps'
+export { NewFeaturesHighlight } from './NewFeaturesHighlight'
+export { OnboardingTour } from './OnboardingTour'
+export { EnhancedHeroSection } from './EnhancedHeroSection'

@@ -19,27 +19,27 @@ export const FAQSection: FC<FAQSectionProps> = ({ className = '' }) => {
     {
       question: 'Apa itu Pasalku.ai?',
       answer:
-        'Pasalku.ai adalah platform konsultasi hukum berbasis AI yang memberikan jawaban cepat, analisis dokumen, dan rujukan hukum Indonesia yang relevan.'
+        'Pasalku.ai adalah platform konsultasi hukum berbasis AI yang membantu Anda memahami hak dan kewajiban hukum dengan mudah. Kami menyediakan jawaban cepat, analisis dokumen, dan referensi hukum Indonesia.'
     },
     {
-      question: 'Apakah jawaban AI bisa dipercaya?',
+      question: 'Apakah jawaban dari AI dapat dipercaya?',
       answer:
-        'Kami melengkapi jawaban AI dengan sitasi (Pasal/UU) dan confidence score. Untuk kasus kompleks, Anda dapat meminta verifikasi Profesional Hukum.'
+        'AI kami dirancang untuk memberikan informasi yang akurat dengan referensi pasal dan undang-undang. Namun, untuk kasus yang kompleks, kami sarankan untuk berkonsultasi dengan profesional hukum.'
     },
     {
-      question: 'Bagaimana sistem harga bekerja?',
+      question: 'Berapa biaya menggunakan Pasalku.ai?',
       answer:
-        'Ada paket Free (10 query/bulan) dan Premium (Rp 99.000/bulan) dengan fitur lanjutan. Lihat detail di halaman Paket & Harga.'
+        'Kami menyediakan paket Gratis dengan 5 konsultasi per bulan, dan paket Premium seharga Rp 49.000/bulan untuk akses unlimited dengan fitur lengkap.'
     },
     {
       question: 'Apakah data saya aman?',
       answer:
-        'Ya. Kami menerapkan enkripsi, PIN-protected sessions, dan audit logging. Akses sesuai peran (RBAC) untuk keamanan berlapis.'
+        'Ya, keamanan data adalah prioritas kami. Semua data dienkripsi dan dilindungi dengan sistem keamanan yang handal sesuai standar industri.'
     },
     {
-      question: 'Bagaimana cara menjadi Profesional Hukum?',
+      question: 'Bagaimana cara memulai menggunakan Pasalku.ai?',
       answer:
-        'Buka halaman Upgrade Profesional, unggah dokumen verifikasi, dan tim kami akan meninjau dalam 1–3 hari kerja.'
+        'Cukup daftar akun gratis, lalu Anda bisa langsung mulai berkonsultasi dengan AI kami. Tidak perlu kartu kredit untuk paket gratis.'
     }
   ]
 

@@ -149,11 +149,7 @@ export default function ContractAnalysisVisualizer() {
 
   const cardVariants = {
     hidden: { opacity: 0, scale: 0.95 },
-    visible: {
-      opacity: 1,
-      scale: 1,
-      transition: { type: "spring", stiffness: 100, damping: 15 }
-    }
+    visible: { opacity: 1, scale: 1 }
   }
 
   const getGradeColor = (grade: string) => {
@@ -588,7 +584,7 @@ export default function ContractAnalysisVisualizer() {
                         <YAxis stroke="#6b7280" />
                         <Tooltip
                           labelFormatter={(value) => `Timeline: ${value}`}
-                          formatter={(value, name) => [value.toFixed(1) + '%', name]}
+                          formatter={(value, name) => [typeof value === 'number' ? value.toFixed(1) + '%' : value, name]}
                         />
                         <Bar dataKey="probability" fill="#8b5cf6" />
                       </BarChart>

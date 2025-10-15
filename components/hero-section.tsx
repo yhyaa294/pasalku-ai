@@ -7,7 +7,7 @@ interface HeroSectionProps {
 export const HeroSection: FC<HeroSectionProps> = ({ onGetStarted }) => {
   const [typedText, setTypedText] = useState('')
   const [isTypingComplete, setIsTypingComplete] = useState(false)
-  const fullText = "Pasalku.ai: Asisten Informasi Hukum Berbasis Kecerdasan Artifisial untuk Masyarakat Indonesia."
+  const fullText = "Platform konsultasi hukum berbasis AI yang membantu Anda memahami hak-hak hukum dengan mudah, cepat, dan terjangkau."
 
   useEffect(() => {
     let i = 0
@@ -25,161 +25,162 @@ export const HeroSection: FC<HeroSectionProps> = ({ onGetStarted }) => {
   }, [])
 
   return (
-    <section id="hero" className="relative min-h-screen flex items-center justify-center overflow-hidden bg-gradient-to-br from-slate-50 via-blue-50 to-indigo-50">
-      {/* Animated Background Elements */}
+    <section id="hero" className="relative min-h-screen flex items-center justify-center overflow-hidden bg-white">
+      {/* Clean Minimalist Background */}
       <div className="absolute inset-0">
-        {/* Enhanced Floating Orbs with Glassmorphism */}
-        <div className="absolute top-20 left-10 w-56 h-56 md:w-80 md:h-80 bg-gradient-to-br from-indigo-200/30 via-blue-300/40 to-purple-200/30 rounded-full blur-xl animate-float backdrop-blur-sm"></div>
-        <div className="absolute bottom-20 right-10 w-72 h-72 md:w-96 md:h-96 bg-gradient-to-br from-purple-300/40 via-pink-200/30 to-indigo-300/40 rounded-full blur-xl animate-levitate backdrop-blur-sm"></div>
-        <div className="absolute top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2 w-40 h-40 bg-gradient-to-br from-blue-300/50 via-indigo-400/30 to-purple-500/40 rounded-full blur-xl animate-pulse opacity-60"></div>
-
-        {/* Additional Ambient Orbs */}
-        <div className="absolute top-32 right-32 w-24 h-24 bg-gradient-to-br from-cyan-200/60 to-blue-300/60 rounded-full blur-lg animate-bounce opacity-40"></div>
-        <div className="absolute bottom-32 left-32 w-32 h-32 bg-gradient-to-br from-purple-300/50 to-pink-200/40 rounded-full blur-lg animate-ping opacity-50"></div>
-
-        {/* Floating Energy Particles */}
-        {[...Array(8)].map((_, i) => (
-          <div
-            key={i}
-            className="absolute w-2 h-2 bg-orange-400 rounded-full animate-float opacity-60"
-            style={{
-              left: `${10 + (i * 12)}%`,
-              top: `${20 + (i * 8)}%`,
-              animationDelay: `${i * 0.5}s`,
-              animationDuration: `${3 + i}s`
-            }}
-          />
-        ))}
+        {/* Subtle Gradient Overlay */}
+        <div className="absolute inset-0 bg-gradient-to-br from-orange-50/30 via-white to-blue-50/20"></div>
+        
+        {/* Floating Accent Shapes - Minimal */}
+        <div className="absolute top-20 right-20 w-64 h-64 bg-gradient-to-br from-orange-400/10 to-orange-500/5 rounded-full blur-3xl animate-float"></div>
+        <div className="absolute bottom-32 left-20 w-80 h-80 bg-gradient-to-br from-blue-400/10 to-purple-500/5 rounded-full blur-3xl animate-levitate"></div>
+        
+        {/* Grid Pattern - Very Subtle */}
+        <div className="absolute inset-0 bg-[url('data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHdpZHRoPSI2MCIgaGVpZ2h0PSI2MCIgdmlld0JveD0iMCAwIDYwIDYwIj48ZyBmaWxsPSJub25lIiBmaWxsLXJ1bGU9ImV2ZW5vZGQiPjxnIGZpbGw9IiM5OTk5OTkiIGZpbGwtb3BhY2l0eT0iMC4wMiI+PHBhdGggZD0iTTM2IDM0djItaDJ2LTJoLTJ6bTAgNHYyaC0ydjJoMnYtMmgydi0yaC0yem0tMiAydi0yaC0ydjJoMnptMi0yaDJ2LTJoLTJ2MnoiLz48L2c+PC9nPjwvc3ZnPg==')] opacity-40"></div>
       </div>
 
       <div className="relative z-10 max-w-7xl mx-auto px-4 py-16">
         <div className="grid lg:grid-cols-2 gap-12 items-center">
           {/* Left Content */}
-          <div className="text-center lg:text-left space-y-8 animate-fade-in">
-            {/* Badge */}
-            <div className="inline-flex items-center px-6 py-3 rounded-full bg-gray-100/80 backdrop-blur-sm border border-gray-200 text-sm font-semibold text-gray-800 animate-bounce hover:animate-shake">
-              <span className="mr-2 animate-spin-slow">⚖️</span>
-              Asisten Hukum AI Terpercaya #1 di Indonesia
+          <div className="text-center lg:text-left space-y-6 animate-fade-in">
+            {/* Fresh Startup Badge */}
+            <div className="inline-flex items-center gap-2 px-4 py-2 rounded-full bg-gradient-to-r from-orange-500 to-orange-600 text-white text-sm font-bold shadow-lg shadow-orange-500/30">
+              <span className="relative flex h-2 w-2">
+                <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-white opacity-75"></span>
+                <span className="relative inline-flex rounded-full h-2 w-2 bg-white"></span>
+              </span>
+              Baru Diluncurkan 2024 🚀
             </div>
 
-            {/* Hero Title */}
-            <h1 className="text-4xl md:text-6xl lg:text-7xl font-black leading-tight mb-6 animate-slide-in-up">
-              <span className="block bg-gradient-to-r from-gray-900 to-gray-700 bg-clip-text text-transparent">
-                Akses Keadilan
+            {/* Hero Title - Startup Style */}
+            <h1 className="text-5xl md:text-6xl lg:text-7xl font-extrabold leading-tight mb-4">
+              <span className="block text-gray-900">
+                Konsultasi Hukum
               </span>
-              <span className="block bg-gradient-to-r from-gray-800 to-black bg-clip-text text-transparent animate-slide-in-right">
-                Lebih Mudah, Lebih Jelas.
+              <span className="block bg-gradient-to-r from-orange-500 via-orange-600 to-orange-700 bg-clip-text text-transparent">
+                Jadi Lebih Mudah
               </span>
             </h1>
 
-            {/* Sub-title with Typing Effect */}
-            <div className="text-lg md:text-xl lg:text-2xl text-gray-700 max-w-3xl leading-relaxed font-medium min-h-[80px] animate-slide-in-bottom">
-              <span className="font-mono">{typedText}</span>
-              {!isTypingComplete && <span className="animate-blink">|</span>}
-            </div>
+            {/* Sub-title - Clean & Simple */}
+            <p className="text-xl md:text-2xl text-gray-600 max-w-2xl leading-relaxed">
+              {typedText}
+              {!isTypingComplete && <span className="animate-blink text-orange-500">|</span>}
+            </p>
 
-            {/* CTA Button with Animations */}
-            <div className="animate-scale-in">
+            {/* CTA Button - Bold & Modern */}
+            <div className="flex flex-col sm:flex-row gap-4 pt-4">
               <button
                 onClick={onGetStarted}
-                className="group relative inline-flex items-center justify-center px-8 py-5 bg-gradient-to-r from-orange-500 to-orange-600 text-white rounded-xl font-black text-xl hover:from-orange-600 hover:to-orange-700 transition-all duration-300 transform hover:scale-105 hover:shadow-2xl overflow-hidden shadow-lg animate-heartbeat"
+                className="group px-8 py-4 bg-gradient-to-r from-orange-500 to-orange-600 text-white rounded-xl font-bold text-lg hover:from-orange-600 hover:to-orange-700 transition-all duration-300 transform hover:scale-105 shadow-xl shadow-orange-500/30 hover:shadow-2xl hover:shadow-orange-500/40"
               >
-                <div className="absolute inset-0 bg-gradient-to-r from-orange-400 to-yellow-500 opacity-0 group-hover:opacity-100 transition-opacity duration-300"></div>
-                <span className="relative flex items-center gap-3">
-                  <svg
-                    className="w-6 h-6 text-white animate-pulse"
-                    fill="none"
-                    stroke="currentColor"
-                    viewBox="0 0 24 24"
-                  >
-                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M8 12h.01M12 12h.01M16 12h.01M21 12c0 4.418-4.03 8-9 8a9.863 9.863 0 01-4.255-.949L3 20l1.395-3.72C3.512 15.042 3 13.574 3 12c0-4.418 4.03-8 9-8s9 3.582 9 8z" />
+                <span className="flex items-center justify-center gap-2">
+                  Coba Gratis Sekarang
+                  <svg className="w-5 h-5 group-hover:translate-x-1 transition-transform" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M13 7l5 5m0 0l-5 5m5-5H6" />
                   </svg>
-                  Mulai Konsultasi Gratis
-                  <div className="w-3 h-3 bg-white rounded-full animate-ping"></div>
                 </span>
               </button>
+              
+              <button className="px-8 py-4 bg-white text-gray-700 rounded-xl font-semibold text-lg border-2 border-gray-200 hover:border-orange-300 hover:text-orange-600 transition-all duration-300">
+                Lihat Demo
+              </button>
+            </div>
+
+            {/* Trust Indicators - Startup Style */}
+            <div className="flex flex-wrap items-center gap-6 pt-6 text-sm text-gray-500">
+              <div className="flex items-center gap-2">
+                <svg className="w-5 h-5 text-green-500" fill="currentColor" viewBox="0 0 20 20">
+                  <path fillRule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zm3.707-9.293a1 1 0 00-1.414-1.414L9 10.586 7.707 9.293a1 1 0 00-1.414 1.414l2 2a1 1 0 001.414 0l4-4z" clipRule="evenodd" />
+                </svg>
+                <span className="font-medium">Gratis untuk mulai</span>
+              </div>
+              <div className="flex items-center gap-2">
+                <svg className="w-5 h-5 text-blue-500" fill="currentColor" viewBox="0 0 20 20">
+                  <path fillRule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zm3.707-9.293a1 1 0 00-1.414-1.414L9 10.586 7.707 9.293a1 1 0 00-1.414 1.414l2 2a1 1 0 001.414 0l4-4z" clipRule="evenodd" />
+                </svg>
+                <span className="font-medium">Tanpa kartu kredit</span>
+              </div>
+              <div className="flex items-center gap-2">
+                <svg className="w-5 h-5 text-orange-500" fill="currentColor" viewBox="0 0 20 20">
+                  <path fillRule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zm3.707-9.293a1 1 0 00-1.414-1.414L9 10.586 7.707 9.293a1 1 0 00-1.414 1.414l2 2a1 1 0 001.414 0l4-4z" clipRule="evenodd" />
+                </svg>
+                <span className="font-medium">Setup 2 menit</span>
+              </div>
             </div>
           </div>
 
-          {/* Right Visual Element - AI & Human Collaboration Illustration */}
+          {/* Right Visual Element - Modern & Minimal */}
           <div className="relative animate-fade-in-delayed">
             <div className="relative w-full max-w-lg mx-auto">
-              {/* Background Glow */}
-              <div className="absolute inset-0 bg-gradient-to-br from-orange-200/30 to-yellow-200/30 rounded-3xl blur-xl transform rotate-3 scale-110"></div>
+              {/* Background Glow - Subtle */}
+              <div className="absolute inset-0 bg-gradient-to-br from-orange-400/20 to-orange-500/10 rounded-3xl blur-2xl"></div>
 
-              {/* Main Card */}
-              <div className="relative bg-white rounded-3xl p-8 shadow-2xl border border-gray-100 overflow-hidden">
-                {/* Animated Background Elements */}
-                <div className="absolute inset-0 opacity-10">
-                  <div className="absolute top-0 left-0 w-32 h-32 bg-gradient-to-br from-orange-400 to-yellow-400 rounded-full blur-2xl animate-float"></div>
-                  <div className="absolute bottom-0 right-0 w-24 h-24 bg-gradient-to-br from-orange-300 to-orange-400 rounded-full blur-xl animate-float animation-delay-1000"></div>
-                  <div className="absolute top-1/2 right-10 w-16 h-16 bg-gradient-to-br from-yellow-300 to-orange-400 rounded-full blur-x1 animate-ping"></div>
-                </div>
-
-                {/* Main Illustration */}
-                <div className="relative z-10 text-center">
-                  <div className="relative inline-flex items-center justify-center mb-8">
-                    {/* Human Hand */}
-                    <div className="absolute left-0 transform -rotate-12 animate-bounce animation-delay-500">
-                      <div className="w-20 h-20 bg-gradient-to-br from-rose-200 to-rose-300 rounded-full flex items-center justify-center shadow-lg">
-                        <span className="text-2xl">🤝</span>
-                      </div>
+              {/* Main Card - Clean Design */}
+              <div className="relative bg-white rounded-3xl p-10 shadow-2xl border border-gray-100">
+                {/* Simple Illustration */}
+                <div className="text-center space-y-6">
+                  {/* Icon Stack */}
+                  <div className="flex justify-center items-center gap-4">
+                    <div className="w-20 h-20 bg-gradient-to-br from-orange-100 to-orange-200 rounded-2xl flex items-center justify-center transform -rotate-6 shadow-lg">
+                      <span className="text-3xl">⚖️</span>
                     </div>
-
-                    {/* AI Hand/Robot */}
-                    <div className="absolute right-0 transform rotate-12 animate-bounce animation-delay-1000">
-                      <div className="w-20 h-20 bg-gradient-to-br from-blue-200 to-indigo-300 rounded-full flex items-center justify-center shadow-lg">
-                        <span className="text-2xl">🤖</span>
-                      </div>
+                    <div className="w-24 h-24 bg-gradient-to-br from-orange-500 to-orange-600 rounded-2xl flex items-center justify-center shadow-xl">
+                      <span className="text-4xl">🤖</span>
                     </div>
-
-                    {/* Central Legal Element - Puzzle Pieces */}
-                    <div className="relative z-10 transform hover:scale-110 transition-transform duration-500">
-                      <div className="w-24 h-24 bg-gradient-to-br from-yellow-300 via-orange-300 to-orange-400 rounded-2xl flex items-center justify-center shadow-xl border-4 border-white relative">
-                        <span className="text-3xl animate-pulse">🧩</span>
-                        <div className="absolute -top-1 -right-1 w-6 h-6 bg-orange-500 rounded-full animate-ping opacity-75"></div>
-                        <div className="absolute -bottom-1 -left-1 w-4 h-4 bg-yellow-500 rounded-full animate-pulse opacity-60"></div>
-                      </div>
+                    <div className="w-20 h-20 bg-gradient-to-br from-orange-100 to-orange-200 rounded-2xl flex items-center justify-center transform rotate-6 shadow-lg">
+                      <span className="text-3xl">💬</span>
                     </div>
                   </div>
 
-                  {/* Book of Law Element */}
-                  <div className="relative mb-6 animate-float">
-                    <div className="w-32 h-20 bg-gradient-to-br from-gray-200 to-gray-300 rounded-lg flex items-center justify-center shadow-lg mx-auto border-l-4 border-orange-500 transform hover:rotate-3 transition-transform duration-300">
-                      <span className="text-2xl animate-glow">📚</span>
-                    </div>
-                    <div className="absolute -top-2 -right-2 w-8 h-8 bg-orange-400 rounded-full animate-ping opacity-75"></div>
-                    <div className="absolute -bottom-2 -left-2 w-6 h-6 bg-yellow-400 rounded-full animate-pulse opacity-60"></div>
+                  {/* Simple Text */}
+                  <div>
+                    <h3 className="text-2xl font-bold text-gray-900 mb-2">
+                      AI + Hukum Indonesia
+                    </h3>
+                    <p className="text-gray-600">
+                      Teknologi modern untuk akses hukum yang lebih baik
+                    </p>
                   </div>
 
-                  {/* Mission Statement */}
-                  <h3 className="text-xl font-bold text-gray-900 mb-3 animate-slide-in-up">
-                    Kolaborasi AI & Manusia untuk Keadilan
-                  </h3>
-                  <p className="text-gray-600 leading-relaxed animate-slide-in-bottom">
-                    Bersama-sama kita satukan kepingan keadilan hukum Indonesia
-                    dengan kecerdasan buatan yang empati dan akurat.
-                  </p>
+                  {/* Stats - Startup Style */}
+                  <div className="grid grid-cols-3 gap-4 pt-4">
+                    <div className="text-center">
+                      <div className="text-2xl font-bold text-orange-600">24/7</div>
+                      <div className="text-xs text-gray-500">Tersedia</div>
+                    </div>
+                    <div className="text-center">
+                      <div className="text-2xl font-bold text-orange-600">&lt;30s</div>
+                      <div className="text-xs text-gray-500">Respons</div>
+                    </div>
+                    <div className="text-center">
+                      <div className="text-2xl font-bold text-orange-600">100%</div>
+                      <div className="text-xs text-gray-500">Gratis</div>
+                    </div>
+                  </div>
                 </div>
               </div>
             </div>
           </div>
         </div>
 
-        {/* Bottom Stats or Call to Action - Optional */}
-        <div className="mt-20 text-center animate-fade-in-up">
-          <div className="inline-flex items-center gap-4 text-sm text-gray-600">
-            <div className="flex items-center gap-2">
-              <div className="w-2 h-2 bg-green-500 rounded-full animate-pulse"></div>
-              <span>100% Gratis Mulai</span>
+        {/* Bottom Stats - Clean */}
+        <div className="mt-16 text-center animate-fade-in-up">
+          <p className="text-sm text-gray-500 mb-4">Dipercaya oleh pengguna di Indonesia</p>
+          <div className="flex justify-center items-center gap-8 flex-wrap">
+            <div className="text-center">
+              <div className="text-2xl font-bold text-gray-900">1,000+</div>
+              <div className="text-sm text-gray-500">Pengguna</div>
             </div>
-            <div className="flex items-center gap-2">
-              <div className="w-2 h-2 bg-orange-500 rounded-full animate-pulse"></div>
-              <span>Akurat & Terpercaya</span>
+            <div className="w-px h-8 bg-gray-300"></div>
+            <div className="text-center">
+              <div className="text-2xl font-bold text-gray-900">50+</div>
+              <div className="text-sm text-gray-500">Fitur AI</div>
             </div>
-            <div className="flex items-center gap-2">
-              <div className="w-2 h-2 bg-blue-500 rounded-full animate-pulse"></div>
-              <span>Akses 24/7</span>
+            <div className="w-px h-8 bg-gray-300"></div>
+            <div className="text-center">
+              <div className="text-2xl font-bold text-gray-900">24/7</div>
+              <div className="text-sm text-gray-500">Support</div>
             </div>
           </div>
         </div>

@@ -3,8 +3,8 @@
 import { motion } from 'framer-motion'
 import { Card, CardContent, CardHeader } from '@/components/ui/card'
 import { Button } from '@/components/ui/button'
-import { EnhancedNavigation } from '@/components/enhanced-navigation'
 import Link from 'next/link'
+import { EnhancedFooter } from '@/components/enhanced-footer'
 import {
   Target,
   Users,
@@ -22,84 +22,72 @@ import {
 } from 'lucide-react'
 
 export default function AboutPage() {
-  const [isAuthenticated, setUserRole] = useState(false)
-  const [userRole, setUserRoleState] = useState<'public' | 'legal_professional' | 'admin'>('public')
-
-  const handleLogin = () => window.location.href = '/login'
-  const handleChatClick = () => window.location.href = '/chat'
 
   const stats = [
-    { label: 'AI Capabilities', value: '96+', icon: Brain, color: 'from-purple-500 to-pink-500' },
-    { label: 'Accuracy Rate', value: '94.1%', icon: Target, color: 'from-blue-500 to-cyan-500' },
-    { label: 'Response Speed', value: '<200ms', icon: Zap, color: 'from-orange-500 to-red-500' },
-    { label: 'Active Users', value: '50K+', icon: Users, color: 'from-green-500 to-emerald-500' }
+    { label: 'Fitur AI', value: '50+', icon: Brain, color: 'from-purple-500 to-pink-500' },
+    { label: 'Waktu Respons', value: '<30 detik', icon: Zap, color: 'from-orange-500 to-red-500' },
+    { label: 'Pengguna Terlayani', value: '1000+', icon: Users, color: 'from-green-500 to-emerald-500' },
+    { label: 'Database Hukum', value: 'Lengkap', icon: Target, color: 'from-blue-500 to-cyan-500' }
   ]
 
   const teamMembers = [
     {
-      name: 'Ahmad Syarifuddin Yahya',
-      role: 'Founder & CEO',
-      description: 'Visioner di balik transformasi hukum dengan teknologi AI di Indonesia.',
+      name: 'Tim Developer',
+      role: 'Development Team',
+      description: 'Tim pengembang yang berdedikasi membangun platform AI untuk akses hukum yang lebih baik.',
+      image: '👥',
+      expertise: 'Full-Stack Development & AI'
+    },
+    {
+      name: 'Tim Legal',
+      role: 'Legal Advisory',
+      description: 'Ahli hukum yang memastikan akurasi informasi dan kepatuhan regulasi.',
       image: '⚖️',
-      expertise: 'AI Strategy & Legal Technology'
+      expertise: 'Legal Compliance & Research'
     },
     {
-      name: 'Dr. Sarah Andini',
-      role: 'Chief Technology Officer',
-      description: 'Ahli machine learning dengan pengalaman 15+ tahun di industri teknologi.',
-      image: '🧠',
-      expertise: 'AI/ML & Systems Architecture'
+      name: 'Tim AI',
+      role: 'AI Engineering',
+      description: 'Spesialis AI dan machine learning yang mengoptimalkan sistem.',
+      image: '🤖',
+      expertise: 'AI/ML Engineering'
     },
     {
-      name: 'Prof. Hendrawan Yudhistira',
-      role: 'Chief Legal Officer',
-      description: 'Professor hukum dengan fokus pada fintech dan teknologi hukum modern.',
-      image: '📚',
-      expertise: 'Legal Technology & Compliance'
-    },
-    {
-      name: 'Maya Sari Putri',
-      role: 'VP of Operations',
-      description: 'Specialis dalam operasi skala besar dan pengalaman pengguna.',
-      image: '🌟',
-      expertise: 'Operations & User Experience'
+      name: 'Tim Support',
+      role: 'Customer Success',
+      description: 'Tim dukungan yang siap membantu pengguna 24/7.',
+      image: '💬',
+      expertise: 'User Support & Success'
     }
   ]
 
   const milestones = [
     {
-      year: '2023',
-      month: 'Jan',
-      title: 'Pendiri Pasalku.ai',
-      description: 'Ide awal tercipta di tengah kompleksitas sistem hukum Indonesia yang membutuhkan solusi modern.',
+      year: '2024',
+      month: 'Q1',
+      title: 'Inisiasi Proyek',
+      description: 'Memulai pengembangan platform konsultasi hukum berbasis AI untuk Indonesia.',
       icon: Rocket
     },
     {
-      year: '2023',
-      month: 'Mar',
-      title: 'Pengembangan Core AI System',
-      description: 'Penggabungan dua AI terdepan dunia pertama di Indonesia untuk dunia hukum.',
+      year: '2024',
+      month: 'Q2',
+      title: 'Pengembangan Core System',
+      description: 'Membangun sistem AI dan database hukum Indonesia yang komprehensif.',
       icon: Brain
     },
     {
-      year: '2023',
-      month: 'Jun',
-      title: 'Beta Launch & User Testing',
-      description: 'Rilis versi awal dengan fitur-fitur inti, menerima feedback dari 500+ pengguna.',
+      year: '2024',
+      month: 'Q3',
+      title: 'Beta Testing',
+      description: 'Peluncuran versi beta untuk testing dan mendapatkan feedback pengguna.',
       icon: Users
     },
     {
-      year: '2023',
-      month: 'Sep',
-      title: 'Pemenang WTech Competition',
-      description: 'Diakui sebagai solusi teknologi hukum paling inovatif di ajang kompetisi tech nasional.',
-      icon: Trophy
-    },
-    {
-      year: '2023',
-      month: 'Dec',
-      title: 'Full Platform Launch',
-      description: 'Peluncuran platform lengkap dengan 96+ fitur AI, siap melayani jutaan pengguna.',
+      year: '2024',
+      month: 'Q4',
+      title: 'Platform Launch',
+      description: 'Peluncuran platform lengkap dengan fitur-fitur AI untuk akses hukum masyarakat.',
       icon: Globe
     }
   ]
@@ -108,35 +96,52 @@ export default function AboutPage() {
     {
       icon: Shield,
       title: 'Keamanan & Privasi',
-      description: 'Kami menjaga data pengguna dengan tingkat keamanan enterprise-grade menggunakan teknologi enkripsi terkini.'
+      description: 'Kami menjaga data pengguna dengan sistem keamanan yang handal dan enkripsi yang kuat.'
     },
     {
       icon: Heart,
-      title: 'Empati & Inklusivitas',
-      description: 'Seluruh solusi kami dibangun dengan empati, untuk membantu semua orang memahami dan mengakses hukum.'
+      title: 'Akses untuk Semua',
+      description: 'Memberikan akses informasi hukum yang mudah dipahami untuk seluruh masyarakat Indonesia.'
     },
     {
       icon: Brain,
-      title: 'Inovasi Berkelanjutan',
-      description: 'Kami terus berinovasi untuk memberikan solusi hukum yang semakin cerdas dan akurat setiap hari.'
+      title: 'Teknologi Terdepan',
+      description: 'Menggunakan teknologi AI terkini untuk memberikan jawaban yang cepat dan akurat.'
     },
     {
       icon: Award,
-      title: 'Kualitas Terdepan',
-      description: 'Dengan akurasi 94.1%, kami menjunjung tinggi standar ketepatan dan kehandalan jawaban hukum.'
+      title: 'Kualitas Terpercaya',
+      description: 'Berkomitmen memberikan informasi hukum yang akurat dengan referensi yang jelas.'
     }
   ]
 
   return (
     <div className="min-h-screen bg-gradient-to-br from-blue-50 via-white to-purple-50">
-      <EnhancedNavigation
-        isAuthenticated={isAuthenticated}
-        userRole={userRole}
-        onLogin={handleLogin}
-        onChatClick={handleChatClick}
-      />
+      <nav className="fixed top-0 left-0 right-0 bg-white/80 backdrop-blur-lg border-b border-gray-200 z-50">
+        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+          <div className="flex items-center justify-between h-16">
+            <Link href="/" className="flex items-center gap-2">
+              <span className="text-xl font-bold text-primary">Pasalku.ai</span>
+            </Link>
+            <div className="flex items-center gap-4">
+              <Link href="/features">
+                <Button variant="ghost">Fitur</Button>
+              </Link>
+              <Link href="/pricing">
+                <Button variant="ghost">Pricing</Button>
+              </Link>
+              <Link href="/faq">
+                <Button variant="ghost">FAQ</Button>
+              </Link>
+              <Link href="/chat">
+                <Button>Mulai Konsultasi</Button>
+              </Link>
+            </div>
+          </div>
+        </div>
+      </nav>
 
-      <div className="pt-20 pb-12">
+  <div className="pt-28 pb-12">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
           {/* Hero Section */}
           <motion.div
@@ -406,64 +411,7 @@ export default function AboutPage() {
       </div>
 
       {/* Footer */}
-      <footer className="bg-gradient-to-r from-gray-900 via-blue-900 to-purple-900 text-white py-12">
-        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-          <div className="grid grid-cols-1 md:grid-cols-4 gap-8">
-            <div>
-              <div className="flex items-center gap-2 mb-4">
-                <div className="w-10 h-10 bg-white rounded-lg flex items-center justify-center">
-                  <span className="text-2xl">⚖️</span>
-                </div>
-                <span className="text-xl font-bold">Pasalku.ai</span>
-              </div>
-              <p className="text-gray-300 mb-4">
-                Revolusi hukum digital untuk semua warga Indonesia.
-              </p>
-              <p className="text-sm text-gray-400">
-                © 2024 Pasalku.ai. Membela hak Anda dengan teknologi AI.
-              </p>
-            </div>
-
-            <div>
-              <h3 className="text-lg font-semibold mb-4">Produk</h3>
-              <ul className="space-y-2 text-gray-300">
-                <li><a href="/" className="hover:text-white transition-colors">Konsultasi AI</a></li>
-                <li><a href="/features" className="hover:text-white transition-colors">Semua Fitur</a></li>
-                <li><a href="/pricing" className="hover:text-white transition-colors">Paket Harga</a></li>
-                <li><a href="/about" className="hover:text-white transition-colors">Tentang Kami</a></li>
-              </ul>
-            </div>
-
-            <div>
-              <h3 className="text-lg font-semibold mb-4">Dukungan</h3>
-              <ul className="space-y-2 text-gray-300">
-                <li><a href="/faq" className="hover:text-white transition-colors">FAQ</a></li>
-                <li><a href="/contact" className="hover:text-white transition-colors">Kontak Kami</a></li>
-                <li><a href="/blog" className="hover:text-white transition-colors">Blog & Artikel</a></li>
-                <li><a href="/privacy-policy" className="hover:text-white transition-colors">Kebijakan Privasi</a></li>
-              </ul>
-            </div>
-
-            <div>
-              <h3 className="text-lg font-semibold mb-4">Media Sosial</h3>
-              <div className="space-y-3 text-gray-300">
-                <p>Ikuti perkembangan terbaru teknologi hukum Indonesia.</p>
-                <div className="flex gap-4">
-                  <a href="#" className="w-10 h-10 bg-white/10 rounded-full flex items-center justify-center hover:bg-white/20 transition-colors">
-                    🌐
-                  </a>
-                  <a href="#" className="w-10 h-10 bg-white/10 rounded-full flex items-center justify-center hover:bg-white/20 transition-colors">
-                    🐦
-                  </a>
-                  <a href="#" className="w-10 h-10 bg-white/10 rounded-full flex items-center justify-center hover:bg-white/20 transition-colors">
-                    📘
-                  </a>
-                </div>
-              </div>
-            </div>
-          </div>
-        </div>
-      </footer>
+      <EnhancedFooter />
     </div>
   )
 }

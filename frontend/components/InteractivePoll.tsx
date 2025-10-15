@@ -9,8 +9,10 @@ import {
   Star, MessageCircle, Share2, RefreshCw
 } from 'lucide-react'
 
+type ColorType = 'purple' | 'blue' | 'green' | 'orange';
+
 // Animated progress bar component
-const AnimatedProgressBar = ({ percentage, color = 'purple' }) => {
+const AnimatedProgressBar = ({ percentage, color = 'purple' }: { percentage: number; color?: ColorType }) => {
   const [width, setWidth] = useState(0)
 
   useEffect(() => {
@@ -18,7 +20,7 @@ const AnimatedProgressBar = ({ percentage, color = 'purple' }) => {
     return () => clearTimeout(timer)
   }, [percentage])
 
-  const colors = {
+  const colors: Record<ColorType, string> = {
     purple: 'bg-gradient-to-r from-purple-500 to-pink-500',
     blue: 'bg-gradient-to-r from-blue-500 to-cyan-500',
     green: 'bg-gradient-to-r from-green-500 to-emerald-500',
@@ -37,8 +39,15 @@ const AnimatedProgressBar = ({ percentage, color = 'purple' }) => {
   )
 }
 
+interface VoteButtonProps {
+  option: { id: string; text: string; votes?: number };
+  isSelected: boolean;
+  onClick: (id: string) => void;
+  voteCount: number;
+}
+
 // Vote button component
-const VoteButton = ({ option, isSelected, onClick, voteCount }) => {
+const VoteButton = ({ option, isSelected, onClick, voteCount }: VoteButtonProps) => {
   return (
     <motion.button
       whileHover={{ scale: 1.02 }}
@@ -80,7 +89,7 @@ const VoteButton = ({ option, isSelected, onClick, voteCount }) => {
 
       {/* Progress bar */}
       <div className="mt-3">
-        <AnimatedProgressBar percentage={isSelected ? 100 : (option.votes / Math.max(option.votes, 1)) * 100} />
+        <AnimatedProgressBar percentage={isSelected ? 100 : ((option.votes || 0) / Math.max(option.votes || 1, 1)) * 100} />
       </div>
     </motion.button>
   )

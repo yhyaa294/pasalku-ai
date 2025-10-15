@@ -11,79 +11,82 @@ export const FeaturesSection: FC<FeaturesSectionProps> = ({ className = '' }) =>
       icon: Brain,
       title: 'Konsultasi Hukum Instan',
       description:
-        'Jawaban cepat dan akurat didukung AI (BytePlus Ark) dengan pemahaman konteks hukum Indonesia.',
-      features: ['4 persona AI', 'Citation extraction (Pasal/UU)', 'Confidence score'],
+        'Dapatkan jawaban hukum cepat dan akurat menggunakan teknologi AI dengan pemahaman konteks hukum Indonesia.',
+      features: ['Respons cepat 24/7', 'Referensi Pasal & UU', 'Berbahasa Indonesia'],
     },
     {
       icon: FileText,
       title: 'Analisis Dokumen Cerdas',
       description:
-        'Unggah dokumen untuk dianalisis (kontrak, surat, bukti). Ekstraksi poin penting dan isu hukum.',
-      features: ['Dukungan PDF/DOCX/Gambar', 'OCR & NER', 'Ringkasan & rekomendasi'],
+        'Upload dokumen hukum Anda (kontrak, surat, bukti) untuk dianalisis. Dapatkan ringkasan dan rekomendasi.',
+      features: ['Format PDF/DOCX/Gambar', 'Ekstraksi poin penting', 'Saran tindak lanjut'],
     },
     {
       icon: Database,
-      title: 'Basis Pengetahuan Hukum',
+      title: 'Database Hukum Lengkap',
       description:
-        'Knowledge Graph (EdgeDB) berisi peraturan, pasal, yurisprudensi, dan terminologi hukum.',
-      features: ['KUHP & regulasi', 'Preseden pengadilan', 'Terminologi hukum'],
+        'Akses database peraturan perundang-undangan, pasal-pasal, dan terminologi hukum Indonesia yang terupdate.',
+      features: ['KUHP & regulasi terbaru', 'Yurisprudensi', 'Istilah hukum Indonesia'],
     },
     {
       icon: Users,
-      title: 'Verifikasi Profesional Hukum',
+      title: 'Verifikasi Profesional',
       description:
-        'Upgrade akun untuk lencana profesional dan akses fitur premium dengan proses verifikasi aman.',
-      features: ['Upload dokumen', 'Review admin', 'Badge terverifikasi'],
+        'Program verifikasi untuk profesional hukum dengan proses yang aman dan akses fitur premium.',
+      features: ['Proses verifikasi mudah', 'Badge terverifikasi', 'Fitur profesional'],
     },
     {
       icon: Shield,
-      title: 'Keamanan Data Terjamin',
+      title: 'Keamanan Terjamin',
       description:
-        'Keamanan tingkat enterprise: enkripsi, PIN-protected sessions, dan audit logging menyeluruh.',
-      features: ['TLS/HTTPS', 'Audit trail', 'RBAC & PIN'],
+        'Data Anda dilindungi dengan enkripsi tingkat tinggi dan sistem keamanan yang terus diperbarui.',
+      features: ['Enkripsi HTTPS/TLS', 'Keamanan data pengguna', 'Privasi terjaga'],
     },
     {
       icon: Globe,
-      title: 'Dukungan Multi-Bahasa',
+      title: 'Mudah Diakses',
       description:
-        'Antarmuka dan jawaban AI siap mendukung Bahasa Indonesia; ekspansi multi-bahasa ke depan.',
-      features: ['Bahasa Indonesia', 'Terminologi hukum lokal', 'Rencana multi-bahasa'],
+        'Interface berbahasa Indonesia yang mudah dipahami, dapat diakses kapan saja dari mana saja.',
+      features: ['Bahasa Indonesia', 'Akses 24/7', 'Mobile & Desktop friendly'],
     },
   ]
 
   return (
-    <section id="features" className={`py-16 md:py-32 px-4 scroll-animate bg-gradient-to-b from-slate-100 via-gray-50 to-slate-200 ${className}`}>
+    <section id="features" className={`py-20 md:py-32 px-4 scroll-animate bg-gray-50 ${className}`}>
       <div className="max-w-7xl mx-auto">
-        <div className="text-center mb-12 md:mb-20">
-          <h2 className="text-4xl md:text-6xl font-black mb-6 md:mb-8 animate-text-shimmer">
-            Kekuatan <span className="text-primary">Pasalku.ai</span> di Tangan Anda
+        <div className="text-center mb-16 md:mb-20">
+          <div className="inline-flex items-center gap-2 px-4 py-2 rounded-full bg-orange-100 text-orange-600 text-sm font-semibold mb-6">
+            <span>✨</span> Fitur Unggulan
+          </div>
+          <h2 className="text-4xl md:text-5xl font-extrabold mb-6 text-gray-900">
+            Semua yang Anda Butuhkan
           </h2>
-          <p className="text-lg md:text-2xl text-muted-foreground max-w-4xl mx-auto leading-relaxed animate-slide-in-bottom">
-            Sorotan kemampuan inti yang membuat pengalaman konsultasi hukum Anda cepat, akurat, dan aman.
+          <p className="text-xl text-gray-600 max-w-3xl mx-auto">
+            Fitur-fitur unggulan yang membantu Anda memahami dan mengakses informasi hukum dengan mudah.
           </p>
         </div>
 
-        <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-6 md:gap-8">
+        <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-8">
           {features.map((feature, index) => (
             <div
               key={index}
-              className="glass-card rounded-2xl md:rounded-3xl p-6 md:p-8 border border-border hover:shadow-xl transition-all duration-300 group hover-lift scroll-animate-scale"
+              className="group bg-white rounded-2xl p-8 border border-gray-200 hover:border-orange-300 hover:shadow-xl transition-all duration-300 scroll-animate-scale"
               style={{ animationDelay: `${index * 0.1}s` }}
             >
-              <div className="w-12 h-12 md:w-16 md:h-16 wood-texture rounded-xl md:rounded-2xl flex items-center justify-center mb-4 md:mb-6 group-hover:scale-110 transition-transform duration-300 legal-shadow animate-cyber-pulse">
-                <feature.icon className="w-6 h-6 md:w-8 md:h-8 text-white" />
+              <div className="w-14 h-14 bg-gradient-to-br from-orange-500 to-orange-600 rounded-xl flex items-center justify-center mb-6 group-hover:scale-110 transition-transform duration-300 shadow-lg shadow-orange-500/30">
+                <feature.icon className="w-7 h-7 text-white" />
               </div>
-              <h3 className="text-xl md:text-2xl font-bold mb-3 md:mb-4 text-primary animate-text-shimmer">
+              <h3 className="text-xl font-bold mb-3 text-gray-900">
                 {feature.title}
               </h3>
-              <p className="text-sm md:text-base text-muted-foreground mb-4 md:mb-6 leading-relaxed">
+              <p className="text-gray-600 mb-6 leading-relaxed">
                 {feature.description}
               </p>
               <div className="space-y-2">
                 {feature.features.map((item, idx) => (
-                  <div key={idx} className="flex items-center gap-2 text-xs md:text-sm">
-                    <CheckCircle className="w-3 h-3 md:w-4 md:h-4 text-primary animate-cyber-pulse" />
-                    <span className="text-muted-foreground">{item}</span>
+                  <div key={idx} className="flex items-center gap-2 text-sm">
+                    <CheckCircle className="w-4 h-4 text-orange-500 flex-shrink-0" />
+                    <span className="text-gray-600">{item}</span>
                   </div>
                 ))}
               </div>

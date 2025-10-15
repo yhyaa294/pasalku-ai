@@ -1,0 +1,6 @@
+"""
+EdgeDB Configuration for Pasalku.ai Knowledge Graph
+"""
+
+[edgedb]
+schema-dir = "dbschema"

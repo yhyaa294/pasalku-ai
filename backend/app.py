@@ -95,6 +95,9 @@ from .routers.startup_accelerator import router as startup_router
 from .routers.international_bridge import router as international_router
 from .routers.document_review import router as document_review_router
 from .routers.knowledge_graph import router as knowledge_graph_router
+from .routers.ai_consensus import router as ai_consensus_router
+from .routers.knowledge_graph_search import router as kg_search_router
+from .routers.legal_flow import router as legal_flow_router
 
 app.include_router(auth_router, prefix="/api/auth", tags=["Authentication"])
 app.include_router(users_router, prefix="/api/users", tags=["Users"])
@@ -116,6 +119,8 @@ app.include_router(reasoning_chain_router, tags=["Reasoning Chain Analyzer"])
 app.include_router(sentiment_analysis_router, tags=["Sentiment Analysis"])
 app.include_router(research_router, tags=["Research Assistant"])
 app.include_router(ethics_router, tags=["Ethics & Compliance"])
+app.include_router(legal_flow_router, tags=["Legal Flow 4-Step"])
+app.include_router(kg_search_router, tags=["Knowledge Graph Search"])
 app.include_router(virtual_court_router, tags=["Virtual Court Simulation"])
 app.include_router(legal_prediction_router, tags=["Legal Prediction Engine"])
 app.include_router(multi_party_router, tags=["Multi-Party Negotiation"])
@@ -124,6 +129,8 @@ app.include_router(voice_router, tags=["AI Voice Assistant"])
 app.include_router(startup_router, tags=["Startup Accelerator"])
 app.include_router(international_router, tags=["International Legal Bridge"])
 app.include_router(document_review_router, tags=["Document Review"])
+app.include_router(ai_consensus_router, tags=["AI Consensus"])
+app.include_router(kg_search_router, tags=["Knowledge Graph Search"])
 
 # Health check endpoint
 @app.get("/health")

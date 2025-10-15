@@ -12,51 +12,51 @@ export const HowItWorksSection: FC<HowItWorksSectionProps> = ({ className = '' }
   const steps = [
     {
       step: "01",
-      title: "Uraikan Perkara Anda.",
+      title: "Ceritakan Masalah Anda",
       description:
-        "Sampaikan permasalahan hukum Anda dalam bahasa sehari-hari. Kecerdasan artifisial kami siap menyimak setiap detailnya.",
+        "Sampaikan pertanyaan atau masalah hukum Anda dengan bahasa sehari-hari. AI kami akan memahami konteksnya.",
       illustration: (
         <div className="w-full h-full flex items-center justify-center">
           <div className="text-6xl animate-bounce">💭➡️💬</div>
         </div>
       ),
-      alt: "Ilustrasi individu dengan pikiran kusut berubah menjadi gelembung bicara jernih"
+      alt: "Ilustrasi seseorang menyampaikan pertanyaan"
     },
     {
       step: "02",
-      title: "Jawab Klarifikasi Artifisial.",
+      title: "AI Menganalisis",
       description:
-        "AI akan mengajukan pertanyaan-pertanyaan krusial untuk menggali konteks, layaknya dialog dengan konsultan hukum.",
+        "Sistem AI kami akan menganalisis pertanyaan Anda dan mencari informasi hukum yang relevan dari database kami.",
       illustration: (
         <div className="w-full h-full flex items-center justify-center">
-          <div className="text-6xl animate-pulse">💬🤖</div>
+          <div className="text-6xl animate-pulse">🤖🔍</div>
         </div>
       ),
-      alt: "Dua gelembung chat modern - manusia dan AI berinteraksi"
+      alt: "AI menganalisis pertanyaan"
     },
     {
       step: "03",
-      title: "Unggah Bukti Pendukung.",
+      title: "Upload Dokumen (Opsional)",
       description:
-        "Sertakan dokumen, foto, atau bukti lain yang relevan secara aman untuk analisis yang lebih komprehensif.",
+        "Jika diperlukan, Anda bisa mengupload dokumen pendukung untuk analisis yang lebih detail dan akurat.",
       illustration: (
         <div className="w-full h-full flex items-center justify-center">
-          <div className="text-6xl animate-bounce">🔒📄</div>
+          <div className="text-6xl animate-bounce">📄⬆️</div>
         </div>
       ),
-      alt: "Ikon gembok besar dengan dokumen yang masuk ke kotak digital aman"
+      alt: "Upload dokumen pendukung"
     },
     {
       step: "04",
-      title: "Terima Analisis Berdasar Hukum.",
+      title: "Dapatkan Jawaban",
       description:
-        "Dapatkan ringkasan masalah, opsi penyelesaian, dan rujukan hukum relevan, disajikan dalam bahasa yang mudah dipahami.",
+        "Terima jawaban yang mudah dipahami dengan referensi pasal dan undang-undang yang relevan untuk kasus Anda.",
       illustration: (
         <div className="w-full h-full flex items-center justify-center">
-          <div className="text-6xl animate-pulse">📱⚖️</div>
+          <div className="text-6xl animate-pulse">✅📋</div>
         </div>
       ),
-      alt: "Tangan memegang tablet dengan informasi terstruktur dan sitasi hukum"
+      alt: "Menerima jawaban yang jelas"
     },
   ]
 
@@ -91,13 +91,13 @@ export const HowItWorksSection: FC<HowItWorksSectionProps> = ({ className = '' }
       <div className="max-w-6xl mx-auto">
         <div className="text-center mb-12 md:mb-20">
           <h2 className="text-4xl md:text-6xl font-black mb-6 md:mb-8 bg-gradient-to-r from-gray-900 to-gray-700 bg-clip-text text-transparent">
-            Bagaimana Pasalku.ai{' '}
+            Cara Kerja{' '}
             <span className="bg-gradient-to-r from-orange-600 to-orange-500 bg-clip-text text-transparent">
-              Mendampingi Anda
+              Pasalku.ai
             </span>
           </h2>
           <p className="text-lg md:text-2xl text-gray-600 max-w-4xl mx-auto leading-relaxed">
-            Empat Langkah Mudah Menuju Kejelasan Hukum.
+            Empat langkah sederhana untuk mendapatkan bantuan hukum yang Anda butuhkan.
           </p>
         </div>
 

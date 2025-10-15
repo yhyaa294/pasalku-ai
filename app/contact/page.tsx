@@ -7,6 +7,7 @@ import { Button } from '@/components/ui/button'
 import { Input } from '@/components/ui/input'
 import { Textarea } from '@/components/ui/textarea'
 import { EnhancedNavigation } from '@/components/enhanced-navigation'
+import { EnhancedFooter } from '@/components/enhanced-footer'
 import {
   Phone,
   Mail,
@@ -422,65 +423,7 @@ export default function ContactPage() {
         </div>
       </div>
 
-      {/* Footer */}
-      <footer className="bg-gradient-to-r from-gray-900 via-blue-900 to-purple-900 text-white py-12">
-        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-          <div className="grid grid-cols-1 md:grid-cols-4 gap-8">
-            <div>
-              <div className="flex items-center gap-2 mb-4">
-                <div className="w-10 h-10 bg-white rounded-lg flex items-center justify-center">
-                  <span className="text-2xl">⚖️</span>
-                </div>
-                <span className="text-xl font-bold">Pasalku.ai</span>
-              </div>
-              <p className="text-gray-300 mb-4">
-                Solusi AI hukum paling canggih untuk masyarakat Indonesia.
-              </p>
-              <p className="text-sm text-gray-400">
-                © 2024 Pasalku.ai. All rights reserved.
-              </p>
-            </div>
-
-            <div>
-              <h3 className="text-lg font-semibold mb-4">Produk</h3>
-              <ul className="space-y-2 text-gray-300">
-                <li><a href="/" className="hover:text-white transition-colors">Konsultasi AI</a></li>
-                <li><a href="/features" className="hover:text-white transition-colors">Fitur Lengkap</a></li>
-                <li><a href="/pricing" className="hover:text-white transition-colors">Paket Harga</a></li>
-                <li><a href="/about" className="hover:text-white transition-colors">Tentang Kami</a></li>
-              </ul>
-            </div>
-
-            <div>
-              <h3 className="text-lg font-semibold mb-4">Dukungan</h3>
-              <ul className="space-y-2 text-gray-300">
-                <li><a href="/faq" className="hover:text-white transition-colors">FAQ</a></li>
-                <li><a href="/contact" className="hover:text-white transition-colors">Kontak Kami</a></li>
-                <li><a href="/blog" className="hover:text-white transition-colors">Blog & Artikel</a></li>
-                <li><a href="/privacy-policy" className="hover:text-white transition-colors">Privacy Policy</a></li>
-              </ul>
-            </div>
-
-            <div>
-              <h3 className="text-lg font-semibold mb-4">Hubungi Kami</h3>
-              <div className="space-y-3 text-gray-300">
-                <p className="flex items-center gap-2">
-                  <Mail className="w-4 h-4" />
-                  <span>support@pasalku.ai</span>
-                </p>
-                <p className="flex items-center gap-2">
-                  <Phone className="w-4 h-4" />
-                  <span>+62 21 1234 5678</span>
-                </p>
-                <p className="flex items-center gap-2">
-                  <MapPin className="w-4 h-4" />
-                  <span>Jakarta Selatan</span>
-                </p>
-              </div>
-            </div>
-          </div>
-        </div>
-      </footer>
+      <EnhancedFooter />
     </div>
   )
 }

@@ -3,6 +3,8 @@
 import { useState, useEffect } from 'react';
 import { useRouter } from 'next/navigation';
 import Link from 'next/link';
+import { Button } from '@/components/ui/button';
+import { EnhancedFooter } from '@/components/enhanced-footer';
 
 // Enhanced AI Feature Categories with Advanced Icons and Features
 const AI_FEATURE_CATEGORIES = [
@@ -198,59 +200,59 @@ const AI_FEATURE_CATEGORIES = [
 
 // Enhanced Quick Stats with Real-time Data
 const QUICK_STATS = [
-  { label: 'AI Features', value: '96+', icon: '🤖', change: '+12', trend: 'up' },
-  { label: 'Success Rate', value: '97%', icon: '🎯', change: '+2%', trend: 'up' },
-  { label: 'Response Time', value: '<200ms', icon: '⚡', change: '-15ms', trend: 'up' },
-  { label: 'Uptime', value: '99.9%', icon: '🛡️', change: 'stable', trend: 'stable' },
-  { label: 'Active Users', value: '1,247', icon: '👥', change: '+89', trend: 'up' },
-  { label: 'Documents Processed', value: '15.3K', icon: '📄', change: '+2.1K', trend: 'up' }
+  { label: 'Fitur AI Aktif', value: '96+', icon: '🤖', change: '+12', trend: 'up' },
+  { label: 'Tingkat Keberhasilan', value: '97%', icon: '🎯', change: '+2%', trend: 'up' },
+  { label: 'Waktu Respons', value: '<200ms', icon: '⚡', change: '-15ms', trend: 'up' },
+  { label: 'Ketersediaan Sistem', value: '99,9%', icon: '🛡️', change: 'stabil', trend: 'stable' },
+  { label: 'Pengguna Aktif', value: '1.247', icon: '👥', change: '+89', trend: 'up' },
+  { label: 'Dokumen Diproses', value: '15,3K', icon: '📄', change: '+2,1K', trend: 'up' }
 ];
 
 // Quick Actions for Immediate Access
 const QUICK_ACTIONS = [
   {
-    title: 'New Consultation',
-    description: 'Start AI-powered legal consultation',
+    title: 'Konsultasi Baru',
+    description: 'Mulai sesi konsultasi hukum dengan AI',
     icon: '💬',
     link: '/ai-chat',
     color: 'bg-blue-500 hover:bg-blue-600',
     priority: 'high'
   },
   {
-    title: 'Upload Document',
-    description: 'Analyze legal documents with AI',
+    title: 'Unggah Dokumen',
+    description: 'Analisis dokumen hukum secara instan',
     icon: '📤',
     link: '/documents/upload',
     color: 'bg-green-500 hover:bg-green-600',
     priority: 'high'
   },
   {
-    title: 'Generate Template',
-    description: 'Create professional legal documents',
+    title: 'Buat Template',
+    description: 'Generasi dokumen hukum profesional',
     icon: '📝',
     link: '/templates',
     color: 'bg-purple-500 hover:bg-purple-600',
     priority: 'medium'
   },
   {
-    title: 'Risk Assessment',
-    description: 'Calculate legal risks instantly',
+    title: 'Analisis Risiko',
+    description: 'Hitung risiko legal secara prediktif',
     icon: '⚠️',
     link: '/risk-calculator',
     color: 'bg-orange-500 hover:bg-orange-600',
     priority: 'medium'
   },
   {
-    title: 'Schedule Meeting',
-    description: 'Book AI consultation session',
+    title: 'Jadwalkan Sesi',
+    description: 'Booking pertemuan dengan konsultan AI',
     icon: '📅',
     link: '/scheduler',
     color: 'bg-indigo-500 hover:bg-indigo-600',
     priority: 'low'
   },
   {
-    title: 'Research Assistant',
-    description: 'Automated legal research',
+    title: 'Riset Hukum',
+    description: 'Temukan preseden dan insight hukum',
     icon: '🔍',
     link: '/research-assistant',
     color: 'bg-teal-500 hover:bg-teal-600',
@@ -297,48 +299,48 @@ export default function DashboardPage() {
     setRecentActivity([
       {
         type: 'consultation',
-        title: 'Contract Intelligence Analysis Completed',
-        time: '2 hours ago',
-        description: 'Dual AI analysis achieved 87% risk reduction optimization',
+        title: 'Analisis Kontrak Terselesaikan',
+        time: '2 jam lalu',
+        description: 'Dual AI mengoptimalkan pengurangan risiko kontrak hingga 87%',
         status: 'success',
         icon: '🎯',
-        metrics: '87% risk reduction'
+        metrics: '87% risiko berkurang'
       },
       {
         type: 'document',
-        title: 'Legal Document Generated',
-        time: '5 hours ago',
-        description: 'Created professional land sale agreement with sentiment optimization',
+        title: 'Dokumen Hukum Dibuat',
+        time: '5 jam lalu',
+        description: 'Perjanjian jual beli tanah selesai dengan optimasi sentimen komunikasi',
         status: 'success',
         icon: '📝',
-        metrics: '94% sentiment score'
+        metrics: '94% skor sentimen'
       },
       {
         type: 'research',
-        title: 'Advanced Legal Research',
-        time: '1 day ago',
-        description: 'AI research found 23 relevant precedents with pattern analysis',
+        title: 'Riset Hukum Lanjutan',
+        time: '1 hari lalu',
+        description: 'AI menemukan 23 preseden relevan melalui analisis pola hukum nasional',
         status: 'success',
         icon: '🔍',
-        metrics: '23 precedents found'
+        metrics: '23 preseden ditemukan'
       },
       {
         type: 'negotiation',
-        title: 'Adaptive Persona Negotiation',
-        time: '2 days ago',
-        description: 'AI successfully adapted from Diplomatic to Strategic persona for optimal outcome',
+        title: 'Negosiasi Persona Adaptif',
+        time: '2 hari lalu',
+        description: 'AI berhasil beralih dari persona Diplomatis ke Strategis untuk hasil optimal',
         status: 'success',
         icon: '🎭',
-        metrics: '92% success rate'
+        metrics: '92% tingkat keberhasilan'
       },
       {
         type: 'system',
-        title: 'AI Model Updated',
-        time: '3 days ago',
-        description: 'Enhanced reasoning capabilities with new legal knowledge base',
+        title: 'Model AI Diperbarui',
+        time: '3 hari lalu',
+        description: 'Kemampuan reasoning ditingkatkan dengan basis pengetahuan hukum terbaru',
         status: 'info',
         icon: '🔄',
-        metrics: 'v2.1.4 deployed'
+        metrics: 'v2.1.4 dirilis'
       }
     ]);
   };
@@ -359,6 +361,25 @@ export default function DashboardPage() {
     }
   };
 
+  const getActivityStatusLabel = (status: string) => {
+    switch (status) {
+      case 'success': return 'Berhasil';
+      case 'warning': return 'Perlu Perhatian';
+      case 'error': return 'Gagal';
+      case 'info': return 'Informasi';
+      default: return 'Status';
+    }
+  };
+
+  const getPriorityLabel = (priority: string) => {
+    switch (priority) {
+      case 'high': return 'Tinggi';
+      case 'medium': return 'Sedang';
+      case 'low': return 'Rendah';
+      default: return 'Prioritas';
+    }
+  };
+
   const getTrendIcon = (trend: string) => {
     switch (trend) {
       case 'up': return '↗️';
@@ -376,8 +397,8 @@ export default function DashboardPage() {
             <div className="animate-spin rounded-full h-16 w-16 border-4 border-blue-200 border-t-blue-600 mx-auto"></div>
             <div className="absolute inset-0 rounded-full border-4 border-purple-200 border-t-purple-600 animate-spin mx-auto animate-reverse"></div>
           </div>
-          <p className="mt-6 text-xl font-semibold text-gray-700">Loading Supreme Legal AI Dashboard...</p>
-          <p className="mt-2 text-gray-500">Initializing advanced AI systems</p>
+          <p className="mt-6 text-xl font-semibold text-gray-700">Memuat Dasbor Intelijen Hukum...</p>
+          <p className="mt-2 text-gray-500">Menginisialisasi sistem AI lanjutan</p>
         </div>
       </div>
     );
@@ -392,26 +413,34 @@ export default function DashboardPage() {
       {/* Enhanced Header with Real-time Features */}
       <header className="bg-white/95 backdrop-blur-xl shadow-xl border-b border-gray-200/50 sticky top-0 z-50">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-          <div className="flex justify-between items-center h-20">
-            <div className="flex items-center space-x-6">
-              <div className="relative">
-                <div className="w-12 h-12 bg-gradient-to-r from-blue-600 via-purple-600 to-indigo-600 rounded-2xl flex items-center justify-center shadow-lg">
-                  <span className="text-white font-bold text-xl">⚖️</span>
+          <div className="flex flex-col gap-4 py-4 md:flex-row md:items-center md:justify-between md:py-0 md:h-20">
+            <div className="flex items-center gap-8">
+              <div className="flex items-center gap-4">
+                <div className="relative">
+                  <div className="w-12 h-12 bg-gradient-to-r from-blue-600 via-purple-600 to-indigo-600 rounded-2xl flex items-center justify-center shadow-lg">
+                    <span className="text-white font-bold text-xl">⚖️</span>
+                  </div>
+                  <div className="absolute -top-1 -right-1 w-4 h-4 bg-green-500 rounded-full border-2 border-white animate-pulse"></div>
                 </div>
-                <div className="absolute -top-1 -right-1 w-4 h-4 bg-green-500 rounded-full border-2 border-white animate-pulse"></div>
+                <div>
+                  <h1 className="text-2xl font-bold text-gray-900">Pasalku.ai</h1>
+                  <p className="text-sm text-gray-500 flex items-center">
+                    <span className="inline-block w-2 h-2 bg-green-500 rounded-full mr-2 animate-pulse"></span>
+                    Platform Intelijen Hukum Enterprise
+                  </p>
+                </div>
               </div>
-              <div>
-                <h1 className="text-2xl font-bold text-gray-900">Pasalku.ai</h1>
-                <p className="text-sm text-gray-500 flex items-center">
-                  <span className="inline-block w-2 h-2 bg-green-500 rounded-full mr-2 animate-pulse"></span>
-                  Enterprise Legal Intelligence Platform
-                </p>
-              </div>
+              <nav className="hidden md:flex items-center gap-6 text-sm font-medium text-gray-600">
+                <Link href="/features" className="hover:text-gray-900 transition-colors">Fitur</Link>
+                <Link href="/pricing" className="hover:text-gray-900 transition-colors">Pricing</Link>
+                <Link href="/faq" className="hover:text-gray-900 transition-colors">FAQ</Link>
+                <Link href="/about" className="hover:text-gray-900 transition-colors">Tentang</Link>
+              </nav>
             </div>
-            <div className="flex items-center space-x-6">
-              <div className="text-right hidden md:block">
+            <div className="flex items-center gap-4 md:gap-6">
+              <div className="hidden md:block text-right">
                 <p className="text-sm font-medium text-gray-900">{user.name}</p>
-                <p className="text-xs text-gray-500 flex items-center">
+                <p className="text-xs text-gray-500 flex items-center justify-end">
                   <span className="inline-block w-2 h-2 bg-blue-500 rounded-full mr-2"></span>
                   {user.role || 'Legal Professional'}
                 </p>
@@ -424,24 +453,27 @@ export default function DashboardPage() {
                   })}
                 </p>
               </div>
-              <div className="flex space-x-3">
-                <button className="p-2 text-gray-400 hover:text-gray-600 hover:bg-gray-100 rounded-lg transition-colors" aria-label="Notifications">
-                  <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M15 17h5l-5 5v-5zM4.868 12.683A17.925 17.925 0 0112 21c7.962 0 12-1.21 12-2.683m-12 2.683a17.925 17.925 0 01-7.132-8.317M12 21c4.411 0 8-4.03 8-9s-3.589-9-8-9-8 4.03-8 9a9.06 9.06 0 001.832 5.683L4 21l4.868-8.317z" />
-                  </svg>
-                </button>
-                <button className="p-2 text-gray-400 hover:text-gray-600 hover:bg-gray-100 rounded-lg transition-colors" aria-label="Settings">
-                  <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 3v1m0 16v1m9-9h-1M4 12H3m15.364 6.364l-.707-.707M6.343 6.343l-.707-.707m12.728 0l-.707.707M6.343 17.657l-.707.707M16 12a4 4 0 11-8 0 4 4 0 018 0z" />
-                  </svg>
-                </button>
-                <button
-                  onClick={handleLogout}
-                  className="px-4 py-2 text-sm text-red-600 hover:text-red-800 hover:bg-red-50 rounded-lg transition-colors border border-red-200"
-                >
-                  Logout
-                </button>
-              </div>
+              <Link href="/chat" className="hidden md:inline-flex">
+                <Button size="sm" className="shadow-sm">
+                  Mulai Konsultasi
+                </Button>
+              </Link>
+              <button className="p-2 text-gray-400 hover:text-gray-600 hover:bg-gray-100 rounded-lg transition-colors" aria-label="Notifikasi">
+                <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M15 17h5l-5 5v-5zM4.868 12.683A17.925 17.925 0 0112 21c7.962 0 12-1.21 12-2.683m-12 2.683a17.925 17.925 0 01-7.132-8.317M12 21c4.411 0 8-4.03 8-9s-3.589-9-8-9-8 4.03-8 9a9.06 9.06 0 001.832 5.683L4 21l4.868-8.317z" />
+                </svg>
+              </button>
+              <button className="p-2 text-gray-400 hover:text-gray-600 hover:bg-gray-100 rounded-lg transition-colors" aria-label="Pengaturan">
+                <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 3v1m0 16v1m9-9h-1M4 12H3m15.364 6.364l-.707-.707M6.343 6.343l-.707-.707m12.728 0l-.707.707M6.343 17.657l-.707.707M16 12a4 4 0 11-8 0 4 4 0 018 0z" />
+                </svg>
+              </button>
+              <button
+                onClick={handleLogout}
+                className="px-4 py-2 text-sm text-red-600 hover:text-red-800 hover:bg-red-50 rounded-lg transition-colors border border-red-200"
+              >
+                Keluar
+              </button>
             </div>
           </div>
         </div>
@@ -456,25 +488,25 @@ export default function DashboardPage() {
 
           <div className="relative flex flex-col lg:flex-row items-center justify-between">
             <div className="flex-1 mb-8 lg:mb-0">
-              <div className="flex items-center space-x-3 mb-4">
-                <div className="w-3 h-3 bg-green-400 rounded-full animate-pulse"></div>
-                <span className="text-sm font-medium text-blue-100">SYSTEM ONLINE</span>
+                <div className="flex items-center space-x-3 mb-4">
+                  <div className="w-3 h-3 bg-green-400 rounded-full animate-pulse"></div>
+                  <span className="text-sm font-medium text-blue-100">SISTEM AKTIF</span>
               </div>
               <h2 className="text-4xl lg:text-5xl font-bold mb-4 leading-tight">
-                🚀 SUPREME LEGAL AI PLATFORM
+                Dasbor Intelijen Hukum
                 <span className="block text-2xl lg:text-3xl font-semibold text-blue-200 mt-2">
-                  Ready for Maximum Performance
+                  Kinerja real-time untuk tim profesional Anda
                 </span>
               </h2>
               <p className="text-xl text-blue-100 mb-6 max-w-2xl">
-                Welcome back, {user.name}! Your advanced legal intelligence system is fully operational with 96+ AI features, 97% success rate, and real-time processing capabilities.
+                Selamat datang kembali, {user.name}. Ekosistem AI Pasalku.ai beroperasi optimal dengan 96+ kapabilitas, tingkat keberhasilan 97%, dan respons real-time di bawah 200ms.
               </p>
               <div className="flex flex-wrap gap-4">
                 <Link href="/ai-chat" className="bg-white/20 backdrop-blur-sm hover:bg-white/30 px-6 py-3 rounded-xl font-semibold transition-all duration-300 border border-white/30 hover:border-white/50">
-                  🚀 Start Consultation
+                  Mulai Konsultasi AI
                 </Link>
                 <Link href="/documents/upload" className="bg-white/10 backdrop-blur-sm hover:bg-white/20 px-6 py-3 rounded-xl font-semibold transition-all duration-300 border border-white/20 hover:border-white/40">
-                  📤 Upload Document
+                  Unggah Dokumen
                 </Link>
               </div>
             </div>
@@ -484,7 +516,7 @@ export default function DashboardPage() {
                   <span className="text-8xl animate-bounce">🤖</span>
                 </div>
                 <div className="absolute -top-4 -right-4 bg-green-500 text-white px-3 py-1 rounded-full text-sm font-bold animate-pulse">
-                  ONLINE
+                  AKTIF
                 </div>
               </div>
             </div>
@@ -515,11 +547,11 @@ export default function DashboardPage() {
         <div className="bg-white rounded-3xl p-8 shadow-xl border border-gray-100">
           <div className="flex items-center justify-between mb-6">
             <div>
-              <h3 className="text-2xl font-bold text-gray-900">⚡ Quick Actions</h3>
-              <p className="text-gray-600 mt-1">Access your most used features instantly</p>
+              <h3 className="text-2xl font-bold text-gray-900">⚡ Aksi Kilat</h3>
+              <p className="text-gray-600 mt-1">Akses fitur paling sering digunakan dalam satu klik</p>
             </div>
             <div className="text-sm text-gray-500 bg-gray-100 px-3 py-1 rounded-full">
-              Priority: High • Medium • Low
+              Prioritas: Tinggi • Sedang • Rendah
             </div>
           </div>
           <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
@@ -536,7 +568,7 @@ export default function DashboardPage() {
                     action.priority === 'medium' ? 'bg-yellow-500/20 text-yellow-100' :
                     'bg-gray-500/20 text-gray-100'
                   }`}>
-                    {action.priority}
+                    {getPriorityLabel(action.priority)}
                   </div>
                 </div>
                 <h4 className="font-bold text-lg mb-2">{action.title}</h4>
@@ -550,11 +582,11 @@ export default function DashboardPage() {
         <div className="bg-white rounded-3xl p-8 shadow-xl border border-gray-100">
           <div className="flex items-center justify-between mb-6">
             <div>
-              <h3 className="text-2xl font-bold text-gray-900">📊 Recent Activity</h3>
-              <p className="text-gray-600 mt-1">Your latest AI-powered legal activities</p>
+              <h3 className="text-2xl font-bold text-gray-900">📊 Aktivitas Terbaru</h3>
+              <p className="text-gray-600 mt-1">Ringkasan aksi hukum berbasis AI yang baru saja terjadi</p>
             </div>
             <Link href="/activity" className="text-blue-600 hover:text-blue-800 font-medium">
-              View All →
+              Lihat Semua →
             </Link>
           </div>
           <div className="space-y-4">
@@ -574,7 +606,7 @@ export default function DashboardPage() {
                   <div className="flex items-center justify-between">
                     <h4 className="text-lg font-semibold text-gray-900">{activity.title}</h4>
                     <div className={`text-xs px-2 py-1 rounded-full border ${getActivityStatusColor(activity.status)}`}>
-                      {activity.status}
+                      {getActivityStatusLabel(activity.status)}
                     </div>
                   </div>
                   <p className="text-gray-600 mt-1">{activity.description}</p>
@@ -591,9 +623,9 @@ export default function DashboardPage() {
         {/* AI Feature Modules Grid */}
         <div className="space-y-8">
           <div className="text-center">
-            <h3 className="text-3xl font-bold text-gray-900 mb-4">🧠 AI Feature Modules</h3>
+            <h3 className="text-3xl font-bold text-gray-900 mb-4">🧠 Modul Fitur AI</h3>
             <p className="text-gray-600 max-w-2xl mx-auto">
-              Explore our comprehensive suite of AI-powered legal intelligence tools, each designed for maximum performance and accuracy.
+              Jelajahi rangkaian lengkap alat intelijen hukum berbasis AI yang menghadirkan performa tinggi dan akurasi terukur.
             </p>
           </div>
 
@@ -650,36 +682,38 @@ export default function DashboardPage() {
           </div>
         </div>
 
-        {/* System Status Footer */}
+        {/* Status Sistem Footer */}
         <div className="bg-gradient-to-r from-gray-900 to-gray-800 rounded-3xl p-8 text-white">
           <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
             <div className="text-center">
               <div className="w-16 h-16 bg-green-500 rounded-2xl flex items-center justify-center mx-auto mb-4">
                 <span className="text-2xl">⚡</span>
               </div>
-              <h4 className="text-xl font-bold mb-2">System Status</h4>
-              <p className="text-gray-300">All AI systems operational</p>
-              <div className="mt-2 text-green-400 font-semibold">🟢 ONLINE</div>
+              <h4 className="text-xl font-bold mb-2">Status Sistem</h4>
+              <p className="text-gray-300">Seluruh modul AI beroperasi normal</p>
+              <div className="mt-2 text-green-400 font-semibold">🟢 AKTIF</div>
             </div>
             <div className="text-center">
               <div className="w-16 h-16 bg-blue-500 rounded-2xl flex items-center justify-center mx-auto mb-4">
                 <span className="text-2xl">🔒</span>
               </div>
-              <h4 className="text-xl font-bold mb-2">Security</h4>
-              <p className="text-gray-300">Enterprise-grade encryption</p>
-              <div className="mt-2 text-blue-400 font-semibold">🔐 SECURE</div>
+              <h4 className="text-xl font-bold mb-2">Keamanan</h4>
+              <p className="text-gray-300">Enkripsi setara enterprise</p>
+              <div className="mt-2 text-blue-400 font-semibold">🔐 TERLINDUNGI</div>
             </div>
             <div className="text-center">
               <div className="w-16 h-16 bg-purple-500 rounded-2xl flex items-center justify-center mx-auto mb-4">
                 <span className="text-2xl">🚀</span>
               </div>
-              <h4 className="text-xl font-bold mb-2">Performance</h4>
-              <p className="text-gray-300">Optimized for speed</p>
-              <div className="mt-2 text-purple-400 font-semibold">&lt;200ms RESPONSE</div>
+              <h4 className="text-xl font-bold mb-2">Performa</h4>
+              <p className="text-gray-300">Optimasi kecepatan respons</p>
+              <div className="mt-2 text-purple-400 font-semibold">&lt;200ms RESPON</div>
             </div>
           </div>
         </div>
       </div>
+
+      <EnhancedFooter />
     </div>
   );
 }

@@ -5,18 +5,11 @@ import { motion } from 'framer-motion'
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card'
 import { Button } from '@/components/ui/button'
 import { Badge } from '@/components/ui/badge'
-import { EnhancedNavigation } from '@/components/enhanced-navigation'
 import Link from 'next/link'
+import { EnhancedFooter } from '@/components/enhanced-footer'
 import {
   Check,
   X,
-  Star,
-  Users,
-  FileText,
-  MessageSquare,
-  Brain,
-  Shield,
-  Zap,
   Award,
   Phone,
   ArrowRight,
@@ -25,14 +18,9 @@ import {
 } from 'lucide-react'
 
 export default function PricingPage() {
-  const [isAuthenticated, setIsAuthenticated] = useState(false)
-  const [userRole, setUserRole] = useState<'public' | 'legal_professional' | 'admin'>('public')
   const [billingCycle, setBillingCycle] = useState<'monthly' | 'yearly'>('monthly')
   const [loadingPlan, setLoadingPlan] = useState<string | null>(null)
   const priceId = process.env.NEXT_PUBLIC_STRIPE_PRICE_ID
-
-  const handleLogin = () => window.location.href = '/login'
-  const handleChatClick = () => window.location.href = '/chat'
 
   const handlePlanClick = async (planName: string) => {
     try {
@@ -174,14 +162,28 @@ export default function PricingPage() {
 
   return (
     <div className="min-h-screen bg-gradient-to-br from-blue-50 via-white to-purple-50">
-      <EnhancedNavigation
-        isAuthenticated={isAuthenticated}
-        userRole={userRole}
-        onLogin={handleLogin}
-        onChatClick={handleChatClick}
-      />
+      <nav className="fixed top-0 left-0 right-0 bg-white/80 backdrop-blur-lg border-b border-gray-200 z-50">
+        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+          <div className="flex items-center justify-between h-16">
+            <Link href="/" className="flex items-center gap-2">
+              <span className="text-xl font-bold text-primary">Pasalku.ai</span>
+            </Link>
+            <div className="flex items-center gap-4">
+              <Link href="/features">
+                <Button variant="ghost">Fitur</Button>
+              </Link>
+              <Link href="/faq">
+                <Button variant="ghost">FAQ</Button>
+              </Link>
+              <Link href="/chat">
+                <Button>Mulai Konsultasi</Button>
+              </Link>
+            </div>
+          </div>
+        </div>
+      </nav>
 
-      <div className="pt-20 pb-12">
+      <div className="pt-28 pb-12">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
           {/* Hero Section */}
           <motion.div
@@ -205,6 +207,7 @@ export default function PricingPage() {
               </span>
               <button
                 onClick={() => setBillingCycle(billingCycle === 'monthly' ? 'yearly' : 'monthly')}
+                aria-label="Toggle billing cycle"
                 className={`relative w-16 h-8 rounded-full transition-colors ${billingCycle === 'yearly' ? 'bg-blue-500' : 'bg-gray-300'}`}
               >
                 <motion.div
@@ -424,57 +427,7 @@ export default function PricingPage() {
         </div>
       </div>
 
-      {/* Footer */}
-      <footer className="bg-gradient-to-r from-gray-900 via-blue-900 to-purple-900 text-white py-12">
-        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-          <div className="grid grid-cols-1 md:grid-cols-4 gap-8">
-            <div>
-              <div className="flex items-center gap-2 mb-4">
-                <div className="w-10 h-10 bg-white rounded-lg flex items-center justify-center">
-                  <span className="text-2xl">⚖️</span>
-                </div>
-                <span className="text-xl font-bold">Pasalku.ai</span>
-              </div>
-              <p className="text-gray-300 mb-4">
-                Platform AI hukum dengan paket harga yang kompetitif untuk semua pengguna.
-              </p>
-            </div>
-
-            <div>
-              <h3 className="text-lg font-semibold mb-4">Produk</h3>
-              <ul className="space-y-2 text-gray-300">
-                <li><a href="/" className="hover:text-white transition-colors">Beranda</a></li>
-                <li><a href="/features" className="hover:text-white transition-colors">Fitur Lengkap</a></li>
-                <li><a href="/pricing" className="hover:text-white transition-colors">Paket & Harga</a></li>
-                <li><a href="/about" className="hover:text-white transition-colors">Tentang Kami</a></li>
-              </ul>
-            </div>
-
-            <div>
-              <h3 className="text-lg font-semibold mb-4">Dukungan</h3>
-              <ul className="space-y-2 text-gray-300">
-                <li><a href="/faq" className="hover:text-white transition-colors">FAQ</a></li>
-                <li><a href="/contact" className="hover:text-white transition-colors">Kontak Kami</a></li>
-                <li><a href="/blog" className="hover:text-white transition-colors">Blog & Artikel</a></li>
-                <li><a href="/terms-of-service" className="hover:text-white transition-colors">Syarat & Ketentuan</a></li>
-              </ul>
-            </div>
-
-            <div>
-              <h3 className="text-lg font-semibold mb-4">Pembayaran</h3>
-              <div className="space-y-2 text-gray-300 text-sm">
-                <p>Menerima pembayaran melalui:</p>
-                <div className="flex flex-wrap gap-2">
-                  <span className="bg-white/10 px-2 py-1 rounded text-xs">Transfer Bank</span>
-                  <span className="bg-white/10 px-2 py-1 rounded text-xs">VA BCA</span>
-                  <span className="bg-white/10 px-2 py-1 rounded text-xs">VA Mandiri</span>
-                  <span className="bg-white/10 px-2 py-1 rounded text-xs">Qris</span>
-                </div>
-              </div>
-            </div>
-          </div>
-        </div>
-      </footer>
+      <EnhancedFooter />
     </div>
   )
 }

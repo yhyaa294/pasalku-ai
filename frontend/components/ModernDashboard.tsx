@@ -12,12 +12,12 @@ import { Badge } from '@/components/ui/badge'
 import { Button } from '@/components/ui/button'
 import {
   Brain, TrendingUp, Shield, FileText, Users, Clock,
-  ArrowUpRight, ArrowDownRight, Target, Zap, Award, Analytics,
-  Legal, Contract, Research, Debate
+  ArrowUpRight, ArrowDownRight, Target, Zap, Award, BarChart3,
+  Scale, File, Search, MessageSquare
 } from 'lucide-react'
 
 // Animated counter component
-const AnimatedCounter = ({ value, suffix = '', prefix = '' }) => {
+const AnimatedCounter = ({ value, suffix = '', prefix = '' }: { value: number; suffix?: string; prefix?: string }) => {
   const [count, setCount] = useState(0)
 
   useEffect(() => {
@@ -125,7 +125,7 @@ const metricsData = [
     title: 'CONTRACT OPTIMIZATION',
     value: '82.0%',
     change: 8.7,
-    icon: Contract,
+    icon: File,
     color: 'blue'
   },
   {
@@ -534,10 +534,10 @@ export default function ModernDashboard() {
           <CardContent>
             <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
               {[
-                { name: 'AI Debate System', value: '98% Consensus', icon: Debate, color: 'from-purple-500 to-pink-500' },
-                { name: 'Contract Intelligence', value: '87% Risk Reduction', icon: Contract, color: 'from-blue-500 to-cyan-500' },
-                { name: 'Research Assistant', value: '89% Precedent Match', icon: Research, color: 'from-green-500 to-emerald-500' },
-                { name: 'Cross-Validation', value: '94% Accuracy', icon: Legal, color: 'from-orange-500 to-red-500' }
+                { name: 'AI Debate System', value: '98% Consensus', icon: MessageSquare, color: 'from-purple-500 to-pink-500' },
+                { name: 'Contract Intelligence', value: '87% Risk Reduction', icon: File, color: 'from-blue-500 to-cyan-500' },
+                { name: 'Research Assistant', value: '89% Precedent Match', icon: Search, color: 'from-green-500 to-emerald-500' },
+                { name: 'Cross-Validation', value: '94% Accuracy', icon: Scale, color: 'from-orange-500 to-red-500' }
               ].map((feature, index) => (
                 <motion.div
                   key={feature.name}

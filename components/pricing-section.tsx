@@ -12,15 +12,15 @@ export const PricingSection: FC<PricingSectionProps> = ({ className = '' }) => {
   const router = useRouter()
   const plans = [
     {
-      name: 'Free',
+      name: 'Gratis',
       price: '0',
       period: '',
-      description: 'Cocok untuk individu dan penggunaan personal',
+      description: 'Untuk pengguna yang ingin mencoba fitur dasar',
       features: [
-        '10 AI queries per bulan',
-        'Konsultasi hukum dasar',
-        'Riwayat chat 30 hari',
-        'Akses knowledge base',
+        '5 konsultasi per bulan',
+        'Akses database hukum dasar',
+        'Riwayat chat 7 hari',
+        'Dukungan email',
       ],
       popular: false,
       color: 'from-gray-500 to-gray-600',
@@ -28,99 +28,112 @@ export const PricingSection: FC<PricingSectionProps> = ({ className = '' }) => {
     },
     {
       name: 'Premium',
-      price: '99000',
+      price: '49000',
       period: '/bulan',
-      description: 'Untuk pengguna aktif dan profesional',
+      description: 'Untuk akses penuh dan fitur premium',
       features: [
-        'Unlimited AI queries',
-        'Analisis dokumen',
-        'Dual-AI verification (opsional)',
-        'Priority support',
-        'Export chat history',
-        'PIN-protected sessions'
+        'Konsultasi unlimited',
+        'Analisis dokumen hukum',
+        'Riwayat chat unlimited',
+        'Referensi pasal lengkap',
+        'Priority support 24/7',
+        'Export hasil konsultasi'
       ],
       popular: true,
       color: 'from-purple-500 to-pink-500',
-      buttonText: 'Lihat Paket Lengkap'
+      buttonText: 'Upgrade ke Premium'
     },
   ]
 
   return (
-    <section id="pricing" className={`py-16 md:py-32 px-4 scroll-animate ${className}`}>
+    <section id="pricing" className={`py-20 md:py-32 px-4 scroll-animate bg-white ${className}`}>
       <div className="max-w-7xl mx-auto">
-        <div className="text-center mb-12 md:mb-20">
-          <h2 className="text-4xl md:text-6xl font-black mb-6 md:mb-8 animate-text-shimmer">
-            Pilih <span className="text-primary">Paket</span> Anda
+        <div className="text-center mb-16 md:mb-20">
+          <div className="inline-flex items-center gap-2 px-4 py-2 rounded-full bg-orange-100 text-orange-600 text-sm font-semibold mb-6">
+            <span>💰</span> Harga Transparan
+          </div>
+          <h2 className="text-4xl md:text-5xl font-extrabold mb-6 text-gray-900">
+            Pilih Paket yang <span className="text-orange-600">Tepat</span>
           </h2>
-          <p className="text-lg md:text-2xl text-muted-foreground max-w-4xl mx-auto leading-relaxed">
-            Mulai gratis atau upgrade ke Pro untuk akses penuh ke fitur AI terdepan
+          <p className="text-xl text-gray-600 max-w-3xl mx-auto">
+            Mulai gratis atau upgrade untuk fitur lebih lengkap dan konsultasi unlimited
           </p>
         </div>
 
-        <div className="grid md:grid-cols-2 gap-6 md:gap-8 max-w-4xl mx-auto">
+        <div className="grid md:grid-cols-2 gap-8 max-w-4xl mx-auto">
           {plans.map((plan, index) => (
             <div
               key={index}
-              className={`relative glass-card rounded-2xl md:rounded-3xl p-6 md:p-8 border transition-all duration-300 hover-lift scroll-animate-scale ${
-                plan.popular ? "border-primary shadow-xl scale-105" : "border-border hover:shadow-xl"
+              className={`relative bg-white rounded-3xl p-8 border-2 transition-all duration-300 scroll-animate-scale ${
+                plan.popular 
+                  ? "border-orange-500 shadow-2xl shadow-orange-500/20 scale-105" 
+                  : "border-gray-200 hover:border-gray-300 hover:shadow-lg"
               }`}
               style={{ animationDelay: `${index * 0.2}s` }}
             >
               {plan.popular && (
                 <div className="absolute -top-4 left-1/2 transform -translate-x-1/2">
-                  <div className="bg-gradient-to-r from-primary to-secondary px-4 py-2 rounded-full text-white text-sm font-bold animate-cyber-pulse">
-                    🔥 RECOMMENDED
+                  <div className="bg-gradient-to-r from-orange-500 to-orange-600 px-6 py-2 rounded-full text-white text-sm font-bold shadow-lg">
+                    ⭐ Paling Populer
                   </div>
                 </div>
               )}
 
-              <div
-                className={`w-16 h-16 md:w-20 md:h-20 bg-gradient-to-r ${plan.color} rounded-xl md:rounded-2xl flex items-center justify-center mb-4 md:mb-6 legal-shadow animate-hologram`}
-              >
-                <Award className="w-8 h-8 md:w-10 md:h-10 text-white" />
+              <div className="text-center mb-8">
+                <div className={`inline-flex items-center justify-center w-16 h-16 rounded-2xl mb-6 ${
+                  plan.popular 
+                    ? "bg-gradient-to-br from-orange-500 to-orange-600 shadow-lg shadow-orange-500/30" 
+                    : "bg-gray-100"
+                }`}>
+                  <Award className={`w-8 h-8 ${plan.popular ? "text-white" : "text-gray-600"}`} />
+                </div>
+
+                <h3 className="text-2xl font-bold mb-2 text-gray-900">
+                  {plan.name}
+                </h3>
+
+                <div className="mb-4">
+                  <span className="text-5xl font-black text-gray-900">
+                    {plan.price === '0' ? 'Gratis' : `Rp ${Number(plan.price).toLocaleString('id-ID')}`}
+                  </span>
+                  {plan.price !== '0' && (
+                    <span className="text-xl text-gray-500">{plan.period}</span>
+                  )}
+                </div>
+
+                <p className="text-gray-600">
+                  {plan.description}
+                </p>
               </div>
 
-              <h3 className="text-2xl md:text-3xl font-bold mb-2 md:mb-3 text-primary animate-text-shimmer">
-                {plan.name}
-              </h3>
-
-              <div className="mb-4 md:mb-6">
-                <span className="text-3xl md:text-5xl font-black text-foreground">
-                  {plan.price === '0' ? 'Free' : `Rp ${Number(plan.price).toLocaleString('id-ID')}`}
-                </span>
-                <span className="text-lg md:text-xl text-muted-foreground">
-                  {plan.price === '0' ? '' : plan.period}
-                </span>
-              </div>
-
-              <p className="text-sm md:text-base text-muted-foreground mb-6 md:mb-8 leading-relaxed">
-                {plan.description}
-              </p>
-
-              <div className="space-y-3 md:space-y-4 mb-6 md:mb-8">
+              <div className="space-y-4 mb-8">
                 {plan.features.map((feature, idx) => (
-                  <div key={idx} className="flex items-center gap-3">
-                    <CheckCircle className="w-4 h-4 md:w-5 md:h-5 text-primary animate-cyber-pulse flex-shrink-0" />
-                    <span className="text-sm md:text-base text-muted-foreground">{feature}</span>
+                  <div key={idx} className="flex items-start gap-3">
+                    <CheckCircle className={`w-5 h-5 flex-shrink-0 mt-0.5 ${
+                      plan.popular ? "text-orange-500" : "text-gray-400"
+                    }`} />
+                    <span className="text-gray-700">{feature}</span>
                   </div>
                 ))}
               </div>
 
               <button
-                className={`w-full py-3 md:py-4 px-6 md:px-8 rounded-xl md:rounded-2xl font-bold text-sm md:text-base transition-all duration-300 hover:scale-105 shadow-lg border-2 ${
+                className={`w-full py-4 px-8 rounded-xl font-bold transition-all duration-300 ${
                   plan.popular
-                    ? "bg-gradient-to-r from-purple-500 to-pink-500 text-white border-purple-600"
-                    : "bg-transparent border-primary text-primary hover:bg-primary hover:text-white"
+                    ? "bg-gradient-to-r from-orange-500 to-orange-600 text-white hover:from-orange-600 hover:to-orange-700 shadow-lg shadow-orange-500/30 hover:shadow-xl"
+                    : "bg-gray-100 text-gray-900 hover:bg-gray-200"
                 }`}
-                onClick={() => {
-                  // Arahkan ke halaman pricing detail untuk checkout
-                  router.push('/pricing')
-                }}
+                onClick={() => router.push('/pricing')}
               >
                 {plan.buttonText}
               </button>
             </div>
           ))}
+        </div>
+
+        {/* Trust Badge */}
+        <div className="text-center mt-12">
+          <p className="text-sm text-gray-500">💳 Tidak perlu kartu kredit untuk paket gratis</p>
         </div>
       </div>
     </section>

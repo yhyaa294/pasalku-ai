@@ -5,7 +5,13 @@
       "Bash(mv public/placeholder-logo.* public/assets/logos/)",
       "Bash(mv public/placeholder.* public/assets/images/)",
       "Bash(mv public/placeholder.svg public/assets/icons/)",
-      "Bash(git add .)"
+      "Bash(git add .)",
+      "Bash(gh --version)",
+      "Bash(gh issue create --title \"🔍 Database Design: EdgeDB Schema for Knowledge Graph\" --body \"$(cat <<''EOF''\n## 🎯 Topic: EdgeDB Schema Design untuk Knowledge Graph Hukum Indonesia\n\n### 📚 Referensi Peta Konsep\n- **File:** docs/CONCEPT_MAP.md\n- **Section:** II.2 - Knowledge Graph Hukum Indonesia (EdgeDB)\n- **Lines:** 114-149\n\n### 💡 Masalah yang Dibahas\nDesain schema EdgeDB yang optimal untuk menangani:\n- Relasi semantik antar peraturan (UU → PP → Perpres → Peraturan Teknis)\n- Hierarki hukum dan referensi silang (Pasal X UU Y ↔ Pasal A PP B)\n- Temporal relationships (perubahan/pencabutan aturan)\n- Topical clustering berdasarkan bidang hukum\n- Pencarian cerdas semantic search\n\n### ✅ Acceptance Criteria\n- [ ] Schema GraphQL lengkap untuk semua jenis data hukum\n- [ ] EdgeQL queries untuk semantic search\n- [ ] Relationship mapping untuk UU, PP, Perpres, Perda\n- [ ] Temporal versioning untuk perubahan regulasi\n- [ ] Migration scripts dari data existing\n\n### 🏗️ Technical Notes\n```typescript\n// Contoh struktur data relatonal\ninterface LegalDocument {\n  id: string;\n  type: ''uu'' | ''pp'' | ''perpres'' | ''perda'';\n  number: string;\n  year: number;\n  title: string;\n  content: string;\n  articles: Article[];\n  references: Reference[];\n  superseded_by?: LegalDocument;\n}\n\n// Relasi antar dokumen\ninterface Reference {\n  source: LegalDocument;\n  target: LegalDocument;\n  type: ''amends'' | ''implements'' | ''references'';\n  article_ref?: string;\n}\n```\n\n### 🔗 Additional Context\nSetelah schema selesai, akan diintegrasikan dengan:\n- AI search engine\n- Citation system\n- Document analysis service\n\n**Priority:** High (Foundation Phase)  \n**Labels:** `database`, `architecture`, `priority-high`  \n**Assignees:** @yhyaa294  \n**Milestone:** Phase 1 - Foundation\n\n---\n*Generated from Concept Map Discussion*\nEOF\n)\" --label \"database,architecture,priority-high\" --assignee yhyaa294)",
+      "Bash(gh auth login --with-token $env:GH_TOKEN)",
+      "Bash(gh auth login)",
+      "Bash(python test_consensus_demo.py --verbose)",
+      "Bash(python -m pytest services/ai/test_consensus.py -v --tb=short)"
     ],
     "deny": [],
     "ask": []

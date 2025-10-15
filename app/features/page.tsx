@@ -6,33 +6,35 @@ import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card'
 import { Button } from '@/components/ui/button'
 import { Badge } from '@/components/ui/badge'
 import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs'
-import { EnhancedNavigation } from '@/components/enhanced-navigation'
 import Link from 'next/link'
 import {
   Brain,
   MessageSquare,
   FileText,
   BookOpen,
-  Users,
   Shield,
   Zap,
   Target,
-  TrendingUp,
   Award,
   Sparkles,
   CheckCircle,
   ArrowRight,
+  Scale,
+  Search,
+  Clock,
+  BarChart3,
+  FileCheck,
+  Users,
+  Globe,
+  TrendingUp,
+  Mic,
   Play,
   Star
 } from 'lucide-react'
+import { EnhancedFooter } from '@/components/enhanced-footer'
 
 export default function FeaturesPage() {
-  const [isAuthenticated, setIsAuthenticated] = useState(false)
-  const [userRole, setUserRole] = useState<'public' | 'legal_professional' | 'admin'>('public')
   const [activeDemo, setActiveDemo] = useState<string | null>(null)
-
-  const handleLogin = () => window.location.href = '/login'
-  const handleChatClick = () => window.location.href = '/chat'
 
   const featureCategories = [
     {
@@ -167,14 +169,30 @@ export default function FeaturesPage() {
 
   return (
     <div className="min-h-screen bg-gradient-to-br from-blue-50 via-white to-purple-50">
-      <EnhancedNavigation
-        isAuthenticated={isAuthenticated}
-        userRole={userRole}
-        onLogin={handleLogin}
-        onChatClick={handleChatClick}
-      />
+      {/* Simple Navigation */}
+      <nav className="fixed top-0 left-0 right-0 bg-white/80 backdrop-blur-lg border-b border-gray-200 z-50">
+        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+          <div className="flex items-center justify-between h-16">
+            <Link href="/" className="flex items-center gap-2">
+              <Scale className="w-8 h-8 text-primary" />
+              <span className="text-xl font-bold">Pasalku.ai</span>
+            </Link>
+            <div className="flex items-center gap-4">
+              <Link href="/pricing">
+                <Button variant="ghost">Pricing</Button>
+              </Link>
+              <Link href="/faq">
+                <Button variant="ghost">FAQ</Button>
+              </Link>
+              <Link href="/chat">
+                <Button>Mulai Konsultasi</Button>
+              </Link>
+            </div>
+          </div>
+        </div>
+      </nav>
 
-      <div className="pt-20 pb-12">
+      <div className="pt-28 pb-12">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
           {/* Hero Section */}
           <motion.div
@@ -473,58 +491,7 @@ export default function FeaturesPage() {
       </div>
 
       {/* Footer */}
-      <footer className="bg-gradient-to-r from-gray-900 via-blue-900 to-purple-900 text-white py-12">
-        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-          <div className="grid grid-cols-1 md:grid-cols-4 gap-8">
-            <div>
-              <div className="flex items-center gap-2 mb-4">
-                <div className="w-10 h-10 bg-white rounded-lg flex items-center justify-center">
-                  <span className="text-2xl">⚖️</span>
-                </div>
-                <span className="text-xl font-bold">Pasalku.ai</span>
-              </div>
-              <p className="text-gray-300 mb-4">
-                Platform AI hukum dengan fitur paling lengkap dan canggih di Indonesia.
-              </p>
-            </div>
-
-            <div>
-              <h3 className="text-lg font-semibold mb-4">Fitur Unggulan</h3>
-              <ul className="space-y-2 text-gray-300">
-                <li><a href="/features#ai-consultation" className="hover:text-white transition-colors">Konsultasi AI</a></li>
-                <li><a href="/features#document-analysis" className="hover:text-white transition-colors">Analisis Dokumen</a></li>
-                <li><a href="/features#legal-research" className="hover:text-white transition-colors">Riset Hukum</a></li>
-                <li><a href="/blog" className="hover:text-white transition-colors">Artikel Teknologi</a></li>
-              </ul>
-            </div>
-
-            <div>
-              <h3 className="text-lg font-semibold mb-4">Dukungan</h3>
-              <ul className="space-y-2 text-gray-300">
-                <li><a href="/faq" className="hover:text-white transition-colors">FAQ</a></li>
-                <li><a href="/contact" className="hover:text-white transition-colors">Kontak Kami</a></li>
-                <li><a href="/about" className="hover:text-white transition-colors">Tentang Kami</a></li>
-                <li><a href="/privacy-policy" className="hover:text-white transition-colors">Kebijakan Privasi</a></li>
-              </ul>
-            </div>
-
-            <div>
-              <h3 className="text-lg font-semibold mb-4">Status Sistem</h3>
-              <div className="space-y-3">
-                <div className="flex items-center gap-2">
-                  <div className="w-2 h-2 bg-green-500 rounded-full animate-pulse"></div>
-                  <span className="text-sm text-gray-300">Semua Sistem Online</span>
-                </div>
-                <div className="text-sm text-gray-400">
-                  Response Time: &lt;20ms<br/>
-                  AI Accuracy: 94.1%<br/>
-                  Uptime: 99.9%
-                </div>
-              </div>
-            </div>
-          </div>
-        </div>
-      </footer>
+      <EnhancedFooter />
     </div>
   )
 }

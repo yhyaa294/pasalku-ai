@@ -7,6 +7,7 @@ import { Button } from '@/components/ui/button'
 import { Input } from '@/components/ui/input'
 import { Badge } from '@/components/ui/badge'
 import { EnhancedNavigation } from '@/components/enhanced-navigation'
+import { EnhancedFooter } from '@/components/enhanced-footer'
 import {
   Award,
   Briefcase,
@@ -489,55 +490,7 @@ export default function ProfessionalUpgradePage() {
         </div>
       </div>
 
-      {/* Footer */}
-      <footer className="bg-gradient-to-r from-gray-900 via-blue-900 to-purple-900 text-white py-12">
-        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-          <div className="grid grid-cols-1 md:grid-cols-4 gap-8">
-            <div>
-              <div className="flex items-center gap-2 mb-4">
-                <Award className="w-8 h-8 text-blue-300" />
-                <div>
-                  <div className="text-lg font-bold">Pasalku.ai Professional</div>
-                  <div className="text-sm text-gray-300">For Legal Professionals</div>
-                </div>
-              </div>
-              <p className="text-gray-300 mb-4">
-                Tingkatkan praktik hukum Anda dengan teknologi AI terdepan dan networking professional.
-              </p>
-            </div>
-
-            <div>
-              <h3 className="text-lg font-semibold mb-4">Professional Benefits</h3>
-              <ul className="space-y-2 text-gray-300">
-                <li><a href="#" className="hover:text-white transition-colors">Networking Platform</a></li>
-                <li><a href="#" className="hover:text-white transition-colors">Premium Templates</a></li>
-                <li><a href="#" className="hover:text-white transition-colors">Database Kasus</a></li>
-                <li><a href="#" className="hover:text-white transition-colors">Analytics Dashboard</a></li>
-              </ul>
-            </div>
-
-            <div>
-              <h3 className="text-lg font-semibold mb-4">Support</h3>
-              <ul className="space-y-2 text-gray-300">
-                <li><a href="/faq" className="hover:text-white transition-colors">FAQ Professional</a></li>
-                <li><a href="/contact" className="hover:text-white transition-colors">Dedicated Support</a></li>
-                <li><a href="/blog" className="hover:text-white transition-colors">Professional Blog</a></li>
-                <li><a href="/terms-of-service" className="hover:text-white transition-colors">Terms & SLA</a></li>
-              </ul>
-            </div>
-
-            <div>
-              <h3 className="text-lg font-semibold mb-4">Compliance</h3>
-              <ul className="space-y-2 text-gray-300">
-                <li>✓ PDPA Certified</li>
-                <li>✓ Professional Insurance</li>
-                <li>✓ Ethical AI Usage</li>
-                <li>✓ Legal Standards</li>
-              </ul>
-            </div>
-          </div>
-        </div>
-      </footer>
+      <EnhancedFooter />
     </div>
   )
 }
