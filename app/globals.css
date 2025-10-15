@@ -1368,15 +1368,23 @@ button.wood-texture * {
 
 /* Enhanced scroll reveal with professional easing */
 .scroll-observe {
-  opacity: 0;
-  transform: translateY(40px) scale(0.98);
-  transition: opacity 0.8s cubic-bezier(0.34, 1.56, 0.64, 1),
-              transform 0.8s cubic-bezier(0.34, 1.56, 0.64, 1);
-}
-
-.scroll-observe.in-view {
   opacity: 1;
   transform: translateY(0) scale(1);
+}
+
+/* Only hide elements below viewport on initial load */
+@media (min-width: 768px) {
+  .scroll-observe:not(.in-view) {
+    opacity: 0;
+    transform: translateY(40px) scale(0.98);
+    transition: opacity 0.8s cubic-bezier(0.34, 1.56, 0.64, 1),
+                transform 0.8s cubic-bezier(0.34, 1.56, 0.64, 1);
+  }
+  
+  .scroll-observe.in-view {
+    opacity: 1;
+    transform: translateY(0) scale(1);
+  }
 }
 
 /* Card hover with 3D effect */

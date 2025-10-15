@@ -59,8 +59,31 @@ export default function PasalkuLandingPage() {
   };
 
   const handleQuickOption = (option: string) => {
-    setChatMessage(option);
-    handleSendMessage();
+    // Add user message directly
+    setMessages(prev => [...prev, { type: 'user', text: option }]);
+    
+    // Simulate bot response
+    setTimeout(() => {
+      const responses: { [key: string]: string } = {
+        'apa itu pasalku': 'Pasalku.ai adalah platform konsultasi hukum berbasis AI yang membantu Anda memahami hak-hak hukum dengan mudah, cepat, dan terjangkau. Kami menggunakan teknologi AI terkini untuk memberikan solusi hukum yang akurat.',
+        'fitur': 'Kami memiliki 50+ fitur AI termasuk: Konsultasi Hukum AI 24/7, Analisis Dokumen Legal, Riset Hukum Otomatis, Prediksi Kasus, dan masih banyak lagi!',
+        'harga': 'Kami punya paket mulai dari Gratis untuk fitur dasar, Professional Rp 199.000/bulan, dan Premium Rp 499.000/bulan. Cek halaman pricing untuk detail lengkap!',
+        'default': 'Terima kasih atas pertanyaannya! Untuk konsultasi hukum lengkap, silakan klik tombol "Mulai Konsultasi Hukum" atau hubungi tim kami. 😊'
+      };
+
+      const lowerMsg = option.toLowerCase();
+      let response = responses.default;
+      
+      if (lowerMsg.includes('apa itu') || lowerMsg.includes('pasalku')) {
+        response = responses['apa itu pasalku'];
+      } else if (lowerMsg.includes('fitur')) {
+        response = responses['fitur'];
+      } else if (lowerMsg.includes('harga') || lowerMsg.includes('paket')) {
+        response = responses['harga'];
+      }
+
+      setMessages(prev => [...prev, { type: 'bot', text: response }]);
+    }, 500);
   };
 
   useEffect(() => {
@@ -79,30 +102,6 @@ export default function PasalkuLandingPage() {
     }
   }, []);
 
-  useEffect(() => {
-    // Lightweight Intersection Observer for scroll animations
-    const observerOptions = {
-      threshold: 0.1,
-      rootMargin: '0px 0px -100px 0px',
-    };
-
-    const observer = new IntersectionObserver((entries) => {
-      entries.forEach((entry) => {
-        if (entry.isIntersecting) {
-          entry.target.classList.add('in-view');
-          // Disconnect after animating to save resources
-          observer.unobserve(entry.target);
-        }
-      });
-    }, observerOptions);
-
-    // Observe scroll elements
-    const elements = document.querySelectorAll('.scroll-observe');
-    elements.forEach((el) => observer.observe(el));
-
-    return () => observer.disconnect();
-  }, []);
-
   const handleLogin = () => {
     // Redirect to login page
     window.location.href = '/login';
@@ -117,80 +116,9 @@ export default function PasalkuLandingPage() {
   };
 
   return (
-    <div className="min-h-screen bg-background text-foreground overflow-x-hidden relative">
-      {/* Premium Animated Background Layers */}
-      <div className="fixed inset-0 overflow-hidden -z-10">
-        {/* Base gradient with subtle animation */}
-        <div className="absolute inset-0 bg-gradient-to-br from-blue-50 via-purple-50 to-orange-50 gradient-flow" />
-        
-        {/* Animated gradient orbs */}
-        <div className="absolute top-0 left-1/4 w-96 h-96 bg-blue-400/10 rounded-full blur-3xl smooth-float" style={{ animationDelay: '0s' }} />
-        <div className="absolute bottom-0 right-1/4 w-96 h-96 bg-purple-400/10 rounded-full blur-3xl smooth-float" style={{ animationDelay: '2s' }} />
-        <div className="absolute top-1/2 left-1/2 w-96 h-96 bg-orange-400/10 rounded-full blur-3xl smooth-float" style={{ animationDelay: '4s' }} />
-        
-        {/* Grid pattern with shimmer */}
-        <div className="absolute inset-0 bg-[url('data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHdpZHRoPSI2MCIgaGVpZ2h0PSI2MCIgb3BhY2l0eT0iMC4xIj48cGF0aCBkPSJNMCAwaDYwdjYwSDB6IiBmaWxsPSJub25lIi8+PHBhdGggZD0iTTMwIDBWNjBNMCwzMEg2MCIgc3Ryb2tlPSIjOGI0NTEzIiBzdHJva2Utd2lkdGg9IjEiLz48L3N2Zz4=')] opacity-20" />
-        
-        {/* Diagonal light rays */}
-        <div className="absolute inset-0">
-          <div className="absolute top-0 left-0 w-full h-px bg-gradient-to-r from-transparent via-blue-400/20 to-transparent animate-slide-right" style={{ top: '20%' }} />
-          <div className="absolute top-0 left-0 w-full h-px bg-gradient-to-r from-transparent via-purple-400/20 to-transparent animate-slide-right" style={{ top: '50%', animationDelay: '1.5s' }} />
-          <div className="absolute top-0 left-0 w-full h-px bg-gradient-to-r from-transparent via-orange-400/20 to-transparent animate-slide-right" style={{ top: '80%', animationDelay: '3s' }} />
-        </div>
-      </div>
-
-      {/* Premium Floating Legal Icons */}
-      <div className="fixed inset-0 pointer-events-none z-0">
-        {[...Array(12)].map((_, i) => {
-          const icons = ["⚖️", "📜", "🔍", "📚", "🏛️", "⚡", "✨", "💼", "🎓", "🔒", "📋", "⭐"];
-          const positions = [
-            { left: "8%", top: "12%" },
-            { left: "88%", top: "18%" },
-            { left: "18%", top: "75%" },
-            { left: "78%", top: "65%" },
-            { left: "42%", top: "8%" },
-            { left: "92%", top: "82%" },
-            { left: "12%", top: "42%" },
-            { left: "65%", top: "88%" },
-            { left: "25%", top: "25%" },
-            { left: "72%", top: "35%" },
-            { left: "50%", top: "92%" },
-            { left: "5%", top: "85%" }
-          ];
-
-          return (
-            <div
-              key={i}
-              className="absolute text-3xl smooth-float"
-              style={{
-                left: positions[i].left,
-                top: positions[i].top,
-                animationDelay: `${i * 0.6}s`,
-                animationDuration: `${5 + (i % 3)}s`,
-                opacity: 0.08 + (i % 3) * 0.02,
-              }}
-            >
-              <span className="inline-block hover-float">{icons[i]}</span>
-            </div>
-          );
-        })}
-      </div>
-
-      {/* Subtle particle effects */}
-      <div className="fixed inset-0 pointer-events-none z-0 opacity-30">
-        {[...Array(6)].map((_, i) => (
-          <div
-            key={i}
-            className="absolute w-1 h-1 bg-blue-500 rounded-full animate-float-particle"
-            style={{
-              left: `${15 + i * 15}%`,
-              top: `${10 + i * 12}%`,
-              animationDelay: `${i * 1.2}s`,
-              animationDuration: `${8 + i}s`,
-            }}
-          />
-        ))}
-      </div>
+    <div className="min-h-screen bg-white text-foreground overflow-x-hidden relative">
+      {/* Simple background */}
+      <div className="fixed inset-0 -z-10 bg-gradient-to-br from-blue-50 via-white to-purple-50"></div>
 
       <EnhancedNavigation
         isAuthenticated={isAuthenticated}
@@ -200,30 +128,73 @@ export default function PasalkuLandingPage() {
       />
 
       <main className="relative z-10">
-        <div className="scroll-observe">
-          <HeroSection onGetStarted={handleChatClick} />
+        <HeroSection onGetStarted={handleChatClick} />
+        
+        {/* Test Marker 1 */}
+        <div className="py-10 bg-red-500 text-white text-center text-2xl font-bold">
+          ⬇️ AFTER HERO - STATISTICS BELOW ⬇️
         </div>
-        <div className="scroll-observe">
-          <StatisticsSection />
+        
+        {/* Statistics Section */}
+        <section className="py-20 bg-gray-50">
+          <div className="max-w-7xl mx-auto px-4">
+            <h2 className="text-4xl font-bold text-center mb-10">📊 Statistics Section</h2>
+            <StatisticsSection />
+          </div>
+        </section>
+        
+        {/* Test Marker 2 */}
+        <div className="py-10 bg-blue-500 text-white text-center text-2xl font-bold">
+          ⬇️ FEATURES BELOW ⬇️
         </div>
-        <div className="scroll-observe">
-          <FeaturesSection />
-        </div>
-        <div className="scroll-observe">
-          <HowItWorksSection />
-        </div>
-        <div className="scroll-observe">
-          <PricingSection />
-        </div>
-        <div className="scroll-observe">
-          <FAQSection />
-        </div>
-        <div className="scroll-observe">
-          <TestimonialsSection />
-        </div>
-        <div className="scroll-observe">
-          <CTASection onGetStarted={handleChatClick} />
-        </div>
+        
+        {/* Features Section */}
+        <section className="py-20 bg-white">
+          <div className="max-w-7xl mx-auto px-4">
+            <h2 className="text-4xl font-bold text-center mb-10">✨ Features Section</h2>
+            <FeaturesSection />
+          </div>
+        </section>
+        
+        {/* How It Works Section */}
+        <section className="py-20 bg-gray-50">
+          <div className="max-w-7xl mx-auto px-4">
+            <h2 className="text-4xl font-bold text-center mb-10">🔄 How It Works</h2>
+            <HowItWorksSection />
+          </div>
+        </section>
+        
+        {/* Pricing Section */}
+        <section className="py-20 bg-white">
+          <div className="max-w-7xl mx-auto px-4">
+            <h2 className="text-4xl font-bold text-center mb-10">💰 Pricing</h2>
+            <PricingSection />
+          </div>
+        </section>
+        
+        {/* FAQ Section */}
+        <section className="py-20 bg-gray-50">
+          <div className="max-w-7xl mx-auto px-4">
+            <h2 className="text-4xl font-bold text-center mb-10">❓ FAQ</h2>
+            <FAQSection />
+          </div>
+        </section>
+        
+        {/* Testimonials Section */}
+        <section className="py-20 bg-white">
+          <div className="max-w-7xl mx-auto px-4">
+            <h2 className="text-4xl font-bold text-center mb-10">⭐ Testimonials</h2>
+            <TestimonialsSection />
+          </div>
+        </section>
+        
+        {/* CTA Section */}
+        <section className="py-20 bg-gradient-to-r from-blue-600 to-purple-600">
+          <div className="max-w-7xl mx-auto px-4">
+            <h2 className="text-4xl font-bold text-center mb-10 text-white">🚀 Call To Action</h2>
+            <CTASection onGetStarted={handleChatClick} />
+          </div>
+        </section>
       </main>
 
       <EnhancedFooter />
