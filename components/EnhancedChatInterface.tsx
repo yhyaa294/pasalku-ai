@@ -379,19 +379,25 @@ const EnhancedChatInterface: React.FC<EnhancedChatInterfaceProps> = ({
   };
 
   return (
-    <div className="flex flex-col h-screen bg-gray-50">
-      {/* Enhanced Header */}
-      <div className="bg-gradient-to-r from-blue-600 to-purple-600 text-white p-4 shadow-lg">
-        <div className="flex justify-between items-center">
+    <div className="flex flex-col h-screen bg-gradient-to-br from-slate-50 via-blue-50 to-purple-50">
+      {/* Enhanced Header - Modern & Professional */}
+      <div className="bg-white/80 backdrop-blur-xl border-b border-gray-200/50 shadow-lg">
+        <div className="bg-gradient-to-r from-blue-600 via-purple-600 to-blue-600 h-1"></div>
+        <div className="flex justify-between items-center p-4">
           <div className="flex items-center space-x-3">
-            <Scale className="w-6 h-6" />
+            <div className="w-10 h-10 bg-gradient-to-br from-blue-600 to-purple-600 rounded-xl flex items-center justify-center shadow-lg">
+              <Scale className="w-6 h-6 text-white" />
+            </div>
             <div>
-              <h1 className="text-xl font-bold">Pasalku AI</h1>
-              <p className="text-xs text-blue-100">Enhanced Legal Assistant</p>
+              <h1 className="text-xl font-bold text-gray-900">Pasalku AI</h1>
+              <p className="text-xs text-gray-500 flex items-center gap-1">
+                <span className="w-2 h-2 bg-green-500 rounded-full animate-pulse"></span>
+                Asisten Hukum Cerdas
+              </p>
             </div>
           </div>
           
-          <div className="flex items-center space-x-2">
+          <div className="flex items-center gap-2">
             {/* Language Switcher */}
             <LanguageSwitcher 
               selectedLanguage={selectedLanguage}
@@ -405,10 +411,10 @@ const EnhancedChatInterface: React.FC<EnhancedChatInterfaceProps> = ({
               variant="ghost"
               size="sm"
               onClick={() => setShowDocumentModal(true)}
-              className="text-white hover:bg-white/20"
+              className="text-gray-700 hover:bg-blue-50 hover:text-blue-600 transition-all"
             >
               <FileText className="w-4 h-4 mr-1" />
-              Generate
+              <span className="hidden sm:inline">Generate</span>
             </Button>
 
             {/* Export Chat */}
@@ -416,70 +422,96 @@ const EnhancedChatInterface: React.FC<EnhancedChatInterfaceProps> = ({
               variant="ghost"
               size="sm"
               onClick={() => setShowExportModal(true)}
-              className="text-white hover:bg-white/20"
+              className="text-gray-700 hover:bg-purple-50 hover:text-purple-600 transition-all"
             >
               <Download className="w-4 h-4 mr-1" />
-              Export
+              <span className="hidden sm:inline">Export</span>
             </Button>
 
             {onClose && (
               <button 
                 onClick={onClose}
-                className="text-white hover:text-gray-200 ml-2"
+                className="ml-2 p-2 text-gray-500 hover:text-gray-700 hover:bg-gray-100 rounded-lg transition-all"
                 aria-label="Close chat"
               >
-                ✕
+                <XCircle className="w-5 h-5" />
               </button>
             )}
           </div>
         </div>
       </div>
 
-      {/* Messages Area */}
-      <div className="flex-1 overflow-y-auto p-4 space-y-4">
+      {/* Messages Area - Modern Scrollbar */}
+      <div className="flex-1 overflow-y-auto p-4 md:p-6 space-y-6 custom-scrollbar">
         {messages.length === 0 && !isLoading && (
           <>
-            <div className="text-center py-8">
-              <Scale className="w-16 h-16 mx-auto text-blue-600 mb-4" />
-              <h2 className="text-2xl font-bold text-gray-800 mb-2">
-                Selamat Datang di Pasalku AI
+            <div className="text-center py-12 animate-fade-in">
+              <div className="relative inline-block mb-6">
+                <div className="w-24 h-24 bg-gradient-to-br from-blue-500 to-purple-600 rounded-3xl flex items-center justify-center shadow-2xl transform hover:scale-105 transition-transform">
+                  <Scale className="w-12 h-12 text-white" />
+                </div>
+                <div className="absolute -top-2 -right-2 w-8 h-8 bg-green-500 rounded-full flex items-center justify-center shadow-lg animate-pulse">
+                  <span className="text-white text-xs font-bold">AI</span>
+                </div>
+              </div>
+              <h2 className="text-3xl md:text-4xl font-extrabold text-gray-900 mb-3">
+                Selamat Datang di <span className="bg-gradient-to-r from-blue-600 to-purple-600 bg-clip-text text-transparent">Pasalku AI</span>
               </h2>
-              <p className="text-gray-600 mb-6">
-                Asisten hukum pintar dengan Citation Detection, Outcome Prediction, dan Multi-Language Support
+              <p className="text-lg text-gray-600 mb-8 max-w-2xl mx-auto">
+                Asisten hukum pintar dengan <span className="font-semibold text-blue-600">Citation Detection</span>, 
+                <span className="font-semibold text-purple-600"> Outcome Prediction</span>, dan 
+                <span className="font-semibold text-green-600"> Multi-Language Support</span>
               </p>
               
-              {/* Feature Highlights */}
-              <div className="grid grid-cols-1 md:grid-cols-3 gap-4 max-w-3xl mx-auto mb-8">
-                <div className="bg-white p-4 rounded-lg shadow">
-                  <Scale className="w-8 h-8 mx-auto text-blue-600 mb-2" />
-                  <h3 className="font-semibold mb-1">Auto Citations</h3>
-                  <p className="text-xs text-gray-600">Deteksi & validasi otomatis legal citations</p>
+              {/* Feature Highlights - Modern Cards */}
+              <div className="grid grid-cols-1 md:grid-cols-3 gap-6 max-w-4xl mx-auto mb-12">
+                <div className="group bg-white/80 backdrop-blur-sm p-6 rounded-2xl shadow-lg hover:shadow-2xl border-2 border-blue-100 hover:border-blue-300 transition-all duration-300 hover:-translate-y-1">
+                  <div className="w-14 h-14 bg-gradient-to-br from-blue-500 to-blue-600 rounded-xl flex items-center justify-center mx-auto mb-4 group-hover:scale-110 transition-transform shadow-lg">
+                    <Scale className="w-7 h-7 text-white" />
+                  </div>
+                  <h3 className="font-bold text-lg mb-2 text-gray-900">Auto Citations</h3>
+                  <p className="text-sm text-gray-600 leading-relaxed">Deteksi & validasi otomatis legal citations dari database hukum Indonesia</p>
                 </div>
-                <div className="bg-white p-4 rounded-lg shadow">
-                  <TrendingUp className="w-8 h-8 mx-auto text-green-600 mb-2" />
-                  <h3 className="font-semibold mb-1">Predictions</h3>
-                  <p className="text-xs text-gray-600">Prediksi outcome berdasarkan data historis</p>
+                <div className="group bg-white/80 backdrop-blur-sm p-6 rounded-2xl shadow-lg hover:shadow-2xl border-2 border-green-100 hover:border-green-300 transition-all duration-300 hover:-translate-y-1">
+                  <div className="w-14 h-14 bg-gradient-to-br from-green-500 to-green-600 rounded-xl flex items-center justify-center mx-auto mb-4 group-hover:scale-110 transition-transform shadow-lg">
+                    <TrendingUp className="w-7 h-7 text-white" />
+                  </div>
+                  <h3 className="font-bold text-lg mb-2 text-gray-900">Predictions</h3>
+                  <p className="text-sm text-gray-600 leading-relaxed">Prediksi outcome berdasarkan analisis data kasus historis</p>
                 </div>
-                <div className="bg-white p-4 rounded-lg shadow">
-                  <Globe className="w-8 h-8 mx-auto text-purple-600 mb-2" />
-                  <h3 className="font-semibold mb-1">Multi-Language</h3>
-                  <p className="text-xs text-gray-600">Support 6 bahasa dengan auto-translation</p>
+                <div className="group bg-white/80 backdrop-blur-sm p-6 rounded-2xl shadow-lg hover:shadow-2xl border-2 border-purple-100 hover:border-purple-300 transition-all duration-300 hover:-translate-y-1">
+                  <div className="w-14 h-14 bg-gradient-to-br from-purple-500 to-purple-600 rounded-xl flex items-center justify-center mx-auto mb-4 group-hover:scale-110 transition-transform shadow-lg">
+                    <Globe className="w-7 h-7 text-white" />
+                  </div>
+                  <h3 className="font-bold text-lg mb-2 text-gray-900">Multi-Language</h3>
+                  <p className="text-sm text-gray-600 leading-relaxed">Support 6 bahasa dengan auto-translation real-time</p>
                 </div>
               </div>
             </div>
 
-            {/* Quick Responses */}
-            <div className="grid grid-cols-1 md:grid-cols-2 gap-3">
-              {quickResponses.map((response, index) => (
-                <button
-                  key={index}
-                  onClick={() => setInput(response)}
-                  className="p-3 bg-white rounded-lg shadow text-left hover:bg-blue-50 hover:border-blue-300 border-2 border-transparent transition-all"
-                  type="button"
-                >
-                  <p className="text-sm font-medium text-gray-800">{response}</p>
-                </button>
-              ))}
+            {/* Quick Responses - Modern Buttons */}
+            <div className="max-w-4xl mx-auto">
+              <p className="text-sm font-semibold text-gray-500 mb-4 flex items-center gap-2">
+                <span className="w-1 h-4 bg-gradient-to-b from-blue-500 to-purple-500 rounded-full"></span>
+                Pertanyaan Populer
+              </p>
+              <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+                {quickResponses.map((response, index) => (
+                  <button
+                    key={index}
+                    onClick={() => setInput(response)}
+                    className="group p-4 bg-white/80 backdrop-blur-sm rounded-xl shadow-md hover:shadow-xl border-2 border-gray-100 hover:border-blue-300 transition-all duration-300 text-left hover:-translate-y-1"
+                    type="button"
+                  >
+                    <div className="flex items-start gap-3">
+                      <div className="w-8 h-8 bg-gradient-to-br from-blue-100 to-purple-100 rounded-lg flex items-center justify-center flex-shrink-0 group-hover:scale-110 transition-transform">
+                        <span className="text-lg">💬</span>
+                      </div>
+                      <p className="text-sm font-medium text-gray-800 leading-relaxed group-hover:text-blue-600 transition-colors">{response}</p>
+                    </div>
+                  </button>
+                ))}
+              </div>
             </div>
           </>
         )}
@@ -531,86 +563,115 @@ const EnhancedChatInterface: React.FC<EnhancedChatInterfaceProps> = ({
           );
         })}
 
-        {/* Typing Indicator */}
+        {/* Typing Indicator - Enhanced */}
         {isTyping && (
-          <div className="flex items-center space-x-2 ml-12">
-            <div className="flex space-x-1 px-3 py-2 bg-white rounded-lg shadow">
-              <div className="w-2 h-2 bg-blue-400 rounded-full animate-bounce"></div>
-              <div className="w-2 h-2 bg-blue-400 rounded-full animate-bounce" style={{ animationDelay: '0.2s' }}></div>
-              <div className="w-2 h-2 bg-blue-400 rounded-full animate-bounce" style={{ animationDelay: '0.4s' }}></div>
+          <div className="flex items-start gap-3 animate-fade-in">
+            <div className="w-10 h-10 bg-gradient-to-br from-blue-500 to-purple-600 rounded-full flex items-center justify-center flex-shrink-0 shadow-lg">
+              <Scale className="w-5 h-5 text-white" />
             </div>
-            <span className="text-sm text-gray-500">AI sedang menganalisis...</span>
+            <div className="bg-white/80 backdrop-blur-sm rounded-2xl rounded-tl-sm px-6 py-4 shadow-lg border-2 border-blue-100">
+              <div className="flex items-center space-x-2">
+                <div className="flex space-x-1">
+                  <div className="w-2.5 h-2.5 bg-blue-500 rounded-full animate-bounce"></div>
+                  <div className="w-2.5 h-2.5 bg-purple-500 rounded-full animate-bounce" style={{ animationDelay: '0.2s' }}></div>
+                  <div className="w-2.5 h-2.5 bg-blue-500 rounded-full animate-bounce" style={{ animationDelay: '0.4s' }}></div>
+                </div>
+                <span className="text-sm text-gray-600 font-medium ml-2">AI sedang menganalisis pertanyaan Anda...</span>
+              </div>
+            </div>
           </div>
         )}
         
         <div ref={messagesEndRef} />
       </div>
 
-      {/* Input Area */}
-      <div className="border-t border-gray-200 p-4 bg-white shadow-lg">
-        {/* Attachments Preview */}
-        {attachments.length > 0 && (
-          <div className="flex flex-wrap gap-2 mb-3">
-            {attachments.map((file, index) => (
-              <div key={index} className="flex items-center bg-blue-50 border border-blue-200 rounded-lg px-3 py-2 text-sm">
-                <Paperclip className="w-4 h-4 mr-2 text-blue-600" />
-                <span className="truncate max-w-xs font-medium">{file.name}</span>
-                <button
-                  onClick={() => removeAttachment(index)}
-                  className="ml-2 text-red-500 hover:text-red-700"
-                  type="button"
-                  aria-label={`Remove ${file.name}`}
-                >
-                  ✕
-                </button>
-              </div>
-            ))}
-          </div>
-        )}
+      {/* Input Area - Modern & Professional */}
+      <div className="border-t border-gray-200/50 bg-white/80 backdrop-blur-xl shadow-2xl">
+        <div className="p-4 md:p-6 max-w-5xl mx-auto">
+          {/* Attachments Preview - Enhanced */}
+          {attachments.length > 0 && (
+            <div className="flex flex-wrap gap-3 mb-4 animate-fade-in">
+              {attachments.map((file, index) => (
+                <div key={index} className="group relative bg-gradient-to-br from-blue-50 to-purple-50 border-2 border-blue-200 rounded-xl px-4 py-3 shadow-md hover:shadow-lg transition-all">
+                  <div className="flex items-center gap-3">
+                    <div className="w-10 h-10 bg-gradient-to-br from-blue-500 to-purple-500 rounded-lg flex items-center justify-center flex-shrink-0">
+                      <Paperclip className="w-5 h-5 text-white" />
+                    </div>
+                    <div className="flex-1 min-w-0">
+                      <p className="text-sm font-semibold text-gray-800 truncate">{file.name}</p>
+                      <p className="text-xs text-gray-500">{(file.size / 1024).toFixed(1)} KB</p>
+                    </div>
+                    <button
+                      onClick={() => removeAttachment(index)}
+                      className="ml-2 p-1.5 text-red-500 hover:text-red-700 hover:bg-red-50 rounded-lg transition-all opacity-0 group-hover:opacity-100"
+                      type="button"
+                      aria-label={`Remove ${file.name}`}
+                    >
+                      <XCircle className="w-5 h-5" />
+                    </button>
+                  </div>
+                </div>
+              ))}
+            </div>
+          )}
 
-        <form onSubmit={handleSubmit} className="flex gap-2">
-          <div className="relative flex-1">
-            <Input
-              type="text"
-              value={input}
-              onChange={(e: React.ChangeEvent<HTMLInputElement>) => setInput(e.target.value)}
-              placeholder="Tanyakan sesuatu tentang hukum..."
-              className="pr-10 border-2 focus:border-blue-500"
-              disabled={isLoading}
-              aria-label="Type your legal question"
-            />
-            <input
-              type="file"
-              ref={fileInputRef}
-              onChange={handleFileChange}
-              className="hidden"
-              multiple
-              aria-label="Upload files"
-            />
-            <button
-              type="button"
-              onClick={() => fileInputRef.current?.click()}
-              className="absolute right-2 top-1/2 transform -translate-y-1/2 text-gray-500 hover:text-blue-600 transition-colors"
-              disabled={isLoading}
-              aria-label="Attach files"
+          <form onSubmit={handleSubmit} className="flex gap-3">
+            <div className="relative flex-1">
+              <Input
+                type="text"
+                value={input}
+                onChange={(e: React.ChangeEvent<HTMLInputElement>) => setInput(e.target.value)}
+                placeholder="Tanyakan sesuatu tentang hukum Indonesia..."
+                className="w-full h-14 px-5 pr-14 text-base border-2 border-gray-200 rounded-2xl focus:border-blue-500 focus:ring-4 focus:ring-blue-100 transition-all shadow-sm hover:shadow-md"
+                disabled={isLoading}
+                aria-label="Type your legal question"
+              />
+              <input
+                type="file"
+                ref={fileInputRef}
+                onChange={handleFileChange}
+                className="hidden"
+                multiple
+                accept=".pdf,.doc,.docx,.txt,.jpg,.jpeg,.png"
+                aria-label="Upload files"
+              />
+              <button
+                type="button"
+                onClick={() => fileInputRef.current?.click()}
+                className="absolute right-4 top-1/2 transform -translate-y-1/2 p-2 text-gray-400 hover:text-blue-600 hover:bg-blue-50 rounded-lg transition-all"
+                disabled={isLoading}
+                aria-label="Attach files"
+                title="Lampirkan file (PDF, DOC, gambar)"
+              >
+                <Paperclip className={`w-5 h-5 ${isLoading ? 'opacity-50' : ''}`} />
+              </button>
+            </div>
+            
+            <Button 
+              type="submit" 
+              disabled={isLoading || (!input.trim() && attachments.length === 0)}
+              className="h-14 px-8 bg-gradient-to-r from-blue-600 via-purple-600 to-blue-600 hover:from-blue-700 hover:via-purple-700 hover:to-blue-700 text-white rounded-2xl font-semibold shadow-lg hover:shadow-xl transition-all disabled:opacity-50 disabled:cursor-not-allowed flex items-center gap-2 text-base"
+              aria-label="Send message"
             >
-              <Paperclip className={`w-5 h-5 ${isLoading ? 'opacity-50' : ''}`} />
-            </button>
-          </div>
+              {isLoading ? (
+                <>
+                  <Loader2 className="h-5 w-5 animate-spin" />
+                  <span className="hidden sm:inline">Mengirim...</span>
+                </>
+              ) : (
+                <>
+                  <Send className="h-5 w-5" />
+                  <span className="hidden sm:inline">Kirim</span>
+                </>
+              )}
+            </Button>
+          </form>
           
-          <Button 
-            type="submit" 
-            disabled={isLoading || (!input.trim() && attachments.length === 0)}
-            className="shrink-0 bg-gradient-to-r from-blue-600 to-purple-600 hover:from-blue-700 hover:to-purple-700 px-6"
-            aria-label="Send message"
-          >
-            {isLoading ? (
-              <Loader2 className="h-5 w-5 animate-spin" />
-            ) : (
-              <Send className="h-5 w-5" />
-            )}
-          </Button>
-        </form>
+          {/* Helper Text */}
+          <p className="text-xs text-gray-500 mt-3 text-center">
+            💡 Tips: Jelaskan situasi hukum Anda dengan detail untuk hasil yang lebih akurat
+          </p>
+        </div>
       </div>
 
       {/* Modals */}

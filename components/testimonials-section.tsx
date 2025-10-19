@@ -1,3 +1,5 @@
+'use client'
+
 import { FC, useState, useEffect } from 'react'
 import { ChevronLeft, ChevronRight, Quote, Star } from 'lucide-react'
 
@@ -112,7 +114,7 @@ export const TestimonialsSection: FC<TestimonialsSectionProps> = ({ className = 
   return (
     <section
       id="testimonials"
-      className={`py-16 md:py-32 px-4 relative overflow-hidden scroll-animate bg-gradient-to-b from-white via-orange-50/30 to-white ${className}`}
+      className={`py-16 md:py-32 px-4 relative overflow-hidden bg-gradient-to-b from-white via-orange-50/30 to-white ${className}`}
     >
       <div className="max-w-6xl mx-auto relative z-10">
         {/* Header */}

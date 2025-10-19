@@ -822,10 +822,10 @@ Berikan respons dalam format JSON:
 
             Berikan penilaian komprehensif dalam konteks hukum Indonesia:
 
-            """ + ("KhUSUS UNTUK BUKTI DIGITAL/SURAT: Formil (legalitas dokumen), Chain of custody (asal-usul bukti), Keaslian (Authenticity), Relevansi dengan kasus. " if evidence_type in ["document", "image"] else "KHUSUS UNTUK BUKTI NON-DIGITAL: Evaluasi narasi dan kredibilitas saksi.")
+            """ + ("KhUSUS UNTUK BUKTI DIGITAL/SURAT: Formil (legalitas dokumen), Chain of custody (asal-usul bukti), Keaslian (Authenticity), Relevansi dengan kasus. " if evidence_type in ["document", "image"] else "KHUSUS UNTUK BUKTI NON-DIGITAL: Evaluasi narasi dan kredibilitas saksi.") + """
 
             BERIKAN RESPON DALAM FORMAT JSON:
-            {{
+            {
                 "strength_level": "kuat|sedang|lemah",
                 "validity_score": 0.0-1.0,
                 "authenticity_score": 0.0-1.0,
@@ -834,7 +834,7 @@ Berikan respons dalam format JSON:
                 "legal_value": "penjelasan nilai bukti secara hukum",
                 "recommendations": ["rekomendasi1", "rekomendasi2"],
                 "preservation_advice": ["saran penyimpanan bukti"]
-            }}
+            }
             """
             messages = [
                 {"role": "system", "content": "You are a legal evidence evaluation expert in Indonesian law. Provide thorough forensic assessment of evidence."},

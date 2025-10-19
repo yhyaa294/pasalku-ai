@@ -1,15 +1,17 @@
 import React, { useState } from 'react';
 import './App.css';
+// import useTranslation from 'next-translate/useTranslation';
 
 function getBackendUrl() {
-  // Prefer Vite-style env, then CRA
-  const viteUrl = import.meta && import.meta.env && import.meta.env.REACT_APP_BACKEND_URL;
-  const craUrl = process && process.env && process.env.REACT_APP_BACKEND_URL;
-  return (viteUrl || craUrl || '') + '/api';
+  const viteUrl = import.meta?.env?.REACT_APP_BACKEND_URL;
+  const craUrl = process?.env?.REACT_APP_BACKEND_URL;
+  return viteUrl || craUrl || 'http://localhost:5000/api'; // Default to localhost
 }
 
 function App() {
-  const [query, setQuery] = useState('Apa saja syarat mendirikan PT di Indonesia?');
+  // const { t } = useTranslation('app');
+
+  const [query, setQuery] = useState(''); // Initialize with empty string
   const [answer, setAnswer] = useState('');
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState('');
@@ -35,7 +37,7 @@ function App() {
       setAnswer(data.answer || '');
       if (data.session_id) setSessionId(data.session_id);
     } catch (err) {
-      setError(err.message);
+      setError(err.message || 'An unexpected error occurred.'); // Improved error message
     } finally {
       setLoading(false);
     }
@@ -43,7 +45,7 @@ function App() {
 
   return (
     <div className="container" data-testid="app-root">
-      <h1 className="title" data-testid="title">Pasalku.ai - Legal AI Consultation</h1>
+      <h1 className="title" data-testid="title">Pasalku AI Consultation</h1>
       <form onSubmit={handleSubmit} className="form" data-testid="consult-form">
         <textarea
           data-testid="consult-input"
@@ -51,13 +53,13 @@ function App() {
           rows={4}
           value={query}
           onChange={(e) => setQuery(e.target.value)}
-          placeholder="Tulis pertanyaan hukum Anda di sini..."
+          placeholder="Enter your legal question here..."
         />
         <div className="row">
           <input
             data-testid="session-id-input"
             className="input"
-            placeholder="Session ID (opsional)"
+            placeholder="Session ID (optional)"
             value={sessionId}
             onChange={(e) => setSessionId(e.target.value)}
           />
@@ -67,7 +69,7 @@ function App() {
             type="submit"
             disabled={loading}
           >
-            {loading ? 'Menganalisis...' : 'Konsultasi'}
+            {loading ? 'Loading...' : 'Submit'}
           </button>
         </div>
       </form>
@@ -77,7 +79,7 @@ function App() {
       )}
       {answer && (
         <div className="answer" data-testid="answer-box">
-          <h3>Jawaban</h3>
+          <h3>AI Response</h3>
           <p>{answer}</p>
         </div>
       )}

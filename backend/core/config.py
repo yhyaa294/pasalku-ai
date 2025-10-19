@@ -20,6 +20,7 @@ class Settings(BaseSettings):
     ENVIRONMENT: str = Field(default="development")
     DEBUG: bool = Field(default=False)
     API_V1_STR: str = Field(default="/api/v1")
+    PROJECT_NAME: str = Field(default="Pasalku.ai Backend")
     
     # CORS
     CORS_ORIGINS: str = Field(default="http://localhost:3000,http://127.0.0.1:3000")

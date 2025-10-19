@@ -66,9 +66,7 @@ export const Navigation: FC<NavigationProps> = ({
           <div className="flex items-center gap-3 cursor-pointer select-none hover:scale-105 transition-transform duration-300"
                onClick={() => window.location.href = '/'}
                onMouseDown={createRipple}>
-            <div className="w-10 h-10 bg-gradient-to-br from-gray-800 to-gray-900 rounded-lg flex items-center justify-center shadow-lg animate-glow">
-              <span className="text-white text-xl animate-bounce-in">⚖️</span>
-            </div>
+            <img src="/logo.svg" alt="Pasalku.ai logo" className="w-10 h-10 rounded-lg shadow-lg object-contain bg-white" />
             <div className="text-xl font-black text-gray-900 bg-gradient-to-r from-gray-900 to-gray-700 bg-clip-text text-transparent">
               Pasalku.ai
             </div>

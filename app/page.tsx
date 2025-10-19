@@ -9,12 +9,14 @@ import { PricingSection } from '@/components/pricing-section';
 import { EnhancedFooter } from '@/components/enhanced-footer';
 import { useEffect, useState } from 'react';
 import Link from 'next/link';
+import dynamic from 'next/dynamic';
 
 import { TestimonialsSection } from '@/components/testimonials-section'
 import { CTASection } from '@/components/cta-section'
 import { FAQSection } from '@/components/faq-section'
 
 export default function PasalkuLandingPage() {
+  const [isMounted, setIsMounted] = useState(false);
   const [isAuthenticated, setIsAuthenticated] = useState(false);
   const [userRole, setUserRole] = useState<'public' | 'legal_professional' | 'admin'>('public');
   const [showChat, setShowChat] = useState(false);
@@ -25,6 +27,19 @@ export default function PasalkuLandingPage() {
       text: 'Halo! 👋 Selamat datang di Pasalku.ai. Saya asisten virtual yang siap membantu Anda mengenal platform kami. Ada yang bisa saya bantu?'
     }
   ]);
+
+  // Handler functions - defined early to avoid hoisting issues
+  const handleLogin = () => {
+    window.location.href = '/login';
+  };
+
+  const handleChatClick = () => {
+    if (isAuthenticated) {
+      setShowChat(true);
+    } else {
+      window.location.href = '/login';
+    }
+  };
 
   const handleSendMessage = () => {
     if (!chatMessage.trim()) return;
@@ -87,38 +102,51 @@ export default function PasalkuLandingPage() {
   };
 
   useEffect(() => {
-    // Check authentication status
-    const userData = localStorage.getItem('user');
-    if (userData) {
-      try {
-        const user = JSON.parse(userData);
-        if (user.isAuthenticated) {
-          setIsAuthenticated(true);
-          setUserRole('public');
+    setIsMounted(true);
+    // Check authentication status - only on client side
+    if (typeof window !== 'undefined') {
+      const userData = localStorage.getItem('user');
+      if (userData) {
+        try {
+          const user = JSON.parse(userData);
+          if (user.isAuthenticated) {
+            setIsAuthenticated(true);
+            setUserRole('public');
+          }
+        } catch (error) {
+          console.error('Error parsing user data:', error);
         }
-      } catch (error) {
-        console.error('Error parsing user data:', error);
       }
     }
   }, []);
 
-  const handleLogin = () => {
-    // Redirect to login page
-    window.location.href = '/login';
-  };
-
-  const handleChatClick = () => {
-    if (isAuthenticated) {
-      setShowChat(true);
-    } else {
-      window.location.href = '/login';
-    }
-  };
+  // Avoid hydration mismatch by not conditionally rendering different content
 
   return (
-    <div className="min-h-screen bg-white text-foreground overflow-x-hidden relative">
-      {/* Simple background */}
-      <div className="fixed inset-0 -z-10 bg-gradient-to-br from-blue-50 via-white to-purple-50"></div>
+    <div className="min-h-screen bg-white text-gray-900 overflow-x-hidden relative text-dark-primary">
+      {/* Premium Subtle Background with Animation */}
+      <div className="fixed inset-0 -z-10">
+        <div className="absolute inset-0 bg-gradient-to-br from-blue-50 via-white to-purple-50"></div>
+        
+        {/* Subtle animated orbs */}
+        <div className="absolute top-0 right-0 w-96 h-96 bg-gradient-to-br from-blue-400/5 to-purple-400/5 rounded-full blur-3xl smooth-float anim-duration-8s"></div>
+        <div className="absolute bottom-0 left-0 w-96 h-96 bg-gradient-to-br from-purple-400/5 to-pink-400/5 rounded-full blur-3xl smooth-float anim-duration-10s anim-delay-2s"></div>
+        
+        {/* Subtle grid pattern */}
+        <div className="absolute inset-0 opacity-20 bg-dot-pattern"></div>
+      </div>
+      
+      {/* Floating icons - subtle - only render after hydration */}
+      <div className="fixed inset-0 pointer-events-none z-0" suppressHydrationWarning>
+        {isMounted && ['⚖️', '📜', '🔍', '💼', '✨', '🎓'].map((icon, i) => (
+          <div
+            key={i}
+            className={`absolute text-2xl opacity-10 smooth-float float-pos-${i + 1} anim-delay-${['1-5s', '3s', '4-5s', '6s', '7-5s', '9s'][i]} anim-duration-6s`}
+          >
+            {icon}
+          </div>
+        ))}
+      </div>
 
       <EnhancedNavigation
         isAuthenticated={isAuthenticated}
@@ -130,77 +158,47 @@ export default function PasalkuLandingPage() {
       <main className="relative z-10">
         <HeroSection onGetStarted={handleChatClick} />
         
-        {/* Test Marker 1 */}
-        <div className="py-10 bg-red-500 text-white text-center text-2xl font-bold">
-          ⬇️ AFTER HERO - STATISTICS BELOW ⬇️
-        </div>
-        
         {/* Statistics Section */}
         <section className="py-20 bg-gray-50">
-          <div className="max-w-7xl mx-auto px-4">
-            <h2 className="text-4xl font-bold text-center mb-10">📊 Statistics Section</h2>
-            <StatisticsSection />
-          </div>
+          <StatisticsSection />
         </section>
-        
-        {/* Test Marker 2 */}
-        <div className="py-10 bg-blue-500 text-white text-center text-2xl font-bold">
-          ⬇️ FEATURES BELOW ⬇️
-        </div>
         
         {/* Features Section */}
         <section className="py-20 bg-white">
-          <div className="max-w-7xl mx-auto px-4">
-            <h2 className="text-4xl font-bold text-center mb-10">✨ Features Section</h2>
-            <FeaturesSection />
-          </div>
+          <FeaturesSection />
         </section>
         
         {/* How It Works Section */}
         <section className="py-20 bg-gray-50">
-          <div className="max-w-7xl mx-auto px-4">
-            <h2 className="text-4xl font-bold text-center mb-10">🔄 How It Works</h2>
-            <HowItWorksSection />
-          </div>
+          <HowItWorksSection />
         </section>
         
         {/* Pricing Section */}
         <section className="py-20 bg-white">
-          <div className="max-w-7xl mx-auto px-4">
-            <h2 className="text-4xl font-bold text-center mb-10">💰 Pricing</h2>
-            <PricingSection />
-          </div>
+          <PricingSection />
         </section>
         
         {/* FAQ Section */}
         <section className="py-20 bg-gray-50">
-          <div className="max-w-7xl mx-auto px-4">
-            <h2 className="text-4xl font-bold text-center mb-10">❓ FAQ</h2>
-            <FAQSection />
-          </div>
+          <FAQSection />
         </section>
         
         {/* Testimonials Section */}
         <section className="py-20 bg-white">
-          <div className="max-w-7xl mx-auto px-4">
-            <h2 className="text-4xl font-bold text-center mb-10">⭐ Testimonials</h2>
-            <TestimonialsSection />
-          </div>
+          <TestimonialsSection />
         </section>
         
         {/* CTA Section */}
         <section className="py-20 bg-gradient-to-r from-blue-600 to-purple-600">
-          <div className="max-w-7xl mx-auto px-4">
-            <h2 className="text-4xl font-bold text-center mb-10 text-white">🚀 Call To Action</h2>
-            <CTASection onGetStarted={handleChatClick} />
-          </div>
+          <CTASection onGetStarted={handleChatClick} />
         </section>
       </main>
 
       <EnhancedFooter />
 
       {/* Mini Customer Service Chat */}
-      {showChat && (
+      <div suppressHydrationWarning>
+        {showChat && (
         <div className="fixed bottom-24 right-6 w-96 h-[500px] bg-white rounded-2xl shadow-2xl border border-gray-200 z-50 overflow-hidden animate-scale-in">
           {/* Header */}
           <div className="bg-gradient-to-r from-blue-600 via-purple-600 to-blue-600 text-white p-4 flex justify-between items-center">
@@ -252,12 +250,14 @@ export default function PasalkuLandingPage() {
 
             {/* Quick Options - Only show initially */}
             {messages.length === 1 && (
-              <div className="space-y-2 animate-fade-in mt-4" style={{ animationDelay: '0.2s' }}>
+              <div className="space-y-2 animate-fade-in mt-4 anim-delay-0-2s">
                 <p className="text-xs text-gray-500 font-medium px-2">Pilihan Cepat:</p>
                 
-                <button 
-                  onClick={() => handleQuickOption('Apa itu Pasalku.ai?')}
-                  className="w-full text-left bg-white hover:bg-blue-50 border border-gray-200 hover:border-blue-300 rounded-xl p-3 transition-all duration-200 hover:shadow-md group"
+                <button
+                   type="button"
+                   onClick={() => handleQuickOption('Apa itu Pasalku.ai?')}
+                   className="w-full text-left bg-white hover:bg-blue-50 border border-gray-200 hover:border-blue-300 rounded-xl p-3 transition-all duration-200 hover:shadow-md group"
+                   aria-label="Tanya tentang Pasalku.ai"
                 >
                   <div className="flex items-center gap-3">
                     <span className="text-2xl group-hover:scale-110 transition-transform">💡</span>
@@ -268,9 +268,11 @@ export default function PasalkuLandingPage() {
                   </div>
                 </button>
 
-                <button 
-                  onClick={() => handleQuickOption('Fitur apa saja yang tersedia?')}
-                  className="w-full text-left bg-white hover:bg-purple-50 border border-gray-200 hover:border-purple-300 rounded-xl p-3 transition-all duration-200 hover:shadow-md group"
+                <button
+                   type="button"
+                   onClick={() => handleQuickOption('Fitur apa saja yang tersedia?')}
+                   className="w-full text-left bg-white hover:bg-purple-50 border border-gray-200 hover:border-purple-300 rounded-xl p-3 transition-all duration-200 hover:shadow-md group"
+                   aria-label="Lihat fitur yang tersedia"
                 >
                   <div className="flex items-center gap-3">
                     <span className="text-2xl group-hover:scale-110 transition-transform">✨</span>
@@ -281,9 +283,11 @@ export default function PasalkuLandingPage() {
                   </div>
                 </button>
 
-                <button 
-                  onClick={() => handleQuickOption('Berapa harga paket?')}
-                  className="w-full text-left bg-white hover:bg-orange-50 border border-gray-200 hover:border-orange-300 rounded-xl p-3 transition-all duration-200 hover:shadow-md group"
+                <button
+                   type="button"
+                   onClick={() => handleQuickOption('Berapa harga paket?')}
+                   className="w-full text-left bg-white hover:bg-orange-50 border border-gray-200 hover:border-orange-300 rounded-xl p-3 transition-all duration-200 hover:shadow-md group"
+                   aria-label="Cek harga paket"
                 >
                   <div className="flex items-center gap-3">
                     <span className="text-2xl group-hover:scale-110 transition-transform">💰</span>
@@ -294,9 +298,11 @@ export default function PasalkuLandingPage() {
                   </div>
                 </button>
 
-                <button 
-                  onClick={() => window.location.href = '/chat'}
-                  className="w-full text-left bg-gradient-to-r from-blue-500 to-purple-500 hover:from-blue-600 hover:to-purple-600 text-white rounded-xl p-3 transition-all duration-200 hover:shadow-lg group"
+                <button
+                   type="button"
+                   onClick={handleChatClick}
+                   className="w-full text-left bg-gradient-to-r from-blue-500 to-purple-500 hover:from-blue-600 hover:to-purple-600 text-white rounded-xl p-3 transition-all duration-200 hover:shadow-lg group"
+                   aria-label="Mulai konsultasi hukum"
                 >
                   <div className="flex items-center gap-3">
                     <span className="text-2xl group-hover:scale-110 transition-transform">🚀</span>
@@ -321,9 +327,11 @@ export default function PasalkuLandingPage() {
                 placeholder="Ketik pertanyaan Anda..."
                 className="flex-1 px-4 py-2 border border-gray-300 rounded-full text-sm focus:outline-none focus:border-blue-400 focus:ring-2 focus:ring-blue-100 transition-all"
               />
-              <button 
+              <button
+                type="button"
                 onClick={handleSendMessage}
                 className="bg-gradient-to-r from-blue-500 to-purple-500 text-white p-2 rounded-full hover:shadow-lg transition-all duration-200 hover:scale-105"
+                aria-label="Kirim pesan"
               >
                 <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                   <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 19l9 2-9-18-9 18 9-2zm0 0v-8" />
@@ -332,10 +340,12 @@ export default function PasalkuLandingPage() {
             </div>
           </div>
         </div>
-      )}
+        )}
+      </div>
 
       {/* Premium Animated Floating Chat Button with Tooltip */}
-      {!showChat && (
+      <div suppressHydrationWarning>
+        {!showChat && (
         <div className="fixed bottom-6 right-6 z-40 group">
           {/* Tooltip */}
           <div className="absolute bottom-full right-0 mb-2 px-3 py-2 bg-gray-900 text-white text-sm rounded-lg opacity-0 group-hover:opacity-100 transition-opacity duration-300 whitespace-nowrap pointer-events-none">
@@ -366,7 +376,7 @@ export default function PasalkuLandingPage() {
             
             {/* Multiple pulse rings */}
             <span className="absolute inset-0 rounded-full bg-gradient-to-r from-blue-600 to-purple-600 animate-ping opacity-20"></span>
-            <span className="absolute inset-0 rounded-full bg-gradient-to-r from-blue-600 to-purple-600 animate-pulse opacity-10" style={{ animationDelay: '0.5s' }}></span>
+            <span className="absolute inset-0 rounded-full bg-gradient-to-r from-blue-600 to-purple-600 animate-pulse opacity-10 anim-delay-0-5s"></span>
             
             {/* Glow effect */}
             <span className="absolute inset-0 rounded-full blur-md bg-gradient-to-r from-blue-500 to-purple-500 opacity-50 group-hover:opacity-75 transition-opacity duration-300"></span>
@@ -375,7 +385,8 @@ export default function PasalkuLandingPage() {
             <span className="absolute -top-1 -right-1 w-3 h-3 bg-red-500 rounded-full animate-pulse border-2 border-white"></span>
           </button>
         </div>
-      )}
+        )}
+      </div>
     </div>
   )
 }

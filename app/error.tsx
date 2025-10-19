@@ -2,13 +2,12 @@
 
 import { useEffect } from 'react';
 import { ResetPage } from '@/components/ResetPage';
-import { useRollbar } from '@rollbar/react';
 
 export default function Error({ error, reset }: { error: Error; reset: () => void }) {
-  const rollbar = useRollbar();
   useEffect(() => {
-    rollbar.error(error);
-  }, [error, rollbar]);
+    // Log error to console
+    console.error('Error occurred:', error);
+  }, [error]);
 
   return <ResetPage reset={reset} />;
 }

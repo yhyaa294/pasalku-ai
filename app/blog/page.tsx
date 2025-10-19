@@ -29,7 +29,6 @@ export default function BlogPage() {
   const [activeFilter, setActiveFilter] = useState('semua')
   const [searchTerm, setSearchTerm] = useState('')
 
-  const handleLogin = () => window.location.href = '/login'
   const handleChatClick = () => window.location.href = '/chat'
 
   const blogFilters = [
@@ -139,7 +138,7 @@ export default function BlogPage() {
       <EnhancedNavigation
         isAuthenticated={isAuthenticated}
         userRole={userRole}
-        onLogin={handleLogin}
+        onLogin={() => window.location.href = '/login'}
         onChatClick={handleChatClick}
       />
 

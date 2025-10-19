@@ -2,7 +2,7 @@ import { FC } from 'react'
 import { 
   Brain, FileText, Shield, Globe, Users, Database, CheckCircle, MessageSquare, Award,
   Search, BookOpen, Bell, Lock, Zap, TrendingUp, Calendar, Video, Download,
-  FileCheck, Calculator, PieChart, Settings, Share2, Archive, Edit, ClipboardCheck
+  FileCheck, Calculator, PieChart, Settings, Share2, Archive, Edit, ClipboardCheck, ArrowRight
 } from 'lucide-react'
 
 interface FeaturesSectionProps {
@@ -158,51 +158,122 @@ export const FeaturesSection: FC<FeaturesSectionProps> = ({ className = '' }) =>
   ]
 
   return (
-    <section id="features" className={`py-16 md:py-32 px-4 scroll-animate bg-gradient-to-b from-slate-50 via-white to-gray-50 ${className}`}>
-      <div className="max-w-7xl mx-auto">
-        <div className="text-center mb-12 md:mb-16">
-          <h2 className="text-4xl md:text-6xl font-black mb-4 md:mb-6 animate-text-shimmer">
-            <span className="bg-gradient-to-r from-orange-600 to-orange-500 bg-clip-text text-transparent">24+ Fitur</span> Lengkap
+    <section id="features" className={`py-20 md:py-32 px-4 bg-gradient-to-b from-white via-blue-50/20 to-white relative overflow-hidden ${className}`}>
+      {/* Background Pattern */}
+      <div className="absolute inset-0 bg-[radial-gradient(circle_at_30%_50%,rgba(59,130,246,0.05),transparent_50%)]"></div>
+      
+      <div className="max-w-7xl mx-auto relative z-10">
+        <div className="text-center mb-16 md:mb-20">
+          <div className="inline-flex items-center gap-2 px-4 py-2 rounded-full bg-blue-100 text-blue-600 text-sm font-bold mb-6">
+            <span>✨</span> 50+ Fitur AI Powerful
+          </div>
+          <h2 className="text-4xl md:text-6xl font-black mb-6 tracking-tight">
+            <span className="bg-gradient-to-r from-blue-600 via-purple-600 to-blue-600 bg-clip-text text-transparent">Fitur Lengkap</span> untuk Semua Kebutuhan
           </h2>
-          <p className="text-lg md:text-xl text-muted-foreground max-w-3xl mx-auto leading-relaxed">
-            Semua yang Anda butuhkan untuk mengelola kebutuhan hukum dalam satu platform
+          <p className="text-xl text-gray-600 max-w-3xl mx-auto leading-relaxed">
+            Platform all-in-one dengan teknologi AI terdepan untuk solusi hukum Anda
           </p>
         </div>
 
-        {/* Grid 4 kolom untuk desktop, 2 untuk tablet, 1 untuk mobile */}
-        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-4 md:gap-6">
-          {features.map((feature, index) => (
+        {/* Bento Grid Layout - Modern & Interactive */}
+        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4 md:gap-6">
+          {/* Featured Large Cards */}
+          <div className="md:col-span-2 lg:col-span-2 bg-white/80 backdrop-blur-xl rounded-3xl p-8 border border-gray-200/50 shadow-xl hover:shadow-2xl hover:shadow-blue-500/10 transition-all duration-500 hover:-translate-y-1 group">
+            <div className="flex items-start gap-4 mb-6">
+              <div className="w-16 h-16 bg-gradient-to-br from-blue-500 to-purple-600 rounded-2xl flex items-center justify-center shadow-lg group-hover:scale-110 transition-transform">
+                <MessageSquare className="w-8 h-8 text-white" />
+              </div>
+              <div>
+                <h3 className="text-2xl font-bold text-gray-900 mb-2">AI Chat Konsultasi</h3>
+                <p className="text-gray-600">Chat interaktif dengan AI untuk konsultasi hukum secara real-time dengan akurasi tinggi</p>
+              </div>
+            </div>
+            <div className="grid grid-cols-3 gap-3">
+              <div className="bg-blue-50 rounded-xl p-3 text-center">
+                <div className="text-xl font-bold text-blue-600">24/7</div>
+                <div className="text-xs text-gray-600">Available</div>
+              </div>
+              <div className="bg-purple-50 rounded-xl p-3 text-center">
+                <div className="text-xl font-bold text-purple-600">Real-time</div>
+                <div className="text-xs text-gray-600">Response</div>
+              </div>
+              <div className="bg-green-50 rounded-xl p-3 text-center">
+                <div className="text-xl font-bold text-green-600">Smart</div>
+                <div className="text-xs text-gray-600">AI Powered</div>
+              </div>
+            </div>
+          </div>
+
+          <div className="md:col-span-2 lg:col-span-2 bg-white/80 backdrop-blur-xl rounded-3xl p-8 border border-gray-200/50 shadow-xl hover:shadow-2xl hover:shadow-purple-500/10 transition-all duration-500 hover:-translate-y-1 group">
+            <div className="flex items-start gap-4 mb-6">
+              <div className="w-16 h-16 bg-gradient-to-br from-purple-500 to-pink-600 rounded-2xl flex items-center justify-center shadow-lg group-hover:scale-110 transition-transform">
+                <FileText className="w-8 h-8 text-white" />
+              </div>
+              <div>
+                <h3 className="text-2xl font-bold text-gray-900 mb-2">Document Analysis</h3>
+                <p className="text-gray-600">Upload dan analisis dokumen hukum secara otomatis dengan AI canggih</p>
+              </div>
+            </div>
+            <div className="grid grid-cols-3 gap-3">
+              <div className="bg-purple-50 rounded-xl p-3 text-center">
+                <div className="text-xl font-bold text-purple-600">Auto</div>
+                <div className="text-xs text-gray-600">Detection</div>
+              </div>
+              <div className="bg-pink-50 rounded-xl p-3 text-center">
+                <div className="text-xl font-bold text-pink-600">Fast</div>
+                <div className="text-xs text-gray-600">Processing</div>
+              </div>
+              <div className="bg-purple-50 rounded-xl p-3 text-center">
+                <div className="text-xl font-bold text-purple-600">Secure</div>
+                <div className="text-xs text-gray-600">Encrypted</div>
+              </div>
+            </div>
+          </div>
+
+          {/* Medium Cards */}
+          {features.slice(2, 8).map((feature, index) => (
             <div
               key={index}
-              className="group relative bg-white rounded-xl p-6 border border-gray-200 hover:border-orange-300 transition-all duration-300 hover:shadow-lg hover:-translate-y-1 scroll-animate-scale"
-              style={{ animationDelay: `${index * 0.05}s` }}
+              className="group bg-white/80 backdrop-blur-xl rounded-2xl p-6 border border-gray-200/50 shadow-lg hover:shadow-xl hover:-translate-y-1 transition-all duration-300"
             >
-              {/* Gradient background on hover */}
-              <div className={`absolute inset-0 bg-gradient-to-br ${feature.color} opacity-0 group-hover:opacity-5 rounded-xl transition-opacity duration-300`}></div>
-              
-              <div className="relative">
-                {/* Icon with gradient background */}
-                <div className={`w-12 h-12 bg-gradient-to-br ${feature.color} rounded-lg flex items-center justify-center mb-4 group-hover:scale-110 transition-transform duration-300 shadow-md`}>
-                  <feature.icon className="w-6 h-6 text-white" />
-                </div>
-                
-                {/* Title */}
-                <h3 className="text-base font-bold mb-2 text-gray-900 group-hover:text-orange-600 transition-colors">
-                  {feature.title}
-                </h3>
-                
-                {/* Description */}
-                <p className="text-sm text-gray-600 leading-relaxed">
-                  {feature.description}
-                </p>
+              <div className={`w-14 h-14 bg-gradient-to-br ${feature.color} rounded-xl flex items-center justify-center mb-4 group-hover:scale-110 transition-transform shadow-md`}>
+                <feature.icon className="w-7 h-7 text-white" />
               </div>
+              <h3 className="text-lg font-bold mb-2 text-gray-900">
+                {feature.title}
+              </h3>
+              <p className="text-sm text-gray-600 leading-relaxed">
+                {feature.description}
+              </p>
+            </div>
+          ))}
+
+          {/* Small Cards - Compact */}
+          {features.slice(8).map((feature, index) => (
+            <div
+              key={index}
+              className="group bg-white/60 backdrop-blur-lg rounded-xl p-5 border border-gray-200/50 hover:bg-white/80 hover:shadow-lg hover:-translate-y-0.5 transition-all duration-300"
+            >
+              <div className={`w-12 h-12 bg-gradient-to-br ${feature.color} rounded-lg flex items-center justify-center mb-3 group-hover:scale-110 transition-transform shadow-sm`}>
+                <feature.icon className="w-6 h-6 text-white" />
+              </div>
+              <h3 className="text-base font-bold mb-1 text-gray-900">
+                {feature.title}
+              </h3>
+              <p className="text-xs text-gray-600 leading-relaxed">
+                {feature.description}
+              </p>
             </div>
           ))}
         </div>
 
-        {/* Bottom CTA */}
-        <div className="mt-12 text-center">
-          <p className="text-gray-500 text-sm">
+        {/* Bottom CTA - Modern */}
+        <div className="mt-16 text-center">
+          <div className="inline-flex items-center gap-2 px-6 py-3 bg-gradient-to-r from-blue-600 to-purple-600 text-white rounded-full font-semibold shadow-lg hover:shadow-xl hover:scale-105 transition-all cursor-pointer">
+            <span>Lihat Semua Fitur</span>
+            <ArrowRight className="w-5 h-5" />
+          </div>
+          <p className="text-gray-500 text-sm mt-4">
             Dan masih banyak fitur lainnya yang terus kami kembangkan 🚀
           </p>
         </div>

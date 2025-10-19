@@ -44,22 +44,28 @@ export default function ChatPage() {
   };
 
   const handleClose = () => {
-    router.push('/dashboard');
+    router.push('/');
   };
 
   if (isLoading) {
     return (
-      <div className="min-h-screen flex items-center justify-center bg-gradient-to-br from-blue-50 to-purple-50">
+      <div className="min-h-screen flex items-center justify-center bg-gradient-to-br from-slate-50 via-blue-50 to-purple-50">
         <div className="text-center">
-          <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-blue-600 mx-auto mb-4"></div>
-          <p className="text-gray-600">Loading chat interface...</p>
+          <div className="relative">
+            <div className="animate-spin rounded-full h-16 w-16 border-4 border-blue-200 border-t-blue-600 mx-auto mb-4"></div>
+            <div className="absolute inset-0 flex items-center justify-center">
+              <span className="text-2xl">⚖️</span>
+            </div>
+          </div>
+          <p className="text-gray-700 font-medium text-lg">Memuat Asisten Hukum AI...</p>
+          <p className="text-gray-500 text-sm mt-2">Mohon tunggu sebentar</p>
         </div>
       </div>
     );
   }
 
   return (
-    <div className="min-h-screen bg-gradient-to-br from-blue-50 to-purple-50">
+    <div className="min-h-screen bg-gradient-to-br from-slate-50 via-blue-50 to-purple-50">
       <EnhancedChatInterface
         isAuthenticated={isAuthenticated}
         userRole={userRole}

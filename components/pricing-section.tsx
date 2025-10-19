@@ -87,13 +87,13 @@ export const PricingSection: FC<PricingSectionProps> = ({ className = '' }) => {
   ]
 
   return (
-    <section id="pricing" className={`py-16 md:py-32 px-4 scroll-animate ${className}`}>
+    <section id="pricing" className={`py-16 md:py-32 px-4 ${className}`}>
       <div className="max-w-7xl mx-auto">
         <div className="text-center mb-12 md:mb-20">
           <h2 className="text-4xl md:text-6xl font-black mb-6 md:mb-8 animate-text-shimmer">
             Pilih <span className="text-primary">Paket</span> Anda
           </h2>
-          <p className="text-lg md:text-2xl text-muted-foreground max-w-4xl mx-auto leading-relaxed">
+          <p className="text-lg md:text-2xl text-gray-600 max-w-4xl mx-auto leading-relaxed">
             Mulai gratis atau upgrade untuk fitur lebih lengkap dan konsultasi unlimited
           </p>
         </div>
@@ -102,7 +102,7 @@ export const PricingSection: FC<PricingSectionProps> = ({ className = '' }) => {
           {plans.map((plan, index) => (
             <div
               key={index}
-              className={`relative glass-card rounded-2xl md:rounded-3xl p-6 md:p-8 border transition-all duration-300 hover-lift scroll-animate-scale ${
+              className={`relative glass-card rounded-2xl md:rounded-3xl p-6 md:p-8 border transition-all duration-300 hover-lift ${
                 plan.popular ? "border-primary shadow-xl scale-105" : "border-border hover:shadow-xl"
               }`}
               style={{ animationDelay: `${index * 0.15}s` }}
@@ -125,7 +125,7 @@ export const PricingSection: FC<PricingSectionProps> = ({ className = '' }) => {
                 {plan.name}
               </h3>
               
-              <p className="text-sm md:text-base text-muted-foreground mb-4 font-semibold">
+              <p className="text-sm md:text-base text-gray-600 mb-4 font-semibold">
                 {plan.subtitle}
               </p>
 
@@ -138,7 +138,7 @@ export const PricingSection: FC<PricingSectionProps> = ({ className = '' }) => {
                 </span>
               </div>
 
-              <p className="text-sm md:text-base text-muted-foreground mb-6 md:mb-8 leading-relaxed">
+              <p className="text-sm md:text-base text-gray-600 mb-6 md:mb-8 leading-relaxed">
                 {plan.description}
               </p>
 
@@ -146,7 +146,7 @@ export const PricingSection: FC<PricingSectionProps> = ({ className = '' }) => {
                 {plan.features.map((feature, idx) => (
                   <div key={idx} className="flex items-start gap-3">
                     <CheckCircle className="w-4 h-4 md:w-5 md:h-5 text-primary animate-cyber-pulse flex-shrink-0 mt-0.5" />
-                    <span className="text-sm md:text-base text-muted-foreground">{feature}</span>
+                    <span className="text-sm md:text-base text-gray-700">{feature}</span>
                   </div>
                 ))}
                 {plan.excluded && plan.excluded.map((feature, idx) => (
@@ -154,7 +154,7 @@ export const PricingSection: FC<PricingSectionProps> = ({ className = '' }) => {
                     <svg className="w-4 h-4 md:w-5 md:h-5 text-gray-400 flex-shrink-0 mt-0.5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                       <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M6 18L18 6M6 6l12 12" />
                     </svg>
-                    <span className="text-sm md:text-base text-muted-foreground line-through">{feature}</span>
+                    <span className="text-sm md:text-base text-gray-500 line-through">{feature}</span>
                   </div>
                 ))}
               </div>
@@ -181,7 +181,7 @@ export const PricingSection: FC<PricingSectionProps> = ({ className = '' }) => {
           <h3 className="text-2xl md:text-3xl font-bold mb-4 text-foreground">
             Add-On Terpopuler
           </h3>
-          <p className="text-muted-foreground mb-8">
+          <p className="text-gray-600 mb-8">
             Sesuaikan paket Anda dengan fitur tambahan yang dibutuhkan
           </p>
           
@@ -189,7 +189,7 @@ export const PricingSection: FC<PricingSectionProps> = ({ className = '' }) => {
             <div className="glass-card rounded-xl p-6 border border-border hover:border-primary transition-all">
               <div className="text-3xl mb-3">💾</div>
               <h4 className="font-bold text-lg mb-2 text-foreground">Additional Storage</h4>
-              <p className="text-sm text-muted-foreground mb-3">Tambahan penyimpanan 50GB</p>
+              <p className="text-sm text-gray-600 mb-3">Tambahan penyimpanan 50GB</p>
               <p className="font-bold text-primary mb-3">Rp 47.000/bulan</p>
               <button 
                 onClick={() => router.push('/pricing')}
@@ -202,7 +202,7 @@ export const PricingSection: FC<PricingSectionProps> = ({ className = '' }) => {
             <div className="glass-card rounded-xl p-6 border border-border hover:border-primary transition-all">
               <div className="text-3xl mb-3">📊</div>
               <h4 className="font-bold text-lg mb-2 text-foreground">Advanced Analytics</h4>
-              <p className="text-sm text-muted-foreground mb-3">Dashboard analytics dengan insights mendalam</p>
+              <p className="text-sm text-gray-600 mb-3">Dashboard analytics dengan insights mendalam</p>
               <p className="font-bold text-primary mb-3">Rp 97.000/bulan</p>
               <button 
                 onClick={() => router.push('/pricing')}
@@ -215,7 +215,7 @@ export const PricingSection: FC<PricingSectionProps> = ({ className = '' }) => {
             <div className="glass-card rounded-xl p-6 border border-border hover:border-primary transition-all">
               <div className="text-3xl mb-3">🏷️</div>
               <h4 className="font-bold text-lg mb-2 text-foreground">White Label Solution</h4>
-              <p className="text-sm text-muted-foreground mb-3">Solusi white label untuk kantor hukum</p>
+              <p className="text-sm text-gray-600 mb-3">Solusi white label untuk kantor hukum</p>
               <p className="font-bold text-primary mb-3">Hubungi untuk harga</p>
               <button 
                 onClick={() => router.push('/pricing')}

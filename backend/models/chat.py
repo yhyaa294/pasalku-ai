@@ -53,8 +53,8 @@ class ChatSession(Base):
     case_number = Column(String, nullable=True)  # If linked to actual case
     case_status = Column(String, nullable=True)  # draft, filed, ongoing, closed
     
-    # Metadata
-    metadata = Column(JSON, nullable=True)
+    # Session metadata (renamed from 'metadata' to avoid SQLAlchemy reserved word)
+    session_metadata = Column(JSON, nullable=True)
     tags = Column(JSON, nullable=True)  # Array of tags
     
     # Timestamps
@@ -106,8 +106,8 @@ class DocumentMetadata(Base):
     key_points = Column(JSON, nullable=True)  # Array of key points
     legal_issues = Column(JSON, nullable=True)  # Array of identified legal issues
     
-    # Metadata
-    metadata = Column(JSON, nullable=True)
+    # Document metadata (renamed from 'metadata' to avoid SQLAlchemy reserved word)
+    document_metadata = Column(JSON, nullable=True)
     tags = Column(JSON, nullable=True)
     
     # Timestamps
@@ -151,8 +151,8 @@ class AIQueryLog(Base):
     # Cost tracking (for internal analytics)
     estimated_cost = Column(Float, nullable=True)  # in USD
     
-    # Metadata
-    metadata = Column(JSON, nullable=True)
+    # Query metadata (renamed from 'metadata' to avoid SQLAlchemy reserved word)
+    query_metadata = Column(JSON, nullable=True)
     
     # Timestamp
     created_at = Column(DateTime, default=datetime.utcnow, nullable=False, index=True)

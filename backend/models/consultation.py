@@ -1,8 +1,9 @@
-from sqlalchemy import Column, Integer, String, Text, DateTime, ForeignKey, Enum, Float
+from sqlalchemy import Column, Integer, String, Text, DateTime, ForeignKey, Enum, Float, UUID
 from sqlalchemy.orm import relationship
 from sqlalchemy.sql import func
 from ..database import Base
 import enum
+import uuid
 
 class LegalCategory(str, enum.Enum):
     PIDANA = "Hukum Pidana"
@@ -16,7 +17,7 @@ class ConsultationSession(Base):
     __tablename__ = "consultation_sessions"
 
     id = Column(Integer, primary_key=True, index=True)
-    user_id = Column(Integer, ForeignKey("users.id"))
+    user_id = Column(UUID(as_uuid=True), ForeignKey("users.id"))
     session_name = Column(String(255), nullable=False)
     legal_category = Column(String(50), nullable=False)
     status = Column(String(20), default="active")  # active, completed, archived

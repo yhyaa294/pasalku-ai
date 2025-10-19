@@ -1,0 +1,93 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+<html>
+<head>
+    <title>Debug Pasalku.ai</title>
+    <style>
+        body { 
+            font-family: Arial; 
+            padding: 40px;
+            background: #f5f5f5;
+        }
+        .container {
+            max-width: 800px;
+            margin: 0 auto;
+            background: white;
+            padding: 30px;
+            border-radius: 8px;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+        }
+        h1 { color: #8b4513; }
+        .step {
+            background: #f9f9f9;
+            padding: 15px;
+            margin: 15px 0;
+            border-left: 4px solid #8b4513;
+        }
+        code {
+            background: #f1f1f1;
+            padding: 2px 6px;
+            border-radius: 3px;
+            font-family: monospace;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>🔍 Debug Halaman Putih Pasalku.ai</h1>
+        
+        <div class="step">
+            <h3>✅ Langkah 1: Cek Console Error</h3>
+            <p>Tekan <code>F12</code> → Tab <code>Console</code></p>
+            <p>Screenshot semua error yang berwarna merah</p>
+        </div>
+
+        <div class="step">
+            <h3>✅ Langkah 2: Cek Network Tab</h3>
+            <p>Tekan <code>F12</code> → Tab <code>Network</code></p>
+            <p>Refresh halaman (Ctrl+R)</p>
+            <p>Cari file yang berwarna merah (failed to load)</p>
+        </div>
+
+        <div class="step">
+            <h3>✅ Langkah 3: Cek Terminal Frontend</h3>
+            <p>Di terminal tempat <code>npm run dev</code> jalan:</p>
+            <ul>
+                <li>Ada error kompilasi?</li>
+                <li>Ada warning tentang file tidak ditemukan?</li>
+            </ul>
+        </div>
+
+        <div class="step">
+            <h3>🔧 Quick Fix - Coba ini:</h3>
+            <p><strong>1. Hard refresh browser:</strong> <code>Ctrl + Shift + R</code></p>
+            <p><strong>2. Clear browser cache</strong></p>
+            <p><strong>3. Buka di Incognito/Private mode</strong></p>
+            <p><strong>4. Coba browser lain (Chrome/Edge/Firefox)</strong></p>
+        </div>
+
+        <div class="step">
+            <h3>📝 Info untuk Developer:</h3>
+            <p>Next.js Dev Server: <strong>http://localhost:5000</strong></p>
+            <p>Backend API: <strong>http://localhost:8000</strong></p>
+            <p>Status: <span id="status">Checking...</span></p>
+        </div>
+
+        <script>
+            // Check if Next.js is running
+            fetch('http://localhost:5000')
+                .then(() => {
+                    document.getElementById('status').textContent = '✅ Frontend Running';
+                    document.getElementById('status').style.color = 'green';
+                })
+                .catch(() => {
+                    document.getElementById('status').textContent = '❌ Frontend Not Running';
+                    document.getElementById('status').style.color = 'red';
+                });
+        </script>
+    </div>
+</body>
+</html>

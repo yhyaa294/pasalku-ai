@@ -164,7 +164,7 @@ const AnalyticsDashboard = () => {
     <div className="min-h-screen bg-gray-50 p-6">
       {/* Header */}
       <div className="mb-8">
-        <div className="flex items-center justify-between mb-4">
+        <div className="flex flex-col md:flex-row md:items-center md:justify-between mb-4 gap-4">
           <div>
             <h1 className="text-3xl font-bold text-gray-900 flex items-center gap-2">
               <BarChart3 className="w-8 h-8 text-blue-600" />
@@ -178,10 +178,15 @@ const AnalyticsDashboard = () => {
           {/* Period Selector */}
           <div className="flex items-center gap-2">
             <Calendar className="w-5 h-5 text-gray-600" />
+            <label htmlFor="period-select" className="sr-only">
+              Select period
+            </label>
             <select
+              id="period-select"
               value={selectedPeriod}
               onChange={(e) => setSelectedPeriod(Number(e.target.value))}
-              className="px-4 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500"
+              aria-label="Select period"
+              className="px-4 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 bg-white"
             >
               <option value={7}>Last 7 days</option>
               <option value={30}>Last 30 days</option>
@@ -199,7 +204,7 @@ const AnalyticsDashboard = () => {
       {/* Summary Cards */}
       <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6 mb-8">
         {/* Total Queries */}
-        <div className="bg-white rounded-xl shadow-sm p-6 border border-gray-200">
+        <div className="bg-white rounded-xl shadow-sm p-6 border border-gray-200 hover:shadow-md transition-shadow">
           <div className="flex items-center justify-between mb-4">
             <div className="p-3 bg-blue-100 rounded-lg">
               <MessageSquare className="w-6 h-6 text-blue-600" />
@@ -215,7 +220,7 @@ const AnalyticsDashboard = () => {
         </div>
 
         {/* Citations Detected */}
-        <div className="bg-white rounded-xl shadow-sm p-6 border border-gray-200">
+        <div className="bg-white rounded-xl shadow-sm p-6 border border-gray-200 hover:shadow-md transition-shadow">
           <div className="flex items-center justify-between mb-4">
             <div className="p-3 bg-green-100 rounded-lg">
               <Scale className="w-6 h-6 text-green-600" />
@@ -231,7 +236,7 @@ const AnalyticsDashboard = () => {
         </div>
 
         {/* Predictions Made */}
-        <div className="bg-white rounded-xl shadow-sm p-6 border border-gray-200">
+        <div className="bg-white rounded-xl shadow-sm p-6 border border-gray-200 hover:shadow-md transition-shadow">
           <div className="flex items-center justify-between mb-4">
             <div className="p-3 bg-purple-100 rounded-lg">
               <TrendingUp className="w-6 h-6 text-purple-600" />
@@ -247,7 +252,7 @@ const AnalyticsDashboard = () => {
         </div>
 
         {/* Documents Generated */}
-        <div className="bg-white rounded-xl shadow-sm p-6 border border-gray-200">
+        <div className="bg-white rounded-xl shadow-sm p-6 border border-gray-200 hover:shadow-md transition-shadow">
           <div className="flex items-center justify-between mb-4">
             <div className="p-3 bg-orange-100 rounded-lg">
               <FileText className="w-6 h-6 text-orange-600" />
@@ -318,8 +323,8 @@ const AnalyticsDashboard = () => {
               const percentage = (topic.count / maxCount) * 100;
               
               return (
-                <div key={index}>
-                  <div className="flex items-center justify-between mb-1">
+                <div key={index} className="space-y-1">
+                  <div className="flex items-center justify-between">
                     <span className="text-sm font-medium text-gray-700 capitalize">
                       {topic.topic}
                     </span>
@@ -327,7 +332,7 @@ const AnalyticsDashboard = () => {
                   </div>
                   <div className="w-full bg-gray-200 rounded-full h-2">
                     <div
-                      className="bg-blue-600 h-2 rounded-full transition-all"
+                      className="bg-blue-600 h-2 rounded-full transition-all duration-300"
                       style={{ width: `${percentage}%` }}
                     />
                   </div>
@@ -345,8 +350,8 @@ const AnalyticsDashboard = () => {
           </h3>
           <div className="space-y-3">
             {data.language_distribution.map((lang, index) => (
-              <div key={index}>
-                <div className="flex items-center justify-between mb-1">
+              <div key={index} className="space-y-1">
+                <div className="flex items-center justify-between">
                   <span className="text-sm font-medium text-gray-700">
                     {getLanguageName(lang.language)}
                   </span>
@@ -356,7 +361,7 @@ const AnalyticsDashboard = () => {
                 </div>
                 <div className="w-full bg-gray-200 rounded-full h-2">
                   <div
-                    className="bg-purple-600 h-2 rounded-full transition-all"
+                    className="bg-purple-600 h-2 rounded-full transition-all duration-300"
                     style={{ width: `${lang.percentage}%` }}
                   />
                 </div>
@@ -375,60 +380,54 @@ const AnalyticsDashboard = () => {
             Prediction Confidence
           </h3>
           <div className="space-y-4">
-            <div className="flex items-center gap-4">
-              <div className="flex-1">
-                <div className="flex items-center justify-between mb-1">
-                  <span className="text-sm font-medium text-green-700">
-                    High (≥80%)
-                  </span>
-                  <span className="text-sm text-gray-600">
-                    {data.prediction_stats.high_confidence_count}
-                  </span>
-                </div>
-                <div className="w-full bg-gray-200 rounded-full h-2">
-                  <div
-                    className="bg-green-600 h-2 rounded-full"
-                    style={{ width: `${data.prediction_stats.high_confidence_percentage}%` }}
-                  />
-                </div>
+            <div className="space-y-1">
+              <div className="flex items-center justify-between">
+                <span className="text-sm font-medium text-green-700">
+                  High (≥80%)
+                </span>
+                <span className="text-sm text-gray-600">
+                  {data.prediction_stats.high_confidence_count}
+                </span>
+              </div>
+              <div className="w-full bg-gray-200 rounded-full h-2">
+                <div
+                  className="bg-green-600 h-2 rounded-full transition-all duration-300"
+                  style={{ width: `${data.prediction_stats.high_confidence_percentage}%` }}
+                />
               </div>
             </div>
 
-            <div className="flex items-center gap-4">
-              <div className="flex-1">
-                <div className="flex items-center justify-between mb-1">
-                  <span className="text-sm font-medium text-yellow-700">
-                    Medium (60-79%)
-                  </span>
-                  <span className="text-sm text-gray-600">
-                    {data.prediction_stats.medium_confidence_count}
-                  </span>
-                </div>
-                <div className="w-full bg-gray-200 rounded-full h-2">
-                  <div
-                    className="bg-yellow-600 h-2 rounded-full"
-                    style={{ width: `${data.prediction_stats.medium_confidence_percentage}%` }}
-                  />
-                </div>
+            <div className="space-y-1">
+              <div className="flex items-center justify-between">
+                <span className="text-sm font-medium text-yellow-700">
+                  Medium (60-79%)
+                </span>
+                <span className="text-sm text-gray-600">
+                  {data.prediction_stats.medium_confidence_count}
+                </span>
+              </div>
+              <div className="w-full bg-gray-200 rounded-full h-2">
+                <div
+                  className="bg-yellow-600 h-2 rounded-full transition-all duration-300"
+                  style={{ width: `${data.prediction_stats.medium_confidence_percentage}%` }}
+                />
               </div>
             </div>
 
-            <div className="flex items-center gap-4">
-              <div className="flex-1">
-                <div className="flex items-center justify-between mb-1">
-                  <span className="text-sm font-medium text-red-700">
-                    Low (&lt;60%)
-                  </span>
-                  <span className="text-sm text-gray-600">
-                    {data.prediction_stats.low_confidence_count}
-                  </span>
-                </div>
-                <div className="w-full bg-gray-200 rounded-full h-2">
-                  <div
-                    className="bg-red-600 h-2 rounded-full"
-                    style={{ width: `${data.prediction_stats.low_confidence_percentage}%` }}
-                  />
-                </div>
+            <div className="space-y-1">
+              <div className="flex items-center justify-between">
+                <span className="text-sm font-medium text-red-700">
+                  Low (&lt;60%)
+                </span>
+                <span className="text-sm text-gray-600">
+                  {data.prediction_stats.low_confidence_count}
+                </span>
+              </div>
+              <div className="w-full bg-gray-200 rounded-full h-2">
+                <div
+                  className="bg-red-600 h-2 rounded-full transition-all duration-300"
+                  style={{ width: `${data.prediction_stats.low_confidence_percentage}%` }}
+                />
               </div>
             </div>
           </div>
@@ -456,8 +455,8 @@ const AnalyticsDashboard = () => {
                 const percentage = (count / maxCount) * 100;
                 
                 return (
-                  <div key={index}>
-                    <div className="flex items-center justify-between mb-1">
+                  <div key={index} className="space-y-1">
+                    <div className="flex items-center justify-between">
                       <span className="text-sm font-medium text-gray-700">
                         {getDocumentTypeName(type)}
                       </span>
@@ -465,7 +464,7 @@ const AnalyticsDashboard = () => {
                     </div>
                     <div className="w-full bg-gray-200 rounded-full h-2">
                       <div
-                        className="bg-orange-600 h-2 rounded-full"
+                        className="bg-orange-600 h-2 rounded-full transition-all duration-300"
                         style={{ width: `${percentage}%` }}
                       />
                     </div>
@@ -486,7 +485,7 @@ const AnalyticsDashboard = () => {
           {data.citation_stats.most_cited_laws.slice(0, 6).map((law, index) => (
             <div
               key={index}
-              className="p-4 bg-gray-50 rounded-lg border border-gray-200"
+              className="p-4 bg-gray-50 rounded-lg border border-gray-200 hover:bg-gray-100 transition-colors"
             >
               <div className="text-sm font-medium text-gray-900 mb-1">
                 {law.law}
@@ -521,7 +520,7 @@ const AnalyticsDashboard = () => {
         <div className="space-y-2">
           {data.timeline.slice(-14).map((point, index) => (
             <div key={index} className="flex items-center gap-2">
-              <div className="text-xs text-gray-600 w-24">
+              <div className="text-xs text-gray-600 w-24 flex-shrink-0">
                 {new Date(point.timestamp).toLocaleDateString('id-ID', {
                   month: 'short',
                   day: 'numeric'
@@ -558,7 +557,7 @@ const AnalyticsDashboard = () => {
                     />
                   )}
                 </div>
-                <span className="text-xs text-gray-600 w-12 text-right">
+                <span className="text-xs text-gray-600 w-12 text-right flex-shrink-0">
                   {point.total}
                 </span>
               </div>
@@ -566,7 +565,7 @@ const AnalyticsDashboard = () => {
           ))}
         </div>
 
-        <div className="mt-4 pt-4 border-t border-gray-200 flex items-center gap-4 text-xs">
+        <div className="mt-4 pt-4 border-t border-gray-200 flex flex-wrap items-center gap-4 text-xs">
           <div className="flex items-center gap-2">
             <div className="w-3 h-3 bg-blue-500 rounded" />
             <span className="text-gray-600">Chat</span>

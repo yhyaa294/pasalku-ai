@@ -92,6 +92,9 @@ class DatabaseConnections:
             try:
                 # Use direct Supabase Postgres URL if available, otherwise construct from components
                 supabase_db_url = settings.PASALKU_AI_POSTGRES_URL or f"postgresql://postgres:{self.supabase_anon_key}@{self.supabase_url.replace('https://', '')}:5432/postgres?sslmode=require"
+                # Fix dialect for SQLAlchemy 2.0 - use postgresql+psycopg2://
+                if supabase_db_url and supabase_db_url.startswith("postgresql://"):
+                    supabase_db_url = supabase_db_url.replace("postgresql://", "postgresql+psycopg2://", 1)
                 self.supabase_engine = create_engine(
                     supabase_db_url,
                     pool_pre_ping=True,

@@ -191,6 +191,7 @@ const DocumentUpload: React.FC<DocumentUploadProps> = ({
             accept={allowedTypes.join(',')}
             onChange={handleFileInput}
             disabled={uploading}
+            title="Upload a file"
           />
 
           <div className="flex flex-col items-center space-y-4">
@@ -221,6 +222,8 @@ const DocumentUpload: React.FC<DocumentUploadProps> = ({
           <AlertCircle className="w-5 h-5 text-red-500 flex-shrink-0" />
           <p className="text-sm text-red-700">{error}</p>
           <button
+            type="button"
+            aria-label="Tutup"
             onClick={() => setError(null)}
             className="ml-auto text-red-500 hover:text-red-700"
           >
@@ -263,6 +266,8 @@ const DocumentUpload: React.FC<DocumentUploadProps> = ({
               </div>
             </div>
             <button
+              type="button"
+              aria-label="Hapus unggahan"
               onClick={clearUpload}
               className="text-green-500 hover:text-green-700 flex-shrink-0"
             >
@@ -272,28 +277,28 @@ const DocumentUpload: React.FC<DocumentUploadProps> = ({
         </div>
       )}
 
-      {/* Analysis Preview Modal (placeholder for when we implement it) */}
+      {/* Preview Area */}
       {showPreview && uploadedDocument && (
-        <div className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50">
-          <div className="bg-white rounded-lg p-6 max-w-2xl w-full mx-4 max-h-[80vh] overflow-y-auto">
-            <div className="flex items-center justify-between mb-4">
-              <h3 className="text-lg font-semibold">Analisis Dokumen</h3>
-              <button
-                onClick={() => setShowPreview(false)}
-                className="text-gray-500 hover:text-gray-700"
-              >
-                <X className="w-6 h-6" />
-              </button>
-            </div>
-            <div className="space-y-4">
-              <p className="text-sm text-gray-600">
-                Analisis lengkap akan ditampilkan di sini setelah AI processing selesai.
+        <div className="mt-4 p-4 bg-white border border-gray-200 rounded-lg shadow-sm">
+          <div className="flex items-center justify-between mb-4">
+            <h3 className="text-lg font-semibold">Analisis Dokumen</h3>
+            <button
+              type="button"
+              aria-label="Tutup pratinjau"
+              onClick={() => setShowPreview(false)}
+              className="text-gray-500 hover:text-gray-700"
+            >
+              <X className="w-6 h-6" />
+            </button>
+          </div>
+          <div className="space-y-4">
+            <p className="text-sm text-gray-600">
+              Analisis lengkap akan ditampilkan di sini setelah AI processing selesai.
+            </p>
+            <div className="bg-yellow-50 p-3 rounded">
+              <p className="text-sm text-yellow-800">
+                <strong>Status:</strong> {uploadedDocument ? getStatusText(uploadedDocument.analysis_status) : 'N/A'}
               </p>
-              <div className="bg-yellow-50 p-3 rounded">
-                <p className="text-sm text-yellow-800">
-                  <strong>Status:</strong> {getStatusText(uploadedDocument.analysis_status)}
-                </p>
-              </div>
             </div>
           </div>
         </div>

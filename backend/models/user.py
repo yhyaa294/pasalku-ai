@@ -39,8 +39,11 @@ class User(Base):
     """
     __tablename__ = "users"
 
-    # Primary key - menggunakan Clerk user ID
-    id = Column(String, primary_key=True, index=True)  # Clerk user ID
+    # Primary key - UUID for database consistency
+    id = Column(UUID(as_uuid=True), primary_key=True, default=uuid.uuid4, index=True)
+    
+    # Clerk user ID for integration
+    clerk_user_id = Column(String, unique=True, nullable=True, index=True)
     
     # Basic info (synced from Clerk)
     email = Column(String, unique=True, index=True, nullable=False)
@@ -96,7 +99,7 @@ class User(Base):
     is_phone_verified = Column(Boolean, default=False)
     
     # Metadata
-    metadata = Column(JSON, nullable=True)  # Additional flexible metadata
+    user_metadata = Column(JSON, nullable=True)  # Additional flexible metadata
     preferences = Column(JSON, nullable=True)  # User preferences (theme, language, etc.)
     
     # Timestamps
@@ -106,6 +109,7 @@ class User(Base):
     
     # Relationships
     chat_sessions = relationship("ChatSession", back_populates="user", cascade="all, delete-orphan")
+    consultation_sessions = relationship("ConsultationSession", back_populates="user", cascade="all, delete-orphan")
     subscriptions = relationship("Subscription", back_populates="user", cascade="all, delete-orphan")
     verification_requests = relationship("VerificationRequest", back_populates="user", cascade="all, delete-orphan")
     
@@ -211,7 +215,7 @@ class Subscription(Base):
     ended_at = Column(DateTime, nullable=True)
     
     # Metadata
-    metadata = Column(JSON, nullable=True)
+    subscription_metadata = Column(JSON, nullable=True)
     
     # Timestamps
     created_at = Column(DateTime, default=datetime.utcnow, nullable=False)
@@ -244,7 +248,7 @@ class AuditLog(Base):
     
     # Details
     description = Column(Text, nullable=True)
-    metadata = Column(JSON, nullable=True)
+    audit_metadata = Column(JSON, nullable=True)
     
     # Context
     ip_address = Column(String, nullable=True)

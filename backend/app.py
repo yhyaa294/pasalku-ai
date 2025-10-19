@@ -36,9 +36,8 @@ sentry_sdk.init(
 
 # Konfigurasi CORS
 allowed_origins = [
-    "http://localhost:5000",
-    "http://127.0.0.1:5000",
     "http://localhost:3000",
+    "http://127.0.0.1:3000",
     "http://127.0.0.1:3000",
     "https://pasalku-ai.vercel.app",
     "https://pasalku-ai-3.vercel.app"

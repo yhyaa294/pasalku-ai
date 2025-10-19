@@ -21,4 +21,4 @@ if ($Push -or $env:DOCKER_REGISTRY) {
     Write-Host "Pushed. Remember to update your deployment platform to use $tag if necessary."
 }
 
-Write-Host "Done. To run locally: docker run --rm -p 3000:3000 pasalku-frontend:latest"
+Write-Host "Done. To run locally: docker run --rm -p 5000:5000 pasalku-frontend:latest"

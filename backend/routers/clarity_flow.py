@@ -3,7 +3,7 @@ from sqlalchemy.orm import Session
 from backend.database import get_db
 from backend.core.security_updated import get_current_user
 from backend.services.ai_service import ai_service
-from backend.models import Konsultasi
+# from backend.models import Konsultasi  # Model not found, commented out
 from backend.schemas.riwayat import DetailKonsultasi
 
 router = APIRouter(prefix="/clarity", tags=["clarity-flow"])

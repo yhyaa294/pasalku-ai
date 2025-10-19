@@ -2,7 +2,8 @@
 Simple HTTP mock server for frontend development.
 Provides:
  - GET /health -> 200
- - POST /login -> accepts JSON {email,password} and returns mock token
+ - POST /api/auth/login -> accepts JSON/form and returns mock token
+ - POST /api/chat -> accepts JSON {message} and returns mock AI response
  - POST /logout -> 200
 
 Run with: python backend/mock_server.py
@@ -83,6 +84,35 @@ class MockHandler(BaseHTTPRequestHandler):
             self._set_headers(200)
             self.wfile.write(json.dumps({'status': 'ok'}).encode())
             return
+
+        # Handle /api/chat (main chat endpoint)
+        if path == '/api/chat':
+            try:
+                data = json.loads(body.decode() or '{}')
+                message = data.get('message', '')
+                if message:
+                    self._set_headers(200)
+                    # Mock AI response
+                    resp = {
+                        'response': f'Ini adalah respons AI mock untuk pertanyaan Anda: "{message}". Dalam implementasi nyata, ini akan menggunakan BytePlus Ark dan Groq untuk memberikan analisis hukum yang akurat.',
+                        'confidence': 0.95,
+                        'citations': [
+                            {'pasal': 'KUHP Pasal 362', 'deskripsi': 'Pencurian'},
+                            {'pasal': 'UU No. 8 Tahun 1981', 'deskripsi': 'Hukum Acara Pidana'}
+                        ],
+                        'session_id': 'mock-session-123',
+                        'timestamp': '2025-10-19T10:40:00Z'
+                    }
+                    self.wfile.write(json.dumps(resp).encode())
+                    return
+                else:
+                    self._set_headers(400)
+                    self.wfile.write(json.dumps({'detail': 'Message is required'}).encode())
+                    return
+            except Exception as e:
+                self._set_headers(400)
+                self.wfile.write(json.dumps({'detail': 'Invalid JSON'}).encode())
+                return
 
         # default 404
         self._set_headers(404)

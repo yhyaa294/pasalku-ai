@@ -19,7 +19,7 @@ export async function POST(req: NextRequest) {
       apiVersion: '2025-09-30.clover',
     })
 
-    const baseUrl = process.env.NEXT_PUBLIC_APP_URL || 'http://localhost:5000'
+    const baseUrl = process.env.NEXT_PUBLIC_APP_URL || 'http://localhost:3000'
 
     const session = await stripe.checkout.sessions.create({
       mode: 'subscription',

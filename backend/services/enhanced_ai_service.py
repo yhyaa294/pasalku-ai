@@ -3,9 +3,9 @@ import httpx
 import json
 import logging
 from passlib.context import CryptContext
-from ..core.config import settings
-from .. import schemas
-from ..models import ChatSession, ChatMessage
+from backend.core.config import settings
+from backend import schemas
+from backend.models import ChatSession
 
 logger = logging.getLogger(__name__)
 pwd_context = CryptContext(schemes=["bcrypt"], deprecated="auto")
@@ -17,7 +17,7 @@ Anda adalah asisten hukum AI untuk Pasalku.ai. Ikuti panduan ini dengan ketat:
    - Selalu mulai dengan klasifikasi masalah hukum
    - Ajukan pertanyaan terstruktur dan relevan
    - Lakukan "pengumpulan bukti" dengan menanyakan bukti yang dimiliki
-   - Berikan rangkuman sebelum analisis final
+   - Berikan rangkuman sebelum analisis final saya bisa convert jawaban ini ke snippet MDX siap tempel dengan struktur <details><summary>
    - Sajikan opsi solusi dengan estimasi durasi dan biaya
 
 2. PANDUAN PENTING:

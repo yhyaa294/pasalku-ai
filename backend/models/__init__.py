@@ -12,14 +12,24 @@ class UserRole(str, Enum):
     def __str__(self):
         return self.value
 
-class User(Base):
-    __tablename__ = "users"
+# Note: User model is now defined in user.py with enhanced Clerk integration
+# Import the enhanced User model instead
+try:
+    from .user import User, UserRole as EnhancedUserRole
+    __all__ = ['User', 'UserRole', 'EnhancedUserRole']
+except ImportError:
+    __all__ = ['UserRole']
 
-    id = Column(String, primary_key=True, index=True, nullable=False)
-    email = Column(String, unique=True, index=True, nullable=False)
-    full_name = Column(String)
-    hashed_password = Column(String)
-    role = Column(SQLEnum(UserRole), default=UserRole.PUBLIC)
-    is_active = Column(Boolean, default=True)
-    created_at = Column(DateTime, default=datetime.utcnow)
-    updated_at = Column(DateTime, default=datetime.utcnow, onupdate=datetime.utcnow)
+# Import and export chat models
+try:
+    from backend.models.chat import ChatSession, AIQueryLog, SessionAnalytics
+    __all__.extend(['ChatSession', 'AIQueryLog', 'SessionAnalytics'])
+except ImportError:
+    pass
+
+# Import and export consultation models
+try:
+    from backend.models.consultation import ConsultationSession, ConsultationMessage, EvidenceRecord, LegalCategory
+    __all__.extend(['ConsultationSession', 'ConsultationMessage', 'EvidenceRecord', 'LegalCategory'])
+except ImportError:
+    pass

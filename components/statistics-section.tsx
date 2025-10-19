@@ -1,3 +1,5 @@
+'use client'
+
 import { FC, useState, useEffect, useRef } from 'react'
 
 interface StatisticsSectionProps {
@@ -135,7 +137,7 @@ export const StatisticsSection: FC<StatisticsSectionProps> = ({ className = '' }
     <section
       id="statistics"
       ref={sectionRef}
-      className={`py-16 md:py-32 px-4 relative scroll-animate bg-gradient-to-b from-white to-gray-50 ${className}`}
+      className={`py-16 md:py-32 px-4 relative bg-gradient-to-b from-white to-gray-50 ${className}`}
     >
       <div className="max-w-7xl mx-auto relative z-10">
         <div className="text-center mb-12 md:mb-16">

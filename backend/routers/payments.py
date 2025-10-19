@@ -3,7 +3,7 @@ from fastapi import APIRouter, HTTPException, Depends, Request
 from sqlalchemy.orm import Session
 from backend.database import get_db
 from backend.core.config import get_settings
-from backend.models import User, ChatSession, Payment
+from backend.models import User, ChatSession
 from pydantic import BaseModel
 from typing import Optional
 from datetime import datetime

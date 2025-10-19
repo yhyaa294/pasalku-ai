@@ -26,6 +26,7 @@ class User(Base):
     # Relationships
     chat_sessions = relationship("ChatSession", back_populates="user")
     payments = relationship("Payment", back_populates="user")
+    consultation_sessions = relationship("ConsultationSession", back_populates="user")
 
 class ChatSession(Base):
     __tablename__ = "chat_sessions"
