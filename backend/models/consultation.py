@@ -1,4 +1,5 @@
 from sqlalchemy import Column, Integer, String, Text, DateTime, ForeignKey, Enum, Float, UUID
+from sqlalchemy.dialects.postgresql import JSON
 from sqlalchemy.orm import relationship
 from sqlalchemy.sql import func
 from ..database import Base
@@ -24,6 +25,9 @@ class ConsultationSession(Base):
     pin_hash = Column(String(255))  # For session protection
     rating = Column(Float)
     feedback = Column(Text)
+    # Stateful consultation tracking
+    conversation_state = Column(String(64), default="AWAITING_INITIAL_PROBLEM", nullable=False, index=True)
+    flow_context = Column(JSON, nullable=True)
     created_at = Column(DateTime(timezone=True), server_default=func.now())
     updated_at = Column(DateTime(timezone=True), onupdate=func.now())
 

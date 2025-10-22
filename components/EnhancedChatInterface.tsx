@@ -64,6 +64,7 @@ interface EnhancedChatInterfaceProps {
   userRole?: 'public' | 'legal_professional' | 'admin';
   onClose?: () => void;
   onLoginRequired?: () => void;
+  prefillInput?: string;
 }
 
 const quickResponses = [
@@ -79,7 +80,8 @@ const EnhancedChatInterface: React.FC<EnhancedChatInterfaceProps> = ({
   isAuthenticated = true, 
   userRole = 'public',
   onClose,
-  onLoginRequired 
+  onLoginRequired,
+  prefillInput
 }) => {
   const [messages, setMessages] = useState<ChatMessage[]>([]);
   const [input, setInput] = useState('');
@@ -108,6 +110,15 @@ const EnhancedChatInterface: React.FC<EnhancedChatInterfaceProps> = ({
       setIsTyping(false);
     }
   }, [isLoading]);
+
+  // Prefill input from query param
+  useEffect(() => {
+    if (prefillInput && !input) {
+      setInput(prefillInput);
+    }
+    // run only once on mount or when prefill changes
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [prefillInput]);
 
   const detectCitations = async (text: string): Promise<Citation[]> => {
     try {
@@ -573,8 +584,8 @@ const EnhancedChatInterface: React.FC<EnhancedChatInterfaceProps> = ({
               <div className="flex items-center space-x-2">
                 <div className="flex space-x-1">
                   <div className="w-2.5 h-2.5 bg-blue-500 rounded-full animate-bounce"></div>
-                  <div className="w-2.5 h-2.5 bg-purple-500 rounded-full animate-bounce" style={{ animationDelay: '0.2s' }}></div>
-                  <div className="w-2.5 h-2.5 bg-blue-500 rounded-full animate-bounce" style={{ animationDelay: '0.4s' }}></div>
+                  <div className="w-2.5 h-2.5 bg-purple-500 rounded-full animate-bounce [animation-delay:0.2s]"></div>
+                  <div className="w-2.5 h-2.5 bg-blue-500 rounded-full animate-bounce [animation-delay:0.4s]"></div>
                 </div>
                 <span className="text-sm text-gray-600 font-medium ml-2">AI sedang menganalisis pertanyaan Anda...</span>
               </div>

@@ -94,8 +94,12 @@ export default function LoginPage() {
       <div className="relative sm:mx-auto sm:w-full sm:max-w-md">
         {/* Logo & Header */}
         <div className="text-center mb-8">
-          <div className="mx-auto h-16 w-16 bg-gradient-to-r from-orange-500 to-orange-600 rounded-2xl flex items-center justify-center shadow-lg">
-            <span className="text-3xl">⚖️</span>
+          <div className="mx-auto h-16 w-16 bg-white rounded-2xl flex items-center justify-center shadow-lg overflow-hidden border-2 border-gray-100 p-2">
+            <img 
+              src="/assets/logos/logo_pasalku.jpg.png" 
+              alt="Pasalku.ai Logo" 
+              className="w-full h-full object-contain"
+            />
           </div>
           <h2 className="mt-6 text-3xl font-bold text-gray-900">
             Masuk ke Pasalku.ai

@@ -22,6 +22,7 @@ import {
   MessageSquare,
   Shield
 } from 'lucide-react'
+import { DarkModeToggleIcon } from './dark-mode-toggle'
 
 // Navigation item types
 interface NavItem {
@@ -195,7 +196,7 @@ export const EnhancedNavigation: FC<EnhancedNavigationProps> = ({
           isScrolled
             ? 'bg-white/90 backdrop-blur-xl shadow-xl border-b border-gray-200/30'
             : 'bg-white/95 backdrop-blur-md shadow-lg border-b border-gray-200/50'
-        }`}
+        } dark:bg-slate-900/80 dark:backdrop-blur-xl dark:shadow-xl dark:border-b dark:border-gray-700`}
       >
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
           <div className="flex justify-between items-center h-16">
@@ -203,13 +204,17 @@ export const EnhancedNavigation: FC<EnhancedNavigationProps> = ({
             <div className="flex items-center gap-3 group cursor-pointer select-none">
               <Link href="/" className="flex items-center gap-3 hover:scale-105 transition-transform duration-300">
                 <motion.div
-                  className="w-10 h-10 bg-gradient-to-br from-orange-600 via-purple-600 to-blue-600 rounded-lg flex items-center justify-center shadow-lg"
-                  whileHover={{ rotate: 5 }}
+                  className="w-10 h-10 rounded-lg flex items-center justify-center shadow-lg overflow-hidden bg-white p-1"
+                  whileHover={{ scale: 1.05 }}
                   transition={{ type: "spring", stiffness: 400, damping: 10 }}
                 >
-                  <span className="text-white text-xl">⚖️</span>
+                  <img 
+                    src="/assets/logos/logo_pasalku.jpg.png" 
+                    alt="Pasalku.ai Logo" 
+                    className="w-full h-full object-contain"
+                  />
                 </motion.div>
-                <div className="text-xl font-black text-gray-900 bg-gradient-to-r from-gray-900 via-purple-600 to-blue-600 bg-clip-text text-transparent">
+                <div className="text-xl font-black text-gray-900 dark:text-gray-100 bg-gradient-to-r from-gray-900 via-purple-600 to-blue-600 bg-clip-text text-transparent">
                   Pasalku.ai
                 </div>
                 <div className="w-2 h-2 bg-green-500 rounded-full animate-pulse shadow-sm"></div>
@@ -227,7 +232,7 @@ export const EnhancedNavigation: FC<EnhancedNavigationProps> = ({
                         <button
                           onMouseEnter={() => setOpenDropdown(item.name)}
                           onMouseLeave={() => setOpenDropdown(null)}
-                          className="relative flex items-center gap-1 text-gray-700 hover:text-orange-600 font-medium transition-all duration-300 hover:scale-105 group px-3 py-2 rounded-lg hover:bg-orange-50"
+                          className="relative flex items-center gap-1 text-gray-700 dark:text-gray-200 hover:text-orange-600 dark:hover:text-orange-400 font-medium transition-all duration-300 hover:scale-105 group px-3 py-2 rounded-lg hover:bg-orange-50 dark:hover:bg-slate-800"
                         >
                           {item.icon && <item.icon className="w-4 h-4" />}
                           <span>{item.name}</span>
@@ -237,10 +242,10 @@ export const EnhancedNavigation: FC<EnhancedNavigationProps> = ({
                         <Link
                           href={item.href || '#'}
                           onClick={(e) => item.href && handleNavClick(e, item.href)}
-                          className={`relative flex items-center gap-1 font-medium transition-all duration-300 hover:scale-105 group px-3 py-2 rounded-lg hover:bg-orange-50 ${
+                          className={`relative flex items-center gap-1 font-medium transition-all duration-300 hover:scale-105 group px-3 py-2 rounded-lg hover:bg-orange-50 dark:hover:bg-slate-800 ${
                             (item.href === '/#' + activeSection || (item.href === '/features' && activeSection === 'features') || (item.href === '/pricing' && activeSection === 'pricing'))
-                              ? 'text-orange-600'
-                              : 'text-gray-700 hover:text-orange-600'
+                              ? 'text-orange-600 dark:text-orange-400'
+                              : 'text-gray-700 dark:text-gray-200 hover:text-orange-600 dark:hover:text-orange-400'
                           }`}
                         >
                           {item.icon && <item.icon className="w-4 h-4" />}
@@ -259,7 +264,7 @@ export const EnhancedNavigation: FC<EnhancedNavigationProps> = ({
                           exit={{ opacity: 0, y: 10 }}
                           onMouseEnter={() => setOpenDropdown(item.name)}
                           onMouseLeave={() => setOpenDropdown(null)}
-                          className="absolute top-full left-0 mt-2 w-64 bg-white shadow-xl rounded-xl border border-gray-200/50 backdrop-blur-sm overflow-hidden z-50"
+                          className="absolute top-full left-0 mt-2 w-64 bg-white dark:bg-slate-900 shadow-xl rounded-xl border border-gray-200/50 dark:border-gray-700 backdrop-blur-sm overflow-hidden z-50"
                         >
                           <div className="py-2">
                             {item.children.map((child, childIndex) => (
@@ -272,7 +277,7 @@ export const EnhancedNavigation: FC<EnhancedNavigationProps> = ({
                                 <Link
                                   href={child.href || '#'}
                                   onClick={(e) => child.href && handleNavClick(e, child.href)}
-                                  className="flex items-center gap-3 px-4 py-3 text-gray-700 hover:text-orange-600 hover:bg-orange-50 transition-colors duration-200"
+                                  className="flex items-center gap-3 px-4 py-3 text-gray-700 dark:text-gray-200 hover:text-orange-600 dark:hover:text-orange-400 hover:bg-orange-50 dark:hover:bg-slate-800 transition-colors duration-200"
                                 >
                                   {child.icon && <child.icon className="w-4 h-4 text-orange-500" />}
                                   <span className="font-medium">{child.name}</span>
@@ -289,11 +294,16 @@ export const EnhancedNavigation: FC<EnhancedNavigationProps> = ({
 
               {/* Auth Buttons */}
               <div className="flex items-center gap-3">
+                {/* Dark Mode Toggle */}
+                <div className="mr-2">
+                  <DarkModeToggleIcon />
+                </div>
+                
                 {isAuthenticated ? (
                   <>
                     <Link
                       href="/dashboard"
-                      className="px-4 py-2 text-gray-700 hover:text-orange-600 font-medium transition-colors duration-300 hover:bg-gray-50 rounded-lg"
+                      className="px-4 py-2 text-gray-700 dark:text-gray-300 hover:text-orange-600 dark:hover:text-orange-400 font-medium transition-colors duration-300 hover:bg-gray-50 dark:hover:bg-gray-800 rounded-lg"
                     >
                       Dashboard
                     </Link>
@@ -329,7 +339,7 @@ export const EnhancedNavigation: FC<EnhancedNavigationProps> = ({
             <div className="lg:hidden">
               <button
                 onClick={() => setIsMobileMenuOpen(!isMobileMenuOpen)}
-                className="p-2 rounded-lg text-gray-700 hover:text-orange-600 hover:bg-gray-100 transition-colors"
+                className="p-2 rounded-lg text-gray-700 dark:text-gray-200 hover:text-orange-600 dark:hover:text-orange-400 hover:bg-gray-100 dark:hover:bg-gray-800 transition-colors"
               >
                 <AnimatePresence mode="wait">
                   {isMobileMenuOpen ? (
@@ -365,7 +375,7 @@ export const EnhancedNavigation: FC<EnhancedNavigationProps> = ({
                 initial={{ opacity: 0, height: 0 }}
                 animate={{ opacity: 1, height: 'auto' }}
                 exit={{ opacity: 0, height: 0 }}
-                className="lg:hidden bg-white/95 backdrop-blur-sm rounded-lg mt-4 border border-gray-200/50 shadow-lg overflow-hidden"
+                className="lg:hidden bg-white/95 dark:bg-slate-900/90 backdrop-blur-sm rounded-lg mt-4 border border-gray-200/50 dark:border-gray-700 shadow-lg overflow-hidden"
               >
                 <div className="py-2">
                   {navigationItems.map((item, index) => (
@@ -375,7 +385,7 @@ export const EnhancedNavigation: FC<EnhancedNavigationProps> = ({
                         {item.children ? (
                           <button
                             onClick={() => toggleMobileDropdown(item.name)}
-                            className="flex items-center justify-between w-full px-4 py-3 text-gray-700 hover:text-orange-600 hover:bg-orange-50 transition-colors"
+                            className="flex items-center justify-between w-full px-4 py-3 text-gray-700 dark:text-gray-200 hover:text-orange-600 dark:hover:text-orange-400 hover:bg-orange-50 dark:hover:bg-slate-800 transition-colors"
                           >
                             <div className="flex items-center gap-3">
                               {item.icon && <item.icon className="w-4 h-4" />}
@@ -395,7 +405,7 @@ export const EnhancedNavigation: FC<EnhancedNavigationProps> = ({
                               item.href && handleNavClick(e, item.href)
                               setIsMobileMenuOpen(false)
                             }}
-                            className="flex items-center gap-3 w-full px-4 py-3 text-gray-700 hover:text-orange-600 hover:bg-orange-50 transition-colors"
+                            className="flex items-center gap-3 w-full px-4 py-3 text-gray-700 dark:text-gray-200 hover:text-orange-600 dark:hover:text-orange-400 hover:bg-orange-50 dark:hover:bg-slate-800 transition-colors"
                           >
                             {item.icon && <item.icon className="w-4 h-4" />}
                             <span className="font-medium">{item.name}</span>
@@ -409,7 +419,7 @@ export const EnhancedNavigation: FC<EnhancedNavigationProps> = ({
                           initial={{ opacity: 0, height: 0 }}
                           animate={{ opacity: 1, height: 'auto' }}
                           exit={{ opacity: 0, height: 0 }}
-                          className="bg-orange-50/50"
+                          className="bg-orange-50/50 dark:bg-slate-800/50"
                         >
                           {item.children.map((child, childIndex) => (
                             <Link
@@ -419,7 +429,7 @@ export const EnhancedNavigation: FC<EnhancedNavigationProps> = ({
                                 child.href && handleNavClick(e, child.href)
                                 setIsMobileMenuOpen(false)
                               }}
-                              className="flex items-center gap-3 px-8 py-3 text-gray-600 hover:text-orange-600 hover:bg-orange-50 transition-colors"
+                              className="flex items-center gap-3 px-8 py-3 text-gray-600 dark:text-gray-300 hover:text-orange-600 dark:hover:text-orange-400 hover:bg-orange-50 dark:hover:bg-slate-800 transition-colors"
                             >
                               {child.icon && <child.icon className="w-4 h-4 text-orange-400" />}
                               <span>{child.name}</span>
@@ -431,12 +441,12 @@ export const EnhancedNavigation: FC<EnhancedNavigationProps> = ({
                   ))}
 
                   {/* Mobile Auth Buttons */}
-                  <div className="border-t border-gray-200 mt-2 pt-2">
+                  <div className="border-t border-gray-200 dark:border-gray-700 mt-2 pt-2">
                     {isAuthenticated ? (
                       <div className="px-4 py-2">
                         <Link
                           href="/dashboard"
-                          className="block w-full px-4 py-2 text-center text-gray-700 hover:text-orange-600 font-medium hover:bg-gray-50 rounded-lg transition-colors"
+                          className="block w-full px-4 py-2 text-center text-gray-700 dark:text-gray-200 hover:text-orange-600 dark:hover:text-orange-400 font-medium hover:bg-gray-50 dark:hover:bg-gray-800 rounded-lg transition-colors"
                           onClick={() => setIsMobileMenuOpen(false)}
                         >
                           Dashboard
@@ -455,7 +465,7 @@ export const EnhancedNavigation: FC<EnhancedNavigationProps> = ({
                       <div className="px-4 py-2 space-y-2">
                         <Link
                           href="/login"
-                          className="block w-full px-4 py-2 text-center border border-gray-300 text-gray-700 font-medium hover:bg-gray-50 hover:border-orange-500 hover:text-orange-600 rounded-lg transition-all duration-300"
+                          className="block w-full px-4 py-2 text-center border border-gray-300 dark:border-gray-700 text-gray-700 dark:text-gray-200 font-medium hover:bg-gray-50 dark:hover:bg-gray-800 hover:border-orange-500 hover:text-orange-600 dark:hover:text-orange-400 rounded-lg transition-all duration-300"
                           onClick={() => setIsMobileMenuOpen(false)}
                         >
                           Masuk

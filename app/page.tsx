@@ -3,17 +3,36 @@
 import { EnhancedNavigation } from '@/components/enhanced-navigation';
 import { HeroSection } from '@/components/hero-section';
 import { StatisticsSection } from '@/components/statistics-section';
-import { FeaturesSection } from '@/components/features-section';
-import { HowItWorksSection } from '@/components/how-it-works-section';
-import { PricingSection } from '@/components/pricing-section';
 import { EnhancedFooter } from '@/components/enhanced-footer';
 import { useEffect, useState } from 'react';
 import Link from 'next/link';
 import dynamic from 'next/dynamic';
 
-import { TestimonialsSection } from '@/components/testimonials-section'
-import { CTASection } from '@/components/cta-section'
-import { FAQSection } from '@/components/faq-section'
+// Performance: split below-the-fold sections into separate chunks
+const FeaturesSection = dynamic(() => import('@/components/features-section').then(m => m.FeaturesSection), {
+  ssr: true,
+  loading: () => <section className="py-20 bg-white dark:bg-slate-950" aria-busy="true" />
+});
+const HowItWorksSection = dynamic(() => import('@/components/how-it-works-section').then(m => m.HowItWorksSection), {
+  ssr: true,
+  loading: () => <section className="py-20 bg-gray-50 dark:bg-slate-900" aria-busy="true" />
+});
+const PricingSection = dynamic(() => import('@/components/pricing-section').then(m => m.PricingSection), {
+  ssr: true,
+  loading: () => <section className="py-20 bg-white dark:bg-slate-950" aria-busy="true" />
+});
+const FAQSection = dynamic(() => import('@/components/faq-section').then(m => m.FAQSection), {
+  ssr: true,
+  loading: () => <section className="py-20 bg-gray-50 dark:bg-slate-900" aria-busy="true" />
+});
+const TestimonialsSection = dynamic(() => import('@/components/testimonials-section').then(m => m.TestimonialsSection), {
+  ssr: true,
+  loading: () => <section className="py-20 bg-white dark:bg-slate-950" aria-busy="true" />
+});
+const CTASection = dynamic(() => import('@/components/cta-section').then(m => m.CTASection), {
+  ssr: true,
+  loading: () => <section className="py-20 bg-gradient-to-r from-blue-600 to-purple-600" aria-busy="true" />
+});
 
 export default function PasalkuLandingPage() {
   const [isMounted, setIsMounted] = useState(false);
@@ -24,7 +43,7 @@ export default function PasalkuLandingPage() {
   const [messages, setMessages] = useState<Array<{ type: 'bot' | 'user', text: string }>>([
     {
       type: 'bot',
-      text: 'Halo! 👋 Selamat datang di Pasalku.ai. Saya asisten virtual yang siap membantu Anda mengenal platform kami. Ada yang bisa saya bantu?'
+      text: 'Halo! 👋 Selamat datang di Pasalku.ai!\n\nSaya **Asisten Info Platform** yang siap membantu Anda mengenal Pasalku.ai.\n\n📌 Saya bisa jawab tentang:\n• Apa itu Pasalku.ai\n• Fitur & paket harga\n• Cara menggunakan\n• Keamanan data\n\n⚠️ **Catatan:** Untuk konsultasi hukum, silakan klik tombol "Mulai Konsultasi Hukum" di bawah ya! 😊'
     }
   ]);
 
@@ -33,10 +52,21 @@ export default function PasalkuLandingPage() {
     window.location.href = '/login';
   };
 
+  const handleGetStarted = () => {
+    // CTA buttons should go to register page
+    window.location.href = '/register';
+  };
+
+  const handleConsultationClick = () => {
+    // All consultation buttons should redirect to login first
+    window.location.href = '/login';
+  };
+
   const handleChatClick = () => {
     if (isAuthenticated) {
       setShowChat(true);
     } else {
+      // Redirect to login if not authenticated
       window.location.href = '/login';
     }
   };
@@ -47,24 +77,55 @@ export default function PasalkuLandingPage() {
     // Add user message
     setMessages(prev => [...prev, { type: 'user', text: chatMessage }]);
     
-    // Simulate bot response
+    // Simulate bot response with scope limitation
     setTimeout(() => {
+      const lowerMsg = chatMessage.toLowerCase();
+      
+      // Keywords untuk mendeteksi pertanyaan hukum (BLOCKED)
+      const legalKeywords = [
+        'hukum', 'pasal', 'undang', 'kontrak', 'gugat', 'perkara', 
+        'advokat', 'pengacara', 'pidana', 'perdata', 'perceraian',
+        'warisan', 'tanah', 'sertifikat', 'sengketa', 'kasus',
+        'tuntut', 'lapor', 'polisi', 'pengadilan', 'hakim'
+      ];
+      
+      const isLegalQuestion = legalKeywords.some(keyword => lowerMsg.includes(keyword));
+      
+      // Jika bertanya tentang hukum, redirect ke konsultasi
+      if (isLegalQuestion) {
+        const response = '⚠️ Maaf, saya hanya asisten info platform. Untuk pertanyaan hukum, silakan:\n\n🚀 Klik tombol "Mulai Konsultasi Hukum" di bawah untuk akses AI Legal Assistant penuh yang bisa menjawab pertanyaan hukum Anda dengan akurat! 😊';
+        setMessages(prev => [...prev, { type: 'bot', text: response }]);
+        setChatMessage('');
+        return;
+      }
+
+      // Responses untuk info platform (ALLOWED)
       const responses: { [key: string]: string } = {
-        'apa itu pasalku': 'Pasalku.ai adalah platform konsultasi hukum berbasis AI yang membantu Anda memahami hak-hak hukum dengan mudah, cepat, dan terjangkau. Kami menggunakan teknologi AI terkini untuk memberikan solusi hukum yang akurat.',
-        'fitur': 'Kami memiliki 50+ fitur AI termasuk: Konsultasi Hukum AI 24/7, Analisis Dokumen Legal, Riset Hukum Otomatis, Prediksi Kasus, dan masih banyak lagi!',
-        'harga': 'Kami punya paket mulai dari Gratis untuk fitur dasar, Professional Rp 199.000/bulan, dan Premium Rp 499.000/bulan. Cek halaman pricing untuk detail lengkap!',
-        'default': 'Terima kasih atas pertanyaannya! Untuk konsultasi hukum lengkap, silakan klik tombol "Mulai Konsultasi Hukum" atau hubungi tim kami. 😊'
+        'tentang': '🤖 **Pasalku.ai** adalah platform konsultasi hukum berbasis AI terkini di Indonesia!\n\n✅ Solusi hukum cepat & akurat\n✅ Teknologi AI terdepan\n✅ Mudah & terjangkau\n✅ 24/7 tersedia\n\nKami membantu Anda memahami hak-hak hukum dengan cara yang modern!',
+        
+        'fitur': '✨ **Fitur Utama Kami:**\n\n🤖 AI Legal Assistant 24/7\n📄 Analisis Dokumen Otomatis\n🔍 Riset Hukum Cerdas\n📊 Prediksi Kasus AI\n💼 Legal Templates\n📚 Knowledge Base Lengkap\n\n...dan 40+ fitur lainnya! 🚀',
+        
+        'harga': '💰 **Paket Kami:**\n\n🆓 **Gratis** - Fitur dasar\n💼 **Professional** - Rp 199K/bulan\n👑 **Premium** - Rp 499K/bulan\n\nSemua paket bisa dicoba GRATIS! Tanpa kartu kredit. 😊',
+        
+        'cara': '🎯 **Cara Menggunakan:**\n\n1️⃣ Daftar akun gratis\n2️⃣ Pilih fitur yang dibutuhkan\n3️⃣ Chat dengan AI atau upload dokumen\n4️⃣ Dapatkan solusi instan!\n\nMudah & cepat! ⚡',
+        
+        'keamanan': '🔒 **Keamanan Data:**\n\n✅ Enkripsi end-to-end\n✅ Server aman di Indonesia\n✅ Tidak dibagikan ke pihak ketiga\n✅ Compliance GDPR & PDPA\n\nData Anda 100% aman! 🛡️',
+        
+        'default': 'Terima kasih! 😊\n\nSaya bisa bantu info tentang:\n📌 Apa itu Pasalku.ai\n📌 Fitur & kemampuan\n📌 Harga & paket\n📌 Cara menggunakan\n📌 Keamanan data\n\nAtau klik "Mulai Konsultasi Hukum" untuk chat dengan AI Legal Assistant! �'
       };
 
-      const lowerMsg = chatMessage.toLowerCase();
       let response = responses.default;
       
-      if (lowerMsg.includes('apa itu') || lowerMsg.includes('pasalku')) {
-        response = responses['apa itu pasalku'];
-      } else if (lowerMsg.includes('fitur')) {
+      if (lowerMsg.includes('apa itu') || lowerMsg.includes('pasalku') || lowerMsg.includes('tentang')) {
+        response = responses['tentang'];
+      } else if (lowerMsg.includes('fitur') || lowerMsg.includes('kemampuan') || lowerMsg.includes('bisa apa')) {
         response = responses['fitur'];
-      } else if (lowerMsg.includes('harga') || lowerMsg.includes('paket')) {
+      } else if (lowerMsg.includes('harga') || lowerMsg.includes('paket') || lowerMsg.includes('biaya') || lowerMsg.includes('pricing')) {
         response = responses['harga'];
+      } else if (lowerMsg.includes('cara') || lowerMsg.includes('gunakan') || lowerMsg.includes('pakai') || lowerMsg.includes('mulai')) {
+        response = responses['cara'];
+      } else if (lowerMsg.includes('aman') || lowerMsg.includes('privasi') || lowerMsg.includes('data') || lowerMsg.includes('keamanan')) {
+        response = responses['keamanan'];
       }
 
       setMessages(prev => [...prev, { type: 'bot', text: response }]);
@@ -77,13 +138,16 @@ export default function PasalkuLandingPage() {
     // Add user message directly
     setMessages(prev => [...prev, { type: 'user', text: option }]);
     
-    // Simulate bot response
+    // Simulate bot response for quick options
     setTimeout(() => {
       const responses: { [key: string]: string } = {
-        'apa itu pasalku': 'Pasalku.ai adalah platform konsultasi hukum berbasis AI yang membantu Anda memahami hak-hak hukum dengan mudah, cepat, dan terjangkau. Kami menggunakan teknologi AI terkini untuk memberikan solusi hukum yang akurat.',
-        'fitur': 'Kami memiliki 50+ fitur AI termasuk: Konsultasi Hukum AI 24/7, Analisis Dokumen Legal, Riset Hukum Otomatis, Prediksi Kasus, dan masih banyak lagi!',
-        'harga': 'Kami punya paket mulai dari Gratis untuk fitur dasar, Professional Rp 199.000/bulan, dan Premium Rp 499.000/bulan. Cek halaman pricing untuk detail lengkap!',
-        'default': 'Terima kasih atas pertanyaannya! Untuk konsultasi hukum lengkap, silakan klik tombol "Mulai Konsultasi Hukum" atau hubungi tim kami. 😊'
+        'apa itu pasalku': '🤖 **Selamat datang di Pasalku.ai!**\n\nKami adalah platform konsultasi hukum berbasis AI terkini di Indonesia. Dengan teknologi AI terdepan, kami membantu Anda:\n\n✅ Memahami hak-hak hukum dengan mudah\n✅ Mendapat solusi cepat & akurat\n✅ Hemat biaya konsultasi\n✅ Akses 24/7 kapan saja\n\nVisi kami: Membuat akses hukum jadi mudah untuk semua orang! 🚀',
+        
+        'fitur': '✨ **Fitur-fitur Kami:**\n\n🤖 **AI Legal Assistant**\n   Chat dengan AI hukum 24/7\n\n📄 **Document Analyzer**\n   Analisis kontrak & dokumen otomatis\n\n🔍 **Legal Research**\n   Riset pasal & peraturan lengkap\n\n📊 **Case Predictor**\n   Prediksi hasil kasus dengan AI\n\n💼 **Legal Templates**\n   Template dokumen legal siap pakai\n\n📚 **Knowledge Base**\n   Artikel & panduan hukum lengkap\n\n...dan 40+ fitur lainnya! 🎯',
+        
+        'harga': '💰 **Paket Harga Kami:**\n\n🆓 **Gratis Forever**\n   • 10 pertanyaan/bulan\n   • Fitur dasar AI Chat\n   • Knowledge Base akses\n\n💼 **Professional - Rp 199K/bulan**\n   • Unlimited pertanyaan\n   • Document analysis\n   • Priority support\n   • Export dokumen\n\n👑 **Premium - Rp 499K/bulan**\n   • Semua fitur Pro\n   • Case prediction AI\n   • Lawyer consultation\n   • Custom templates\n\n✨ Coba GRATIS tanpa kartu kredit! 😊',
+        
+        'default': 'Terima kasih! Silakan pilih opsi lain atau ketik pertanyaan Anda. 😊'
       };
 
       const lowerMsg = option.toLowerCase();
@@ -123,21 +187,21 @@ export default function PasalkuLandingPage() {
   // Avoid hydration mismatch by not conditionally rendering different content
 
   return (
-    <div className="min-h-screen bg-white text-gray-900 overflow-x-hidden relative text-dark-primary">
+    <div className="min-h-screen bg-white dark:bg-slate-950 text-gray-900 dark:text-slate-100 overflow-x-hidden relative text-dark-primary">
       {/* Premium Subtle Background with Animation */}
       <div className="fixed inset-0 -z-10">
-        <div className="absolute inset-0 bg-gradient-to-br from-blue-50 via-white to-purple-50"></div>
+        <div className="absolute inset-0 bg-gradient-to-br from-blue-50 via-white to-purple-50 dark:from-slate-900 dark:via-slate-950 dark:to-slate-900"></div>
         
         {/* Subtle animated orbs */}
-        <div className="absolute top-0 right-0 w-96 h-96 bg-gradient-to-br from-blue-400/5 to-purple-400/5 rounded-full blur-3xl smooth-float anim-duration-8s"></div>
-        <div className="absolute bottom-0 left-0 w-96 h-96 bg-gradient-to-br from-purple-400/5 to-pink-400/5 rounded-full blur-3xl smooth-float anim-duration-10s anim-delay-2s"></div>
+        <div className="hidden md:block motion-reduce:hidden absolute top-0 right-0 w-96 h-96 bg-gradient-to-br from-blue-400/5 to-purple-400/5 rounded-full blur-3xl smooth-float anim-duration-8s"></div>
+        <div className="hidden md:block motion-reduce:hidden absolute bottom-0 left-0 w-96 h-96 bg-gradient-to-br from-purple-400/5 to-pink-400/5 rounded-full blur-3xl smooth-float anim-duration-10s anim-delay-2s"></div>
         
         {/* Subtle grid pattern */}
         <div className="absolute inset-0 opacity-20 bg-dot-pattern"></div>
       </div>
       
       {/* Floating icons - subtle - only render after hydration */}
-      <div className="fixed inset-0 pointer-events-none z-0" suppressHydrationWarning>
+      <div className="fixed inset-0 pointer-events-none z-0 hidden md:block motion-reduce:hidden" suppressHydrationWarning>
         {isMounted && ['⚖️', '📜', '🔍', '💼', '✨', '🎓'].map((icon, i) => (
           <div
             key={i}
@@ -156,41 +220,46 @@ export default function PasalkuLandingPage() {
       />
 
       <main className="relative z-10">
-        <HeroSection onGetStarted={handleChatClick} />
+        <HeroSection onGetStarted={handleGetStarted} />
         
         {/* Statistics Section */}
-        <section className="py-20 bg-gray-50">
+        <section className="py-20 bg-gray-50 dark:bg-slate-900">
           <StatisticsSection />
         </section>
         
         {/* Features Section */}
-        <section className="py-20 bg-white">
+        <section className="py-20 bg-white dark:bg-slate-950">
           <FeaturesSection />
+          <div className="text-center mt-8">
+            <Link href="/features" className="inline-block px-6 py-3 rounded-xl bg-gradient-to-r from-blue-600 to-purple-600 text-white font-semibold shadow hover:shadow-lg">
+              Jelajahi 96+ Fitur →
+            </Link>
+          </div>
         </section>
         
         {/* How It Works Section */}
-        <section className="py-20 bg-gray-50">
+        <section className="py-20 bg-gray-50 dark:bg-slate-900">
           <HowItWorksSection />
         </section>
         
         {/* Pricing Section */}
-        <section className="py-20 bg-white">
+        <section className="py-20 bg-white dark:bg-slate-950">
           <PricingSection />
         </section>
         
         {/* FAQ Section */}
-        <section className="py-20 bg-gray-50">
+        <section className="py-20 bg-gray-50 dark:bg-slate-900">
           <FAQSection />
         </section>
         
         {/* Testimonials Section */}
-        <section className="py-20 bg-white">
+        <section className="py-20 bg-white dark:bg-slate-950">
           <TestimonialsSection />
         </section>
         
         {/* CTA Section */}
         <section className="py-20 bg-gradient-to-r from-blue-600 to-purple-600">
-          <CTASection onGetStarted={handleChatClick} />
+          <CTASection onGetStarted={handleGetStarted} />
         </section>
       </main>
 
@@ -210,8 +279,8 @@ export default function PasalkuLandingPage() {
                 <span className="absolute bottom-0 right-0 w-3 h-3 bg-green-400 rounded-full border-2 border-white"></span>
               </div>
               <div>
-                <h3 className="font-bold text-base">Asisten Pasalku.ai</h3>
-                <p className="text-xs opacity-90">Online • Siap membantu Anda</p>
+                <h3 className="font-bold text-base">Asisten Info Platform</h3>
+                <p className="text-xs opacity-90">Online • Tanya seputar Pasalku.ai</p>
               </div>
             </div>
             <button
@@ -300,15 +369,39 @@ export default function PasalkuLandingPage() {
 
                 <button
                    type="button"
+                   onClick={() => handleQuickOption('Cara menggunakan platform?')}
+                   className="w-full text-left bg-white hover:bg-green-50 border border-gray-200 hover:border-green-300 rounded-xl p-3 transition-all duration-200 hover:shadow-md group"
+                   aria-label="Cara menggunakan"
+                >
+                  <div className="flex items-center gap-3">
+                    <span className="text-2xl group-hover:scale-110 transition-transform">🎯</span>
+                    <div>
+                      <p className="text-sm font-medium text-gray-800">Cara Menggunakan?</p>
+                      <p className="text-xs text-gray-500">Panduan step-by-step</p>
+                    </div>
+                  </div>
+                </button>
+
+                <div className="relative my-3">
+                  <div className="absolute inset-0 flex items-center">
+                    <div className="w-full border-t border-gray-300"></div>
+                  </div>
+                  <div className="relative flex justify-center text-xs">
+                    <span className="bg-gray-50 px-2 text-gray-500">Untuk Konsultasi Hukum</span>
+                  </div>
+                </div>
+
+                <button
+                   type="button"
                    onClick={handleChatClick}
-                   className="w-full text-left bg-gradient-to-r from-blue-500 to-purple-500 hover:from-blue-600 hover:to-purple-600 text-white rounded-xl p-3 transition-all duration-200 hover:shadow-lg group"
+                   className="w-full text-left bg-gradient-to-r from-blue-500 to-purple-500 hover:from-blue-600 hover:to-purple-600 text-white rounded-xl p-4 transition-all duration-200 hover:shadow-lg group border-2 border-blue-400"
                    aria-label="Mulai konsultasi hukum"
                 >
                   <div className="flex items-center gap-3">
-                    <span className="text-2xl group-hover:scale-110 transition-transform">🚀</span>
+                    <span className="text-3xl group-hover:scale-110 transition-transform">🚀</span>
                     <div>
-                      <p className="text-sm font-medium">Mulai Konsultasi Hukum</p>
-                      <p className="text-xs opacity-90">Akses penuh AI legal assistant</p>
+                      <p className="text-base font-bold">Mulai Konsultasi Hukum</p>
+                      <p className="text-xs opacity-90">Akses AI Legal Assistant Lengkap</p>
                     </div>
                   </div>
                 </button>
@@ -324,7 +417,7 @@ export default function PasalkuLandingPage() {
                 value={chatMessage}
                 onChange={(e) => setChatMessage(e.target.value)}
                 onKeyPress={(e) => e.key === 'Enter' && handleSendMessage()}
-                placeholder="Ketik pertanyaan Anda..."
+                placeholder="Tanya tentang platform..."
                 className="flex-1 px-4 py-2 border border-gray-300 rounded-full text-sm focus:outline-none focus:border-blue-400 focus:ring-2 focus:ring-blue-100 transition-all"
               />
               <button
@@ -375,14 +468,14 @@ export default function PasalkuLandingPage() {
             </svg>
             
             {/* Multiple pulse rings */}
-            <span className="absolute inset-0 rounded-full bg-gradient-to-r from-blue-600 to-purple-600 animate-ping opacity-20"></span>
-            <span className="absolute inset-0 rounded-full bg-gradient-to-r from-blue-600 to-purple-600 animate-pulse opacity-10 anim-delay-0-5s"></span>
+            <span className="absolute inset-0 rounded-full bg-gradient-to-r from-blue-600 to-purple-600 motion-safe:animate-ping opacity-20"></span>
+            <span className="absolute inset-0 rounded-full bg-gradient-to-r from-blue-600 to-purple-600 motion-safe:animate-pulse opacity-10 anim-delay-0-5s"></span>
             
             {/* Glow effect */}
             <span className="absolute inset-0 rounded-full blur-md bg-gradient-to-r from-blue-500 to-purple-500 opacity-50 group-hover:opacity-75 transition-opacity duration-300"></span>
             
             {/* Notification badge */}
-            <span className="absolute -top-1 -right-1 w-3 h-3 bg-red-500 rounded-full animate-pulse border-2 border-white"></span>
+            <span className="absolute -top-1 -right-1 w-3 h-3 bg-red-500 rounded-full motion-safe:animate-pulse border-2 border-white"></span>
           </button>
         </div>
         )}

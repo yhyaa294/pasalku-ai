@@ -7,11 +7,15 @@ from alembic import context
 import os
 import sys
 
-# Tambahkan path ke direktori backend ke sys.path
-sys.path.append(os.path.dirname(os.path.dirname(__file__)))
+# Add parent directory to sys.path to enable imports
+current_dir = os.path.dirname(__file__)
+backend_dir = os.path.dirname(current_dir)
+parent_dir = os.path.dirname(backend_dir)
+sys.path.insert(0, parent_dir)
 
-# Import model SQLAlchemy
+# Import models and config
 from backend.database import Base
+from backend.models import consultation, chat  # Import all models to register them
 from backend.core.config import settings
 
 # this is the Alembic Config object, which provides

@@ -13,6 +13,7 @@ from ..database import get_db
 from ..models.consultation import ConsultationSession, ConsultationMessage, LegalCategory
 from ..core.security import get_current_user
 from ..services.ai_agent import AIConsultationAgent
+from ..services.consultation_flow import advance_flow, state_store, ConversationState
 # Temporarily commented out due to syntax error - will fix
 # from ..services.ai_service import ai_service
 from ..core.config import settings
@@ -36,12 +37,28 @@ async def create_consultation_session(
         legal_category=category,
         status="active"
     )
+    # Initialize persistent state for the structured consultation flow
+    try:
+        session.conversation_state = "AWAITING_INITIAL_PROBLEM"
+        session.flow_context = {
+            "session_id": None,
+            "problem_description": None,
+            "clarification_questions": [],
+            "clarification_answers": {},
+            "summary_text": None,
+            "evidence_confirmed": None,
+            "final_analysis": None,
+            "state": "AWAITING_INITIAL_PROBLEM"
+        }
+    except Exception:
+        # If DB JSON column isn't available yet, ignore and continue (migration pending)
+        pass
     db.add(session)
     db.commit()
     db.refresh(session)
 
     # Create initial AI greeting
-    initial_message = ai_agent.generate_greeting(category)
+    initial_message = await ai_agent.generate_greeting(category)
     message = ConsultationMessage(
         session_id=session.id,
         role="assistant",
@@ -83,30 +100,126 @@ async def send_message(
     db.add(user_message)
     db.commit()
 
-    # Get conversation history
-    history = db.query(ConsultationMessage).filter(
-        ConsultationMessage.session_id == session_id
-    ).order_by(ConsultationMessage.created_at).all()
+    # Load persisted flow_context if any and seed in-memory store
+    try:
+        if session.flow_context:
+            from ..services.consultation_flow import ConsultationContext
+            ctx = ConsultationContext.from_dict(session.flow_context)
+            state_store.set(ctx)
+    except Exception as e:
+        logger.warning(f"Failed to load persisted flow_context for session {session_id}: {e}")
 
-    # Generate AI response
-    ai_response = ai_agent.generate_response(
-        message,
-        history,
-        session.legal_category
-    )
+    # Branch into stateful consultation flow
+    try:
+        flow_result = await advance_flow(session_id=session_id, user_message=message)
 
-    # Save AI response
-    ai_message = ConsultationMessage(
-        session_id=session_id,
-        role="assistant",
-        content=ai_response
-    )
-    db.add(ai_message)
-    db.commit()
+        # Persist assistant output as message for history
+        assistant_payload_parts = []
+        if flow_result.get("message"):
+            assistant_payload_parts.append(flow_result["message"])
+        if flow_result.get("summary"):
+            assistant_payload_parts.append(flow_result["summary"])
+        if flow_result.get("questions"):
+            assistant_payload_parts.append("\n".join([f"- {q}" for q in flow_result["questions"]]))
+        if flow_result.get("final_analysis"):
+            assistant_payload_parts.append(json.dumps(flow_result["final_analysis"], ensure_ascii=False, indent=2))
 
+        assistant_text = "\n\n".join(assistant_payload_parts) or ""
+
+        if assistant_text:
+            ai_message = ConsultationMessage(
+                session_id=session_id,
+                role="assistant",
+                content=assistant_text
+            )
+            db.add(ai_message)
+            db.commit()
+
+        # Persist flow state back to DB (serialize and store into session.flow_context + conversation_state)
+        try:
+            ctx = state_store.get(session_id)
+            session.flow_context = ctx.to_dict()
+            session.conversation_state = ctx.state.value if isinstance(ctx.state, ConversationState) else str(ctx.state)
+            db.add(session)
+            db.commit()
+        except Exception as e:
+            logger.warning(f"Failed to persist flow state for session {session_id}: {e}")
+
+        return flow_result
+    except Exception as e:
+        logger.error(f"Stateful flow failed, falling back to legacy response: {e}")
+
+        # Legacy fallback: conversation history + generic response
+        history = db.query(ConsultationMessage).filter(
+            ConsultationMessage.session_id == session_id
+        ).order_by(ConsultationMessage.created_at).all()
+
+        ai_response = await ai_agent.generate_response(
+            message,
+            history,
+            session.legal_category
+        )
+
+        ai_message = ConsultationMessage(
+            session_id=session_id,
+            role="assistant",
+            content=ai_response
+        )
+        db.add(ai_message)
+        db.commit()
+
+        return {"response": ai_response, "state": "LEGACY"}
+
+
+@router.get("/sessions/{session_id}/state")
+async def get_session_state(
+    session_id: int,
+    db: Session = Depends(get_db),
+    current_user = Depends(get_current_user)
+):
+    """Inspect current state of the structured consultation flow for debugging/testing."""
+    # Validate ownership
+    session = db.query(ConsultationSession).filter(
+        ConsultationSession.id == session_id,
+        ConsultationSession.user_id == current_user.id
+    ).first()
+
+    if not session:
+        raise HTTPException(status_code=status.HTTP_404_NOT_FOUND, detail="Session not found")
+
+    ctx = state_store.get(session_id)
     return {
-        "response": ai_response
+        "session_id": session_id,
+        "state": ctx.state,
+        "problem_description": ctx.problem_description,
+        "answered": len(ctx.clarification_answers),
+        "total_questions": len(ctx.clarification_questions),
+        "has_summary": bool(ctx.summary_text),
+        "evidence_confirmed": ctx.evidence_confirmed,
+        "has_final_analysis": bool(ctx.final_analysis),
     }
+
+
+@router.post("/sessions/{session_id}/reset-state")
+async def reset_session_state(
+    session_id: int,
+    db: Session = Depends(get_db),
+    current_user = Depends(get_current_user)
+):
+    """Reset the in-memory flow state for a session. Does not delete DB messages."""
+    # Validate ownership
+    session = db.query(ConsultationSession).filter(
+        ConsultationSession.id == session_id,
+        ConsultationSession.user_id == current_user.id
+    ).first()
+
+    if not session:
+        raise HTTPException(status_code=status.HTTP_404_NOT_FOUND, detail="Session not found")
+
+    # Reinitialize state entry
+    from ..services.consultation_flow import ConsultationContext
+    state_store.set(ConsultationContext(session_id=session_id))
+    return {"status": "reset", "session_id": session_id}
 
 @router.post("/sessions/{session_id}/complete")
 async def complete_session(

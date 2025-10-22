@@ -1,87 +1,92 @@
+"""
+Sentry Configuration Module for Pasalku.ai Backend
+"""
+import logging
 import sentry_sdk
 from sentry_sdk.integrations.fastapi import FastApiIntegration
 from sentry_sdk.integrations.sqlalchemy import SqlalchemyIntegration
-from ..core.config import settings
+from sentry_sdk.integrations.logging import LoggingIntegration
+
+from backend.core.config import settings
+
+logger = logging.getLogger(__name__)
 
 def init_sentry():
-    """Initialize Sentry with proper configuration"""
-    sentry_sdk.init(
-        dsn=settings.SENTRY_DSN,
-        environment="production",  # Can be configured based on settings
-        traces_sample_rate=1.0,  # Adjust based on traffic
-        profiles_sample_rate=1.0,
-        
-        # Enable integrations
-        integrations=[
-            FastApiIntegration(
-                transaction_style="endpoint",
-                middleware_span_enabled=True
-            ),
-            SqlalchemyIntegration()
-        ],
-        
-        # Configure additional settings
-        send_default_pii=False,  # Don't send personally identifiable information
-        attach_stacktrace=True,
-        max_breadcrumbs=50,
-        
-        # Set your release version
-        release=f"pasalku-ai@{settings.APP_VERSION}",
-        
-        # Configure sampling
-        traces_sampler=_traces_sampler
-    )
-    
-    # Set Sentry user scope for organization
-    sentry_sdk.set_tag("organization", settings.SENTRY_ORG)
-    sentry_sdk.set_tag("project", settings.SENTRY_PROJECT)
+    """
+    Initialize Sentry for error monitoring.
+    This should be called during application startup.
+    """
+    if settings.NEXT_PUBLIC_SENTRY_DSN:
+        try:
+            sentry_logging = LoggingIntegration(
+                level=logging.INFO,        # Capture info and above as breadcrumbs
+                event_level=logging.ERROR  # Send errors as events
+            )
+            
+            sentry_sdk.init(
+                dsn=settings.NEXT_PUBLIC_SENTRY_DSN,
+                environment=settings.ENVIRONMENT,
+                integrations=[
+                    FastApiIntegration(transaction_style="endpoint"),
+                    SqlalchemyIntegration(),
+                    sentry_logging
+                ],
+                traces_sample_rate=1.0 if settings.ENVIRONMENT == "development" else 0.1,
+                profiles_sample_rate=1.0 if settings.ENVIRONMENT == "development" else 0.1,  # Profiling
+                send_default_pii=False,  # Don't send personally identifiable information
+            )
+            
+            logger.info("Sentry initialized successfully")
+            return True
+        except Exception as e:
+            logger.error(f"Failed to initialize Sentry: {str(e)}")
+            return False
+    else:
+        logger.warning("Sentry DSN not configured, skipping Sentry initialization")
+        return False
 
-def _traces_sampler(sampling_context):
-    """Custom sampling function for Sentry performance monitoring"""
-    # Path-based sampling
-    if "wsgi_environ" in sampling_context:
-        path = sampling_context["wsgi_environ"].get("PATH_INFO", "")
-        
-        # Always sample error endpoints
-        if "/error" in path:
-            return 1.0
-        
-        # Sample health checks less frequently
-        if "/health" in path:
-            return 0.01
-        
-        # Sample static files less
-        if "/static/" in path:
-            return 0.1
-        
-        # Sample API endpoints more frequently
-        if "/api/" in path:
-            return 0.5
+def capture_exception(exception: Exception, extra: dict = None):
+    """
+    Capture an exception with Sentry
     
-    # Default to 10% sampling
-    return 0.1
+    Args:
+        exception: The exception to capture
+        extra: Additional data to include with the exception
+    """
+    try:
+        sentry_sdk.set_extra('additional_context', extra or {})
+        sentry_sdk.capture_exception(exception)
+    except Exception as e:
+        logger.error(f"Failed to capture exception with Sentry: {str(e)}")
 
-def capture_exception(
-    error: Exception,
-    context: dict = None,
-    level: str = "error",
-    user_id: str = None
-):
-    """Helper function to capture exceptions with context"""
-    if context is None:
-        context = {}
+def set_user(user_data: dict):
+    """
+    Set user data for Sentry error tracking
     
-    with sentry_sdk.push_scope() as scope:
-        # Add context
-        for key, value in context.items():
-            scope.set_extra(key, value)
-        
-        # Set severity level
-        scope.set_level(level)
-        
-        # Set user context if available
-        if user_id:
-            scope.set_user({"id": user_id})
-        
-        # Capture exception
-        sentry_sdk.capture_exception(error)
+    Args:
+        user_data: Dictionary with user information (id, email, etc.)
+    """
+    try:
+        sentry_sdk.set_user(user_data)
+    except Exception as e:
+        logger.error(f"Failed to set user data for Sentry: {str(e)}")
+
+def add_breadcrumb(message: str, category: str = "custom", level: str = "info", data: dict = None):
+    """
+    Add a breadcrumb to the current Sentry context
+    
+    Args:
+        message: The message for the breadcrumb
+        category: The category for the breadcrumb
+        level: The level for the breadcrumb (info, warning, error, etc.)
+        data: Additional data to include with the breadcrumb
+    """
+    try:
+        sentry_sdk.add_breadcrumb(
+            message=message,
+            category=category,
+            level=level,
+            data=data
+        )
+    except Exception as e:
+        logger.error(f"Failed to add breadcrumb to Sentry: {str(e)}")

@@ -2,9 +2,11 @@
 
 import { useState, useEffect } from 'react';
 import { useRouter } from 'next/navigation';
-import Link from 'next/link';
 import { Button } from '@/components/ui/button';
-import { EnhancedFooter } from '@/components/enhanced-footer';
+import { useToast } from '@/components/ui/toast';
+import Link from 'next/link';
+import { DropdownMenu, DropdownMenuTrigger, DropdownMenuContent, DropdownMenuItem, DropdownMenuSeparator, DropdownMenuLabel } from '@/components/ui/dropdown-menu';
+import { Avatar, AvatarFallback } from '@/components/ui/avatar';
 
 // Enhanced AI Feature Categories with Advanced Icons and Features
 const AI_FEATURE_CATEGORIES = [
@@ -263,9 +265,36 @@ const QUICK_ACTIONS = [
 export default function DashboardPage() {
   const [user, setUser] = useState<any>(null);
   const [recentActivity, setRecentActivity] = useState<any[]>([]);
+  const [filter, setFilter] = useState<'all' | 'draft' | 'done'>('all');
   const [isLoading, setIsLoading] = useState(true);
   const [currentTime, setCurrentTime] = useState(new Date());
+  const [backendStatus, setBackendStatus] = useState<{connected:boolean; kind:string; url:string} | null>(null);
+  const [isSidebarCollapsed, setIsSidebarCollapsed] = useState(false);
+  const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
+  const [expandedCategories, setExpandedCategories] = useState<string[]>(['core-ai', 'intelligence']); // Default expanded categories
   const router = useRouter();
+  const { show: showToast, Toast } = useToast();
+  
+  // Toggle category in sidebar
+  const toggleCategory = (categoryId: string) => {
+    setExpandedCategories(prev => 
+      prev.includes(categoryId) 
+        ? prev.filter(id => id !== categoryId) 
+        : [...prev, categoryId]
+    );
+  };
+  
+  // Effect to handle mobile menu closing when resizing to desktop
+  useEffect(() => {
+    const handleResize = () => {
+      if (window.innerWidth >= 1024) { // lg breakpoint
+        setIsMobileMenuOpen(false);
+      }
+    };
+    
+    window.addEventListener('resize', handleResize);
+    return () => window.removeEventListener('resize', handleResize);
+  }, []);
 
   useEffect(() => {
     // Check authentication
@@ -294,61 +323,132 @@ export default function DashboardPage() {
     return () => clearInterval(timer);
   }, [router]);
 
+  useEffect(() => {
+    // check backend connectivity for small status badge
+    const check = async () => {
+      try {
+        const res = await fetch('/api/status', { cache: 'no-store' });
+        const data = await res.json();
+        setBackendStatus({ connected: !!data.connected, kind: data.kind, url: data.url });
+      } catch {
+        setBackendStatus({ connected: false, kind: 'unknown', url: '' });
+      }
+    };
+    check();
+  }, []);
+
   const loadRecentActivity = () => {
-    // Enhanced recent activity with more detailed data
-    setRecentActivity([
+    // Load from localStorage if present
+    const saved = typeof window !== 'undefined' ? localStorage.getItem('recentActivity') : null;
+    if (saved) {
+      try {
+        const parsed = JSON.parse(saved);
+        if (Array.isArray(parsed)) {
+          setRecentActivity(parsed);
+          return;
+        }
+      } catch (_) {}
+    }
+    // Default seed: Riwayat & Draf (prioritaskan draf)
+    const seed = [
+      {
+        type: 'draft', // draft | consultation | document | research
+        title: 'Draf Konsultasi: Perundungan di Sekolah',
+        time: 'Baru saja',
+        description: 'Ringkasan bukti dan rencana langkah cepat belum lengkap',
+        status: 'warning', // success | warning | error | info
+        icon: '📝',
+        metrics: 'Draf belum dikirim'
+      },
       {
         type: 'consultation',
-        title: 'Analisis Kontrak Terselesaikan',
+        title: 'Konsultasi: Sengketa Perdata Sederhana',
         time: '2 jam lalu',
-        description: 'Dual AI mengoptimalkan pengurangan risiko kontrak hingga 87%',
+        description: 'Rangkuman kronologi dan opsi mediasi disusun',
         status: 'success',
         icon: '🎯',
-        metrics: '87% risiko berkurang'
+        metrics: 'Siap tindak lanjut'
       },
       {
         type: 'document',
-        title: 'Dokumen Hukum Dibuat',
+        title: 'Draf: Surat Somasi Dasar',
         time: '5 jam lalu',
-        description: 'Perjanjian jual beli tanah selesai dengan optimasi sentimen komunikasi',
-        status: 'success',
-        icon: '📝',
-        metrics: '94% skor sentimen'
+        description: 'Template somasi otomatis — menunggu penyesuaian fakta',
+        status: 'warning',
+        icon: '📄',
+        metrics: 'Perlu revisi data'
       },
       {
         type: 'research',
-        title: 'Riset Hukum Lanjutan',
+        title: 'Riset Preseden Terkait Fitnah Online',
         time: '1 hari lalu',
-        description: 'AI menemukan 23 preseden relevan melalui analisis pola hukum nasional',
+        description: 'Daftar 5 preseden relevan tersimpan',
         status: 'success',
         icon: '🔍',
-        metrics: '23 preseden ditemukan'
-      },
-      {
-        type: 'negotiation',
-        title: 'Negosiasi Persona Adaptif',
-        time: '2 hari lalu',
-        description: 'AI berhasil beralih dari persona Diplomatis ke Strategis untuk hasil optimal',
-        status: 'success',
-        icon: '🎭',
-        metrics: '92% tingkat keberhasilan'
-      },
-      {
-        type: 'system',
-        title: 'Model AI Diperbarui',
-        time: '3 hari lalu',
-        description: 'Kemampuan reasoning ditingkatkan dengan basis pengetahuan hukum terbaru',
-        status: 'info',
-        icon: '🔄',
-        metrics: 'v2.1.4 dirilis'
+        metrics: '5 preseden'
       }
-    ]);
+    ];
+    setRecentActivity(seed);
+    localStorage.setItem('recentActivity', JSON.stringify(seed));
   };
 
   const handleLogout = () => {
     localStorage.removeItem('user');
     localStorage.removeItem('token');
     router.push('/login');
+  };
+
+  // Persist on change
+  useEffect(() => {
+    if (recentActivity && Array.isArray(recentActivity)) {
+      try {
+        localStorage.setItem('recentActivity', JSON.stringify(recentActivity));
+      } catch (_) {}
+    }
+  }, [recentActivity]);
+
+  // Derived filtered list
+  const getFilteredActivities = () => {
+    let list = [...recentActivity];
+    if (filter === 'draft') list = list.filter((x) => x.type === 'draft');
+    if (filter === 'done') list = list.filter((x) => x.status === 'success');
+    // Prioritize drafts on top for all filter
+    if (filter === 'all') list.sort((a, b) => (a.type === 'draft' ? -1 : 0));
+    return list;
+  };
+
+  // Item handlers
+  const continueDraft = (index: number) => {
+    const item = getFilteredActivities()[index];
+    if (!item) return;
+    // Navigate to AI chat with prefill
+    const prefillParts = [item.title, item.description].filter(Boolean);
+    const prefill = prefillParts.join(' — ');
+    router.push(`/ai-chat?prefill=${encodeURIComponent(prefill)}`);
+  };
+
+  const openItem = (index: number) => {
+    // In a real app, this would route to the related detail page
+    router.push('/riwayat');
+  };
+
+  const exportItem = (index: number) => {
+    // Minimal export: copy JSON to clipboard
+    const item = getFilteredActivities()[index];
+    if (!item) return;
+    try {
+      navigator.clipboard.writeText(JSON.stringify(item, null, 2));
+      showToast('Tersalin ke clipboard', 'Data item berhasil disalin sebagai JSON');
+    } catch (_) {}
+  };
+
+  const deleteItem = (index: number) => {
+    const list = getFilteredActivities();
+    const item = list[index];
+    if (!item) return;
+    const updated = recentActivity.filter((x) => x !== item);
+    setRecentActivity(updated);
+    showToast('Item dihapus', 'Item telah dihapus dari Riwayat & Draf');
   };
 
   const getActivityStatusColor = (status: string) => {
@@ -409,311 +509,317 @@ export default function DashboardPage() {
   }
 
   return (
-    <div className="min-h-screen bg-gradient-to-br from-blue-50 via-white to-purple-50">
-      {/* Enhanced Header with Real-time Features */}
-      <header className="bg-white/95 backdrop-blur-xl shadow-xl border-b border-gray-200/50 sticky top-0 z-50">
-        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-          <div className="flex flex-col gap-4 py-4 md:flex-row md:items-center md:justify-between md:py-0 md:h-20">
-            <div className="flex items-center gap-8">
-              <div className="flex items-center gap-4">
-                <div className="relative">
-                  <div className="w-12 h-12 bg-gradient-to-r from-blue-600 via-purple-600 to-indigo-600 rounded-2xl flex items-center justify-center shadow-lg">
-                    <span className="text-white font-bold text-xl">⚖️</span>
+    <div className="min-h-screen bg-gradient-to-br from-slate-50 via-white to-blue-50 flex">
+      {Toast}
+      
+      {/* Top Bar - Mission Control Header */}
+      <header className="fixed top-0 left-0 right-0 bg-white/95 backdrop-blur-xl border-b border-gray-200 z-50 h-16">
+        <div className="flex items-center justify-between h-full px-4 sm:px-6 lg:px-8">
+          <div className="flex items-center gap-3">
+            {/* Mobile menu button - visible on small screens */}
+            <button 
+              onClick={() => setIsMobileMenuOpen(!isMobileMenuOpen)}
+              className="lg:hidden p-2 text-gray-600 hover:text-blue-600 hover:bg-gray-100 rounded-md"
+            >
+              <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M4 6h16M4 12h16M4 18h16" />
+              </svg>
+            </button>
+            
+            <div className="relative">
+              <div className="w-10 h-10 bg-gradient-to-r from-blue-600 to-purple-600 rounded-xl flex items-center justify-center shadow">
+                <span className="text-white font-bold">⚖️</span>
+              </div>
+              <span className="absolute -top-1 -right-1 w-3 h-3 bg-green-500 rounded-full border-2 border-white animate-pulse"></span>
+            </div>
+            <div>
+              <h1 className="text-lg font-bold text-gray-900">Pasalku.ai</h1>
+              <p className="text-[10px] text-gray-500">Mission Control</p>
+            </div>
+          </div>
+          
+          {/* Global Search - centered on mobile */}
+          <div className="hidden lg:flex flex-1 max-w-2xl mx-8">
+            <div className="relative">
+              <input
+                type="text"
+                placeholder="Cari kasus, dokumen, atau fitur..."
+                className="w-full px-4 py-2 pl-10 rounded-full border border-gray-300 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-blue-500 transition-all bg-white/80 backdrop-blur-sm"
+              />
+              <svg className="absolute left-3 top-1/2 transform -translate-y-1/2 w-4 h-4 text-gray-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z" />
+              </svg>
+            </div>
+          </div>
+          
+          {/* Right side controls */}
+          <div className="flex items-center gap-4">
+            {/* King Button - Most prominent - hidden on mobile */}
+            <Link href="/ai-chat" className="hidden lg:block">
+              <Button className="bg-gradient-to-r from-blue-600 to-purple-600 hover:from-blue-700 hover:to-purple-700 text-white px-6 py-2 rounded-full font-bold shadow-lg hover:shadow-xl transform hover:scale-105 transition-all duration-300 relative overflow-hidden group">
+                <span className="absolute inset-0 bg-gradient-to-r from-blue-700/20 to-purple-700/20 opacity-0 group-hover:opacity-100 transition-opacity duration-300"></span>
+                <span className="flex items-center gap-2 relative z-10">
+                  <span className="text-lg">+</span> Mulai Konsultasi Baru
+                </span>
+              </Button>
+            </Link>
+            
+            {/* Notification icon */}
+            <button className="relative p-2 text-gray-600 hover:text-blue-600 hover:bg-gray-100 rounded-full transition-colors">
+              <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M15 17h5l-1.405-1.405A2.032 2.032 0 0118 14.158V11a6.002 6.002 0 00-4-5.659V5a2 2 0 10-4 0v.341C7.67 6.165 6 8.388 6 11v3.159c0 .538-.214 1.055-.595 1.436L4 17h5m6 0v1a3 3 0 11-6 0v-1m6 0H9" />
+              </svg>
+              <span className="absolute top-1 right-1 w-2 h-2 bg-red-500 rounded-full"></span>
+            </button>
+            
+            {/* User dropdown */}
+            <DropdownMenu>
+              <DropdownMenuTrigger className="outline-none">
+                <div className="flex items-center gap-2">
+                  <Avatar>
+                    <AvatarFallback className="bg-blue-100 text-blue-700 text-xs">
+                      {String(user.name || 'U').slice(0,2).toUpperCase()}
+                    </AvatarFallback>
+                  </Avatar>
+                  <div className="hidden md:block text-left">
+                    <p className="text-sm font-medium text-gray-900">{user.name}</p>
+                    <p className="text-xs text-gray-500">{user.role || 'Pengguna'}</p>
                   </div>
-                  <div className="absolute -top-1 -right-1 w-4 h-4 bg-green-500 rounded-full border-2 border-white animate-pulse"></div>
                 </div>
-                <div>
-                  <h1 className="text-2xl font-bold text-gray-900">Pasalku.ai</h1>
-                  <p className="text-sm text-gray-500 flex items-center">
-                    <span className="inline-block w-2 h-2 bg-green-500 rounded-full mr-2 animate-pulse"></span>
-                    Platform Intelijen Hukum Enterprise
-                  </p>
-                </div>
-              </div>
-              <nav className="hidden md:flex items-center gap-6 text-sm font-medium text-gray-600">
-                <Link href="/features" className="hover:text-gray-900 transition-colors">Fitur</Link>
-                <Link href="/pricing" className="hover:text-gray-900 transition-colors">Pricing</Link>
-                <Link href="/faq" className="hover:text-gray-900 transition-colors">FAQ</Link>
-                <Link href="/about" className="hover:text-gray-900 transition-colors">Tentang</Link>
-              </nav>
-            </div>
-            <div className="flex items-center gap-4 md:gap-6">
-              <div className="hidden md:block text-right">
-                <p className="text-sm font-medium text-gray-900">{user.name}</p>
-                <p className="text-xs text-gray-500 flex items-center justify-end">
-                  <span className="inline-block w-2 h-2 bg-blue-500 rounded-full mr-2"></span>
-                  {user.role || 'Legal Professional'}
-                </p>
-                <p className="text-xs text-gray-400 mt-1">
-                  {currentTime.toLocaleDateString('id-ID', {
-                    weekday: 'long',
-                    year: 'numeric',
-                    month: 'long',
-                    day: 'numeric'
-                  })}
-                </p>
-              </div>
-              <Link href="/chat" className="hidden md:inline-flex">
-                <Button size="sm" className="shadow-sm">
-                  Mulai Konsultasi
-                </Button>
-              </Link>
-              <button className="p-2 text-gray-400 hover:text-gray-600 hover:bg-gray-100 rounded-lg transition-colors" aria-label="Notifikasi">
-                <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M15 17h5l-5 5v-5zM4.868 12.683A17.925 17.925 0 0112 21c7.962 0 12-1.21 12-2.683m-12 2.683a17.925 17.925 0 01-7.132-8.317M12 21c4.411 0 8-4.03 8-9s-3.589-9-8-9-8 4.03-8 9a9.06 9.06 0 001.832 5.683L4 21l4.868-8.317z" />
-                </svg>
-              </button>
-              <button className="p-2 text-gray-400 hover:text-gray-600 hover:bg-gray-100 rounded-lg transition-colors" aria-label="Pengaturan">
-                <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 3v1m0 16v1m9-9h-1M4 12H3m15.364 6.364l-.707-.707M6.343 6.343l-.707-.707m12.728 0l-.707.707M6.343 17.657l-.707.707M16 12a4 4 0 11-8 0 4 4 0 018 0z" />
-                </svg>
-              </button>
-              <button
-                onClick={handleLogout}
-                className="px-4 py-2 text-sm text-red-600 hover:text-red-800 hover:bg-red-50 rounded-lg transition-colors border border-red-200"
-              >
-                Keluar
-              </button>
-            </div>
+              </DropdownMenuTrigger>
+              <DropdownMenuContent align="end" className="w-56">
+                <DropdownMenuLabel>Profil</DropdownMenuLabel>
+                <DropdownMenuSeparator />
+                <DropdownMenuItem asChild>
+                  <Link href="/riwayat">Riwayat & Draf</Link>
+                </DropdownMenuItem>
+                <DropdownMenuItem asChild>
+                  <Link href="/features-hub">Features Hub</Link>
+                </DropdownMenuItem>
+                <DropdownMenuItem asChild>
+                  <Link href="/privacy-policy">Kebijakan Privasi</Link>
+                </DropdownMenuItem>
+                <DropdownMenuSeparator />
+                <DropdownMenuItem onSelect={(e) => { e.preventDefault(); handleLogout(); }} className="text-red-600 focus:text-red-700">
+                  Keluar
+                </DropdownMenuItem>
+              </DropdownMenuContent>
+            </DropdownMenu>
+          </div>
+        </div>
+        
+        {/* Search bar on mobile - shown below header when needed */}
+        <div className="lg:hidden px-4 pb-4">
+          <div className="relative">
+            <input
+              type="text"
+              placeholder="Cari kasus, dokumen, atau fitur..."
+              className="w-full px-4 py-2 pl-10 rounded-full border border-gray-300 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-blue-500 transition-all bg-white/80 backdrop-blur-sm"
+            />
+            <svg className="absolute left-3 top-1/2 transform -translate-y-1/2 w-4 h-4 text-gray-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+              <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z" />
+            </svg>
           </div>
         </div>
       </header>
 
-      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8 space-y-8">
-        {/* Supreme Hero Section with Advanced Animations */}
-        <div className="relative overflow-hidden bg-gradient-to-r from-blue-600 via-purple-600 via-indigo-600 to-blue-600 rounded-3xl p-8 text-white shadow-2xl">
-          <div className="absolute inset-0 bg-black/10"></div>
-          <div className="absolute -top-10 -right-10 w-40 h-40 bg-white/10 rounded-full blur-3xl animate-pulse"></div>
-          <div className="absolute -bottom-10 -left-10 w-32 h-32 bg-white/10 rounded-full blur-2xl animate-pulse animate-delay-1000"></div>
-
-          <div className="relative flex flex-col lg:flex-row items-center justify-between">
-            <div className="flex-1 mb-8 lg:mb-0">
-                <div className="flex items-center space-x-3 mb-4">
-                  <div className="w-3 h-3 bg-green-400 rounded-full animate-pulse"></div>
-                  <span className="text-sm font-medium text-blue-100">SISTEM AKTIF</span>
-              </div>
-              <h2 className="text-4xl lg:text-5xl font-bold mb-4 leading-tight">
-                Dasbor Intelijen Hukum
-                <span className="block text-2xl lg:text-3xl font-semibold text-blue-200 mt-2">
-                  Kinerja real-time untuk tim profesional Anda
-                </span>
-              </h2>
-              <p className="text-xl text-blue-100 mb-6 max-w-2xl">
-                Selamat datang kembali, {user.name}. Ekosistem AI Pasalku.ai beroperasi optimal dengan 96+ kapabilitas, tingkat keberhasilan 97%, dan respons real-time di bawah 200ms.
-              </p>
-              <div className="flex flex-wrap gap-4">
-                <Link href="/ai-chat" className="bg-white/20 backdrop-blur-sm hover:bg-white/30 px-6 py-3 rounded-xl font-semibold transition-all duration-300 border border-white/30 hover:border-white/50">
-                  Mulai Konsultasi AI
-                </Link>
-                <Link href="/documents/upload" className="bg-white/10 backdrop-blur-sm hover:bg-white/20 px-6 py-3 rounded-xl font-semibold transition-all duration-300 border border-white/20 hover:border-white/40">
-                  Unggah Dokumen
-                </Link>
-              </div>
-            </div>
-            <div className="flex-shrink-0">
-              <div className="relative">
-                <div className="w-48 h-48 bg-white/20 rounded-3xl flex items-center justify-center backdrop-blur-sm border border-white/30">
-                  <span className="text-8xl animate-bounce">🤖</span>
-                </div>
-                <div className="absolute -top-4 -right-4 bg-green-500 text-white px-3 py-1 rounded-full text-sm font-bold animate-pulse">
-                  AKTIF
-                </div>
-              </div>
-            </div>
-          </div>
-        </div>
-
-        {/* Enhanced Quick Stats Grid */}
-        <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-6 gap-6">
-          {QUICK_STATS.map((stat, index) => (
-            <div key={index} className="bg-white rounded-2xl p-6 shadow-lg hover:shadow-xl transition-all duration-300 border border-gray-100 hover:border-gray-200">
-              <div className="flex items-center justify-between mb-4">
-                <div className="text-3xl">{stat.icon}</div>
-                <div className={`text-sm font-medium px-2 py-1 rounded-full ${
-                  stat.trend === 'up' ? 'bg-green-100 text-green-800' :
-                  stat.trend === 'down' ? 'bg-red-100 text-red-800' :
-                  'bg-gray-100 text-gray-800'
-                }`}>
-                  {getTrendIcon(stat.trend)} {stat.change}
-                </div>
-              </div>
-              <div className="text-2xl font-bold text-gray-900 mb-1">{stat.value}</div>
-              <div className="text-sm text-gray-500">{stat.label}</div>
-            </div>
-          ))}
-        </div>
-
-        {/* Quick Actions Section */}
-        <div className="bg-white rounded-3xl p-8 shadow-xl border border-gray-100">
-          <div className="flex items-center justify-between mb-6">
-            <div>
-              <h3 className="text-2xl font-bold text-gray-900">⚡ Aksi Kilat</h3>
-              <p className="text-gray-600 mt-1">Akses fitur paling sering digunakan dalam satu klik</p>
-            </div>
-            <div className="text-sm text-gray-500 bg-gray-100 px-3 py-1 rounded-full">
-              Prioritas: Tinggi • Sedang • Rendah
-            </div>
-          </div>
-          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
-            {QUICK_ACTIONS.map((action, index) => (
-              <Link
-                key={index}
-                href={action.link}
-                className={`${action.color} text-white p-6 rounded-2xl hover:shadow-lg transition-all duration-300 transform hover:-translate-y-1`}
-              >
-                <div className="flex items-start justify-between mb-4">
-                  <div className="text-3xl">{action.icon}</div>
-                  <div className={`text-xs px-2 py-1 rounded-full ${
-                    action.priority === 'high' ? 'bg-red-500/20 text-red-100' :
-                    action.priority === 'medium' ? 'bg-yellow-500/20 text-yellow-100' :
-                    'bg-gray-500/20 text-gray-100'
-                  }`}>
-                    {getPriorityLabel(action.priority)}
-                  </div>
-                </div>
-                <h4 className="font-bold text-lg mb-2">{action.title}</h4>
-                <p className="text-white/80 text-sm">{action.description}</p>
-              </Link>
-            ))}
-          </div>
-        </div>
-
-        {/* Recent Activity Feed */}
-        <div className="bg-white rounded-3xl p-8 shadow-xl border border-gray-100">
-          <div className="flex items-center justify-between mb-6">
-            <div>
-              <h3 className="text-2xl font-bold text-gray-900">📊 Aktivitas Terbaru</h3>
-              <p className="text-gray-600 mt-1">Ringkasan aksi hukum berbasis AI yang baru saja terjadi</p>
-            </div>
-            <Link href="/activity" className="text-blue-600 hover:text-blue-800 font-medium">
-              Lihat Semua →
-            </Link>
-          </div>
-          <div className="space-y-4">
-            {recentActivity.map((activity, index) => (
-              <div key={index} className="flex items-start space-x-4 p-4 rounded-2xl border border-gray-100 hover:border-gray-200 hover:shadow-md transition-all duration-300">
-                <div className="flex-shrink-0">
-                  <div className={`w-12 h-12 rounded-xl flex items-center justify-center text-2xl ${
-                    activity.status === 'success' ? 'bg-green-100' :
-                    activity.status === 'warning' ? 'bg-yellow-100' :
-                    activity.status === 'error' ? 'bg-red-100' :
-                    'bg-blue-100'
-                  }`}>
-                    {activity.icon}
-                  </div>
-                </div>
-                <div className="flex-1 min-w-0">
-                  <div className="flex items-center justify-between">
-                    <h4 className="text-lg font-semibold text-gray-900">{activity.title}</h4>
-                    <div className={`text-xs px-2 py-1 rounded-full border ${getActivityStatusColor(activity.status)}`}>
-                      {getActivityStatusLabel(activity.status)}
+      {/* Collapsible Sidebar */}
+      <aside className={`fixed top-16 left-0 h-[calc(100vh-4rem)] w-64 bg-white/90 backdrop-blur-sm border-r border-gray-200 z-40 overflow-y-auto transition-all duration-300 lg:static lg:z-auto lg:translate-x-0 ${isSidebarCollapsed ? '-translate-x-full lg:translate-x-0 lg:w-20' : 'translate-x-0 lg:w-64'} ${isMobileMenuOpen ? 'translate-x-0' : '-translate-x-full'} lg:translate-x-0`}>
+        <div className="p-4">
+          <button 
+            onClick={() => setIsSidebarCollapsed(!isSidebarCollapsed)}
+            className="absolute top-4 right-2 p-1 rounded-md text-gray-500 hover:bg-gray-100 hover:text-gray-700"
+          >
+            {isSidebarCollapsed ? (
+              <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 5l7 7-7 7" />
+              </svg>
+            ) : (
+              <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M15 19l-7-7 7-7" />
+              </svg>
+            )}
+          </button>
+          
+          {!isCollapsed && (
+            <>
+              <h3 className="text-sm font-semibold text-gray-500 uppercase tracking-wider mb-4">Menu Utama</h3>
+              
+              {/* Navigation Categories */}
+              <div className="space-y-6">
+                {AI_FEATURE_CATEGORIES.map((category) => (
+                  <div key={category.id}>
+                    <div className="flex items-center justify-between mb-2">
+                      <h4 className="text-sm font-semibold text-gray-700">{category.icon} {category.title}</h4>
+                      <button 
+                        onClick={() => toggleCategory(category.id)}
+                        className="text-gray-400 hover:text-gray-600"
+                      >
+                        {expandedCategories.includes(category.id) ? (
+                          <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M5 15l7-7 7 7" />
+                          </svg>
+                        ) : (
+                          <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M19 9l-7 7-7-7" />
+                          </svg>
+                        )}
+                      </button>
                     </div>
+                    
+                    {expandedCategories.includes(category.id) && (
+                      <ul className="space-y-1 pl-2">
+                        {category.features.map((feature, idx) => (
+                          <li key={idx}>
+                            <Link 
+                              href={feature.link} 
+                              className="flex items-center gap-3 px-3 py-2 text-sm text-gray-600 hover:text-blue-600 hover:bg-blue-50 rounded-lg transition-all duration-200 group"
+                            >
+                              <span className="text-lg group-hover:scale-110 transition-transform">{feature.icon}</span>
+                              <span className="flex-1">{feature.name}</span>
+                              {feature.badge && (
+                                <span className="text-xs bg-blue-100 text-blue-800 px-2 py-0.5 rounded-full shrink-0">{feature.badge}</span>
+                              )}
+                            </Link>
+                          </li>
+                        ))}
+                      </ul>
+                    )}
                   </div>
-                  <p className="text-gray-600 mt-1">{activity.description}</p>
-                  <div className="flex items-center justify-between mt-3">
-                    <span className="text-sm text-gray-500">{activity.time}</span>
-                    <span className="text-sm font-medium text-blue-600">{activity.metrics}</span>
+                ))}
+              </div>
+            </>
+          )}
+        </div>
+      </aside>
+
+      {/* Main Content Area */}
+      <main className={`flex-1 pt-16 transition-all duration-300 ${isSidebarCollapsed ? 'lg:ml-20' : 'lg:ml-64'} ${isMobileMenuOpen ? 'lg:ml-64' : 'ml-0'}`}>
+        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8 space-y-8">
+          {/* Hero Section - Dasbor Intelijen Hukum */}
+          <div className="bg-gradient-to-r from-blue-600 to-purple-600 rounded-2xl p-6 md:p-8 text-white">
+            <p className="text-sm opacity-90 mb-2">Selamat datang kembali, <span className="font-semibold">{user.name}</span></p>
+            <h2 className="text-2xl md:text-3xl font-bold">Dasbor Intelijen Hukum</h2>
+            <p className="text-blue-100 mt-2">Kendalikan konsultasi hukum Anda dengan kecerdasan buatan</p>
+            <div className="mt-6 flex flex-wrap gap-4">
+              <Link href="/ai-chat">
+                <Button className="bg-white text-blue-600 hover:bg-blue-50 font-bold">Mulai Konsultasi AI</Button>
+              </Link>
+              <Link href="/documents/upload">
+                <Button variant="secondary" className="bg-white/20 text-white border border-white/30 hover:bg-white/30 font-bold">Unggah Dokumen</Button>
+              </Link>
+            </div>
+          </div>
+
+          {/* Quick Actions and Recent Activity */}
+          <div className="grid grid-cols-1 lg:grid-cols-3 gap-6">
+            {/* Left 70% - Recent Activity */}
+            <div className="lg:col-span-2">
+              <div className="bg-white rounded-2xl p-6 shadow-sm border border-gray-100">
+                <div className="flex items-center justify-between mb-4">
+                  <h3 className="text-xl font-bold text-gray-900">Riwayat & Draf</h3>
+                  <div className="flex items-center gap-1 rounded-lg border border-gray-200 p-1 bg-gray-50">
+                    <button onClick={() => setFilter('all')} className={`px-3 py-1 text-xs rounded-md ${filter==='all' ? 'bg-white shadow text-gray-900' : 'text-gray-600 hover:text-gray-800'}`}>Semua</button>
+                    <button onClick={() => setFilter('draft')} className={`px-3 py-1 text-xs rounded-md ${filter==='draft' ? 'bg-white shadow text-gray-900' : 'text-gray-600 hover:text-gray-800'}`}>Draf</button>
+                    <button onClick={() => setFilter('done')} className={`px-3 py-1 text-xs rounded-md ${filter==='done' ? 'bg-white shadow text-gray-900' : 'text-gray-600 hover:text-gray-800'}`}>Selesai</button>
                   </div>
+                </div>
+                <div className="space-y-3">
+                  {getFilteredActivities().map((activity, index) => (
+                    <div key={index} className="flex items-start gap-3 p-4 rounded-xl border border-gray-100 hover:border-gray-200 transition-colors">
+                      <div className="text-2xl leading-none">{activity.icon}</div>
+                      <div className="flex-1 min-w-0">
+                        <div className="flex items-center justify-between">
+                          <h4 className="font-semibold text-gray-900 truncate">{activity.title}</h4>
+                          <span className={`text-[11px] px-2 py-0.5 rounded-full border ${getActivityStatusColor(activity.status)}`}>{getActivityStatusLabel(activity.status)}</span>
+                        </div>
+                        <p className="text-sm text-gray-600 mt-0.5">{activity.description}</p>
+                        <div className="flex items-center justify-between mt-2 text-xs text-gray-500">
+                          <span>{activity.time}</span>
+                          <span className="text-blue-600 font-medium">{activity.metrics}</span>
+                        </div>
+                        <div className="mt-3 flex items-center gap-2">
+                          {activity.type === 'draft' ? (
+                            <>
+                              <button onClick={() => continueDraft(index)} className="px-3 py-1.5 text-xs rounded-md bg-blue-600 text-white hover:bg-blue-700">Lanjutkan</button>
+                              <button onClick={() => deleteItem(index)} className="px-3 py-1.5 text-xs rounded-md bg-red-50 text-red-600 border border-red-200 hover:bg-red-100">Hapus</button>
+                            </>
+                          ) : (
+                            <>
+                              <button onClick={() => openItem(index)} className="px-3 py-1.5 text-xs rounded-md bg-gray-100 text-gray-800 hover:bg-gray-200">Buka</button>
+                              <button onClick={() => exportItem(index)} className="px-3 py-1.5 text-xs rounded-md bg-white border border-gray-200 text-gray-700 hover:bg-gray-50">Ekspor</button>
+                            </>
+                          )}
+                        </div>
+                      </div>
+                    </div>
+                  ))}
                 </div>
               </div>
-            ))}
-          </div>
-        </div>
+            </div>
 
-        {/* AI Feature Modules Grid */}
-        <div className="space-y-8">
-          <div className="text-center">
-            <h3 className="text-3xl font-bold text-gray-900 mb-4">🧠 Modul Fitur AI</h3>
-            <p className="text-gray-600 max-w-2xl mx-auto">
-              Jelajahi rangkaian lengkap alat intelijen hukum berbasis AI yang menghadirkan performa tinggi dan akurasi terukur.
-            </p>
-          </div>
-
-          <div className="grid grid-cols-1 lg:grid-cols-2 gap-8">
-            {AI_FEATURE_CATEGORIES.map((category, categoryIndex) => (
-              <div key={categoryIndex} className={`rounded-3xl p-8 shadow-xl border-2 ${category.borderColor} ${category.gradient} hover:shadow-2xl transition-all duration-300`}>
-                <div className="flex items-center space-x-4 mb-6">
-                  <div className={`w-16 h-16 rounded-2xl bg-gradient-to-br ${category.color} flex items-center justify-center text-3xl shadow-lg`}>
-                    {category.icon}
-                  </div>
-                  <div>
-                    <h4 className="text-2xl font-bold text-gray-900">{category.title}</h4>
-                    <p className="text-gray-600">{category.description}</p>
-                  </div>
-                </div>
-
-                <div className="grid grid-cols-1 gap-4">
-                  {category.features.map((feature, featureIndex) => (
-                    <Link
-                      key={featureIndex}
-                      href={feature.link}
-                      className="group bg-white rounded-2xl p-6 hover:shadow-lg transition-all duration-300 border border-gray-100 hover:border-gray-200"
-                    >
-                      <div className="flex items-start justify-between mb-3">
-                        <div className="flex items-center space-x-3">
-                          <div className="text-2xl">{feature.icon}</div>
-                          <div>
-                            <h5 className="font-semibold text-gray-900 group-hover:text-blue-600 transition-colors">
-                              {feature.name}
-                            </h5>
-                            <div className="flex items-center space-x-2 mt-1">
-                              <span className={`text-xs px-2 py-1 rounded-full ${
-                                feature.badge === 'Premium' ? 'bg-purple-100 text-purple-800' :
-                                feature.badge === 'Advanced' ? 'bg-blue-100 text-blue-800' :
-                                feature.badge === 'Adaptive' ? 'bg-green-100 text-green-800' :
-                                'bg-gray-100 text-gray-800'
-                              }`}>
-                                {feature.badge}
-                              </span>
-                              <span className="text-xs text-gray-500">{feature.metrics}</span>
-                            </div>
-                          </div>
+            {/* Right 30% - Quick Actions */}
+            <div className="lg:col-span-1">
+              <div className="bg-white rounded-2xl p-6 shadow-sm border border-gray-100">
+                <h3 className="text-xl font-bold text-gray-900 mb-4">Aksi Kilat</h3>
+                <div className="grid grid-cols-1 gap-3">
+                  {QUICK_ACTIONS.map((action, index) => (
+                    <Link key={index} href={action.link} className={`group rounded-xl border p-4 transition-all duration-300 hover:shadow-md ${action.priority === 'high' ? 'ring-2 ring-offset-2 ring-blue-500/20' : ''}`}>
+                      <div className="flex items-center gap-3">
+                        <div className="text-xl">{action.icon}</div>
+                        <div>
+                          <h4 className={`font-medium ${action.priority === 'high' ? 'text-blue-700' : action.priority === 'medium' ? 'text-purple-700' : 'text-gray-700'}`}>{action.title}</h4>
+                          <p className={`${action.priority === 'high' ? 'text-blue-600' : action.priority === 'medium' ? 'text-purple-600' : 'text-gray-500'} text-sm`}>{action.description}</p>
                         </div>
-                        <svg className="w-5 h-5 text-gray-400 group-hover:text-blue-600 transition-colors" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                          <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 5l7 7-7 7" />
-                        </svg>
                       </div>
-                      <p className="text-gray-600 text-sm">{feature.description}</p>
                     </Link>
                   ))}
                 </div>
               </div>
-            ))}
-          </div>
-        </div>
-
-        {/* Status Sistem Footer */}
-        <div className="bg-gradient-to-r from-gray-900 to-gray-800 rounded-3xl p-8 text-white">
-          <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
-            <div className="text-center">
-              <div className="w-16 h-16 bg-green-500 rounded-2xl flex items-center justify-center mx-auto mb-4">
-                <span className="text-2xl">⚡</span>
-              </div>
-              <h4 className="text-xl font-bold mb-2">Status Sistem</h4>
-              <p className="text-gray-300">Seluruh modul AI beroperasi normal</p>
-              <div className="mt-2 text-green-400 font-semibold">🟢 AKTIF</div>
-            </div>
-            <div className="text-center">
-              <div className="w-16 h-16 bg-blue-500 rounded-2xl flex items-center justify-center mx-auto mb-4">
-                <span className="text-2xl">🔒</span>
-              </div>
-              <h4 className="text-xl font-bold mb-2">Keamanan</h4>
-              <p className="text-gray-300">Enkripsi setara enterprise</p>
-              <div className="mt-2 text-blue-400 font-semibold">🔐 TERLINDUNGI</div>
-            </div>
-            <div className="text-center">
-              <div className="w-16 h-16 bg-purple-500 rounded-2xl flex items-center justify-center mx-auto mb-4">
-                <span className="text-2xl">🚀</span>
-              </div>
-              <h4 className="text-xl font-bold mb-2">Performa</h4>
-              <p className="text-gray-300">Optimasi kecepatan respons</p>
-              <div className="mt-2 text-purple-400 font-semibold">&lt;200ms RESPON</div>
             </div>
           </div>
-        </div>
-      </div>
 
-      <EnhancedFooter />
+          {/* Jelajahi Kemampuan AI */}
+          <div>
+            <div className="text-center mb-6">
+              <h3 className="text-2xl font-bold text-gray-900">Jelajahi Kemampuan AI</h3>
+              <p className="text-gray-600">Lihat daftar lengkap kemampuan di Features Hub</p>
+            </div>
+            <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
+              <Link href="/features?category=core" className="group bg-white rounded-2xl p-6 border border-gray-100 hover:border-blue-200 shadow-sm hover:shadow-md transition-all">
+                <div className="text-3xl mb-3">💬</div>
+                <h4 className="font-semibold text-gray-900 group-hover:text-blue-700">Konsultasi & Strategi</h4>
+                <p className="text-sm text-gray-600 mt-1">AI chat dengan citation, ringkasan, dan rekomendasi langkah</p>
+                <span className="inline-block mt-4 text-sm text-blue-600">Lihat Detail →</span>
+              </Link>
+              <Link href="/features?category=document-intelligence" className="group bg-white rounded-2xl p-6 border border-gray-100 hover:border-blue-200 shadow-sm hover:shadow-md transition-all">
+                <div className="text-3xl mb-3">📄</div>
+                <h4 className="font-semibold text-gray-900 group-hover:text-blue-700">Intelijen Dokumen & Data</h4>
+                <p className="text-sm text-gray-600 mt-1">Unggah, analisis, dan buat dokumen hukum secara cerdas</p>
+                <span className="inline-block mt-4 text-sm text-blue-600">Lihat Detail →</span>
+              </Link>
+              <Link href="/features?category=legal-intelligence" className="group bg-white rounded-2xl p-6 border border-gray-100 hover:border-blue-200 shadow-sm hover:shadow-md transition-all">
+                <div className="text-3xl mb-3">📊</div>
+                <h4 className="font-semibold text-gray-900 group-hover:text-blue-700">Prediksi & Analitik</h4>
+                <p className="text-sm text-gray-600 mt-1">Perkiraan hasil dan faktor risiko dari kasus serupa</p>
+                <span className="inline-block mt-4 text-sm text-blue-600">Lihat Detail →</span>
+              </Link>
+            </div>
+          </div>
+
+          {/* Minimal Footer */}
+          <footer className="text-center text-xs text-gray-500 py-6">© {new Date().getFullYear()} Pasalku.ai</footer>
+        </div>
+      </main>
+          {/* Mobile menu backdrop */}
+          {isMobileMenuOpen && (
+            <div 
+              className="fixed inset-0 bg-black bg-opacity-50 z-30 lg:hidden"
+              onClick={() => setIsMobileMenuOpen(false)}
+            ></div>
+          )}
+        </div>
+      </main>
     </div>
   );
 }

@@ -1,478 +1,274 @@
-'use client'
+'use client';
 
-import { useState } from 'react'
-import Link from 'next/link'
-import { motion, AnimatePresence } from 'framer-motion'
-import { 
-  MessageSquare, FileText, Database, FileCheck, Calendar, Search, Users, PieChart, 
-  ClipboardCheck, Bell, Video, Lock, BookOpen, TrendingUp, Download, Share2, 
-  Calculator, Archive, Edit, Zap, Settings, Shield, Award, Globe, ArrowRight,
-  Scale, CheckCircle, Brain, Play, Star, Sparkles
-} from 'lucide-react'
-import { Button } from '@/components/ui/button'
-import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card'
-import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs'
-import { Badge } from '@/components/ui/badge'
-import { EnhancedFooter } from '@/components/enhanced-footer'
+import { useEffect, useMemo, useState } from 'react';
+import Link from 'next/link';
+import { useSearchParams, useRouter } from 'next/navigation';
+
+type Plan = 'Free' | 'Premium' | 'Professional' | 'Beta';
+type Category = 'core' | 'legal-intelligence' | 'document-intelligence' | 'specialized-tools' | 'ai' | 'tools' | 'insights';
+
+interface FeatureItem {
+  id: string;
+  title: string;
+  description: string;
+  category: Category;
+  status: 'ready' | 'coming-soon' | 'beta';
+  plan: Plan;
+  link: string;
+  icon?: string;
+}
+
+const ALL_FEATURES: FeatureItem[] = [
+  {
+    id: 'ai-chat',
+    title: 'AI Chat Konsultasi',
+    description: 'Chat interaktif dengan AI untuk konsultasi hukum real-time',
+    category: 'core',
+    status: 'ready',
+    plan: 'Free',
+    link: '/ai-chat',
+    icon: '💬'
+  },
+  {
+    id: 'citations',
+    title: 'Auto Citation Detection',
+    description: 'Deteksi & format sitasi hukum Indonesia otomatis',
+    category: 'legal-intelligence',
+    status: 'ready',
+    plan: 'Professional',
+    link: '/ai-chat',
+    icon: '⚖️'
+  },
+  {
+    id: 'predictions',
+    title: 'Outcome Prediction',
+    description: 'Prediksi hasil berdasarkan kasus serupa & faktor kunci',
+    category: 'legal-intelligence',
+    status: 'ready',
+    plan: 'Premium',
+    link: '/ai-chat',
+    icon: '📊'
+  },
+  {
+    id: 'doc-generator',
+    title: 'Document Generator',
+    description: 'Buat dokumen hukum profesional berbasis konteks chat',
+    category: 'document-intelligence',
+    status: 'ready',
+    plan: 'Professional',
+    link: '/templates',
+    icon: '📝'
+  },
+  {
+    id: 'doc-upload',
+    title: 'Smart Document Upload',
+    description: 'Unggah & analisis dokumen secara cerdas',
+    category: 'document-intelligence',
+    status: 'ready',
+    plan: 'Professional',
+    link: '/documents/upload',
+    icon: '📤'
+  },
+  {
+    id: 'translation',
+    title: 'Legal Translation',
+    description: 'Penerjemahan dengan preservasi istilah hukum',
+    category: 'ai',
+    status: 'ready',
+    plan: 'Professional',
+    link: '/ai-chat',
+    icon: '🌐'
+  },
+  {
+    id: 'strategic-assessment',
+    title: 'Strategic Assessment Intelligence',
+    description: 'Analisis strategi multi-skenario untuk kasus kompleks',
+    category: 'core',
+    status: 'beta',
+    plan: 'Beta',
+    link: '/features#request-beta',
+    icon: '🎯'
+  },
+  {
+    id: 'virtual-court',
+    title: 'Virtual Court Simulation',
+    description: 'Simulasi persidangan virtual untuk latihan strategi',
+    category: 'specialized-tools',
+    status: 'coming-soon',
+    plan: 'Premium',
+    link: '/pricing',
+    icon: '🏛️'
+  },
+  {
+    id: 'analytics',
+    title: 'Analytics Dashboard',
+    description: 'Pantau penggunaan, topik populer, dan akurasi prediksi',
+    category: 'insights',
+    status: 'coming-soon',
+    plan: 'Professional',
+    link: '/analytics',
+    icon: '📈'
+  },
+];
+
+const CATEGORY_DEFS: { id: Category | 'all'; name: string; icon: string }[] = [
+  { id: 'all', name: 'Semua Fitur', icon: '🎯' },
+  { id: 'core', name: 'Core AI Systems', icon: '🤖' },
+  { id: 'legal-intelligence', name: 'Legal Intelligence', icon: '🧠' },
+  { id: 'document-intelligence', name: 'Document Intelligence', icon: '📄' },
+  { id: 'ai', name: 'AI Utilities', icon: '✨' },
+  { id: 'specialized-tools', name: 'Specialized Tools', icon: '⚙️' },
+  { id: 'insights', name: 'Insights', icon: '📊' },
+];
 
 export default function FeaturesPage() {
-  const [activeDemo, setActiveDemo] = useState<string | null>(null)
-  const featureCategories = [
-    {
-      id: 'ai-consultation',
-      title: 'AI Konsultasi Hukum',
-      description: 'Konsultasi hukum canggih dengan dual AI intelligence',
-      icon: MessageSquare,
-      color: 'from-blue-500 to-cyan-500',
-      features: [
-        {
-          name: 'Strategic Assessment Intelligence',
-          description: 'Analisis strategis kompleks menggunakan Ark + Groq AI fusion',
-          benefits: ['94.1% akurasi', 'Multi-angkuts integration', 'Real-time consensus'],
-          demo: 'Consultation Demo',
-          plan: 'Premium'
-        },
-        {
-          name: 'Adaptive Persona System',
-          description: 'AI personas yang otomatis beradaptasi pada situasi negosiasi',
-          benefits: ['4 Personality modes', 'Context awareness', 'Dynamic switching'],
-          demo: 'Persona Demo',
-          plan: 'Professional'
-        },
-        {
-          name: 'Reasoning Chain Analyzer',
-          description: 'Deteksi fallacy logis dalam argumen hukum',
-          benefits: ['15 fallacy patterns', 'Logic validation', 'Counter-argument generation'],
-          demo: 'Reasoning Demo',
-          plan: 'Professional'
-        }
-      ]
-    },
-    {
-      id: 'document-analysis',
-      title: 'Document Intelligence',
-      description: 'Analisis dokumen hukum canggih dengan AI vision & NLP',
-      icon: FileText,
-      color: 'from-purple-500 to-pink-500',
-      features: [
-        {
-          name: 'Contract Intelligence Engine',
-          description: 'Analisis kontrak praktik hukum dengan akurasi 87%',
-          benefits: ['Risk assessment', 'Optimization suggestions', 'Compliance checking'],
-          demo: 'Contract Demo',
-          plan: 'Professional'
-        },
-        {
-          name: 'Smart Document OCR',
-          description: 'Pengenalan karakter canggih untuk dokumen hukum',
-          benefits: ['96% accuracy', 'Handwriting recognition', 'Multi-language support'],
-          demo: 'OCR Demo',
-          plan: 'Premium'
-        },
-        {
-          name: 'Sentiment Analysis Engine',
-          description: 'Analisis tone dan sentiment dalam dokumen hukum',
-          benefits: ['8 mood categories', 'Conflict detection', 'Communication optimization'],
-          demo: 'Sentiment Demo',
-          plan: 'Professional'
-        }
-      ]
-    },
-    {
-      id: 'legal-research',
-      title: 'Legal Research Assistant',
-      description: 'Asisten riset hukum otomatis dengan database komprehensif',
-      icon: BookOpen,
-      color: 'from-green-500 to-emerald-500',
-      features: [
-        {
-          name: 'Automated Research Engine',
-          description: 'Riset hukum otomatis dengan precedent discovery',
-          benefits: ['89% relevance score', 'Cross-jurisdiction search', 'Citation verification'],
-          demo: 'Research Demo',
-          plan: 'Professional'
-        },
-        {
-          name: 'Knowledge Graph Analytics',
-          description: 'Analisis hubungan antar peraturan hukum Indonesia',
-          benefits: ['Semantic search', 'Relationship mapping', 'Predictive connections'],
-          demo: 'Knowledge Demo',
-          plan: 'Professional'
-        },
-        {
-          name: 'Legal Forecasting',
-          description: 'Prediksi outcome kasus dengan 87% akurasi',
-          benefits: ['Historical analysis', 'Success prediction', 'Risk assessment'],
-          demo: 'Forecast Demo',
-          plan: 'Professional'
-        }
-      ]
-    }
-  ]
+  const searchParams = useSearchParams();
+  const router = useRouter();
+  const initialCategory = (searchParams?.get('category') as Category) || 'all';
 
-  const advancedFeatures = [
-    {
-      name: 'Virtual Court Simulation',
-      description: 'Simulasi persidangan dengan AI praetor dan avokat',
-      benefits: ['Realistic proceedings', 'Performance feedback', 'Courtroom training'],
-      status: 'Lambda',
-      icon: Users
-    },
-    {
-      name: 'Multi-Party Negotiation Mediator',
-      description: 'Mediasi negosiasi multiparty dengan analisis kepentingan',
-      benefits: ['Win-win calculation', 'Stakeholder mapping', 'Coalition analysis'],
-      status: 'Lambda',
-      icon: Shield
-    },
-    {
-      name: 'Legal Business Intelligence',
-      description: 'Dashboard analytics untuk pengelolaan praktik hukum',
-      benefits: ['Revenue forecasting', 'Performance metrics', 'Client retention analysis'],
-      status: 'Lambda',
-      icon: TrendingUp
-    },
-    {
-      name: 'AI Voice Assistant',
-      description: 'Asisten suara natural untuk konsultasi hukum',
-      benefits: ['Natural conversations', 'Multi-language voice', 'Conference integration'],
-      status: 'Beta',
-      icon: MessageSquare
-    }
-  ]
+  const [category, setCategory] = useState<Category | 'all'>(initialCategory);
+  const [query, setQuery] = useState('');
+  const [planFilter, setPlanFilter] = useState<Plan | 'All'>('All');
 
-  const performanceStats = [
-    { metric: 'AI Accuracy', value: '94.1%', trend: '+16.8%' },
-    { metric: 'Response Time', value: '<200ms', trend: '-15.2%' },
-    { metric: 'User Satisfaction', value: '97%', trend: '+23.4%' },
-    { metric: 'Risk Reduction', value: '87%', trend: '+12.3%' }
-  ]
+  useEffect(() => {
+    // Sync URL when filters change
+    const params = new URLSearchParams();
+    if (category && category !== 'all') params.set('category', category);
+    if (query) params.set('q', query);
+    const url = params.toString() ? `/features?${params.toString()}` : '/features';
+    router.replace(url);
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [category, query]);
+
+  useEffect(() => {
+    const q = searchParams?.get('q') || '';
+    if (q) setQuery(q);
+    // keep in sync on first load
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, []);
+
+  const filtered = useMemo(() => {
+    return ALL_FEATURES.filter(f => {
+      const byCat = category === 'all' || f.category === category;
+      const byPlan = planFilter === 'All' || f.plan === planFilter;
+      const byQ = !query || `${f.title} ${f.description}`.toLowerCase().includes(query.toLowerCase());
+      return byCat && byPlan && byQ;
+    });
+  }, [category, planFilter, query]);
+
+  const badgeFor = (f: FeatureItem) => {
+    if (f.status === 'beta') return 'BETA';
+    if (f.status === 'coming-soon') return 'COMING SOON';
+    return f.plan;
+  };
+
+  const badgeClass = (f: FeatureItem) => {
+    if (f.status === 'beta') return 'bg-yellow-100 text-yellow-700 border-yellow-200';
+    if (f.status === 'coming-soon') return 'bg-gray-100 text-gray-600 border-gray-200';
+    if (f.plan === 'Premium') return 'bg-purple-100 text-purple-700 border-purple-200';
+    if (f.plan === 'Professional') return 'bg-blue-100 text-blue-700 border-blue-200';
+    return 'bg-green-100 text-green-700 border-green-200';
+  };
+
+  const actionFor = (f: FeatureItem) => {
+    if (f.status === 'coming-soon') return { href: '/pricing', label: 'Upgrade untuk Akses' };
+    if (f.status === 'beta') return { href: '#request-beta', label: 'Minta Akses Beta' };
+    if (f.plan === 'Premium' || f.plan === 'Professional') return { href: '/pricing', label: 'Upgrade ke Premium' };
+    return { href: f.link, label: 'Gunakan Fitur →' };
+  };
 
   return (
-    <div className="min-h-screen bg-gradient-to-br from-blue-50 via-white to-purple-50">
-      {/* Simple Navigation */}
-      <nav className="fixed top-0 left-0 right-0 bg-white/80 backdrop-blur-lg border-b border-gray-200 z-50">
-        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-          <div className="flex items-center justify-between h-16">
-            <Link href="/" className="flex items-center gap-2">
-              <Scale className="w-8 h-8 text-primary" />
-              <span className="text-xl font-bold">Pasalku.ai</span>
-            </Link>
-            <div className="flex items-center gap-4">
-              <Link href="/pricing">
-                <Button variant="ghost">Pricing</Button>
-              </Link>
-              <Link href="/faq">
-                <Button variant="ghost">FAQ</Button>
-              </Link>
-              <Link href="/chat">
-                <Button>Mulai Konsultasi</Button>
-              </Link>
+    <div className="min-h-screen bg-gradient-to-br from-gray-50 via-white to-blue-50">
+      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-10">
+        <div className="text-center mb-8">
+          <h1 className="text-4xl md:text-5xl font-extrabold bg-gradient-to-r from-blue-600 to-purple-600 bg-clip-text text-transparent">
+            Semua Fitur AI Kami
+          </h1>
+          <p className="text-gray-600 mt-2">Pusat fitur terpadu — temukan 96+ kemampuan AI dalam satu tempat</p>
+        </div>
+
+        {/* Filters */}
+        <div className="bg-white rounded-2xl p-4 border border-gray-200 shadow-sm mb-6">
+          <div className="flex flex-col md:flex-row gap-3 items-stretch md:items-center">
+            {/* Category tabs */}
+            <div className="flex-1 overflow-x-auto">
+              <div className="flex gap-2 min-w-max">
+                {CATEGORY_DEFS.map(c => (
+                  <button
+                    key={c.id}
+                    onClick={() => setCategory(c.id as any)}
+                    className={`px-3 py-2 text-sm rounded-lg border ${category === c.id ? 'bg-blue-600 text-white border-blue-700' : 'bg-white text-gray-700 border-gray-200 hover:bg-gray-50'}`}
+                    title={c.name}
+                  >
+                    <span className="mr-1">{c.icon}</span>
+                    {c.name}
+                  </button>
+                ))}
+              </div>
             </div>
+
+            {/* Plan filter */}
+            <select
+              value={planFilter}
+              onChange={(e) => setPlanFilter(e.target.value as any)}
+              className="px-3 py-2 border border-gray-200 rounded-lg text-sm bg-white"
+              aria-label="Filter paket"
+            >
+              <option value="All">Semua Paket</option>
+              <option value="Free">Gratis</option>
+              <option value="Professional">Professional</option>
+              <option value="Premium">Premium</option>
+              <option value="Beta">Beta</option>
+            </select>
+
+            {/* Search */}
+            <input
+              type="search"
+              placeholder="Cari fitur..."
+              value={query}
+              onChange={(e) => setQuery(e.target.value)}
+              className="w-full md:w-64 px-3 py-2 border border-gray-200 rounded-lg text-sm"
+              aria-label="Cari fitur"
+            />
           </div>
         </div>
-      </nav>
 
-      <div className="pt-28 pb-12">
-        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-          {/* Hero Section */}
-          <motion.div
-            initial={{ opacity: 0, y: 30 }}
-            animate={{ opacity: 1, y: 0 }}
-            transition={{ duration: 0.8 }}
-            className="text-center mb-16"
-          >
-            <h1 className="text-4xl md:text-5xl lg:text-6xl font-bold bg-gradient-to-r from-blue-600 via-purple-600 to-indigo-600 bg-clip-text text-transparent mb-6">
-              Semua Fitur AI Kami
-            </h1>
-            <p className="text-xl text-gray-600 max-w-4xl mx-auto mb-8">
-              Temukan kecanggihan 96+ fitur AI hukum kami yang didukung oleh teknologi dual AI
-              terdepan dunia. Dari konsultasi sederhana sampai analisis enterprise.
-            </p>
-
-            <div className="flex flex-col sm:flex-row gap-4 justify-center mb-12">
-              <Link href="/register">
-                <Button className="bg-gradient-to-r from-blue-500 to-purple-500 hover:from-blue-600 hover:to-purple-600 text-white px-8 py-3 text-lg font-medium">
-                  Mulai Konsultasi Gratis
-                </Button>
-              </Link>
-              <Link href="/pricing">
-                <Button variant="outline" className="border-2 border-blue-500 text-blue-600 hover:bg-blue-50 px-8 py-3 text-lg font-medium">
-                  Lihat Paket Harga
-                </Button>
-              </Link>
-            </div>
-
-            {/* Performance Stats */}
-            <motion.div
-              initial={{ opacity: 0, y: 20 }}
-              animate={{ opacity: 1, y: 0 }}
-              transition={{ duration: 0.6, delay: 0.3 }}
-              className="grid grid-cols-2 md:grid-cols-4 gap-4"
-            >
-              {performanceStats.map((stat, index) => (
-                <motion.div
-                  key={stat.metric}
-                  initial={{ scale: 0.9, opacity: 0 }}
-                  animate={{ scale: 1, opacity: 1 }}
-                  transition={{ duration: 0.5, delay: index * 0.1 }}
-                  className="bg-white/80 backdrop-blur-sm rounded-xl p-4 border border-gray-200/50"
-                >
-                  <div className="text-2xl font-bold text-gray-900">{stat.value}</div>
-                  <div className="text-sm text-gray-600">{stat.metric}</div>
-                  <div className="flex items-center text-green-600 text-xs mt-1">
-                    <TrendingUp className="w-3 h-3 mr-1" />
-                    {stat.trend}
-                  </div>
-                </motion.div>
-              ))}
-            </motion.div>
-          </motion.div>
-
-          {/* Feature Categories Tabs */}
-          <motion.div
-            initial={{ opacity: 0, y: 30 }}
-            animate={{ opacity: 1, y: 0 }}
-            transition={{ duration: 0.6, delay: 0.4 }}
-          >
-            <Tabs defaultValue="ai-consultation" className="w-full">
-              <TabsList className="grid w-full grid-cols-3 mb-8 h-auto p-1 bg-white/50 backdrop-blur-sm rounded-xl border border-gray-200/50">
-                {featureCategories.map((category) => (
-                  <TabsTrigger
-                    key={category.id}
-                    value={category.id}
-                    className="flex items-center gap-3 px-6 py-4 rounded-lg text-sm font-medium data-[state=active]:bg-gradient-to-r data-[state=active]:from-blue-500 data-[state=active]:to-purple-500 data-[state=active]:text-white"
-                  >
-                    <div className={`p-2 rounded-lg bg-gradient-to-r ${category.color}`}>
-                      <category.icon className="w-5 h-5 text-white" />
+        {/* Grid */}
+        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-5">
+          {filtered.map((f) => {
+            const action = actionFor(f);
+            return (
+              <div key={f.id} className="bg-white rounded-2xl p-6 border border-gray-200 shadow-sm hover:shadow-md transition-all">
+                <div className="flex items-start justify-between">
+                  <div className="flex items-center gap-3">
+                    <div className="w-10 h-10 rounded-lg bg-gradient-to-br from-blue-500 to-purple-600 text-white flex items-center justify-center">
+                      <span className="text-lg">{f.icon || '✨'}</span>
                     </div>
-                    <div className="text-left">
-                      <div className="font-semibold">{category.title}</div>
-                      <div className="text-xs opacity-75">Direkomendasikan</div>
-                    </div>
-                  </TabsTrigger>
-                ))}
-              </TabsList>
-
-              {featureCategories.map((category) => (
-                <TabsContent key={category.id} value={category.id}>
-                  <motion.div
-                    initial={{ opacity: 0, y: 20 }}
-                    animate={{ opacity: 1, y: 0 }}
-                    transition={{ duration: 0.5 }}
-                    className="grid grid-cols-1 md:grid-cols-3 gap-6"
-                  >
-                    {category.features.map((feature, index) => (
-                      <motion.div
-                        key={feature.name}
-                        initial={{ opacity: 0, y: 20 }}
-                        animate={{ opacity: 1, y: 0 }}
-                        transition={{ duration: 0.5, delay: index * 0.1 }}
-                      >
-                        <Card className="h-full backdrop-blur-sm bg-white/90 hover:bg-white/95 transition-all duration-300 hover:shadow-xl border-0 overflow-hidden group">
-                          <CardHeader className="relative">
-                            <div className="flex items-start justify-between">
-                              <div className={`p-3 rounded-xl bg-gradient-to-r ${category.color} mb-4`}>
-                                <Brain className="w-6 h-6 text-white" />
-                              </div>
-                              <Badge className={`text-xs ${
-                                feature.plan === 'Gratis' ? 'bg-green-100 text-green-800' :
-                                feature.plan === 'Premium' ? 'bg-purple-100 text-purple-800' :
-                                'bg-blue-100 text-blue-800'
-                              }`}>
-                                {feature.plan}
-                              </Badge>
-                            </div>
-                            <CardTitle className="text-xl font-bold text-gray-900 group-hover:text-blue-600 transition-colors">
-                              {feature.name}
-                            </CardTitle>
-                            <p className="text-gray-600 mt-2 leading-relaxed">
-                              {feature.description}
-                            </p>
-                          </CardHeader>
-
-                          <CardContent className="space-y-4">
-                            {/* Benefits */}
-                            <div className="space-y-2">
-                              {feature.benefits.map((benefit, benefitIndex) => (
-                                <div key={benefitIndex} className="flex items-center gap-3">
-                                  <CheckCircle className="w-4 h-4 text-green-500 flex-shrink-0" />
-                                  <span className="text-sm text-gray-700">{benefit}</span>
-                                </div>
-                              ))}
-                            </div>
-
-                            {/* Demo Button */}
-                            <button
-                              onClick={() => setActiveDemo(feature.demo)}
-                              className="w-full flex items-center justify-center gap-2 px-4 py-2 bg-gradient-to-r from-blue-50 to-purple-50 hover:from-blue-100 hover:to-purple-100 border border-blue-200 hover:border-blue-300 rounded-lg transition-all group"
-                            >
-                              <Play className="w-4 h-4 text-blue-600" />
-                              <span className="text-sm font-medium text-blue-600">Lihat Demo</span>
-                            </button>
-
-                            {/* Plan Link */}
-                            <div className="pt-2">
-                              <Link href={`/pricing`}>
-                                <Button variant="outline" className="w-full text-blue-600 border-blue-200 hover:border-blue-300 hover:bg-blue-50">
-                                  Upgrade ke {feature.plan}
-                                  <ArrowRight className="w-4 h-4 ml-2" />
-                                </Button>
-                              </Link>
-                            </div>
-                          </CardContent>
-                        </Card>
-                      </motion.div>
-                    ))}
-                  </motion.div>
-                </TabsContent>
-              ))}
-            </Tabs>
-          </motion.div>
-
-          {/* Advanced Features Section */}
-          <motion.div
-            initial={{ opacity: 0, y: 30 }}
-            animate={{ opacity: 1, y: 0 }}
-            transition={{ duration: 0.6, delay: 0.6 }}
-            className="mt-16"
-          >
-            <div className="text-center mb-12">
-              <h2 className="text-3xl font-bold bg-gradient-to-r from-purple-600 via-pink-600 to-purple-600 bg-clip-text text-transparent mb-4">
-                Fitur Advanced & Enterprise
-              </h2>
-              <p className="text-lg text-gray-600 max-w-3xl mx-auto">
-                Teknologi AI hukum paling mutakhir untuk kantor hukum dan perusahaan enterprise.
-                Fitur-fitur ini didasarkan pada permintaan pengguna dan teknologi terkini.
-              </p>
-            </div>
-
-            <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
-              {advancedFeatures.map((feature, index) => (
-                <motion.div
-                  key={feature.name}
-                  initial={{ opacity: 0, x: index % 2 === 0 ? -20 : 20 }}
-                  animate={{ opacity: 1, x: 0 }}
-                  transition={{ duration: 0.6, delay: index * 0.1 }}
-                >
-                  <Card className="backdrop-blur-sm bg-white/90 hover:bg-white/95 transition-all duration-300 hover:shadow-xl border-0 h-full">
-                    <CardContent className="p-6">
-                      <div className="flex items-start gap-4 mb-4">
-                        <div className="p-3 bg-gradient-to-r from-orange-400 to-red-500 rounded-xl">
-                          <feature.icon className="w-6 h-6 text-white" />
-                        </div>
-                        <div className="flex-1">
-                          <div className="flex items-center gap-3 mb-2">
-                            <h3 className="text-lg font-bold text-gray-900">{feature.name}</h3>
-                            <Badge className={`text-xs ${
-                              feature.status === 'Gamma' ? 'bg-green-100 text-green-800' :
-                              'bg-orange-100 text-orange-800'
-                            }`}>
-                              <Sparkles className="w-3 h-3 mr-1" />
-                              {feature.status}
-                            </Badge>
-                          </div>
-                          <p className="text-gray-600 text-sm leading-relaxed">
-                            {feature.description}
-                          </p>
-                        </div>
-                      </div>
-
-                      <div className="space-y-2">
-                        {feature.benefits.map((benefit, benefitIndex) => (
-                          <div key={benefitIndex} className="flex items-center gap-3">
-                            <Star className="w-4 h-4 text-yellow-500 flex-shrink-0" />
-                            <span className="text-sm text-gray-700">{benefit}</span>
-                          </div>
-                        ))}
-                      </div>
-
-                      <Link href="/contact" className="block mt-4">
-                        <Button className="w-full bg-gradient-to-r from-orange-500 to-red-500 hover:from-orange-600 hover:to-red-600 text-white">
-                          Minta Akses Beta
-                        </Button>
-                      </Link>
-                    </CardContent>
-                  </Card>
-                </motion.div>
-              ))}
-            </div>
-          </motion.div>
-
-          {/* Demo Modal */}
-          <AnimatePresence>
-            {activeDemo && (
-              <motion.div
-                initial={{ opacity: 0 }}
-                animate={{ opacity: 1 }}
-                exit={{ opacity: 0 }}
-                className="fixed inset-0 z-50 flex items-center justify-center bg-black/50 backdrop-blur-sm"
-                onClick={() => setActiveDemo(null)}
-              >
-                <motion.div
-                  initial={{ scale: 0.9, opacity: 0 }}
-                  animate={{ scale: 1, opacity: 1 }}
-                  exit={{ scale: 0.9, opacity: 0 }}
-                  className="bg-white rounded-2xl p-8 max-w-md w-full mx-4"
-                  onClick={(e) => e.stopPropagation()}
-                >
-                  <div className="text-center">
-                    <div className="w-16 h-16 bg-gradient-to-r from-blue-500 to-purple-500 rounded-full flex items-center justify-center mx-auto mb-4">
-                      <Play className="w-8 h-8 text-white" />
-                    </div>
-                    <h3 className="text-xl font-bold text-gray-900 mb-4">Demo {activeDemo}</h3>
-                    <p className="text-gray-600 mb-6">
-                      Demo interaktif untuk fitur ini sedang dipersiapkan.
-                      Hubungi kami untuk jadwalkan demonstrasi khusus!
-                    </p>
-                    <div className="flex gap-3">
-                      <Button variant="outline" onClick={() => setActiveDemo(null)} className="flex-1">
-                        Tutup
-                      </Button>
-                      <Link href="/contact" className="flex-1">
-                        <Button className="w-full bg-gradient-to-r from-blue-500 to-purple-500">
-                          Jadwalkan Demo
-                        </Button>
-                      </Link>
+                    <div>
+                      <h3 className="font-bold text-gray-900">{f.title}</h3>
+                      <p className="text-sm text-gray-600">{f.description}</p>
                     </div>
                   </div>
-                </motion.div>
-              </motion.div>
-            )}
-          </AnimatePresence>
+                  <span className={`text-[11px] px-2 py-0.5 rounded-full border ${badgeClass(f)}`}>{badgeFor(f)}</span>
+                </div>
+                <div className="mt-4 flex items-center justify-between">
+                  <span className="text-xs text-gray-500">Kategori: {CATEGORY_DEFS.find(c => c.id === f.category)?.name || f.category}</span>
+                  <Link href={action.href} className={`text-sm font-medium ${f.status === 'ready' ? 'text-blue-600 hover:text-blue-700' : 'text-gray-600 hover:text-gray-700'}`}>
+                    {action.label}
+                  </Link>
+                </div>
+              </div>
+            );
+          })}
+        </div>
 
-          {/* Call to Action */}
-          <motion.div
-            initial={{ opacity: 0, y: 30 }}
-            animate={{ opacity: 1, y: 0 }}
-            transition={{ duration: 0.6, delay: 0.8 }}
-            className="mt-16 text-center bg-gradient-to-r from-blue-600 via-purple-600 to-indigo-600 rounded-2xl p-12 text-white"
-          >
-            <h2 className="text-3xl font-bold mb-4">
-              Siap Jelajahi Semua Fitur Kami?
-            </h2>
-            <p className="text-xl text-blue-100 mb-8 max-w-3xl mx-auto">
-              Dari fitur dasar gratis sampai solusi enterprise canggih,
-              kami punya yang sesuai dengan kebutuhan hukum Anda.
-            </p>
-            <div className="flex flex-col sm:flex-row gap-4 justify-center">
-              <Link href="/register">
-                <Button className="bg-white text-purple-600 hover:bg-gray-100 px-8 py-3 text-lg font-semibold">
-                  Mulai Gratisan Sekarang
-                </Button>
-              </Link>
-              <Link href="/pricing">
-                <Button variant="outline" className="border-2 border-white text-white hover:bg-white/10 px-8 py-3 text-lg font-semibold">
-                  Lihat Semua Paket
-                </Button>
-              </Link>
-            </div>
-          </motion.div>
+        {/* Beta request anchor */}
+        <div id="request-beta" className="mt-10 bg-white rounded-2xl p-6 border border-gray-200">
+          <h2 className="text-xl font-bold text-gray-900 mb-2">Minta Akses Beta</h2>
+          <p className="text-sm text-gray-600 mb-3">Tertarik mencoba fitur Beta seperti Strategic Assessment Intelligence? Daftar minat Anda.</p>
+          <Link href="/register" className="text-sm font-semibold text-blue-600 hover:text-blue-700">Daftar Minat Beta →</Link>
         </div>
       </div>
-
-      {/* Footer */}
-      <EnhancedFooter />
     </div>
-  )
+  );
 }

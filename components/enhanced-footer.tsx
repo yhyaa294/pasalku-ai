@@ -82,8 +82,12 @@ export function EnhancedFooter() {
           <div className="grid grid-cols-1 lg:grid-cols-5 gap-12">
             <div className="lg:col-span-2 space-y-6">
               <div className="flex items-center gap-3">
-                <div className="w-12 h-12 bg-white rounded-xl flex items-center justify-center">
-                  <span className="text-3xl">⚖️</span>
+                <div className="w-12 h-12 bg-white rounded-xl flex items-center justify-center overflow-hidden p-1.5">
+                  <img 
+                    src="/assets/logos/logo_pasalku.jpg.png" 
+                    alt="Pasalku.ai Logo" 
+                    className="w-full h-full object-contain"
+                  />
                 </div>
                 <div>
                   <p className="text-2xl font-bold">Pasalku.ai</p>

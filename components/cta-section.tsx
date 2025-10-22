@@ -12,18 +12,18 @@ export const CTASection: FC<CTASectionProps> = ({ onGetStarted, className = '' }
   return (
     <section
       id="cta"
-      className={`py-24 md:py-32 px-4 relative overflow-hidden bg-gradient-to-br from-blue-600 via-purple-600 to-blue-700 ${className}`}
+      className={`py-24 md:py-32 px-4 relative overflow-hidden bg-gradient-to-br from-orange-500 via-red-500 to-orange-600 ${className}`}
     >
       {/* Modern Animated Background */}
       <div className="absolute inset-0">
-        <div className="absolute inset-0 bg-[radial-gradient(circle_at_30%_50%,rgba(255,255,255,0.1),transparent_50%)]"></div>
-        <div className="absolute inset-0 bg-[radial-gradient(circle_at_70%_50%,rgba(255,255,255,0.1),transparent_50%)]"></div>
-        <div className="absolute inset-0 bg-[linear-gradient(rgba(255,255,255,0.03)_1px,transparent_1px),linear-gradient(90deg,rgba(255,255,255,0.03)_1px,transparent_1px)] bg-[size:64px_64px]"></div>
+        <div className="absolute inset-0 bg-[radial-gradient(circle_at_30%_50%,rgba(255,255,255,0.15),transparent_50%)]"></div>
+        <div className="absolute inset-0 bg-[radial-gradient(circle_at_70%_50%,rgba(255,255,255,0.15),transparent_50%)]"></div>
+        <div className="absolute inset-0 bg-[linear-gradient(rgba(255,255,255,0.05)_1px,transparent_1px),linear-gradient(90deg,rgba(255,255,255,0.05)_1px,transparent_1px)] bg-[size:64px_64px]"></div>
       </div>
 
       {/* Floating Orbs */}
-      <div className="absolute top-20 left-20 w-64 h-64 bg-white/10 rounded-full blur-3xl animate-pulse"></div>
-      <div className="absolute bottom-20 right-20 w-96 h-96 bg-white/10 rounded-full blur-3xl animate-pulse" style={{ animationDelay: '1s' }}></div>
+      <div className="absolute top-20 left-20 w-64 h-64 bg-yellow-300/20 rounded-full blur-3xl animate-pulse"></div>
+      <div className="absolute bottom-20 right-20 w-96 h-96 bg-red-400/20 rounded-full blur-3xl animate-pulse" style={{ animationDelay: '1s' }}></div>
 
       <div className="max-w-5xl mx-auto text-center relative z-10">
         {/* Modern Badge */}
@@ -54,7 +54,7 @@ export const CTASection: FC<CTASectionProps> = ({ onGetStarted, className = '' }
         <div className="flex flex-col sm:flex-row gap-4 justify-center mb-16">
           <button
             onClick={onGetStarted}
-            className="group px-12 py-6 bg-white text-blue-600 rounded-2xl font-black text-xl hover:bg-blue-50 transition-all duration-300 transform hover:scale-105 shadow-2xl hover:shadow-white/20"
+            className="group px-12 py-6 bg-white text-orange-600 rounded-2xl font-black text-xl hover:bg-orange-50 transition-all duration-300 transform hover:scale-105 shadow-2xl hover:shadow-white/30"
           >
             <span className="flex items-center justify-center gap-2">
               Mulai Gratis Sekarang
@@ -64,7 +64,7 @@ export const CTASection: FC<CTASectionProps> = ({ onGetStarted, className = '' }
             </span>
           </button>
           
-          <button className="px-12 py-6 bg-white/10 backdrop-blur-xl border-2 border-white/30 text-white rounded-2xl font-bold text-xl hover:bg-white/20 transition-all duration-300 hover:scale-105">
+          <button className="px-12 py-6 bg-white/20 backdrop-blur-xl border-2 border-white/40 text-white rounded-2xl font-bold text-xl hover:bg-white/30 transition-all duration-300 hover:scale-105 shadow-lg">
             Lihat Demo
           </button>
         </div>

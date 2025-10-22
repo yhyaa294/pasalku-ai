@@ -75,28 +75,17 @@ def verify_token(token: str, token_type: Optional[str] = None) -> Optional[str]:
 
 def verify_password(plain_password: str, hashed_password: str) -> bool:
     try:
-        logger.debug("Verifying password...")
-
-        # Temporary fallback for simple hash (testing only)
-        import hashlib
-        simple_hash = hashlib.sha256(plain_password.encode()).hexdigest()
-        if simple_hash == hashed_password:
-            logger.debug("Password verified with simple hash")
-            return True
-
-        # Try bcrypt verification
+        logger.debug("Verifying password with bcrypt...")
+        
+        # Use bcrypt verification (the proper method)
         result = pwd_context.verify(plain_password, hashed_password)
         logger.debug(f"Password verification result: {result}")
         return result
     except Exception as e:
         logger.error(f"Error verifying password: {str(e)}")
-        # Fallback to simple hash for testing
-        import hashlib
-        try:
-            simple_hash = hashlib.sha256(plain_password.encode()).hexdigest()
-            return simple_hash == hashed_password
-        except Exception:
-            return False
+        import traceback
+        logger.error(f"Full traceback: {traceback.format_exc()}")
+        return False
 
 
 def get_password_hash(password: str) -> str:

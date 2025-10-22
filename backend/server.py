@@ -81,54 +81,12 @@ if settings.MONGODB_URI:
         mongo_available = False
 
 # ----- App -----
-@asynccontextmanager
-async def lifespan(app: FastAPI):
-    """Handle application startup and shutdown."""
-    global mongo_available, analytics_service
-    
-    logger.info(f"Starting up {settings.PROJECT_NAME} in {settings.ENVIRONMENT} mode...")
-    
-    # Initialize database
-    try:
-        init_db()
-        logger.info("Database initialized successfully")
-    except Exception as e:
-        logger.error(f"Failed to initialize database: {str(e)}")
-        raise
-    
-    # Skip MongoDB initialization for now to test
-    # # Initialize MongoDB if available
-    # if mongo_available:
-    #     try:
-    #         # Test MongoDB connection
-    #         # await mongo_client.server_info()
-    #         logger.info("MongoDB connection successful")
-
-    #         # Initialize analytics service
-    #         analytics_service = AnalyticsService(mongo_client)
-    #         logger.info("Analytics service initialized successfully")
-
-    #     except Exception as e:
-    #         logger.error(f"MongoDB connection failed: {str(e)}")
-    #         mongo_available = False
-    
-    logger.info("Application startup complete")
-    
-    yield
-    
-    # Shutdown
-    logger.info("Shutting down Pasalku.ai Backend...")
-    # if mongo_available and mongo_client:
-    #     mongo_client.close()
-    #     logger.info("MongoDB connection closed")
-
 app = FastAPI(
     title=settings.PROJECT_NAME,
     version="1.0.0",
     docs_url="/api/docs",
     redoc_url="/api/redoc",
     openapi_url="/api/openapi.json",
-    lifespan=lifespan
 )
 
 # ----- Helpers -----

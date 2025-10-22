@@ -87,10 +87,12 @@ export default function RegisterPage() {
 
       <div className="relative sm:mx-auto sm:w-full sm:max-w-md">
         <div className="text-center mb-8">
-          <div className="mx-auto h-16 w-16 bg-gradient-to-r from-blue-600 to-purple-600 rounded-2xl flex items-center justify-center shadow-lg">
-            <svg className="w-8 h-8 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-              <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M18 9v3m0 0v3m0-3h3m-3 0h-3m-2-5a4 4 0 11-8 0 4 4 0 018 0zM3 20a6 6 0 0112 0v1H3v-1z" />
-            </svg>
+          <div className="mx-auto h-16 w-16 bg-white rounded-2xl flex items-center justify-center shadow-lg overflow-hidden border-2 border-gray-100 p-2">
+            <img 
+              src="/assets/logos/logo_pasalku.jpg.png" 
+              alt="Pasalku.ai Logo" 
+              className="w-full h-full object-contain"
+            />
           </div>
           <h2 className="mt-6 text-3xl font-bold text-gray-900">
             Buat Akun Baru

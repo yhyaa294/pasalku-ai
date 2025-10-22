@@ -10,6 +10,7 @@ from datetime import datetime, timedelta
 import aiohttp
 from aiohttp import ClientTimeout
 import backoff
+import re
 
 from backend.core.config import settings
 
@@ -316,39 +317,56 @@ Instruksi:
         return questions_map.get(category, questions_map['Hukum Perdata'])
 
     async def generate_legal_analysis(self, consultation_data: Dict[str, Any]) -> Dict[str, Any]:
-        """Generate structured legal analysis with options and estimates."""
+        """Generate structured legal analysis with options and estimates based on AI Constitution."""
         try:
             category = consultation_data.get('category', 'Hukum Perdata')
             problem = consultation_data.get('problem', '')
             answers = consultation_data.get('answers', [])
             evidence = consultation_data.get('evidence', '')
 
+            # AI Constitution prompt for structured analysis
             analysis_prompt = f"""
-Berdasarkan informasi konsultasi hukum berikut:
+Sebagai asisten hukum AI Pasalku.ai, Anda harus memberikan analisis hukum yang akurat dan terstruktur sesuai dengan Konstitusi AI berikut:
 
+**KONSTITUSI AI PASALKU:**
+1. Berikan jawaban dalam format JSON terstruktur
+2. Sertakan analisis mendalam berdasarkan hukum positif Indonesia
+3. Sertakan opsi-opsi solusi yang tersedia dengan estimasi durasi dan biaya
+4. Berikan sitasi hukum yang relevan dan valid
+5. Jaga netralitas dan profesionalitas
+6. Akhiri dengan disclaimer bahwa ini bukan nasihat hukum resmi
+
+**DATA KLIEN:**
 Kategori: {category}
 Masalah: {problem}
-Jawaban pertanyaan: {'; '.join(answers)}
-Bukti: {evidence}
+Jawaban klarifikasi: {'; '.join(answers)}
+Bukti pendukung: {evidence}
 
-Berikan analisis hukum terstruktur dalam format JSON dengan field:
-- analysis: Analisis singkat situasi hukum
-- options: Array 2-4 opsi solusi, masing-masing dengan field:
-  - solution: Nama solusi
-  - description: Penjelasan singkat
-  - duration_estimate: "cepat" | "sedang" | "lama"
-  - cost_estimate: "rendah" | "sedang" | "tinggi"
-- recommendations: Rekomendasi utama
-- citations: Array referensi hukum (minimal 1)
+**FORMAT JAWABAN (dalam JSON):**
+{{
+  "analysis": "Analisis mendalam situasi hukum berdasarkan fakta dan hukum positif",
+  "options": [
+    {{
+      "solution": "Nama solusi",
+      "description": "Penjelasan lengkap solusi",
+      "duration_estimate": "cepat/sedang/lama",
+      "cost_estimate": "rendah/sedang/tinggi"
+    }}
+  ],
+  "recommendations": "Rekomendasi utama berdasarkan analisis",
+  "citations": ["Daftar sitasi hukum: UU No. tahun Tentang pokok", "Putusan Mahkamah dll"],
+  "disclaimer": "Disclaimer bahwa ini bukan nasihat hukum resmi"
+}}
 """
 
             payload = {
                 "model": self.model_id,
                 "messages": [
-                    {"role": "system", "content": "Anda adalah AI hukum Indonesia. Berikan analisis dalam format JSON yang valid."},
+                    {"role": "system", "content": "Anda adalah AI hukum Indonesia yang mengikuti Konstitusi AI Pasalku. Berikan analisis dalam format JSON yang valid sesuai dengan instruksi."},
                     {"role": "user", "content": analysis_prompt}
                 ],
-                "max_tokens": 1000
+                "max_tokens": 1000,
+                "temperature": 0.3  # Lower temperature for more consistent, factual responses
             }
 
             response_data = await self._make_request(payload)
@@ -358,22 +376,38 @@ Berikan analisis hukum terstruktur dalam format JSON dengan field:
 
                 # Try to parse JSON
                 try:
+                    # Clean the response if it contains markdown code blocks
+                    if ai_response.strip().startswith('```json'):
+                        # Extract content from JSON code block
+                        json_match = re.search(r'```json\s*\n(.*?)\n```', ai_response, re.DOTALL)
+                        if json_match:
+                            ai_response = json_match.group(1)
+                    elif ai_response.strip().startswith('```'):
+                        # Extract content from generic code block
+                        code_match = re.search(r'```\s*\n(.*?)\n```', ai_response, re.DOTALL)
+                        if code_match:
+                            ai_response = code_match.group(1)
+
                     analysis = json.loads(ai_response)
+                    # Ensure disclaimer is included
+                    if "disclaimer" not in analysis:
+                        analysis["disclaimer"] = "Informasi ini merupakan hasil analisis AI dan bukan nasihat hukum resmi. Konsultasikan dengan pengacara profesional untuk penanganan spesifik."
                     return analysis
                 except json.JSONDecodeError:
                     # Fallback analysis
                     return {
-                        "analysis": f"Berdasarkan informasi yang diberikan, masalah ini terkait {category}.",
+                        "analysis": f"Berdasarkan informasi yang diberikan, masalah ini terkait {category}. Analisis mendalam membutuhkan konsultasi dengan profesional hukum.",
                         "options": [
                             {
                                 "solution": "Konsultasi Pengacara",
-                                "description": "Konsultasikan dengan pengacara profesional untuk penanganan lebih lanjut",
+                                "description": "Konsultasikan dengan pengacara profesional untuk penanganan spesifik terhadap kasus Anda",
                                 "duration_estimate": "sedang",
                                 "cost_estimate": "sedang"
                             }
                         ],
-                        "recommendations": "Segera konsultasikan dengan pengacara yang berkompeten",
-                        "citations": ["UU No. 2 Tahun 2004 tentang Penyelesaian Perselisihan Hubungan Industrial"]
+                        "recommendations": f"Segera konsultasikan dengan pengacara yang berkompeten di bidang {category}",
+                        "citations": [f"Hukum positif Indonesia yang relevan dengan {category}"],
+                        "disclaimer": "Informasi ini merupakan hasil analisis AI dan bukan nasihat hukum resmi. Konsultasikan dengan pengacara profesional untuk penanganan spesifik."
                     }
             else:
                 raise Exception("Invalid response from AI service")
@@ -382,9 +416,17 @@ Berikan analisis hukum terstruktur dalam format JSON dengan field:
             logger.error(f"Error generating legal analysis: {str(e)}")
             return {
                 "analysis": "Terjadi kesalahan dalam analisis. Silakan coba lagi.",
-                "options": [],
-                "recommendations": "Konsultasikan dengan pengacara",
-                "citations": []
+                "options": [
+                    {
+                        "solution": "Konsultasi Pengacara",
+                        "description": "Konsultasikan dengan pengacara profesional untuk penanganan spesifik terhadap kasus Anda",
+                        "duration_estimate": "sedang",
+                        "cost_estimate": "sedang"
+                    }
+                ],
+                "recommendations": "Segera konsultasikan dengan pengacara yang berkompeten",
+                "citations": [],
+                "disclaimer": "Informasi ini merupakan hasil analisis AI dan bukan nasihat hukum resmi. Konsultasikan dengan pengacara profesional untuk penanganan spesifik."
             }
 
     async def get_clarity_flow_response(

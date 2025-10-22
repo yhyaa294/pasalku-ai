@@ -24,6 +24,31 @@ html {
   /* The prefixed versions provide compatibility for mobile browsers. */
 }
 
+/* ========================================
+   DARK MODE TRANSITIONS
+   ======================================== */
+
+/* Smooth transition for dark mode */
+html {
+  transition: background-color 0.3s ease, color 0.3s ease;
+}
+
+body {
+  transition: background-color 0.3s ease, color 0.3s ease;
+}
+
+/* All elements get smooth color transitions */
+* {
+  transition-property: background-color, border-color, color, fill, stroke;
+  transition-duration: 0.3s;
+  transition-timing-function: ease-in-out;
+}
+
+/* Preserve transform/opacity animations */
+*:where(:not(:has(> *))) {
+  transition-property: background-color, border-color, color, fill, stroke, opacity, transform;
+}
+
 /* Prevent CLS from images */
 img {
   height: auto;
@@ -190,6 +215,12 @@ img {
     background: linear-gradient(135deg, #fafafa 0%, #f5f5f5 100%);
     color: var(--foreground);
   }
+  /* Dark theme body/html background */
+  .dark html,
+  .dark body {
+    background: linear-gradient(135deg, #0b1220 0%, #0f172a 100%);
+    color: var(--foreground);
+  }
   
   /* Force text visibility */
   p, h1, h2, h3, h4, h5, h6, span, div, a, li, label {
@@ -202,6 +233,23 @@ img {
     z-index: 1;
   }
 }
+
+/* ========================================
+  DARK MODE OVERRIDES FOR LEGACY UTILITIES
+  ======================================== */
+/* Membantu komponen lama yang masih pakai kelas Tailwind default tanpa prefix dark: */
+.dark .bg-white { background-color: #0b1220 !important; }
+.dark .bg-gray-50 { background-color: #0f172a !important; }
+.dark .bg-gray-100 { background-color: #0f172a !important; }
+.dark .text-gray-900 { color: #e5e7eb !important; }
+.dark .text-gray-800 { color: #e5e7eb !important; }
+.dark .text-gray-700 { color: #cbd5e1 !important; }
+.dark .border-gray-200 { border-color: #334155 !important; }
+.dark .border-gray-300 { border-color: #475569 !important; }
+.dark .hover\:bg-gray-50:hover { background-color: #0f172a !important; }
+.dark .hover\:bg-orange-50:hover { background-color: #0b1320 !important; }
+.dark .hover\:text-orange-600:hover { color: #fb923c !important; }
+
 
 /* Updated animations with legal theme colors */
 @keyframes float {
@@ -1644,14 +1692,7 @@ button.wood-texture * {
   *::before,
   *::after {
     animation-duration: 0.01ms !important;
-    animation-iteration-count: 1 !important;
     transition-duration: 0.01ms !important;
-    scroll-behavior: auto !important;
-  }
-  
-  .scroll-observe {
-    opacity: 1;
-    transform: none;
   }
 }
 
@@ -1794,6 +1835,73 @@ button.wood-texture * {
 .float-pos-6 {
   left: 85%;
   top: 70%;
+}
+
+/* Fade in animations for hero */
+@keyframes fade-in {
+  from {
+    opacity: 0;
+    transform: translateY(10px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+.animate-fade-in {
+  animation: fade-in 0.8s ease-out;
+}
+
+.animate-fade-in-delayed {
+  animation: fade-in 0.8s ease-out 0.2s backwards;
+}
+
+.animate-fade-in-up {
+  animation: fade-in 0.8s ease-out 0.4s backwards;
+}
+
+/* Smooth title rotation animation */
+@keyframes title-fade-in {
+  0% {
+    opacity: 0;
+    transform: translateY(20px) scale(0.95);
+  }
+  100% {
+    opacity: 1;
+    transform: translateY(0) scale(1);
+  }
+}
+
+.animate-title-fade-in {
+  animation: title-fade-in 0.6s cubic-bezier(0.4, 0, 0.2, 1) backwards;
+}
+
+/* Mobile Optimization Styles */
+@media (max-width: 600px) {
+  body {
+    font-size: 14px;
+    padding: 0 1rem;
+  }
+  /* Optimasi untuk hero section */
+  .hero-section {
+    padding: 1rem;
+    font-size: 1.2rem;
+  }
+  /* Optimasi untuk CTA, Statistik, Fitur, dan Footer */
+  .cta-section,
+  .statistics-section,
+  .features-section,
+  .footer {
+    padding: 1rem;
+    text-align: center;
+  }
+}
+
+/* Accessibility Enhancements */
+:focus {
+  outline: 2px dashed var(--accent-color, #f39c12);
+  outline-offset: 4px;
 }
 
 
