@@ -1,6 +1,7 @@
  'use client'
 
 import Link from 'next/link'
+import Image from 'next/image'
 import {
   Instagram,
   Linkedin,
@@ -83,9 +84,11 @@ export function EnhancedFooter() {
             <div className="lg:col-span-2 space-y-6">
               <div className="flex items-center gap-3">
                 <div className="w-12 h-12 bg-white rounded-xl flex items-center justify-center overflow-hidden p-1.5">
-                  <img 
-                    src="/assets/logos/logo_pasalku.jpg.png" 
-                    alt="Pasalku.ai Logo" 
+                  <Image
+                    src="/assets/logos/logo_pasalku.jpg.png"
+                    alt="Pasalku.ai Logo"
+                    width={48}
+                    height={48}
                     className="w-full h-full object-contain"
                   />
                 </div>

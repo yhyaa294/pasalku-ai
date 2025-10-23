@@ -19,69 +19,136 @@ from backend.services.ai_service_enhanced import ai_service_enhanced as ai_servi
 
 router = APIRouter()
 
-@router.post("/consult", response_model=schemas.ChatResponse)
-async def consult_with_ai(
-    chat_request: schemas.ChatRequest,
+@router.post("/konsultasi", response_model=dict)
+async def konsultasi_ai(
+    request: schemas.ChatRequest,
     current_user: models.User = Depends(get_current_user),
     db: Session = Depends(get_db)
 ):
     """
-    Konsultasi hukum dengan AI (authenticated endpoint)
+    Endpoint konsultasi AI dengan JWT authentication dan AI Constitution
+    sesuai dengan requirements untuk MVP
     """
     try:
         # Validasi input
-        if not chat_request.query or len(chat_request.query.strip()) < 5:
+        if not request.query or len(request.query.strip()) < 5:
             raise HTTPException(
                 status_code=status.HTTP_400_BAD_REQUEST,
                 detail="Pertanyaan harus lebih dari 5 karakter"
             )
 
-        # Get or create session
-        session_id = chat_request.session_id
-        if not session_id:
-            # Create new session
-            session = crud.create_chat_session(db, current_user.id, f"Session {chat_request.query[:50]}...")
-            session_id = session.id
-        else:
-            # Verify session belongs to user
-            session = crud.get_chat_session(db, session_id, current_user.id)
-            if not session:
-                raise HTTPException(
-                    status_code=status.HTTP_404_NOT_FOUND,
-                    detail="Session tidak ditemukan"
-                )
+        logger.info(f"Konsultasi request from user {current_user.email}: {request.query[:50]}...")
 
-        # Get AI response
-        user_context = f"Role: {current_user.role}, Email: {current_user.email}"
+        # Create new session for konsultasi
+        session = crud.create_chat_session(
+            db,
+            current_user.id,
+            f"Konsultasi: {request.query[:50]}..."
+        )
+
+        # AI Constitution system prompt
+        ai_constitution = f"""Anda adalah asisten AI hukum Indonesia Pasalku.ai yang membantu pengguna dengan pertanyaan hukum.
+
+**KONSTITUSI AI PASALKU:**
+1. Berikan jawaban dalam format JSON terstruktur yang VALID
+2. Sertakan analisis mendalam berdasarkan hukum positif Indonesia
+3. Sertakan opsi-opsi solusi yang tersedia dengan estimasi durasi dan biaya
+4. Berikan sitasi hukum yang relevan dan valid
+5. Jaga netralitas dan profesionalitas
+6. Akhiri dengan disclaimer bahwa ini bukan nasihat hukum resmi
+
+**KONTEKS PENGGUNA:**
+- Email: {current_user.email}
+- Role: {current_user.role}
+- Session ID: {session.id}
+
+**FORMAT JAWABAN JSON YANG WAJIB:**
+{{
+  "analysis": "Analisis mendalam situasi hukum berdasarkan fakta dan hukum positif Indonesia",
+  "options": [
+    {{
+      "solution": "Nama solusi yang jelas",
+      "description": "Penjelasan lengkap solusi ini",
+      "duration_estimate": "cepat/sedang/lama",
+      "cost_estimate": "rendah/sedang/tinggi"
+    }}
+  ],
+  "recommendations": "Rekomendasi utama berdasarkan analisis",
+  "citations": ["Daftar sitasi hukum: UU No. tahun Tentang pokok", "Putusan Mahkamah Agung dll"],
+  "disclaimer": "Disclaimer bahwa ini bukan nasihat hukum resmi"
+}}
+
+**PANDUAN TEKNIS:**
+- Pastikan JSON valid dan tidak ada syntax error
+- Gunakan bahasa Indonesia yang formal dan profesional
+- Fokus pada aspek hukum Indonesia
+- Berikan estimasi yang realistis"""
+
+        # Get AI response using the enhanced AI service
+        user_context = f"Role: {current_user.role}, Email: {current_user.email}, Session: {session.id}"
         response = await ai_service.get_legal_response(
-            query=chat_request.query,
+            query=request.query,
             user_context=user_context
         )
 
+        # Try to get structured analysis if it's a complex legal question
+        try:
+            # Check if this is a complex legal question that needs structured analysis
+            legal_keywords = ['hukum', 'pasal', 'undang', 'kontrak', 'gugat', 'perkara', 'pidana', 'perdata']
+            is_complex_legal = any(keyword in request.query.lower() for keyword in legal_keywords)
+
+            if is_complex_legal and len(request.query) > 50:
+                # Get structured analysis for complex legal questions
+                structured_analysis = await ai_service.generate_legal_analysis({
+                    'category': ai_service.classify_legal_problem(request.query),
+                    'problem': request.query,
+                    'answers': [],
+                    'evidence': ''
+                })
+
+                # Use structured analysis if successful
+                if structured_analysis and 'analysis' in structured_analysis:
+                    response = structured_analysis
+                    response['answer'] = structured_analysis['analysis']
+                    response['structured'] = True
+        except Exception as e:
+            logger.warning(f"Failed to get structured analysis: {str(e)}")
+            # Continue with regular response
+
         # Save user message
         crud.create_chat_message(
-            db, session_id, "user", chat_request.query
+            db, session.id, "user", request.query
         )
 
         # Save AI response
         crud.create_chat_message(
-            db, session_id, "assistant", response["answer"], response.get("citations", [])
+            db, session.id, "assistant", response["answer"], response.get("citations", [])
         )
 
+        # Return structured response
         return {
-            "session_id": session_id,
+            "session_id": str(session.id),
             "message": response["answer"],
             "citations": response.get("citations", []),
-            "disclaimer": response.get("disclaimer", "")
+            "disclaimer": response.get("disclaimer", ""),
+            "structured": response.get("structured", False),
+            "success": True,
+            "user": {
+                "id": str(current_user.id),
+                "email": current_user.email,
+                "role": current_user.role.value if hasattr(current_user.role, 'value') else str(current_user.role)
+            }
         }
 
     except HTTPException:
         raise
     except Exception as e:
-        logger.error(f"Error in consult endpoint: {str(e)}")
+        logger.error(f"Error in konsultasi endpoint: {str(e)}")
+        import traceback
+        logger.error(f"Traceback: {traceback.format_exc()}")
         raise HTTPException(
             status_code=status.HTTP_500_INTERNAL_SERVER_ERROR,
-            detail=f"Terjadi kesalahan saat memproses permintaan: {str(e)}"
+            detail=f"Terjadi kesalahan saat memproses konsultasi: {str(e)}"
         )
 
 @router.get("/history", response_model=List[schemas.ChatSession])

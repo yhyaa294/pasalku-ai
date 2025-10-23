@@ -3,6 +3,7 @@
 import { useState } from 'react';
 import { useRouter } from 'next/navigation';
 import Link from 'next/link';
+import Image from 'next/image';
 
 export default function LoginPage() {
   const [formData, setFormData] = useState({
@@ -78,11 +79,6 @@ export default function LoginPage() {
     });
   };
 
-  // Ensure the handleLogin function is declared and used properly
-  const handleLogin = () => {
-    window.location.href = '/login';
-  };
-
   return (
     <div className="min-h-screen bg-gradient-to-br from-orange-50 via-white to-blue-50 flex flex-col justify-center py-12 sm:px-6 lg:px-8">
       {/* Subtle background decoration */}
@@ -95,9 +91,12 @@ export default function LoginPage() {
         {/* Logo & Header */}
         <div className="text-center mb-8">
           <div className="mx-auto h-16 w-16 bg-white rounded-2xl flex items-center justify-center shadow-lg overflow-hidden border-2 border-gray-100 p-2">
-            <img 
-              src="/assets/logos/logo_pasalku.jpg.png" 
-              alt="Pasalku.ai Logo" 
+            <Image
+              src="/assets/logos/logo_pasalku.jpg.png"
+              alt="Pasalku.ai Logo"
+              width={64}
+              height={64}
+              priority
               className="w-full h-full object-contain"
             />
           </div>

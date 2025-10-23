@@ -372,6 +372,7 @@ const CaseStudiesPage = () => {
           {/* New Case Modal */}
           {showNewCaseForm && (
             <CaseCreationModal
+            
               onSubmit={handleCreateCase}
               onClose={() => setShowNewCaseForm(false)}
             />

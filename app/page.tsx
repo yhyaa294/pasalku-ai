@@ -4,62 +4,62 @@ import { EnhancedNavigation } from '@/components/enhanced-navigation';
 import { HeroSection } from '@/components/hero-section';
 import { StatisticsSection } from '@/components/statistics-section';
 import { EnhancedFooter } from '@/components/enhanced-footer';
+import { ClientOnlyWrapper } from '@/components/ClientOnlyWrapper';
 import { useEffect, useState } from 'react';
+import { useRouter } from 'next/navigation';
 import Link from 'next/link';
 import dynamic from 'next/dynamic';
 
-// Performance: split below-the-fold sections into separate chunks
+// CRITICAL: All dynamic sections must use ssr: false to prevent hydration mismatch
 const FeaturesSection = dynamic(() => import('@/components/features-section').then(m => m.FeaturesSection), {
-  ssr: true,
-  loading: () => <section className="py-20 bg-white dark:bg-slate-950" aria-busy="true" />
+  ssr: false,
+  loading: () => <section className="py-20 bg-white dark:bg-slate-950" aria-busy="true"><div className="max-w-7xl mx-auto px-4 text-center"><div className="animate-pulse">Loading features...</div></div></section>
 });
 const HowItWorksSection = dynamic(() => import('@/components/how-it-works-section').then(m => m.HowItWorksSection), {
-  ssr: true,
-  loading: () => <section className="py-20 bg-gray-50 dark:bg-slate-900" aria-busy="true" />
+  ssr: false,
+  loading: () => <section className="py-20 bg-gray-50 dark:bg-slate-900" aria-busy="true"><div className="max-w-7xl mx-auto px-4 text-center"><div className="animate-pulse">Loading how it works...</div></div></section>
 });
 const PricingSection = dynamic(() => import('@/components/pricing-section').then(m => m.PricingSection), {
-  ssr: true,
-  loading: () => <section className="py-20 bg-white dark:bg-slate-950" aria-busy="true" />
+  ssr: false,
+  loading: () => <section className="py-20 bg-white dark:bg-slate-950" aria-busy="true"><div className="max-w-7xl mx-auto px-4 text-center"><div className="animate-pulse">Loading pricing...</div></div></section>
 });
 const FAQSection = dynamic(() => import('@/components/faq-section').then(m => m.FAQSection), {
-  ssr: true,
-  loading: () => <section className="py-20 bg-gray-50 dark:bg-slate-900" aria-busy="true" />
+  ssr: false,
+  loading: () => <section className="py-20 bg-gray-50 dark:bg-slate-900" aria-busy="true"><div className="max-w-7xl mx-auto px-4 text-center"><div className="animate-pulse">Loading FAQ...</div></div></section>
 });
 const TestimonialsSection = dynamic(() => import('@/components/testimonials-section').then(m => m.TestimonialsSection), {
-  ssr: true,
-  loading: () => <section className="py-20 bg-white dark:bg-slate-950" aria-busy="true" />
+  ssr: false,
+  loading: () => <section className="py-20 bg-white dark:bg-slate-950" aria-busy="true"><div className="max-w-7xl mx-auto px-4 text-center"><div className="animate-pulse">Loading testimonials...</div></div></section>
 });
 const CTASection = dynamic(() => import('@/components/cta-section').then(m => m.CTASection), {
-  ssr: true,
-  loading: () => <section className="py-20 bg-gradient-to-r from-blue-600 to-purple-600" aria-busy="true" />
+  ssr: false,
+  loading: () => <section className="py-20 bg-gradient-to-r from-blue-600 to-purple-600" aria-busy="true"><div className="max-w-7xl mx-auto px-4 text-center"><div className="animate-pulse text-white">Loading call to action...</div></div></section>
 });
 
 export default function PasalkuLandingPage() {
+  const router = useRouter();
   const [isMounted, setIsMounted] = useState(false);
   const [isAuthenticated, setIsAuthenticated] = useState(false);
   const [userRole, setUserRole] = useState<'public' | 'legal_professional' | 'admin'>('public');
   const [showChat, setShowChat] = useState(false);
   const [chatMessage, setChatMessage] = useState('');
-  const [messages, setMessages] = useState<Array<{ type: 'bot' | 'user', text: string }>>([
-    {
-      type: 'bot',
-      text: 'Halo! 👋 Selamat datang di Pasalku.ai!\n\nSaya **Asisten Info Platform** yang siap membantu Anda mengenal Pasalku.ai.\n\n📌 Saya bisa jawab tentang:\n• Apa itu Pasalku.ai\n• Fitur & paket harga\n• Cara menggunakan\n• Keamanan data\n\n⚠️ **Catatan:** Untuk konsultasi hukum, silakan klik tombol "Mulai Konsultasi Hukum" di bawah ya! 😊'
-    }
-  ]);
+  
+  // CRITICAL: Initialize messages as empty array for SSR consistency
+  const [messages, setMessages] = useState<Array<{ type: 'bot' | 'user', text: string }>>([]);
 
   // Handler functions - defined early to avoid hoisting issues
   const handleLogin = () => {
-    window.location.href = '/login';
+    router.push('/login');
   };
 
   const handleGetStarted = () => {
     // CTA buttons should go to register page
-    window.location.href = '/register';
+    router.push('/register');
   };
 
   const handleConsultationClick = () => {
     // All consultation buttons should redirect to login first
-    window.location.href = '/login';
+    router.push('/login');
   };
 
   const handleChatClick = () => {
@@ -67,7 +67,7 @@ export default function PasalkuLandingPage() {
       setShowChat(true);
     } else {
       // Redirect to login if not authenticated
-      window.location.href = '/login';
+      router.push('/login');
     }
   };
 
@@ -166,25 +166,32 @@ export default function PasalkuLandingPage() {
   };
 
   useEffect(() => {
+    // CRITICAL: Set mounted state first
     setIsMounted(true);
-    // Check authentication status - only on client side
-    if (typeof window !== 'undefined') {
-      const userData = localStorage.getItem('user');
-      if (userData) {
-        try {
+    
+    // Initialize default bot message only after mounting
+    setMessages([{
+      type: 'bot',
+      text: 'Halo! 👋 Selamat datang di Pasalku.ai!\n\nSaya **Asisten Info Platform** yang siap membantu Anda mengenal Pasalku.ai.\n\n📌 Saya bisa jawab tentang:\n• Apa itu Pasalku.ai\n• Fitur & paket harga\n• Cara menggunakan\n• Keamanan data\n\n⚠️ **Catatan:** Untuk konsultasi hukum, silakan klik tombol "Mulai Konsultasi Hukum" di bawah ya! 😊'
+    }]);
+    
+    // Check authentication status - only on client side with error handling
+    try {
+      if (typeof window !== 'undefined' && window.localStorage) {
+        const userData = localStorage.getItem('user');
+        if (userData) {
           const user = JSON.parse(userData);
-          if (user.isAuthenticated) {
+          if (user?.isAuthenticated) {
             setIsAuthenticated(true);
-            setUserRole('public');
+            setUserRole(user.role || 'public');
           }
-        } catch (error) {
-          console.error('Error parsing user data:', error);
         }
       }
+    } catch (error) {
+      // Silently handle localStorage errors
+      console.warn('Failed to access localStorage:', error);
     }
   }, []);
-
-  // Avoid hydration mismatch by not conditionally rendering different content
 
   return (
     <div className="min-h-screen bg-white dark:bg-slate-950 text-gray-900 dark:text-slate-100 overflow-x-hidden relative text-dark-primary">
@@ -200,17 +207,19 @@ export default function PasalkuLandingPage() {
         <div className="absolute inset-0 opacity-20 bg-dot-pattern"></div>
       </div>
       
-      {/* Floating icons - subtle - only render after hydration */}
-      <div className="fixed inset-0 pointer-events-none z-0 hidden md:block motion-reduce:hidden" suppressHydrationWarning>
-        {isMounted && ['⚖️', '📜', '🔍', '💼', '✨', '🎓'].map((icon, i) => (
-          <div
-            key={i}
-            className={`absolute text-2xl opacity-10 smooth-float float-pos-${i + 1} anim-delay-${['1-5s', '3s', '4-5s', '6s', '7-5s', '9s'][i]} anim-duration-6s`}
-          >
-            {icon}
-          </div>
-        ))}
-      </div>
+      {/* Floating icons - CLIENT ONLY to prevent hydration mismatch */}
+      <ClientOnlyWrapper>
+        <div className="fixed inset-0 pointer-events-none z-0 hidden md:block motion-reduce:hidden">
+          {['⚖️', '📜', '🔍', '💼', '✨', '🎓'].map((icon, i) => (
+            <div
+              key={i}
+              className={`absolute text-2xl opacity-10 smooth-float float-pos-${i + 1} anim-delay-${['1-5s', '3s', '4-5s', '6s', '7-5s', '9s'][i]} anim-duration-6s`}
+            >
+              {icon}
+            </div>
+          ))}
+        </div>
+      </ClientOnlyWrapper>
 
       <EnhancedNavigation
         isAuthenticated={isAuthenticated}
@@ -265,9 +274,9 @@ export default function PasalkuLandingPage() {
 
       <EnhancedFooter />
 
-      {/* Mini Customer Service Chat */}
-      <div suppressHydrationWarning>
-        {showChat && (
+      {/* Mini Customer Service Chat - CLIENT ONLY */}
+      <ClientOnlyWrapper>
+        {isMounted && showChat && (
         <div className="fixed bottom-24 right-6 w-96 h-[500px] bg-white rounded-2xl shadow-2xl border border-gray-200 z-50 overflow-hidden animate-scale-in">
           {/* Header */}
           <div className="bg-gradient-to-r from-blue-600 via-purple-600 to-blue-600 text-white p-4 flex justify-between items-center">
@@ -434,11 +443,11 @@ export default function PasalkuLandingPage() {
           </div>
         </div>
         )}
-      </div>
+      </ClientOnlyWrapper>
 
-      {/* Premium Animated Floating Chat Button with Tooltip */}
-      <div suppressHydrationWarning>
-        {!showChat && (
+      {/* Premium Animated Floating Chat Button with Tooltip - CLIENT ONLY */}
+      <ClientOnlyWrapper>
+        {isMounted && !showChat && (
         <div className="fixed bottom-6 right-6 z-40 group">
           {/* Tooltip */}
           <div className="absolute bottom-full right-0 mb-2 px-3 py-2 bg-gray-900 text-white text-sm rounded-lg opacity-0 group-hover:opacity-100 transition-opacity duration-300 whitespace-nowrap pointer-events-none">
@@ -479,7 +488,7 @@ export default function PasalkuLandingPage() {
           </button>
         </div>
         )}
-      </div>
+      </ClientOnlyWrapper>
     </div>
   )
 }

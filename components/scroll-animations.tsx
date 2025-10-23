@@ -38,19 +38,36 @@ export function useScrollAnimation() {
 // Scroll Progress Bar Component
 export function ScrollProgressBar() {
   const [scrollProgress, setScrollProgress] = useState(0)
+  const [isMounted, setIsMounted] = useState(false)
 
   useEffect(() => {
+    setIsMounted(true)
+    
     const updateScrollProgress = () => {
+      if (typeof window === 'undefined' || typeof document === 'undefined') return
+      
       const scrollPx = document.documentElement.scrollTop
       const winHeightPx = document.documentElement.scrollHeight - document.documentElement.clientHeight
-      const scrolled = (scrollPx / winHeightPx) * 100
+      const scrolled = winHeightPx > 0 ? (scrollPx / winHeightPx) * 100 : 0
 
       setScrollProgress(scrolled)
     }
 
-    window.addEventListener('scroll', updateScrollProgress, { passive: true })
-    return () => window.removeEventListener('scroll', updateScrollProgress)
+    if (typeof window !== 'undefined') {
+      updateScrollProgress() // Initial call
+      window.addEventListener('scroll', updateScrollProgress, { passive: true })
+    }
+    
+    return () => {
+      if (typeof window !== 'undefined') {
+        window.removeEventListener('scroll', updateScrollProgress)
+      }
+    }
   }, [])
+
+  if (!isMounted) {
+    return null
+  }
 
   return (
     <div
@@ -71,11 +88,14 @@ export function ParallaxContainer({
   className?: string
 }) {
   const [offset, setOffset] = useState(0)
+  const [isMounted, setIsMounted] = useState(false)
   const ref = useRef<HTMLDivElement>(null)
 
   useEffect(() => {
+    setIsMounted(true)
+    
     const handleScroll = () => {
-      if (!ref.current) return
+      if (!ref.current || typeof window === 'undefined') return
 
       const rect = ref.current.getBoundingClientRect()
       const scrolled = window.pageYOffset
@@ -88,11 +108,21 @@ export function ParallaxContainer({
       }
     }
 
-    window.addEventListener('scroll', handleScroll, { passive: true })
-    handleScroll() // Initial call
+    if (typeof window !== 'undefined') {
+      handleScroll() // Initial call
+      window.addEventListener('scroll', handleScroll, { passive: true })
+    }
 
-    return () => window.removeEventListener('scroll', handleScroll)
+    return () => {
+      if (typeof window !== 'undefined') {
+        window.removeEventListener('scroll', handleScroll)
+      }
+    }
   }, [speed])
+
+  if (!isMounted) {
+    return <div ref={ref} className={className}>{children}</div>
+  }
 
   return (
     <div ref={ref} className={className}>

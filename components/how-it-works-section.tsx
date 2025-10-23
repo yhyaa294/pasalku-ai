@@ -63,8 +63,10 @@ export const HowItWorksSection: FC<HowItWorksSectionProps> = ({ className = '' }
   ]
 
   useEffect(() => {
+    if (typeof window === 'undefined') return
+    
     const handleScroll = () => {
-      if (!sectionRef.current) return
+      if (!sectionRef.current || typeof window === 'undefined') return
 
       const sectionTop = sectionRef.current.offsetTop
       const sectionHeight = sectionRef.current.offsetHeight
@@ -80,7 +82,8 @@ export const HowItWorksSection: FC<HowItWorksSectionProps> = ({ className = '' }
       }
     }
 
-    window.addEventListener('scroll', handleScroll)
+    handleScroll() // Initial call
+    window.addEventListener('scroll', handleScroll, { passive: true })
     return () => window.removeEventListener('scroll', handleScroll)
   }, [])
 

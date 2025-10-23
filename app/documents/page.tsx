@@ -16,7 +16,7 @@ interface DocumentItem {
   summary?: string;
   risk_assessment?: string;
   recommendations?: string[];
-  ai_insights?: any;
+  ai_insights?: Record<string, any>;
   legal_references?: string[];
   extracted_text?: string;
 }

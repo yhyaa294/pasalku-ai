@@ -3,6 +3,7 @@ import type { Metadata } from "next"
 import { GeistSans } from "geist/font/sans"
 import { GeistMono } from "geist/font/mono"
 import "./globals.css"
+import "./safe-animations.css"
 import { ThemeProvider } from "@/contexts/ThemeContext"
 import Script from "next/script"
 
@@ -89,23 +90,7 @@ export default function RootLayout({
     <html lang="id" suppressHydrationWarning>
       <body 
         className={`font-sans ${GeistSans.variable} ${GeistMono.variable}`}
-        suppressHydrationWarning
       >
-        {/* Prevent theme flash by setting initial theme before hydration */}
-        <Script id="theme-init" strategy="beforeInteractive">
-          {`
-            (function() {
-              try {
-                var theme = localStorage.getItem('theme');
-                if (!theme) {
-                  theme = window.matchMedia('(prefers-color-scheme: dark)').matches ? 'dark' : 'light';
-                }
-                if (theme === 'dark') document.documentElement.classList.add('dark');
-                else document.documentElement.classList.remove('dark');
-              } catch (e) {}
-            })();
-          `}
-        </Script>
         <ThemeProvider>
           {children}
           <Analytics />

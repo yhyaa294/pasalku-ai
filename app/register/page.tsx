@@ -3,6 +3,7 @@
 import { useState } from 'react';
 import { useRouter } from 'next/navigation';
 import Link from 'next/link';
+import Image from 'next/image';
 
 export default function RegisterPage() {
   const [formData, setFormData] = useState({
@@ -42,7 +43,9 @@ export default function RegisterPage() {
     }
 
     try {
-      const response = await fetch('http://localhost:8000/api/auth/register', {
+      // Use environment variable for API URL like login page does
+      const apiUrl = process.env.NEXT_PUBLIC_API_URL || 'http://localhost:8000';
+      const response = await fetch(`${apiUrl}/api/auth/register`, {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',
@@ -51,14 +54,13 @@ export default function RegisterPage() {
           email: formData.email,
           password: formData.password,
           full_name: formData.fullName
-          // Role will be automatically set to 'Masyarakat Umum' in backend
         }),
       });
 
       if (response.ok) {
-        const data = await response.json();
-        localStorage.setItem('token', data.token);
-        router.push('/chat');
+        // After successful registration, redirect to login page
+        // The backend register endpoint only creates the user, doesn't return a token
+        router.push('/login?message=Registration successful. Please log in.');
       } else {
         const errorData = await response.json();
         setError(errorData.detail || 'Terjadi kesalahan saat registrasi');
@@ -88,9 +90,12 @@ export default function RegisterPage() {
       <div className="relative sm:mx-auto sm:w-full sm:max-w-md">
         <div className="text-center mb-8">
           <div className="mx-auto h-16 w-16 bg-white rounded-2xl flex items-center justify-center shadow-lg overflow-hidden border-2 border-gray-100 p-2">
-            <img 
-              src="/assets/logos/logo_pasalku.jpg.png" 
-              alt="Pasalku.ai Logo" 
+            <Image
+              src="/assets/logos/logo_pasalku.jpg.png"
+              alt="Pasalku.ai Logo"
+              width={64}
+              height={64}
+              priority
               className="w-full h-full object-contain"
             />
           </div>

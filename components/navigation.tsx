@@ -1,4 +1,5 @@
 import { FC, useState, useEffect } from 'react'
+import Image from 'next/image'
 
 interface NavigationProps {
   isAuthenticated: boolean
@@ -14,27 +15,46 @@ export const Navigation: FC<NavigationProps> = ({
   onChatClick
 }) => {
   const [isScrolled, setIsScrolled] = useState(false)
+  const [isMounted, setIsMounted] = useState(false)
 
   useEffect(() => {
+    setIsMounted(true)
+    
     const handleScroll = () => {
-      setIsScrolled(window.scrollY > 20)
+      if (typeof window !== 'undefined') {
+        setIsScrolled(window.scrollY > 20)
+      }
     }
-    window.addEventListener('scroll', handleScroll)
-    return () => window.removeEventListener('scroll', handleScroll)
+    
+    if (typeof window !== 'undefined') {
+      handleScroll()
+      window.addEventListener('scroll', handleScroll)
+    }
+    
+    return () => {
+      if (typeof window !== 'undefined') {
+        window.removeEventListener('scroll', handleScroll)
+      }
+    }
   }, [])
 
   const handleNavClick = (e: React.MouseEvent<HTMLAnchorElement>, href: string) => {
     e.preventDefault()
-    const target = document.querySelector(href)
-    if (target) {
-      target.scrollIntoView({
-        behavior: 'smooth',
-        block: 'start'
-      })
+    
+    if (typeof document !== 'undefined') {
+      const target = document.querySelector(href)
+      if (target) {
+        target.scrollIntoView({
+          behavior: 'smooth',
+          block: 'start'
+        })
+      }
     }
   }
 
   const createRipple = (event: React.MouseEvent) => {
+    if (typeof document === 'undefined') return
+    
     const button = event.currentTarget as HTMLElement
     const circle = document.createElement("span")
     const diameter = Math.max(button.clientWidth, button.clientHeight)
@@ -54,6 +74,12 @@ export const Navigation: FC<NavigationProps> = ({
     button.appendChild(circle)
   }
 
+  const handleLogoClick = () => {
+    if (typeof window !== 'undefined') {
+      window.location.href = '/'
+    }
+  }
+
   return (
     <nav className={`fixed top-0 left-0 w-full z-50 transition-all duration-300 ${
       isScrolled
@@ -64,9 +90,9 @@ export const Navigation: FC<NavigationProps> = ({
         <div className="flex justify-between items-center h-16">
           {/* Logo */}
           <div className="flex items-center gap-3 cursor-pointer select-none hover:scale-105 transition-transform duration-300"
-               onClick={() => window.location.href = '/'}
+               onClick={handleLogoClick}
                onMouseDown={createRipple}>
-            <img src="/logo.svg" alt="Pasalku.ai logo" className="w-10 h-10 rounded-lg shadow-lg object-contain bg-white" />
+            <Image src="/logo.svg" alt="Pasalku.ai logo" width={40} height={40} priority className="w-10 h-10 rounded-lg shadow-lg object-contain bg-white" />
             <div className="text-xl font-black text-gray-900 bg-gradient-to-r from-gray-900 to-gray-700 bg-clip-text text-transparent">
               Pasalku.ai
             </div>

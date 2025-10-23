@@ -1,7 +1,8 @@
 import axios, { AxiosError, AxiosInstance, AxiosRequestConfig, AxiosResponse } from 'axios';
+import { safeLocalStorage, isServer as checkIsServer } from './safe-storage';
 
 // Simple API client without complex type definitions
-const isServer = typeof window === 'undefined';
+const isServer = checkIsServer();
 
 // Create axios instance
 const createApiClient = (): AxiosInstance => {
@@ -22,14 +23,10 @@ const createApiClient = (): AxiosInstance => {
   instance.interceptors.request.use(
     (config) => {
       // Add auth token if exists
-      if (!isServer && typeof window !== 'undefined') {
-        try {
-          const token = localStorage.getItem('token');
-          if (token && config.headers) {
-            config.headers.Authorization = `Bearer ${token}`;
-          }
-        } catch (error) {
-          console.warn('Error accessing localStorage:', error);
+      if (!isServer) {
+        const token = safeLocalStorage.getItem('token');
+        if (token && config.headers) {
+          config.headers.Authorization = `Bearer ${token}`;
         }
       }
       return config;

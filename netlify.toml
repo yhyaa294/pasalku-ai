@@ -1,0 +1,18 @@
+[build]
+  command = "npm run build"
+  publish = ".next"
+
+[build.environment]
+  NEXT_TELEMETRY_DISABLED = "1"
+  NODE_VERSION = "18.x"
+  NPM_FLAGS = "--legacy-peer-deps"
+  NEXT_IGNORE_ESLINT = "1"
+  NODE_OPTIONS = "--max_old_space_size=4096"
+
+[[plugins]]
+  package = "@netlify/plugin-nextjs"
+
+[[redirects]]
+  from = "/*"
+  to = "/index.html"
+  status = 200

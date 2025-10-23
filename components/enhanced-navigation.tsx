@@ -1,7 +1,8 @@
-'use client'
 
 import { FC, useState, useEffect } from 'react'
 import Link from 'next/link'
+import Image from 'next/image'
+import { useRouter } from 'next/navigation'
 import { motion, AnimatePresence } from 'framer-motion'
 import {
   ChevronDown,
@@ -47,6 +48,7 @@ export const EnhancedNavigation: FC<EnhancedNavigationProps> = ({
   onLogin,
   onChatClick
 }) => {
+  const router = useRouter();
   const [isScrolled, setIsScrolled] = useState(false)
   const [activeSection, setActiveSection] = useState<string>('')
   const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false)
@@ -88,40 +90,79 @@ export const EnhancedNavigation: FC<EnhancedNavigationProps> = ({
   ]
 
   useEffect(() => {
+    // CRITICAL: Prevent scroll listener during SSR
+    if (typeof window === 'undefined') return;
+    
     const handleScroll = () => {
-      setIsScrolled(window.scrollY > 20)
+      // Double-check window exists
+      if (typeof window !== 'undefined') {
+        setIsScrolled(window.scrollY > 20)
+      }
     }
-    window.addEventListener('scroll', handleScroll)
-    return () => window.removeEventListener('scroll', handleScroll)
+    
+    // Small delay to ensure hydration is complete
+    const timeoutId = setTimeout(() => {
+      handleScroll() // Initial call
+      window.addEventListener('scroll', handleScroll, { passive: true })
+    }, 100)
+    
+    return () => {
+      clearTimeout(timeoutId)
+      if (typeof window !== 'undefined') {
+        window.removeEventListener('scroll', handleScroll)
+      }
+    }
   }, [])
 
-  // Simple scrollspy: works on homepage where sections exist
+  // Simple scrollspy: works on homepage where sections exist - PROTECTED
   useEffect(() => {
+    // CRITICAL: Prevent DOM access during SSR
+    if (typeof window === 'undefined' || typeof document === 'undefined') return;
+    
     const sectionIds = ['hero', 'features', 'how-it-works', 'pricing', 'testimonials', 'faq', 'cta']
+    
     const handler = () => {
-      if (typeof window === 'undefined') return
-      if (window.location.pathname !== '/') return
+      // Triple-check all browser APIs exist
+      if (typeof window === 'undefined' || typeof document === 'undefined') return
+      if (!window.location || window.location.pathname !== '/') return
+      
       let current = ''
-      for (const id of sectionIds) {
-        const el = document.getElementById(id)
-        if (!el) continue
-        const rect = el.getBoundingClientRect()
-        if (rect.top <= 120 && rect.bottom >= 200) {
-          current = id
-          break
+      try {
+        for (const id of sectionIds) {
+          const el = document.getElementById(id)
+          if (!el) continue
+          const rect = el.getBoundingClientRect()
+          if (rect.top <= 120 && rect.bottom >= 200) {
+            current = id
+            break
+          }
         }
+        setActiveSection(current)
+      } catch (error) {
+        // Silently handle DOM errors
       }
-      setActiveSection(current)
     }
-    window.addEventListener('scroll', handler)
-    handler()
-    return () => window.removeEventListener('scroll', handler)
+    
+    // Delay to ensure DOM is ready
+    const timeoutId = setTimeout(() => {
+      handler() // Initial call
+      window.addEventListener('scroll', handler, { passive: true })
+    }, 200)
+    
+    return () => {
+      clearTimeout(timeoutId)
+      if (typeof window !== 'undefined') {
+        window.removeEventListener('scroll', handler)
+      }
+    }
   }, [])
 
   const handleNavClick = (e: React.MouseEvent<HTMLAnchorElement>, href: string) => {
     if (href.startsWith('http') || href.includes('.com') || href.includes('.net')) return // External links
 
     e.preventDefault()
+
+    if (typeof document === 'undefined') return
 
     // Handle internal section links (#) or same-page hash (/#[id])
     const hasHashOnly = href.startsWith('#')
@@ -155,7 +196,7 @@ export const EnhancedNavigation: FC<EnhancedNavigationProps> = ({
     }
 
     // Fallback: navigate normally
-    window.location.href = href
+    router.push(href)
   }
 
   const toggleMobileDropdown = (key: string) => {
@@ -169,21 +210,28 @@ export const EnhancedNavigation: FC<EnhancedNavigationProps> = ({
   }
 
   const createRipple = (event: React.MouseEvent) => {
-    const button = event.currentTarget as HTMLElement
-    const circle = document.createElement("span")
-    const diameter = Math.max(button.clientWidth, button.clientHeight)
-    const radius = diameter / 2
+    // CRITICAL: Prevent DOM manipulation during SSR
+    if (typeof document === 'undefined') return
+    
+    try {
+      const button = event.currentTarget as HTMLElement
+      const circle = document.createElement("span")
+      const diameter = Math.max(button.clientWidth, button.clientHeight)
+      const radius = diameter / 2
 
-    const rect = button.getBoundingClientRect()
-    circle.style.width = circle.style.height = `${diameter}px`
-    circle.style.left = `${event.clientX - rect.left - radius}px`
-    circle.style.top = `${event.clientY - rect.top - radius}px`
-    circle.classList.add("ripple-effect")
+      const rect = button.getBoundingClientRect()
+      circle.style.width = circle.style.height = `${diameter}px`
+      circle.style.left = `${event.clientX - rect.left - radius}px`
+      circle.style.top = `${event.clientY - rect.top - radius}px`
+      circle.classList.add("ripple-effect")
 
-    const ripple = button.getElementsByClassName("ripple-effect")[0]
-    if (ripple) ripple.remove()
+      const ripple = button.getElementsByClassName("ripple-effect")[0]
+      if (ripple) ripple.remove()
 
-    button.appendChild(circle)
+      button.appendChild(circle)
+    } catch (error) {
+      // Silently handle DOM manipulation errors
+    }
   }
 
   return (
@@ -208,16 +256,19 @@ export const EnhancedNavigation: FC<EnhancedNavigationProps> = ({
                   whileHover={{ scale: 1.05 }}
                   transition={{ type: "spring", stiffness: 400, damping: 10 }}
                 >
-                  <img 
-                    src="/assets/logos/logo_pasalku.jpg.png" 
-                    alt="Pasalku.ai Logo" 
+                  <Image
+                    src="/assets/logos/logo_pasalku.jpg.png"
+                    alt="Pasalku.ai Logo"
+                    width={40}
+                    height={40}
+                    priority
                     className="w-full h-full object-contain"
                   />
                 </motion.div>
                 <div className="text-xl font-black text-gray-900 dark:text-gray-100 bg-gradient-to-r from-gray-900 via-purple-600 to-blue-600 bg-clip-text text-transparent">
                   Pasalku.ai
                 </div>
-                <div className="w-2 h-2 bg-green-500 rounded-full animate-pulse shadow-sm"></div>
+                <div className="w-2 h-2 bg-green-500 rounded-full motion-safe:animate-pulse shadow-sm"></div>
               </Link>
             </div>
 

@@ -102,15 +102,22 @@ export const StatisticsSection: FC<StatisticsSectionProps> = ({ className = '' }
     }
 
     // Safety fallback: ensure content becomes visible even if observer never fires
-    const timeoutId = window.setTimeout(() => setInView(true), 1500)
+    let timeoutId: number | undefined
+    if (typeof window !== 'undefined') {
+      timeoutId = window.setTimeout(() => setInView(true), 1500)
+    }
 
     return () => {
       observer.disconnect()
-      window.clearTimeout(timeoutId)
+      if (typeof window !== 'undefined' && timeoutId) {
+        window.clearTimeout(timeoutId)
+      }
     }
   }, [])
 
   const animateNumber = (index: number, target: number) => {
+    if (typeof window === 'undefined') return
+
     const duration = 2500 // 2.5 seconds for more dramatic effect
     const start = Date.now()
     const startValue = 0

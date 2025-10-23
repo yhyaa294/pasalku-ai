@@ -6,7 +6,7 @@ export function cn(...inputs: ClassValue[]) {
   return twMerge(clsx(inputs))
 }
 
-export async function fetchWithAuth(url: string, options: RequestInit = {}) {
+export const fetchWithAuth = async (url: string, options: RequestInit = {}) => {
   const session = await getSession();
   
   // We need to type cast here because the session object from next-auth
@@ -33,3 +33,4 @@ export async function fetchWithAuth(url: string, options: RequestInit = {}) {
   return response;
 }
 
+// Re-export or add other utilities as needed to ensure fetchWithAuth is properly exported

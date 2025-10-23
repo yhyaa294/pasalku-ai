@@ -534,7 +534,7 @@ export default function DashboardPage() {
             </div>
             <div>
               <h1 className="text-lg font-bold text-gray-900">Pasalku.ai</h1>
-              <p className="text-[10px] text-gray-500">Mission Control</p>
+              <p className="text-[10px] text-gray-500 bg-gradient-to-r from-blue-600 to-purple-600 bg-clip-text text-transparent font-bold">MISSION CONTROL</p>
             </div>
           </div>
           
@@ -641,7 +641,7 @@ export default function DashboardPage() {
             )}
           </button>
           
-          {!isCollapsed && (
+          {!isSidebarCollapsed && (
             <>
               <h3 className="text-sm font-semibold text-gray-500 uppercase tracking-wider mb-4">Menu Utama</h3>
               
@@ -697,19 +697,32 @@ export default function DashboardPage() {
       <main className={`flex-1 pt-16 transition-all duration-300 ${isSidebarCollapsed ? 'lg:ml-20' : 'lg:ml-64'} ${isMobileMenuOpen ? 'lg:ml-64' : 'ml-0'}`}>
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8 space-y-8">
           {/* Hero Section - Dasbor Intelijen Hukum */}
-          <div className="bg-gradient-to-r from-blue-600 to-purple-600 rounded-2xl p-6 md:p-8 text-white">
-            <p className="text-sm opacity-90 mb-2">Selamat datang kembali, <span className="font-semibold">{user.name}</span></p>
-            <h2 className="text-2xl md:text-3xl font-bold">Dasbor Intelijen Hukum</h2>
-            <p className="text-blue-100 mt-2">Kendalikan konsultasi hukum Anda dengan kecerdasan buatan</p>
-            <div className="mt-6 flex flex-wrap gap-4">
+          <div className="bg-gradient-to-r from-blue-600 to-purple-600 rounded-2xl p-6 md:p-8 text-white relative overflow-hidden">
+            <div className="absolute inset-0 bg-gradient-to-r from-blue-700/10 via-transparent to-purple-700/10 opacity-30"></div>
+            <div className="relative z-10">
+              <p className="text-sm opacity-90 mb-2">Selamat datang kembali, <span className="font-semibold">{user.name}</span></p>
+              <h2 className="text-2xl md:text-3xl font-bold">Dasbor Intelijen Hukum</h2>
+              <p className="text-blue-100 mt-2">Kendalikan konsultasi hukum Anda dengan kecerdasan buatan</p>
+              <div className="mt-6 flex flex-wrap gap-4">
               <Link href="/ai-chat">
-                <Button className="bg-white text-blue-600 hover:bg-blue-50 font-bold">Mulai Konsultasi AI</Button>
+                <Button className="bg-white text-blue-600 hover:bg-blue-50 font-bold shadow-md hover:shadow-lg transform hover:-translate-y-0.5 transition-all duration-300 relative overflow-hidden group">
+                  <span className="absolute inset-0 bg-blue-100/50 opacity-0 group-hover:opacity-100 transition-opacity duration-300"></span>
+                  <span className="relative z-10 flex items-center gap-2">
+                    <span className="text-lg">💬</span> Mulai Konsultasi AI
+                  </span>
+                </Button>
               </Link>
               <Link href="/documents/upload">
-                <Button variant="secondary" className="bg-white/20 text-white border border-white/30 hover:bg-white/30 font-bold">Unggah Dokumen</Button>
+                <Button variant="secondary" className="bg-white/20 text-white border border-white/30 hover:bg-white/30 font-bold shadow-md hover:shadow-lg transform hover:-translate-y-0.5 transition-all duration-300 relative overflow-hidden group">
+                  <span className="absolute inset-0 bg-white/30 opacity-0 group-hover:opacity-100 transition-opacity duration-300"></span>
+                  <span className="relative z-10 flex items-center gap-2">
+                    <span className="text-lg">📤</span> Unggah Dokumen
+                  </span>
+                </Button>
               </Link>
             </div>
           </div>
+        </div>
 
           {/* Quick Actions and Recent Activity */}
           <div className="grid grid-cols-1 lg:grid-cols-3 gap-6">
@@ -764,7 +777,7 @@ export default function DashboardPage() {
                 <h3 className="text-xl font-bold text-gray-900 mb-4">Aksi Kilat</h3>
                 <div className="grid grid-cols-1 gap-3">
                   {QUICK_ACTIONS.map((action, index) => (
-                    <Link key={index} href={action.link} className={`group rounded-xl border p-4 transition-all duration-300 hover:shadow-md ${action.priority === 'high' ? 'ring-2 ring-offset-2 ring-blue-500/20' : ''}`}>
+                    <Link key={index} href={action.link} className={`group rounded-xl border p-4 transition-all duration-300 hover:shadow-lg transform hover:-translate-y-0.5 ${action.priority === 'high' ? 'bg-gradient-to-br from-blue-50 to-indigo-50 border-blue-200' : action.priority === 'medium' ? 'bg-gradient-to-br from-purple-50 to-violet-50 border-purple-200' : 'bg-gradient-to-br from-gray-50 to-slate-50 border-gray-200'}`}>
                       <div className="flex items-center gap-3">
                         <div className="text-xl">{action.icon}</div>
                         <div>
@@ -810,15 +823,14 @@ export default function DashboardPage() {
           {/* Minimal Footer */}
           <footer className="text-center text-xs text-gray-500 py-6">© {new Date().getFullYear()} Pasalku.ai</footer>
         </div>
-      </main>
-          {/* Mobile menu backdrop */}
-          {isMobileMenuOpen && (
-            <div 
-              className="fixed inset-0 bg-black bg-opacity-50 z-30 lg:hidden"
-              onClick={() => setIsMobileMenuOpen(false)}
-            ></div>
-          )}
-        </div>
+
+        {/* Mobile menu backdrop */}
+        {isMobileMenuOpen && (
+          <div 
+            className="fixed inset-0 bg-black bg-opacity-50 z-30 lg:hidden"
+            onClick={() => setIsMobileMenuOpen(false)}
+          ></div>
+        )}
       </main>
     </div>
   );

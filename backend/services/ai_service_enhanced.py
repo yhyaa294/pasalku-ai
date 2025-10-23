@@ -131,17 +131,47 @@ class AIService:
             # if not self._check_rate_limit(user_id):
             #     raise Exception("Rate limit exceeded")
 
-            # Prepare system prompt
-            system_prompt = f"""Anda adalah asisten AI hukum Indonesia yang membantu pengguna dengan pertanyaan hukum.
+            # Prepare system prompt with AI Constitution
+            system_prompt = f"""Anda adalah asisten AI hukum Indonesia Pasalku.ai yang membantu pengguna dengan pertanyaan hukum.
 
-Konteks pengguna: {user_context}
+**KONSTITUSI AI PASALKU:**
+1. Berikan jawaban dalam format JSON terstruktur yang VALID
+2. Sertakan analisis mendalam berdasarkan hukum positif Indonesia
+3. Sertakan opsi-opsi solusi yang tersedia dengan estimasi durasi dan biaya
+4. Berikan sitasi hukum yang relevan dan valid
+5. Jaga netralitas dan profesionalitas
+6. Akhiri dengan disclaimer bahwa ini bukan nasihat hukum resmi
 
-Instruksi:
-- Berikan jawaban yang jelas, ringkas, dan mudah dimengerti
-- Sertakan referensi hukum jika memungkinkan
-- Gunakan bahasa Indonesia yang sopan dan profesional
-- Jika tidak yakin, sarankan berkonsultasi dengan pengacara
-- Jawab berdasarkan hukum Indonesia terkini"""
+**KONTEKS PENGGUNA:**
+Role: {user_context.split(',')[0] if ',' in user_context else user_context}
+
+**FORMAT JAWABAN JSON YANG WAJIB:**
+{{
+  "analysis": "Analisis mendalam situasi hukum berdasarkan fakta dan hukum positif Indonesia",
+  "options": [
+    {{
+      "solution": "Nama solusi yang jelas",
+      "description": "Penjelasan lengkap solusi ini",
+      "duration_estimate": "cepat/sedang/lama",
+      "cost_estimate": "rendah/sedang/tinggi"
+    }}
+  ],
+  "recommendations": "Rekomendasi utama berdasarkan analisis",
+  "citations": ["Daftar sitasi hukum: UU No. tahun Tentang pokok", "Putusan Mahkamah Agung dll"],
+  "disclaimer": "Disclaimer bahwa ini bukan nasihat hukum resmi"
+}}
+
+**PANDUAN TEKNIS:**
+- Pastikan JSON valid dan tidak ada syntax error
+- Gunakan bahasa Indonesia yang formal dan profesional
+- Fokus pada aspek hukum Indonesia
+- Berikan estimasi yang realistis
+
+**INSTRUKSI KHUSUS:**
+Jika pertanyaan sederhana, berikan jawaban langsung tapi tetap dalam format JSON.
+Jika pertanyaan kompleks, berikan analisis mendalam dengan opsi solusi yang lengkap.
+
+Pertanyaan pengguna: {query}"""
 
             # Prepare messages
             messages = [{"role": "system", "content": system_prompt}]
@@ -175,19 +205,53 @@ Instruksi:
                 if "choices" in response_data and response_data["choices"]:
                     ai_response = response_data["choices"][0]["message"]["content"]
 
-                    # Extract citations (basic implementation)
-                    citations = self._extract_citations(ai_response)
+                    # Try to parse as structured JSON first
+                    try:
+                        import json
+                        # Clean the response if it contains markdown code blocks
+                        if ai_response.strip().startswith('```json'):
+                            # Extract content from JSON code block
+                            json_match = re.search(r'```json\s*\n(.*?)\n```', ai_response, re.DOTALL)
+                            if json_match:
+                                ai_response = json_match.group(1)
+                        elif ai_response.strip().startswith('```'):
+                            # Extract content from generic code block
+                            code_match = re.search(r'```\s*\n(.*?)\n```', ai_response, re.DOTALL)
+                            if code_match:
+                                ai_response = code_match.group(1)
 
-                    return {
-                        "answer": ai_response,
-                        "citations": citations,
-                        "disclaimer": (
-                            "Informasi yang diberikan bersifat umum dan bukan merupakan nasihat hukum. "
-                            "Untuk masalah hukum spesifik, disarankan untuk berkonsultasi dengan pengacara."
-                        ),
-                        "model": self.model_id,
-                        "tokens_used": response_data.get("usage", {}).get("total_tokens", 0)
-                    }
+                        structured_response = json.loads(ai_response)
+
+                        # Extract citations (basic implementation)
+                        citations = self._extract_citations(ai_response)
+
+                        return {
+                            "answer": structured_response.get("analysis", ai_response),
+                            "citations": structured_response.get("citations", citations),
+                            "disclaimer": structured_response.get("disclaimer", (
+                                "Informasi yang diberikan bersifat umum dan bukan merupakan nasihat hukum. "
+                                "Untuk masalah hukum spesifik, disarankan untuk berkonsultasi dengan pengacara."
+                            )),
+                            "model": self.model_id,
+                            "tokens_used": response_data.get("usage", {}).get("total_tokens", 0),
+                            "structured": True,
+                            "options": structured_response.get("options", []),
+                            "recommendations": structured_response.get("recommendations", "")
+                        }
+                    except json.JSONDecodeError:
+                        # Fallback to regular text response
+                        citations = self._extract_citations(ai_response)
+                        return {
+                            "answer": ai_response,
+                            "citations": citations,
+                            "disclaimer": (
+                                "Informasi yang diberikan bersifat umum dan bukan merupakan nasihat hukum. "
+                                "Untuk masalah hukum spesifik, disarankan untuk berkonsultasi dengan pengacara."
+                            ),
+                            "model": self.model_id,
+                            "tokens_used": response_data.get("usage", {}).get("total_tokens", 0),
+                            "structured": False
+                        }
                 else:
                     raise Exception("Invalid response format from AI service")
 
