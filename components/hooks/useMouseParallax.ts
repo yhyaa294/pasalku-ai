@@ -70,4 +70,12 @@ export const useMouseParallax = (isEnabled: boolean = true) => {
       if (typeof window !== 'undefined') {
         window.removeEventListener('mousemove', handleMouseMove)
       }
-  
+      if (rafRef.current != null) {
+        cancelAnimationFrame(rafRef.current)
+        rafRef.current = null
+      }
+    }
+  }, [handleMouseMove, isEnabled])
+
+  return { sectionRef }
+}

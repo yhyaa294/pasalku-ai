@@ -97,3 +97,8 @@ secrets/
 # Temporary files
 tmp/
 temp/
+
+# Exclude env backup files (contain secrets)
+.env.local.cleaned
+.env.local.pre-replace-*
+.env.local.backup-*

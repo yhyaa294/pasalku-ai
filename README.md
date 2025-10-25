@@ -7,6 +7,10 @@
 [![TypeScript](https://img.shields.io/badge/TypeScript-007ACC?style=for-the-badge&logo=typescript&logoColor=white)](https://www.typescriptlang.org/)
 [![Deploy on Vercel](https://vercel.com/button)](https://vercel.com/new/git/external?repository-url=https%3A%2F%2Fgithub.com%2Fyhyaa294%2Fpasalku-ai.git)
 
+> **🚨 Issues?**  
+> - **Qoder IDE not working?** → [Recovery Guide](README_RECOVERY.md)  
+> - **Git push error?** → [Fix Git Push](FIX_GIT_PUSH.md) | Run: `.ix-git-push.ps1`
+
 <br />
 <p align="center">
   <img src="https://raw.githubusercontent.com/yhyaa294/pasalku-ai/main/docs/assets/pasalku-ai-logo-banner.png" alt="Pasalku.ai Banner" width="700"/>

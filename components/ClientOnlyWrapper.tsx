@@ -87,7 +87,7 @@ export function useClientOnly(delay = 0): boolean {
 export function useSafeBrowserAPI() {
   const isClient = useClientOnly()
 
-  return useCallback(<T>(fn: () => T, fallback?: T): T | undefined => {
+  return useCallback(<T,>(fn: () => T, fallback?: T): T | undefined => {
     if (!isClient) return fallback
 
     try {
