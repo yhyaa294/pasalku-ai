@@ -1621,7 +1621,7 @@ button.wood-texture * {
   animation: text-shimmer 3s linear infinite;
 }
 
-/* Fade in stagger for lists */
+
 @keyframes fade-in-stagger {
   from {
     opacity: 0;
@@ -1644,7 +1644,7 @@ button.wood-texture * {
 .fade-in-stagger > *:nth-child(5) { animation-delay: 0.5s; }
 .fade-in-stagger > *:nth-child(6) { animation-delay: 0.6s; }
 
-/* Smooth underline animation */
+
 .underline-animate {
   position: relative;
 }
@@ -1768,7 +1768,7 @@ button.wood-texture * {
   animation-duration: 6s;
 }
 
-/* Animation delay utilities */
+
 .anim-delay-0-2s {
   animation-delay: 0.2s;
 }

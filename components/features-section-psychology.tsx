@@ -474,3 +474,5 @@ export const FeaturesSection: FC<FeaturesSectionProps> = ({ className = '' }) =>
     </section>
   )
 }
+
+export default FeaturesSection

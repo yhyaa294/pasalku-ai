@@ -420,3 +420,5 @@ export const PricingSection: FC<PricingSectionProps> = ({ className = '' }) => {
     </section>
   )
 }
+
+export default PricingSection

@@ -1,8 +1,8 @@
 'use client';
 
 import { EnhancedNavigation } from '@/components/enhanced-navigation';
-import { HeroSection } from '@/components/hero-section';
-import { StatisticsSection } from '@/components/statistics-section';
+import { HeroSection } from '@/components/hero-section-psychology';
+import { ProblemStatementSection } from '@/components/problem-statement-section-psychology';
 import { EnhancedFooter } from '@/components/enhanced-footer';
 import { ClientOnlyWrapper } from '@/components/ClientOnlyWrapper';
 import { useEffect, useState } from 'react';
@@ -11,7 +11,7 @@ import Link from 'next/link';
 import dynamic from 'next/dynamic';
 
 // CRITICAL: All dynamic sections must use ssr: false to prevent hydration mismatch
-const FeaturesSection = dynamic(() => import('@/components/features-section').then(m => m.FeaturesSection), {
+const FeaturesSection = dynamic(() => import('@/components/features-section-psychology'), {
   ssr: false,
   loading: () => <section className="py-20 bg-white dark:bg-slate-950" aria-busy="true"><div className="max-w-7xl mx-auto px-4 text-center"><div className="animate-pulse">Loading features...</div></div></section>
 });
@@ -19,7 +19,7 @@ const HowItWorksSection = dynamic(() => import('@/components/how-it-works-sectio
   ssr: false,
   loading: () => <section className="py-20 bg-gray-50 dark:bg-slate-900" aria-busy="true"><div className="max-w-7xl mx-auto px-4 text-center"><div className="animate-pulse">Loading how it works...</div></div></section>
 });
-const PricingSection = dynamic(() => import('@/components/pricing-section').then(m => m.PricingSection), {
+const PricingSection = dynamic(() => import('@/components/pricing-section-psychology'), {
   ssr: false,
   loading: () => <section className="py-20 bg-white dark:bg-slate-950" aria-busy="true"><div className="max-w-7xl mx-auto px-4 text-center"><div className="animate-pulse">Loading pricing...</div></div></section>
 });
@@ -231,30 +231,19 @@ export default function PasalkuLandingPage() {
       <main className="relative z-10">
         <HeroSection onGetStarted={handleGetStarted} />
         
-        {/* Statistics Section */}
-        <section className="py-20 bg-gray-50 dark:bg-slate-900">
-          <StatisticsSection />
-        </section>
+        {/* Problem Statement Section - Psychology Driven */}
+        <ProblemStatementSection />
         
-        {/* Features Section */}
-        <section className="py-20 bg-white dark:bg-slate-950">
-          <FeaturesSection />
-          <div className="text-center mt-8">
-            <Link href="/features" className="inline-block px-6 py-3 rounded-xl bg-gradient-to-r from-blue-600 to-purple-600 text-white font-semibold shadow hover:shadow-lg">
-              Jelajahi 96+ Fitur →
-            </Link>
-          </div>
-        </section>
+        {/* Features Section - Psychology Enhanced */}
+        <FeaturesSection />
         
         {/* How It Works Section */}
         <section className="py-20 bg-gray-50 dark:bg-slate-900">
           <HowItWorksSection />
         </section>
         
-        {/* Pricing Section */}
-        <section className="py-20 bg-white dark:bg-slate-950">
-          <PricingSection />
-        </section>
+        {/* Pricing Section - Psychology Enhanced */}
+        <PricingSection />
         
         {/* FAQ Section */}
         <section className="py-20 bg-gray-50 dark:bg-slate-900">

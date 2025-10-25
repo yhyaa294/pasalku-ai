@@ -198,6 +198,32 @@ Kami menggunakan arsitektur multi-database untuk mengoptimalkan setiap jenis dat
 - **4. Turso:** Cache respons AI, data sesi untuk performa cepat.
 - **5. EdgeDB:** Knowledge Graph hukum Indonesia yang kaya dan terstruktur.
 
+### 🔌 MCP (Model Context Protocol) Integration
+
+Pasalku.ai mendukung integrasi dengan TestSprite MCP untuk testing dan development.
+
+**Setup MCP Server:**
+
+```powershell
+# 1. Copy template konfigurasi
+cp mcp-config.example.json mcp-config.json
+cp .env.mcp.example .env.mcp
+
+# 2. Edit .env.mcp dengan API key Anda
+# TESTSPRITE_API_KEY=your-api-key-here
+# TESTSPRITE_PROJECT=mcp_pasalku
+
+# 3. Jalankan MCP server
+.\start-mcp.ps1
+```
+
+**File Konfigurasi:**
+- [`mcp-config.json`](mcp-config.json) - Konfigurasi MCP server
+- [`.env.mcp`](.env.mcp.example) - Environment variables untuk API keys
+- [`start-mcp.ps1`](start-mcp.ps1) - Script untuk menjalankan MCP server
+
+📖 **Dokumentasi lengkap:** Lihat [`MCP_SETUP_GUIDE.md`](MCP_SETUP_GUIDE.md) untuk panduan detail.
+
 ---
 
 ## 🔒 Keamanan & Monitoring
