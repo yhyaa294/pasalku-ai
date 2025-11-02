@@ -9,23 +9,23 @@ from sqlalchemy.orm import Session
 from datetime import timedelta
 from typing import Any, Optional
 
-from backend import crud
-from backend import schemas
-from backend import models
-from backend.core.security_updated import (
+import crud
+import schemas
+import models
+from core.security_updated import (
     create_access_token,
     create_refresh_token,
     get_current_user,
     verify_password,
     verify_token
 )
-from backend.core.clerk_service import (
+from core.clerk_service import (
     clerk_service,
     get_clerk_user
 )
 from fastapi import Request, Form
-from backend.core.config import settings
-from backend.database import get_db
+from core.config import settings
+from database import get_db
 
 # Setup logging
 logger = logging.getLogger(__name__)

@@ -25,7 +25,7 @@ except ImportError:
     edgedb = None
 
 # Import settings
-from .core.config import get_settings
+from core.config import get_settings
 
 # Setup logging
 logger = logging.getLogger(__name__)

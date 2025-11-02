@@ -10,7 +10,7 @@ from contextlib import asynccontextmanager
 from fastapi.middleware.cors import CORSMiddleware
 from fastapi.security import OAuth2PasswordBearer
 
-from backend.core.config import get_settings
+from core.config import get_settings
 
 # Setup logging first
 logging.basicConfig(
@@ -49,11 +49,11 @@ except ImportError:
 except Exception as e:
     sentry_available = False
     logger.warning(f"Sentry initialization failed: {str(e)}")
-from backend.database import init_db, get_db, get_db_connections
-from backend.routers import auth_router, users_router, chat_router, consultation_router, payments, analytics
+from database import init_db, get_db, get_db_connections
+from routers import auth_router, users_router, chat_router, consultation_router, payments, analytics
 # Import all models to ensure they are registered with SQLAlchemy
 # Import models to register mappers
-from backend.models import user, consultation, chat
+from models import user, consultation, chat
 from sqlalchemy.orm import configure_mappers
 
 # Ensure SQLAlchemy mappers are fully configured now (fixes back_populates resolution issues)
@@ -62,8 +62,8 @@ try:
 except Exception:
     # If configuration fails, let startup log the error and re-raise during init_db
     pass
-# # from backend.services.ai_service import ai_service  # Temporarily disabled - syntax error in ai_service.py
-from backend.services.analytics_service import AnalyticsService
+# # from services.ai_service import ai_service  # Temporarily disabled - syntax error in ai_service.py
+from services.analytics_service import AnalyticsService
 
 mongo_available = False
 mongo_client = None
@@ -337,7 +337,7 @@ async def generate_final_analysis(payload: Dict[str, Any]):
 
 # ===== ADVANCED AI FEATURES =====
 
-# from backend.services.ai_service import advanced_ai_service  # Temporarily disabled
+# from services.ai_service import advanced_ai_service  # Temporarily disabled
 
 @app.post("/api/ai/duaI-consensus", tags=["Advanced AI"])
 async def dual_ai_consensus(payload: Dict[str, Any]):
