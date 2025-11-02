@@ -1,7 +1,7 @@
 'use client';
 
-import { EnhancedNavigation } from '@/components/enhanced-navigation';
-import { HeroSection } from '@/components/hero-section-psychology';
+import { ModernNavigation } from '@/components/navigation-modern';
+import { HeroSection } from '@/components/hero-section-modern';
 import { ProblemStatementSection } from '@/components/problem-statement-section-psychology';
 import { EnhancedFooter } from '@/components/enhanced-footer';
 import { ClientOnlyWrapper } from '@/components/ClientOnlyWrapper';
@@ -221,7 +221,7 @@ export default function PasalkuLandingPage() {
         </div>
       </ClientOnlyWrapper>
 
-      <EnhancedNavigation
+      <ModernNavigation
         isAuthenticated={isAuthenticated}
         userRole={userRole}
         onLogin={handleLogin}
