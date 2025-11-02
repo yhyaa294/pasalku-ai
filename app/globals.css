@@ -1838,8 +1838,8 @@ button.wood-texture * {
   top: 70%;
 }
 
-/* Fade in animations for hero */
-@keyframes fade-in {
+/* Fade in animations for hero - using unique names to avoid conflicts */
+@keyframes hero-fade-in {
   from {
     opacity: 0;
     transform: translateY(10px);
@@ -1850,20 +1850,20 @@ button.wood-texture * {
   }
 }
 
-.animate-fade-in {
-  animation: fade-in 0.8s ease-out;
+.animate-hero-fade-in {
+  animation: hero-fade-in 0.8s ease-out;
 }
 
-.animate-fade-in-delayed {
-  animation: fade-in 0.8s ease-out 0.2s backwards;
+.animate-hero-fade-in-delayed {
+  animation: hero-fade-in 0.8s ease-out 0.2s backwards;
 }
 
-.animate-fade-in-up {
-  animation: fade-in 0.8s ease-out 0.4s backwards;
+.animate-hero-fade-in-up {
+  animation: hero-fade-in 0.8s ease-out 0.4s backwards;
 }
 
-/* Smooth title rotation animation */
-@keyframes title-fade-in {
+/* Smooth title rotation animation - unique name */
+@keyframes hero-title-fade-in {
   0% {
     opacity: 0;
     transform: translateY(20px) scale(0.95);
@@ -1874,8 +1874,8 @@ button.wood-texture * {
   }
 }
 
-.animate-title-fade-in {
-  animation: title-fade-in 0.6s cubic-bezier(0.4, 0, 0.2, 1) backwards;
+.animate-hero-title-fade-in {
+  animation: hero-title-fade-in 0.6s cubic-bezier(0.4, 0, 0.2, 1) backwards;
 }
 
 /* Mobile Optimization Styles */
