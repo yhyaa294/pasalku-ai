@@ -8,7 +8,7 @@ import httpx
 import jwt
 from jwt import PyJWKClient
 
-from backend.core.config import settings
+from core.config import settings
 
 logger = logging.getLogger(__name__)
 
@@ -122,7 +122,7 @@ class ClerkService:
         Sync Clerk user data to local database
         Returns user data dict or None if sync fails
         """
-        from backend import crud
+        import crud
 
         # Get user metadata from Clerk
         metadata = await self.get_user_metadata(clerk_user_id)

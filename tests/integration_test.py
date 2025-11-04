@@ -318,16 +318,17 @@ class IntegrationTester:
 
         # Print summary
         print("\n" + "=" * 60)
-        print("📊 TEST SUMMARY"        print("=" * 60)
+        print("📊 TEST SUMMARY")
+        print("=" * 60)
         print(f"✅ Passed: {self.passed}")
         print(f"❌ Failed: {self.failed}")
         print(f"📈 Total:  {self.passed + self.failed}")
-        print(".1f"
+        print(f"📊 Success Rate: {(self.passed / (self.passed + self.failed) * 100):.1f}%")
         print("\n📋 DETAILED RESULTS:")
         print("=" * 60)
 
         for result in self.test_results:
-            print("<12")
+            print(f"{'✅ PASS' if result['status'] else '❌ FAIL'} {result['test']:<20} {result['message']}")
 
         # Service status overview
         if services_status:
@@ -345,11 +346,11 @@ async def main():
             success = await tester.run_all_tests()
 
             if success:
-                print("
-🎉 ALL TESTS PASSED! Pasalku.ai is ready for deployment."                return 0
+                print("\n🎉 ALL TESTS PASSED! Pasalku.ai is ready for deployment.")
+                return 0
             else:
-                print("
-⚠️  SOME TESTS FAILED. Please review the errors above."                return 1
+                print("\n⚠️  SOME TESTS FAILED. Please review the errors above.")
+                return 1
 
     except KeyboardInterrupt:
         print("\n⏹️  Tests interrupted by user")

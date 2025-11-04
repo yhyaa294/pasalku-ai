@@ -1,7 +1,8 @@
 'use client';
 
 import { ModernNavigation } from '@/components/navigation-modern';
-import { HeroSection } from '@/components/hero-section-adhi-aura';
+import { EnhancedHeroSection } from '@/components/enhanced-hero-section';
+import { ModernCTASection } from '@/components/modern-cta-section';
 import { ProblemStatementSection } from '@/components/problem-statement-section-psychology';
 import { WhyPasalkuSection } from '@/components/why-pasalku-section';
 import { EnhancedFooter } from '@/components/enhanced-footer';
@@ -240,7 +241,8 @@ export default function PasalkuLandingPage() {
       />
 
       <main className="relative z-10">
-        <HeroSection onGetStarted={handleGetStarted} />
+        {/* Enhanced Hero Section - Premium Design */}
+        <EnhancedHeroSection onGetStarted={handleGetStarted} />
         
         {/* Problem Statement Section - Psychology Driven */}
         <ProblemStatementSection />
@@ -269,10 +271,8 @@ export default function PasalkuLandingPage() {
           <TestimonialsSection />
         </section>
         
-        {/* CTA Section */}
-        <section className="py-20 bg-gradient-to-r from-blue-600 to-purple-600">
-          <CTASection onGetStarted={handleGetStarted} />
-        </section>
+        {/* Modern CTA Section - Premium Design */}
+        <ModernCTASection onGetStarted={handleGetStarted} />
       </main>
 
       <EnhancedFooter />
