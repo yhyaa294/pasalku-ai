@@ -322,17 +322,18 @@ class AIProviderTester:
 
         # Print summary
         print("\n" + "=" * 50)
-        print("🤖 AI PROVIDER TEST SUMMARY"        print("=" * 50)
+        print("🤖 AI PROVIDER TEST SUMMARY")
+        print("=" * 50)
         print(f"✅ Passed: {self.passed}")
         print(f"❌ Failed: {self.failed}")
         print(f"📈 Total:  {self.passed + self.failed}")
         success_rate = (self.passed / (self.passed + self.failed)) * 100 if (self.passed + self.failed) > 0 else 0
-        print(".1f"
+        print(f"📊 Success Rate: {success_rate:.1f}%")
         print("\n📋 DETAILED RESULTS:")
         print("=" * 50)
 
         for result in self.test_results:
-            print("<12")
+            print(f"{result['status']} {result['test_name']}: {result['message']}")
 
         return self.failed == 0
 
@@ -343,10 +344,11 @@ async def main():
             success = await tester.run_all_tests()
 
             if success:
-                print("
-🎉 ALL AI PROVIDER TESTS PASSED!"            else:
-                print("
-⚠️  SOME AI PROVIDER TESTS FAILED."                return 1
+                print("\n🎉 ALL AI PROVIDER TESTS PASSED!")
+                return 0
+            else:
+                print("\n⚠️  SOME AI PROVIDER TESTS FAILED.")
+                return 1
 
     except KeyboardInterrupt:
         print("\n⏹️  AI provider tests interrupted by user")

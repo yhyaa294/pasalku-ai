@@ -11,30 +11,40 @@ import { useRouter } from 'next/navigation';
 import Link from 'next/link';
 import dynamic from 'next/dynamic';
 
+import {
+  FeaturesSectionSkeleton,
+  HowItWorksSectionSkeleton,
+  PricingSectionSkeleton,
+  FAQSectionSkeleton,
+  TestimonialsSectionSkeleton,
+  CTASectionSkeleton
+} from '@/components/LoadingSkeletons';
+
 // CRITICAL: All dynamic sections must use ssr: false to prevent hydration mismatch
+// Now with beautiful loading skeletons for better UX
 const FeaturesSection = dynamic(() => import('@/components/features-section-psychology').then(m => m.FeaturesSection), {
   ssr: false,
-  loading: () => <section className="py-20 bg-white dark:bg-slate-950" aria-busy="true"><div className="max-w-7xl mx-auto px-4 text-center"><div className="animate-pulse">Loading features...</div></div></section>
+  loading: () => <FeaturesSectionSkeleton />
 });
 const HowItWorksSection = dynamic(() => import('@/components/how-it-works-section').then(m => m.HowItWorksSection), {
   ssr: false,
-  loading: () => <section className="py-20 bg-gray-50 dark:bg-slate-900" aria-busy="true"><div className="max-w-7xl mx-auto px-4 text-center"><div className="animate-pulse">Loading how it works...</div></div></section>
+  loading: () => <HowItWorksSectionSkeleton />
 });
 const PricingSection = dynamic(() => import('@/components/pricing-section-psychology'), {
   ssr: false,
-  loading: () => <section className="py-20 bg-white dark:bg-slate-950" aria-busy="true"><div className="max-w-7xl mx-auto px-4 text-center"><div className="animate-pulse">Loading pricing...</div></div></section>
+  loading: () => <PricingSectionSkeleton />
 });
 const FAQSection = dynamic(() => import('@/components/faq-section').then(m => m.FAQSection), {
   ssr: false,
-  loading: () => <section className="py-20 bg-gray-50 dark:bg-slate-900" aria-busy="true"><div className="max-w-7xl mx-auto px-4 text-center"><div className="animate-pulse">Loading FAQ...</div></div></section>
+  loading: () => <FAQSectionSkeleton />
 });
 const TestimonialsSection = dynamic(() => import('@/components/testimonials-section').then(m => m.TestimonialsSection), {
   ssr: false,
-  loading: () => <section className="py-20 bg-white dark:bg-slate-950" aria-busy="true"><div className="max-w-7xl mx-auto px-4 text-center"><div className="animate-pulse">Loading testimonials...</div></div></section>
+  loading: () => <TestimonialsSectionSkeleton />
 });
 const CTASection = dynamic(() => import('@/components/cta-section').then(m => m.CTASection), {
   ssr: false,
-  loading: () => <section className="py-20 bg-gradient-to-r from-blue-600 to-purple-600" aria-busy="true"><div className="max-w-7xl mx-auto px-4 text-center"><div className="animate-pulse text-white">Loading call to action...</div></div></section>
+  loading: () => <CTASectionSkeleton />
 });
 
 export default function PasalkuLandingPage() {

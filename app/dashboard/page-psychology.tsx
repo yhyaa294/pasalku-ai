@@ -439,6 +439,9 @@ function DashboardPage() {
   const { show: showToast, Toast } = useToast();
 
   useEffect(() => {
+    // CRITICAL: Only run on client side to prevent hydration errors
+    if (typeof window === 'undefined') return;
+    
     // Check authentication
     const userData = localStorage.getItem('user');
     if (!userData) {
@@ -481,6 +484,9 @@ function DashboardPage() {
   }, []);
 
   const loadUserProgress = () => {
+    // CRITICAL: Only access localStorage on client side
+    if (typeof window === 'undefined') return;
+    
     // Load completed tasks from localStorage
     const completed = localStorage.getItem('completedTasks');
     if (completed) {

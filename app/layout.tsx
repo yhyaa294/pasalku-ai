@@ -8,9 +8,13 @@ import "./safe-animations.css"
 import "./modern-interactions.css"
 import "./ultimate-animations.css"
 import { ThemeProvider } from "@/contexts/ThemeContext"
+import dynamic from "next/dynamic"
 
-
-import { Analytics } from "@vercel/analytics/react"
+// CRITICAL FIX: Dynamic import Analytics to prevent hydration mismatch
+const Analytics = dynamic(
+  () => import("@vercel/analytics/react").then(m => m.Analytics),
+  { ssr: false }
+)
 
 export const metadata: Metadata = {
   title: "Pasalku.ai - AI Hukum Indonesia Terdepan | Akurasi 94.1% | Konsultasi Hukum Cerdas",
