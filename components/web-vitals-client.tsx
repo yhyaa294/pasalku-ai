@@ -19,7 +19,7 @@ export function WebVitalsClient() {
             }
           }
         })
-        fcpObserver.observe({ type: 'paint', buffered: true } as any)
+        fcpObserver.observe({ type: 'paint', buffered: true })
       } catch {}
     }
 
@@ -29,13 +29,13 @@ export function WebVitalsClient() {
     if (isSupported) {
       try {
         lcpObserver = new PerformanceObserver((entryList) => {
-          const entries = entryList.getEntries() as any[]
+          const entries = entryList.getEntries()
           const lastEntry = entries[entries.length - 1]
           if (lastEntry) {
             latestLCP = lastEntry.renderTime || lastEntry.loadTime || lastEntry.startTime || 0
           }
         })
-        lcpObserver.observe({ type: 'largest-contentful-paint', buffered: true } as any)
+        lcpObserver.observe({ type: 'largest-contentful-paint', buffered: true })
       } catch {}
     }
 
@@ -54,7 +54,7 @@ export function WebVitalsClient() {
     if (isSupported) {
       try {
         clsObserver = new PerformanceObserver((entryList) => {
-          for (const entry of entryList.getEntries() as any[]) {
+          for (const entry of entryList.getEntries()) {
             if (!entry.hadRecentInput) {
               const firstSession = entry.startTime - sessionStartTime > 1000 || sessionValue > 0
               if (firstSession) {
@@ -66,7 +66,7 @@ export function WebVitalsClient() {
             }
           }
         })
-        clsObserver.observe({ type: 'layout-shift', buffered: true } as any)
+        clsObserver.observe({ type: 'layout-shift', buffered: true })
       } catch {}
     }
 
@@ -77,7 +77,7 @@ export function WebVitalsClient() {
 
     // Finalize on page hide or visibility change
     const onHidden = (event: Event) => {
-      if ((event as any).type === 'pagehide' || document.visibilityState === 'hidden') {
+      if (event.type === 'pagehide' || document.visibilityState === 'hidden') {
         finalizeLCP()
         finalizeCLS()
         window.removeEventListener('pagehide', onHidden)

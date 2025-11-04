@@ -3,13 +3,16 @@
 // import GoogleProvider from "next-auth/providers/google";
 import CredentialsProvider from "next-auth/providers/credentials";
 
+import type { User, Session } from 'next-auth';
+import type { JWT } from 'next-auth/jwt';
+
 export const authConfig = {
   providers: [
-    // GitHubProvider({
+    // GitHubProvider({                            
     //   clientId: process.env.GITHUB_CLIENT_ID!,
     //   clientSecret: process.env.GITHUB_CLIENT_SECRET!,
     // }),
-    // GoogleProvider({
+    // GoogleProvider({                            
     //   clientId: process.env.GOOGLE_CLIENT_ID!,
     //   clientSecret: process.env.GOOGLE_CLIENT_SECRET!,
     // }),
@@ -57,22 +60,22 @@ export const authConfig = {
     })
   ],
   callbacks: {
-    async jwt({ token, user }: any) {
+    async jwt({ token, user }: { token: JWT; user: User }) {
       if (user) {
         token.role = user.role;
         token.accessToken = user.accessToken;
       }
       return token;
     },
-    async session({ session, token }: any) {
-      if (token) {
+    async session({ session, token }: { session: Session; token: JWT }) {
+      if (token && session.user) {
         session.user.id = token.sub!;
         session.user.role = token.role as string;
         session.accessToken = token.accessToken as string;
       }
       return session;
     },
-    authorized({ auth, request: { nextUrl } }: any) {
+    authorized({ auth, request: { nextUrl } }: { auth: Session | null; request: any }) {
       const isLoggedIn = !!auth?.user;
       const isOnDashboard = nextUrl.pathname.startsWith('/dashboard') ||
                            nextUrl.pathname.startsWith('/chat');
@@ -85,8 +88,7 @@ export const authConfig = {
       }
       return true;
     },
-  },
-  pages: {
+  },  pages: {
     signIn: '/login',
     error: '/login',
   },

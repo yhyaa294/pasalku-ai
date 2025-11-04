@@ -29,7 +29,7 @@ export const HeroSection: FC<HeroSectionProps> = ({ onGetStarted }) => {
   }, [])
 
   return (
-    <section className="relative min-h-screen flex items-center justify-center overflow-hidden bg-gradient-to-br from-primary-50 via-white to-accent-50 pt-20">
+    <section className="relative min-h-screen flex items-center justify-center overflow-hidden bg-gradient-to-br from-primary-50 via-white to-accent-50 pt-20 scroll-trigger stagger-children">
       {/* Modern Background Elements */}
       <div className="absolute inset-0">
         {/* Gradient Mesh */}
@@ -39,9 +39,9 @@ export const HeroSection: FC<HeroSectionProps> = ({ onGetStarted }) => {
         <div className="absolute inset-0 bg-[linear-gradient(to_right,primary-100/5_1px,transparent_1px),linear-gradient(to_bottom,primary-100/5_1px,transparent_1px)] bg-[size:32px_32px]"></div>
         
         {/* Floating Orbs */}
-        <div className="absolute top-20 left-10 w-32 h-32 bg-primary-200/20 rounded-full blur-2xl animate-pulse"></div>
-        <div className="absolute bottom-20 right-10 w-40 h-40 bg-accent-200/20 rounded-full blur-2xl animate-pulse" style={{ animationDelay: '1s' }}></div>
-        <div className="absolute top-1/2 left-1/3 w-24 h-24 bg-primary-300/20 rounded-full blur-xl animate-float"></div>
+        <div className="absolute top-20 left-10 w-32 h-32 bg-primary-200/20 rounded-full blur-2xl animate-parallaxFloat animate-morphShape"></div>
+        <div className="absolute bottom-20 right-10 w-40 h-40 bg-accent-200/20 rounded-full blur-2xl animate-parallaxFloat animate-colorShift" style={{ animationDelay: '1s' }}></div>
+        <div className="absolute top-1/2 left-1/3 w-24 h-24 bg-primary-300/20 rounded-full blur-xl animate-parallaxFloat" style={{ animationDelay: '2s' }}></div>
       </div>
 
       <div className="relative z-10 max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-12">
@@ -91,7 +91,7 @@ export const HeroSection: FC<HeroSectionProps> = ({ onGetStarted }) => {
               <Button 
                 size="lg" 
                 onClick={onGetStarted}
-                className="bg-primary-600 hover:bg-primary-700 text-white px-8 py-4 text-lg font-semibold rounded-xl shadow-lg hover:shadow-xl transition-all duration-300 group"
+                className="bg-primary-600 hover:bg-primary-700 text-white px-8 py-4 text-lg font-semibold rounded-xl shadow-lg hover:shadow-xl transition-all duration-300 group animate-buttonPulse animate-liquidButton touch-optimized"
               >
                 Mulai Konsultasi Gratis
                 <ArrowRight className="ml-2 w-5 h-5 group-hover:translate-x-1 transition-transform" />

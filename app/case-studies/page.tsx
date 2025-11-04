@@ -4,19 +4,12 @@ import React, { useState, useEffect } from 'react';
 import { useRouter } from 'next/navigation';
 import {
   BriefcaseIcon,
-  GraduationCap,
-  TrendingUp,
-  Lightbulb,
-  Users,
   BarChart3,
   Brain,
   Target,
   Plus,
-  Play,
   Eye,
   GitCompare,
-  FlaskConical,
-  Award,
   Clock,
   CheckCircle,
   AlertTriangle
@@ -58,8 +51,7 @@ const CaseStudiesPage = () => {
       'stats.highRisk': 'Risiko Tinggi',
       'stats.selected': 'Dipilih',
       'noCases.title': 'Belum Ada Kasus',
-      'noCases.description': 'Mulai dengan membuat kasus hukum pertama Anda untuk analisis AI',
-    };
+      'noCases.description': 'Mulai dengan membuat kasus hukum pertama Anda untuk analisis AI'};
     let result = translations[key] || key;
     if (params) {
       Object.keys(params).forEach(k => {
@@ -276,8 +268,7 @@ const CaseStudiesPage = () => {
           ) : (
             <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
               {cases.map((caseStudy) => (
-                <div
-                  key={caseStudy.case_id}
+                <div key={caseStudy.case_id}
                   className={`bg-white rounded-lg shadow-md hover:shadow-lg transition-all cursor-pointer border-2 ${
                     selectedCases.has(caseStudy.case_id)
                       ? 'border-indigo-500 ring-2 ring-indigo-200'

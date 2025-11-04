@@ -30,12 +30,20 @@ import { LegalCitation } from '@/components/custom/LegalCitation'
 import { ConfidenceIndicator } from '@/components/custom/ConfidenceIndicator'
 import { AiThinking } from '@/components/custom/AiThinking'
 
+interface Citation {
+  pasal: string;
+  undangUndang: string;
+  tahun: string;
+  deskripsi: string;
+  link: string;
+}
+
 interface Message {
   id: string
   role: 'user' | 'assistant'
   content: string
   timestamp: Date
-  citations?: any[]
+  citations?: Citation[]
   confidence?: number
 }
 
@@ -53,9 +61,14 @@ const sampleQuestions = [
   'Apa hak saya sebagai karyawan?'
 ]
 
+interface User {
+  name: string;
+  isAuthenticated: boolean;
+}
+
 export default function KonsultasiPage() {
   const router = useRouter()
-  const [user, setUser] = useState<any>(null)
+  const [user, setUser] = useState<User | null>(null)
   const [messages, setMessages] = useState<Message[]>([])
   const [inputValue, setInputValue] = useState('')
   const [isLoading, setIsLoading] = useState(false)
@@ -67,16 +80,16 @@ export default function KonsultasiPage() {
 
   useEffect(() => {
     // Check authentication
-    const userData = localStorage.getItem('user')
+    const userData = localStorage.getItem('user');
     if (!userData) {
-      router.push('/login')
-      return
+      router.push('/login');
+      return;
     }
 
     try {
-      const parsedUser = JSON.parse(userData)
+      const parsedUser = JSON.parse(userData);
       if (parsedUser.isAuthenticated) {
-        setUser(parsedUser)
+        setUser(parsedUser);
         // Add welcome message
         setMessages([{
           id: '1',
@@ -85,10 +98,10 @@ export default function KonsultasiPage() {
           timestamp: new Date()
         }])
       } else {
-        router.push('/login')
+        router.push('/login');
       }
-    } catch (error) {
-      router.push('/login')
+    } catch {
+      router.push('/login');
     }
   }, [router])
 

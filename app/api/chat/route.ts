@@ -15,7 +15,7 @@ async function readMessage(req: Request): Promise<string | null> {
       const val = form.get('message') || form.get('query');
       return (val ? String(val) : '');
     }
-  } catch (_) {
+  } catch {
     // fall through
   }
   return null;
@@ -46,7 +46,7 @@ export async function POST(req: Request) {
           const responseText = data.response || data.answer || JSON.stringify(data);
           return NextResponse.json({ response: responseText, ...data });
         }
-      } catch (e) {
+      } catch {
         // Fallback to local mock
       }
     }

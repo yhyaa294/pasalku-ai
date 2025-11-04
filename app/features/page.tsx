@@ -1,6 +1,6 @@
 'use client';
 
-import { useEffect, useMemo, useState } from 'react';
+import { useEffect, useMemo, useState, Suspense } from 'react';
 import Link from 'next/link';
 import { useSearchParams, useRouter } from 'next/navigation';
 
@@ -121,7 +121,7 @@ const CATEGORY_DEFS: { id: Category | 'all'; name: string; icon: string }[] = [
   { id: 'insights', name: 'Insights', icon: '📊' },
 ];
 
-export default function FeaturesPage() {
+function FeaturesContent() {
   const searchParams = useSearchParams();
   const router = useRouter();
   const initialCategory = (searchParams?.get('category') as Category) || 'all';
@@ -196,7 +196,7 @@ export default function FeaturesPage() {
                 {CATEGORY_DEFS.map(c => (
                   <button
                     key={c.id}
-                    onClick={() => setCategory(c.id as any)}
+                    onClick={() => setCategory(c.id)}
                     className={`px-3 py-2 text-sm rounded-lg border ${category === c.id ? 'bg-blue-600 text-white border-blue-700' : 'bg-white text-gray-700 border-gray-200 hover:bg-gray-50'}`}
                     title={c.name}
                   >
@@ -210,7 +210,7 @@ export default function FeaturesPage() {
             {/* Plan filter */}
             <select
               value={planFilter}
-              onChange={(e) => setPlanFilter(e.target.value as any)}
+              onChange={(e) => setPlanFilter(e.target.value as Plan | 'All')}
               className="px-3 py-2 border border-gray-200 rounded-lg text-sm bg-white"
               aria-label="Filter paket"
             >
@@ -270,5 +270,13 @@ export default function FeaturesPage() {
         </div>
       </div>
     </div>
+  );
+}
+
+export default function FeaturesPage() {
+  return (
+    <Suspense fallback={<div className="min-h-screen flex items-center justify-center"><div className="animate-spin rounded-full h-12 w-12 border-b-2 border-blue-600"></div></div>}>
+      <FeaturesContent />
+    </Suspense>
   );
 }

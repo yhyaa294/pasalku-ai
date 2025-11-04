@@ -1,15 +1,27 @@
 import { NextRequest, NextResponse } from 'next/server'
 
+interface Resend {
+  emails: {
+    send(payload: {
+      from: string;
+      to: string[];
+      replyTo: string;
+      subject: string;
+      html: string;
+    }): Promise<any>;
+  };
+}
+
 // Optional: Resend email service if RESEND_API_KEY is provided
-let resend: any = null
+let resend: Resend | null = null
 try {
   // Dynamically import to avoid hard dependency if not installed
-  // @ts-ignore
+  // @ts-expect-error
   const { Resend } = await import('resend')
   if (process.env.RESEND_API_KEY) {
     resend = new Resend(process.env.RESEND_API_KEY)
   }
-} catch (e) {
+} catch {
   // Resend not installed, fallback to console logging
 }
 

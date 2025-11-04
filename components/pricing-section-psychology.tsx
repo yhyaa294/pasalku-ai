@@ -19,6 +19,7 @@ export const PricingSection: FC<PricingSectionProps> = ({ className = '' }) => {
       period: '/bulan',
       description: 'Mulai perjalanan hukum Anda tanpa risiko. Sempurna untuk eksplorasi awal.',
       features: [
+        'Pasalku Academy Basic (3 quest per hari)',
         '5 konsultasi per bulan',
         'Analisis dokumen sederhana',
         'Chat dukungan umum',
@@ -47,6 +48,7 @@ export const PricingSection: FC<PricingSectionProps> = ({ className = '' }) => {
       period: '/bulan',
       description: 'Solusi lengkap untuk kebutuhan hukum sehari-hari. Paling populer di kalangan UMKM.',
       features: [
+        'Pasalku Academy Premium (track & quest unlimited)',
         '50 konsultasi per bulan',
         'Analisis dokumen canggih',
         'Riset hukum mendalam',
@@ -75,6 +77,7 @@ export const PricingSection: FC<PricingSectionProps> = ({ className = '' }) => {
       period: '/bulan',
       description: 'Solusi enterprise dengan fitur unlimited dan support premium untuk tim besar.',
       features: [
+        'Pasalku Academy Enterprise (akses modul lengkap untuk tim)',
         'Konsultasi tak terbatas',
         'Semua fitur AI kecerdasan web hukum',
         'Riset hukum unlimited',

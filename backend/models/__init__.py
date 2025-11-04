@@ -2,7 +2,7 @@
 from enum import Enum
 from datetime import datetime
 from sqlalchemy import Column, String, DateTime, Boolean, Enum as SQLEnum
-from backend.database import Base
+from database import Base
 
 class UserRole(str, Enum):
     PUBLIC = "public"

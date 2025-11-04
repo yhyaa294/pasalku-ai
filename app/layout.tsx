@@ -2,10 +2,13 @@ import type React from "react"
 import type { Metadata } from "next"
 import { GeistSans } from "geist/font/sans"
 import { GeistMono } from "geist/font/mono"
+import { ClerkProvider } from '@clerk/nextjs'
 import "./globals.css"
 import "./safe-animations.css"
+import "./modern-interactions.css"
+import "./ultimate-animations.css"
 import { ThemeProvider } from "@/contexts/ThemeContext"
-import Script from "next/script"
+
 
 import { Analytics } from "@vercel/analytics/react"
 
@@ -87,15 +90,17 @@ export default function RootLayout({
   children: React.ReactNode
 }>) {
   return (
-    <html lang="id" suppressHydrationWarning>
-      <body 
-        className={`font-sans ${GeistSans.variable} ${GeistMono.variable}`}
-      >
-        <ThemeProvider>
-          {children}
-          <Analytics />
-        </ThemeProvider>
-      </body>
-    </html>
+    <ClerkProvider>
+      <html lang="id" suppressHydrationWarning>
+        <body 
+          className={`font-sans ${GeistSans.variable} ${GeistMono.variable}`}
+        >
+          <ThemeProvider>
+            {children}
+            <Analytics />
+          </ThemeProvider>
+        </body>
+      </html>
+    </ClerkProvider>
   )
 }

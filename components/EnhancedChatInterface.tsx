@@ -18,6 +18,7 @@ import {
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
 import { MessageItem } from './chat';
+import { EnhancedMessage } from './EnhancedMessage';
 import { CitationCard } from './chat/CitationCard';
 import { PredictionCard } from './chat/PredictionCard';
 import { DocumentGeneratorModal } from './chat/DocumentGeneratorModal';
@@ -327,42 +328,6 @@ const EnhancedChatInterface: React.FC<EnhancedChatInterfaceProps> = ({
       )
     );
 
-  const handleSubmit = async (e: React.FormEvent<HTMLFormElement>): Promise<void> => {
-    e.preventDefault();
-    if ((!input.trim() && attachments.length === 0) || isLoading) return;
-
-    if (!isAuthenticated) {
-      onLoginRequired?.();
-      return;
-    }
-
-    const userMessage: ChatMessage = {
-      id: Date.now().toString(),
-      content: input,
-      role: 'user',
-      timestamp: new Date(),
-      status: 'sending',
-      attachments: [...attachments]
-    };
-
-    setMessages(prev => [...prev, userMessage]);
-    const userInput = input;
-    setInput('');
-    setAttachments([]);
-    setIsLoading(true);
-
-    // Detect language
-    const detectedLang = await detectLanguage(userInput);
-
-    // Update user message
-    setMessages(prev => 
-      prev.map(msg => 
-        msg.id === userMessage.id 
-          ? { ...msg, status: 'sent', detectedLanguage: detectedLang }
-          : msg
-      )
-    );
-
     try {
       // Get JWT token from localStorage
       const token = localStorage.getItem('token');
@@ -379,9 +344,10 @@ const EnhancedChatInterface: React.FC<EnhancedChatInterfaceProps> = ({
           'Authorization': `Bearer ${token}`
         },
         body: JSON.stringify({
-          query: userInput,
-          language: selectedLanguage
-        }),
+          message: userInput,
+          language: detectedLang,
+          attachments: attachments.map(file => ({ name: file.name, type: file.type }))
+        })
       });
 
       if (!response.ok) {
@@ -396,9 +362,7 @@ const EnhancedChatInterface: React.FC<EnhancedChatInterfaceProps> = ({
 
       // Get predictions if relevant
       let predictions: Prediction[] = [];
-      if (userInput.toLowerCase().includes('prediksi') || 
-          userInput.toLowerCase().includes('kemungkinan') ||
-          userInput.toLowerCase().includes('peluang')) {
+      if (userInput.toLowerCase().includes('prediksi') || userInput.toLowerCase().includes('kemungkinan')) {
         predictions = await getPredictions(userInput);
       }
 
@@ -408,43 +372,33 @@ const EnhancedChatInterface: React.FC<EnhancedChatInterfaceProps> = ({
         translatedContent = await translateMessage(data.message, 'id', selectedLanguage);
       }
 
-      const botMessage: ChatMessage = {
-        id: `ai-${Date.now()}`,
+      const assistantMessage: ChatMessage = {
+        id: data.response_id || Date.now().toString(),
         content: translatedContent,
         role: 'assistant',
         timestamp: new Date(),
         status: 'sent',
         citations,
         predictions,
-        detectedLanguage: 'id',
-        translationAvailable: detectedLang !== selectedLanguage,
-        attachmentsUrls: data.attachments || []
+        translationAvailable: detectedLang !== selectedLanguage
       };
 
-      setMessages(prev => [...prev, botMessage]);
+      setMessages(prev => [...prev, assistantMessage]);
     } catch (error) {
-      console.error('Error:', error);
+      console.error('Chat error:', error);
       
-      setMessages(prev => 
-        prev.map(msg => 
-          msg.id === userMessage.id 
-            ? { ...msg, status: 'failed', error: 'Failed to send message' }
-            : msg
-        )
-      );
-
       const errorMessage: ChatMessage = {
-        id: `error-${Date.now()}`,
-        content: 'Terjadi kesalahan. Silakan coba lagi.',
+        id: Date.now().toString(),
+        content: error instanceof Error ? error.message : 'Terjadi kesalahan saat mengirim pesan',
         role: 'error',
         timestamp: new Date(),
-        status: 'failed',
-        error: 'Failed to send message'
+        status: 'failed'
       };
-      
+
       setMessages(prev => [...prev, errorMessage]);
     } finally {
       setIsLoading(false);
+      setIsTyping(false);
     }
   };
 
@@ -591,11 +545,20 @@ const EnhancedChatInterface: React.FC<EnhancedChatInterfaceProps> = ({
           const isCurrentUser = message.role === 'user';
           return (
             <div key={message.id} className="space-y-2">
-              <MessageItem
-                message={message}
-                isCurrentUser={isCurrentUser}
-                onRetry={handleRetryMessage}
-              />
+              {/* Use EnhancedMessage for AI responses to enable term detection */}
+              {!isCurrentUser ? (
+                <EnhancedMessage
+                  content={message.content}
+                  role={message.role}
+                  isPremiumUser={userRole !== 'public'}
+                />
+              ) : (
+                <MessageItem
+                  message={message}
+                  isCurrentUser={isCurrentUser}
+                  onRetry={handleRetryMessage}
+                />
+              )}
               
               {/* Citations Display */}
               {message.citations && message.citations.length > 0 && (

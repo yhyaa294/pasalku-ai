@@ -68,6 +68,11 @@ export const EnhancedNavigation: FC<EnhancedNavigationProps> = ({
       icon: Star
     },
     {
+      name: 'Academy',
+      href: '/academy',
+      icon: BookOpen
+    },
+    {
       name: 'Harga',
       href: '/pricing',
       icon: CreditCard
@@ -183,6 +188,7 @@ export const EnhancedNavigation: FC<EnhancedNavigationProps> = ({
       const map: Record<string, string> = {
         '/features': '#features',
         '/pricing': '#pricing',
+        '/academy': '#academy'
       }
       const mapped = map[href]
       if (mapped) {

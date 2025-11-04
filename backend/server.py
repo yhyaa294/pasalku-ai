@@ -9,6 +9,7 @@ from fastapi import FastAPI, HTTPException, Depends, status, Request
 from contextlib import asynccontextmanager
 from fastapi.middleware.cors import CORSMiddleware
 from fastapi.security import OAuth2PasswordBearer
+from fastapi.responses import HTMLResponse
 
 from core.config import get_settings
 
@@ -50,7 +51,7 @@ except Exception as e:
     sentry_available = False
     logger.warning(f"Sentry initialization failed: {str(e)}")
 from database import init_db, get_db, get_db_connections
-from routers import auth_router, users_router, chat_router, consultation_router, payments, analytics
+from routers import auth_router, users_router, chat_router, consultation_router, payments, analytics, terms
 # Import all models to ensure they are registered with SQLAlchemy
 # Import models to register mappers
 from models import user, consultation, chat
@@ -99,6 +100,193 @@ app.include_router(chat_router, prefix="/api/chat", tags=["Chat"])
 app.include_router(consultation_router, prefix="/api/consultation", tags=["Consultation"])
 app.include_router(payments.router, prefix="/api/payments", tags=["Payments"])
 app.include_router(analytics.router, prefix="/api/analytics", tags=["Analytics"])
+app.include_router(terms.router, prefix="/api/terms", tags=["Legal Terms"])
+
+
+@app.get("/", response_class=HTMLResponse, include_in_schema=False)
+async def backend_homepage() -> HTMLResponse:
+    """Serve a friendly landing page for developers accessing the backend root."""
+
+    hero_gradient = "background: radial-gradient(circle at top left, rgba(37,99,235,0.25), transparent 55%), radial-gradient(circle at top right, rgba(168,85,247,0.25), transparent 50%), linear-gradient(135deg, #0f172a, #111827);"
+
+    html = f"""
+    <!DOCTYPE html>
+    <html lang="en">
+      <head>
+        <meta charset="UTF-8" />
+        <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+        <title>{settings.PROJECT_NAME} API</title>
+        <link rel="preconnect" href="https://fonts.googleapis.com">
+        <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+        <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700&display=swap" rel="stylesheet">
+        <style>
+          :root {{
+            color-scheme: dark;
+          }}
+          * {{ box-sizing: border-box; }}
+          body {{
+            margin: 0;
+            font-family: 'Plus Jakarta Sans', system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
+            background-color: #030712;
+            color: #f9fafb;
+            line-height: 1.6;
+          }}
+          .hero {{
+            {hero_gradient}
+            padding: 120px 24px 96px;
+            text-align: center;
+            position: relative;
+            overflow: hidden;
+          }}
+          .hero::after {{
+            content: '';
+            position: absolute;
+            inset: 0;
+            background: radial-gradient(circle at bottom, rgba(249,115,22,0.15), transparent 60%);
+            pointer-events: none;
+          }}
+          h1 {{
+            font-size: clamp(2.75rem, 4vw, 3.5rem);
+            margin-bottom: 16px;
+            font-weight: 700;
+          }}
+          p.lead {{
+            max-width: 680px;
+            margin: 0 auto 32px;
+            color: #c7d2fe;
+          }}
+          .cta {{
+            display: inline-flex;
+            gap: 16px;
+            flex-wrap: wrap;
+            justify-content: center;
+          }}
+          .btn {{
+            display: inline-flex;
+            align-items: center;
+            gap: 8px;
+            padding: 14px 28px;
+            border-radius: 999px;
+            font-weight: 600;
+            text-decoration: none;
+            transition: transform 0.2s ease, box-shadow 0.2s ease;
+          }}
+          .btn-primary {{
+            background: linear-gradient(135deg, #2563eb, #7c3aed);
+            color: #f9fafb;
+            box-shadow: 0 18px 40px -18px rgba(79,70,229,0.6);
+          }}
+          .btn-outline {{
+            border: 1px solid rgba(148,163,184,0.35);
+            color: #e2e8f0;
+            background: rgba(15,23,42,0.35);
+          }}
+          .btn:hover {{
+            transform: translateY(-2px);
+            box-shadow: 0 20px 45px -20px rgba(59,130,246,0.6);
+          }}
+          section {{
+            padding: 72px 24px;
+          }}
+          .container {{
+            max-width: 1080px;
+            margin: 0 auto;
+          }}
+          .grid {{
+            display: grid;
+            gap: 24px;
+            grid-template-columns: repeat(auto-fit, minmax(240px, 1fr));
+          }}
+          .card {{
+            padding: 24px;
+            border-radius: 18px;
+            background: linear-gradient(145deg, rgba(30,41,59,0.75), rgba(15,23,42,0.65));
+            border: 1px solid rgba(148,163,184,0.15);
+            box-shadow: 0 18px 45px -28px rgba(15,118,110,0.55);
+            backdrop-filter: blur(12px);
+          }}
+          .card h3 {{
+            margin-top: 0;
+            font-size: 1.25rem;
+            color: #c4b5fd;
+          }}
+          footer {{
+            text-align: center;
+            padding: 48px 24px 64px;
+            color: #94a3b8;
+            font-size: 0.875rem;
+          }}
+          code {{
+            background: rgba(15,23,42,0.65);
+            padding: 4px 8px;
+            border-radius: 6px;
+            border: 1px solid rgba(148,163,184,0.25);
+            font-size: 0.85rem;
+            color: #93c5fd;
+          }}
+          @media (max-width: 640px) {{
+            .hero {{ padding: 96px 20px 72px; }}
+            section {{ padding: 56px 20px; }}
+          }}
+        </style>
+      </head>
+      <body>
+        <header class="hero">
+          <h1>{settings.PROJECT_NAME}</h1>
+          <p class="lead">
+            API backend Pasalku.ai siap melayani modul konsultasi hukum, chat AI, analitik,
+            dan integrasi compliance. Gunakan dokumentasi interaktif untuk mengeksplor endpoint tersedia.
+          </p>
+          <div class="cta">
+            <a class="btn btn-primary" href="/api/docs">⚡ API Docs (Swagger)</a>
+            <a class="btn btn-outline" href="/api/redoc">📘 Redoc Reference</a>
+            <a class="btn btn-outline" href="/api/health">🩺 Health Check</a>
+          </div>
+        </header>
+
+        <section>
+          <div class="container">
+            <div class="grid">
+              <article class="card">
+                <h3>🚀 Konsultasi Terstruktur</h3>
+                <p>
+                  Endpoint <code>/api/structured-consult/*</code> memandu pengguna melewati empat fase konsultasi
+                  hukum berbasis AI, lengkap dengan pengumpulan bukti dan analisis akhir.
+                </p>
+              </article>
+              <article class="card">
+                <h3>🧠 Chat & AI Services</h3>
+                <p>
+                  Modula chat, dual-AI consensus, dan reasoning chain tersedia melalui namespace <code>/api/chat</code>
+                  serta <code>/api/ai/*</code> untuk berbagai skenario bantuan hukum.
+                </p>
+              </article>
+              <article class="card">
+                <h3>📊 Analitik & Pembayaran</h3>
+                <p>
+                  Pantau performa platform dan kelola monetisasi melalui <code>/api/analytics</code> dan
+                  <code>/api/payments</code>. Endpoint siap diintegrasikan dengan dashboard frontend.
+                </p>
+              </article>
+              <article class="card">
+                <h3>⚙️ Cara Menjalankan</h3>
+                <p>
+                  Pastikan dependensi terinstal, lalu jalankan <code>uvicorn server:app --reload</code> dari direktori backend.
+                  Gunakan variabel lingkungan di <code>.env</code> untuk konfigurasi database & layanan eksternal.
+                </p>
+              </article>
+            </div>
+          </div>
+        </section>
+
+        <footer>
+          © {datetime.utcnow().year} Pasalku.ai Backend • Dibangun dengan FastAPI & kasih sayang untuk developer.
+        </footer>
+      </body>
+    </html>
+    """
+
+    return HTMLResponse(content=html)
 
 # Health check endpoint
 @app.get("/api/health", tags=["Health"])

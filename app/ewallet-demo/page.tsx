@@ -9,14 +9,26 @@ import { Badge } from '@/components/ui/badge';
 import { CheckCircle, XCircle, Clock, CreditCard } from 'lucide-react';
 import UnifiedEwalletPayment from '@/components/UnifiedEwalletPayment';
 
+interface PaymentResult {
+  success: boolean;
+  transaction?: TransactionData;
+  error?: string;
+  timestamp: string;
+}
+
+interface TransactionData {
+  success: boolean;
+  [key: string]: any;
+}
+
 export default function EwalletDemoPage() {
   const [amount, setAmount] = useState<string>('50000');
   const [orderId, setOrderId] = useState<string>(`PASALKU-${Date.now()}`);
   const [description, setDescription] = useState<string>('Pasalku AI Premium Subscription');
   const [showPayment, setShowPayment] = useState(false);
-  const [paymentResult, setPaymentResult] = useState<any>(null);
+  const [paymentResult, setPaymentResult] = useState<PaymentResult | null>(null);
 
-  const handlePaymentSuccess = (transaction: any) => {
+  const handlePaymentSuccess = (transaction: TransactionData) => {
     setPaymentResult({
       success: true,
       transaction,

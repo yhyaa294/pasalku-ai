@@ -3,12 +3,10 @@
 import { useState, useEffect } from 'react'
 import {
   Plus,
-  Calendar,
   Clock,
   Play,
   Pause,
   Settings,
-  Bell,
   AlertCircle,
   CheckCircle,
   RefreshCw,
@@ -16,7 +14,7 @@ import {
   Edit,
   MoreHorizontal
 } from 'lucide-react'
-import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card'
+import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card'
 import { Button } from '@/components/ui/button'
 import { Badge } from '@/components/ui/badge'
 import {
@@ -25,9 +23,6 @@ import {
   DropdownMenuItem,
   DropdownMenuTrigger,
 } from '@/components/ui/dropdown-menu'
-import { Input } from '@/components/ui/input'
-import { Label } from '@/components/ui/label'
-import { Textarea } from '@/components/ui/textarea'
 import {
   Dialog,
   DialogContent,
@@ -36,7 +31,6 @@ import {
   DialogTitle,
   DialogTrigger,
 } from '@/components/ui/dialog'
-import { Switch } from '@/components/ui/switch'
 
 interface Workflow {
   id: string

@@ -7,7 +7,7 @@ import { useToast } from '@/components/ui/toast';
 import Link from 'next/link';
 import { DropdownMenu, DropdownMenuTrigger, DropdownMenuContent, DropdownMenuItem, DropdownMenuSeparator, DropdownMenuLabel } from '@/components/ui/dropdown-menu';
 import { Avatar, AvatarFallback } from '@/components/ui/avatar';
-import { CheckCircle, Trophy, Star, Zap, Target, Award, Flame, TrendingUp, Gift, Sparkles } from 'lucide-react';
+import { CheckCircle, Trophy, Star, Target, Flame, Sparkles } from 'lucide-react';
 
 // GAMIFICATION ELEMENTS - PSYCHOLOGY PRINCIPLES
 // Commitment & Consistency, Progress Tracking, Positive Reinforcement, Habit Formation
@@ -425,7 +425,7 @@ const QUICK_ACTIONS = [
   }
 ];
 
-export default function DashboardPage() {
+function DashboardPage() {
   const [user, setUser] = useState<any>(null);
   const [recentActivity, setRecentActivity] = useState<any[]>([]);
   const [filter, setFilter] = useState<'all' | 'draft' | 'done'>('all');
@@ -770,7 +770,7 @@ export default function DashboardPage() {
               <p className="text-blue-100 mb-2">Selamat datang kembali, <span className="font-semibold">{user.name}</span></p>
               <h2 className="text-2xl md:text-3xl font-bold">Apa yang bisa saya bantu hari ini?</h2>
             </div>
-            {/* LEVEL & XP DISPLAY */}
+            {/* LEVEL & XP DIS*/}
             <div className="text-right">
               <div className="flex items-center gap-2 mb-2">
                 <Star className="w-5 h-5 text-yellow-300" />
@@ -800,7 +800,7 @@ export default function DashboardPage() {
               <Button className="bg-white text-purple-600 hover:bg-gray-100">Mulai Konsultasi Baru</Button>
             </Link>
             <Link href="/documents/upload">
-              <Button variant="outline" className="border-white text-white hover:bg-white/10">Unggah Dokumen</Button>
+              <Button variant="outline" className="border-white text.white hover:bg-white/10">Unggah Dokumen</Button>
             </Link>
           </div>
         </div>
@@ -823,7 +823,7 @@ export default function DashboardPage() {
                   <div key={task.id} className={`flex items-center gap-4 p-4 rounded-xl border transition-all ${
                     isCompleted
                       ? 'bg-green-50 border-green-200'
-                      : 'bg-white border-gray-200 hover:border-blue-300'
+                      : 'bg-white border-gray-200 hover.border-blue-300'
                   }`}>
                     <div className={`w-8 h-8 rounded-full flex items-center justify-center ${
                       isCompleted ? 'bg-green-500' : 'bg-gray-200'
@@ -903,9 +903,39 @@ export default function DashboardPage() {
           {/* Left 70% */}
           <div className="lg:col-span-2">
             <div className="bg-white rounded-2xl p-6 shadow-sm border border-gray-100">
-              <div className="flex items-center justify-between mb-4">
+              <div className="flex items.center justify-between mb-4">
                 <h3 className="text-xl font-bold text-gray-900">Riwayat & Draf</h3>
                 <div className="flex items-center gap-1 rounded-lg border border-gray-200 p-1 bg-gray-50">
                   <button onClick={() => setFilter('all')} className={`px-3 py-1 text-xs rounded-md ${filter==='all' ? 'bg-white shadow text-gray-900' : 'text-gray-600 hover:text-gray-800'}`}>Semua</button>
                   <button onClick={() => setFilter('draft')} className={`px-3 py-1 text-xs rounded-md ${filter==='draft' ? 'bg-white shadow text-gray-900' : 'text-gray-600 hover:text-gray-800'}`}>Draf</button>
-                  <button onClick={() => setFilter('done')} className={`px-3 py-
+                  <button onClick={() => setFilter('done')} className={`px-3 py-1 text-xs rounded-md ${filter==='done' ? 'bg-white shadow text-gray-900' : 'text-gray-600 hover:text-gray-800'}`}>Selesai</button>
+                </div>
+              </div>
+              <div className="text-sm text-gray-600 mt-4 text-center">
+                File history section - coming soon
+              </div>
+            </div>
+          </div>
+
+          {/* Right 30% */}
+          <div className="lg:col-span-1">
+            <div className="bg-white rounded-2xl p-6 shadow-sm border border-gray-100">
+              <h3 className="text-xl font-bold text-gray-900 mb-4">Quick Actions</h3>
+              <div className="space-y-2">
+                <Link href="/ai-chat" className="block p-3 rounded-lg border hover:border-blue-300 hover:bg-blue-50 transition">
+                  <span className="text-sm font-medium">Start AI Chat</span>
+                </Link>
+                <Link href="/documents" className="block p-3 rounded-lg border hover:border-green-300 hover:bg-green-50 transition">
+                  <span className="text-sm font-medium">Upload Document</span>
+                </Link>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+      {Toast}
+    </div>
+  );
+}
+
+export default DashboardPage;

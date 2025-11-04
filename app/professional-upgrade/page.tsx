@@ -19,15 +19,13 @@ import {
   TrendingUp,
   MessageSquare,
   Database,
-  Phone,
-  Mail,
   Building
 } from 'lucide-react'
 import Link from 'next/link'
 
 export default function ProfessionalUpgradePage() {
-  const [isAuthenticated, setIsAuthenticated] = useState(false)
-  const [userRole, setUserRole] = useState<'public' | 'legal_professional' | 'admin'>('public')
+  const [isAuthenticated] = useState(false)
+  const [userRole] = useState<'public' | 'legal_professional' | 'admin'>('public')
   const [showForm, setShowForm] = useState(false)
   const [verificationStep, setVerificationStep] = useState(1)
 
@@ -215,8 +213,7 @@ export default function ProfessionalUpgradePage() {
             className="grid grid-cols-1 md:grid-cols-2 gap-6 mb-16"
           >
             {professionalBenefits.map((benefit, index) => (
-              <motion.div
-                key={benefit.title}
+              <motion.div key={benefit.title}
                 initial={{ scale: 0.9, opacity: 0 }}
                 animate={{ scale: 1, opacity: 1 }}
                 transition={{ duration: 0.5, delay: index * 0.05 }}
@@ -257,8 +254,7 @@ export default function ProfessionalUpgradePage() {
 
             <div className="grid grid-cols-1 lg:grid-cols-3 gap-8">
               {pricingTiers.map((tier, index) => (
-                <motion.div
-                  key={tier.name}
+                <motion.div key={tier.name}
                   initial={{ opacity: 0, y: 20 }}
                   animate={{ opacity: 1, y: 0 }}
                   transition={{ duration: 0.5, delay: index * 0.1 }}
@@ -375,7 +371,7 @@ export default function ProfessionalUpgradePage() {
                           <h4 className="text-lg font-semibold text-gray-900">Data Pribadi</h4>
                           <div className="grid grid-cols-2 gap-4">
                             <Input placeholder="Nama Lengkap" />
-                            <Input placeholder="Email Professional" />
+                            <Input placeholder="EProfessional" />
                           </div>
                           <div className="grid grid-cols-2 gap-4">
                             <Input placeholder="No. Telepon" />

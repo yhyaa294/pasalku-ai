@@ -16,11 +16,22 @@ interface EwalletProvider {
   icon: React.ReactNode;
 }
 
+interface ProviderDetails {
+  name: string;
+  status: 'active' | 'coming_soon';
+  features: string[];
+}
+
+interface TransactionData {
+  success: boolean;
+  [key: string]: any;
+}
+
 interface UnifiedEwalletPaymentProps {
   amount: number;
   orderId?: string;
   description?: string;
-  onSuccess?: (transaction: any) => void;
+  onSuccess?: (transaction: TransactionData) => void;
   onFailure?: (error: string) => void;
 }
 
@@ -44,7 +55,7 @@ export const UnifiedEwalletPayment: React.FC<UnifiedEwalletPaymentProps> = ({
         const data = await response.json();
 
         if (data.success) {
-          const providerList: EwalletProvider[] = Object.entries(data.details).map(([key, details]: [string, any]) => ({
+          const providerList: EwalletProvider[] = Object.entries(data.details).map(([key, details]: [string, ProviderDetails]) => ({
             name: key,
             displayName: details.name,
             status: details.status,

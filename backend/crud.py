@@ -1,7 +1,7 @@
 from sqlalchemy.orm import Session
-from backend import models
-from backend import schemas
-from backend.core.security_updated import get_password_hash, verify_password
+import models
+import schemas
+from core.security_updated import get_password_hash, verify_password
 from typing import List, Optional
 from datetime import datetime
 from uuid import UUID

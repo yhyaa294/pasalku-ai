@@ -70,4 +70,9 @@ export const useMouseParallax = (isEnabled: boolean = true) => {
       if (typeof window !== 'undefined') {
         window.removeEventListener('mousemove', handleMouseMove)
       }
+    }
+  }, [isEnabled, handleMouseMove])
+
+  return { sectionRef }
+}
   

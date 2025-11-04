@@ -1,17 +1,30 @@
+import { clerkMiddleware, createRouteMatcher } from '@clerk/nextjs/server'
 import { NextResponse } from 'next/server'
 import type { NextRequest } from 'next/server'
 
-export function middleware(request: NextRequest) {
+// Define protected routes that require authentication
+const isProtectedRoute = createRouteMatcher([
+  '/dashboard(.*)',
+  '/chat(.*)',
+  '/api/chat(.*)',
+])
+
+export default clerkMiddleware(async (auth, request: NextRequest) => {
+  // Protect routes
+  if (isProtectedRoute(request)) {
+    await auth.protect()
+  }
+
   // Clone the response
   const response = NextResponse.next()
 
   // Add security headers
   const headers = response.headers
 
-  // ✅ Fix: Add x-content-type-options header
+  // Add x-content-type-options header
   headers.set('X-Content-Type-Options', 'nosniff')
 
-  // ✅ Fix: Remove x-xss-protection (deprecated, use CSP instead)
+  // Remove x-xss-protection (deprecated, use CSP instead)
   headers.delete('X-XSS-Protection')
 
   // Add Content Security Policy
@@ -29,7 +42,7 @@ export function middleware(request: NextRequest) {
     'camera=(), microphone=(), geolocation=(), interest-cohort=()'
   )
 
-  // ✅ Fix: Add cache-control for static resources
+  // Add cache-control for static resources
   if (
     request.nextUrl.pathname.startsWith('/_next/static') ||
     request.nextUrl.pathname.match(/\.(jpg|jpeg|png|gif|svg|ico|woff|woff2|ttf|eot)$/)
@@ -44,7 +57,7 @@ export function middleware(request: NextRequest) {
   }
 
   return response
-}
+})
 
 export const config = {
   matcher: [

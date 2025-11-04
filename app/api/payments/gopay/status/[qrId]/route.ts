@@ -1,59 +1,66 @@
 import { NextRequest, NextResponse } from 'next/server';
 
-// Mock GoPay service for demonstration
-class MockGoPayService {
-  static async check_payment_status(qrId: string) {
-    // Simulate API call delay
-    await new Promise(resolve => setTimeout(resolve, 500));
+// Define the context type for clarity
+interface RouteContext {
+  params: {
+    qrId: string;
+  };
+}
 
-    // Mock status response - randomly succeed after some time
-    const isSuccess = Math.random() > 0.7; // 30% chance of success
-    const statuses = ['PENDING', 'SUCCESS', 'FAILED', 'EXPIRED'];
-    const randomStatus = isSuccess ? 'SUCCESS' : statuses[Math.floor(Math.random() * statuses.length)];
+/**
+ * @swagger
+ * /api/payments/gopay/status/{qrId}:
+ *   get:
+ *     summary: Get GoPay QR payment status
+ *     description: Checks the status of a GoPay transaction using the QR ID.
+ *     tags: [Payments]
+ *     parameters:
+ *       - in: path
+ *         name: qrId
+ *         required: true
+ *         schema:
+ *           type: string
+ *         description: The unique QR ID of the transaction.
+ *     responses:
+ *       200:
+ *         description: Successful response with transaction status.
+ *       404:
+ *         description: Transaction not found.
+ *       500:
+ *         description: Internal server error.
+ */
+export async function GET(request: NextRequest, context: RouteContext) {
+  const { qrId } = context.params;
 
-    return {
+  if (!qrId) {
+    return NextResponse.json({ error: 'QR ID is required' }, { status: 400 });
+  }
+
+  try {
+    // This is a placeholder for your actual GoPay status check logic
+    const paymentStatus = await getGopayStatus(qrId);
+
+    if (!paymentStatus) {
+      return NextResponse.json({ error: 'Transaction not found' }, { status: 404 });
+    }
+
+    return NextResponse.json({
       success: true,
-      qr_id: qrId,
-      status: randomStatus,
-      transaction_id: randomStatus === 'SUCCESS' ? `TXN-${Date.now()}` : null,
-      paid_amount: randomStatus === 'SUCCESS' ? 50000 : null,
-      paid_at: randomStatus === 'SUCCESS' ? new Date().toISOString() : null,
-      metadata: { source: 'pasalku_demo' }
-    };
+      status: paymentStatus.transaction_status,
+    });
+  } catch (error) {
+    console.error(`[GoPay Status Error] for qrId ${qrId}:`, error);
+    return NextResponse.json({ error: 'Internal server error' }, { status: 500 });
   }
 }
 
-export async function GET(
-  request: NextRequest,
-  { params }: { params: { qrId: string } }
-) {
-  try {
-    const qrId = params.qrId;
-
-    if (!qrId) {
-      return NextResponse.json(
-        { error: 'QR ID is required' },
-        { status: 400 }
-      );
+// Dummy function to simulate fetching GoPay status
+async function getGopayStatus(qrId: string) {
+    console.log(`Fetching status for QR ID: ${qrId}`);
+    
+    if (qrId.includes('success')) {
+        return { transaction_status: 'success' };
     }
-
-    // Initialize GoPay service
-    const result = await MockGoPayService.check_payment_status(qrId);
-
-    if (result.success) {
-      return NextResponse.json(result);
-    } else {
-      return NextResponse.json(
-        { error: 'Status check failed' },
-        { status: 500 }
-      );
-    }
-
-  } catch (error) {
-    console.error('GoPay status check error:', error);
-    return NextResponse.json(
-      { error: 'Internal server error' },
-      { status: 500 }
-    );
-  }
+    
+    return { transaction_status: 'pending' };
 }

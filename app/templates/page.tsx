@@ -11,15 +11,12 @@ import {
   Edit,
   Check,
   AlertCircle,
-  BookOpen,
   FileCheck,
   FileSignature,
   Building,
   Home,
   Briefcase,
   Shield,
-  Clock,
-  Users,
   TrendingUp
 } from 'lucide-react';
 
@@ -194,7 +191,7 @@ const TemplatesPage = () => {
     const matchesCategory = selectedCategory === 'all' || template.category === selectedCategory;
     const matchesSearch = template.name.toLowerCase().includes(searchQuery.toLowerCase()) ||
                          template.description.toLowerCase().includes(searchQuery.toLowerCase()) ||
-                         template.tags.some(tag => tag.toLowerCase().includes(searchQuery.toLowerCase()));
+                         template.tags?.some((tag: string) => tag.toLowerCase().includes(searchQuery.toLowerCase()));
     return matchesCategory && matchesSearch;
   });
 
@@ -236,70 +233,78 @@ const TemplatesPage = () => {
                 </h2>
 
                 <div className="space-y-4">
-                  {templateVariables.map((variable) => (
-                    <div key={variable.variable_name} className="space-y-2">
-                      <label className="block text-sm font-medium text-gray-700">
-                        {variable.label}
-                        {variable.required && <span className="text-red-500">*</span>}
-                      </label>
+                  {templateVariables.map((variable) => {
+                    const inputId = `template-variable-${variable.variable_name}`
 
-                      {variable.variable_type === 'text' && (
-                        <input
-                          type="text"
-                          value={variableValues[variable.variable_name] || ''}
-                          onChange={(e) => setVariableValues({
-                            ...variableValues,
-                            [variable.variable_name]: e.target.value
-                          })}
-                          placeholder={variable.description}
-                          className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-blue-500"
-                        />
-                      )}
+                    return (
+                      <div key={variable.variable_name} className="space-y-2">
+                        <label className="block text-sm font-medium text-gray-700" htmlFor={inputId}>
+                          {variable.label}
+                          {variable.required && <span className="text-red-500">*</span>}
+                        </label>
 
-                      {variable.variable_type === 'date' && (
-                        <input
-                          type="date"
-                          value={variableValues[variable.variable_name] || ''}
-                          onChange={(e) => setVariableValues({
-                            ...variableValues,
-                            [variable.variable_name]: e.target.value
-                          })}
-                          className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-blue-500"
-                        />
-                      )}
+                        {variable.variable_type === 'text' && (
+                          <input
+                            id={inputId}
+                            type="text"
+                            value={variableValues[variable.variable_name] || ''}
+                            onChange={(e) => setVariableValues({
+                              ...variableValues,
+                              [variable.variable_name]: e.target.value
+                            })}
+                            placeholder={variable.description}
+                            className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-blue-500"
+                          />
+                        )}
 
-                      {variable.variable_type === 'number' && (
-                        <input
-                          type="number"
-                          value={variableValues[variable.variable_name] || ''}
-                          onChange={(e) => setVariableValues({
-                            ...variableValues,
-                            [variable.variable_name]: e.target.value
-                          })}
-                          placeholder={variable.description}
-                          className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-blue-500"
-                        />
-                      )}
+                        {variable.variable_type === 'date' && (
+                          <input
+                            id={inputId}
+                            type="date"
+                            value={variableValues[variable.variable_name] || ''}
+                            onChange={(e) => setVariableValues({
+                              ...variableValues,
+                              [variable.variable_name]: e.target.value
+                            })}
+                            className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-blue-500"
+                          />
+                        )}
 
-                      {variable.variable_type === 'choice' && variable.choices && (
-                        <select
-                          value={variableValues[variable.variable_name] || ''}
-                          onChange={(e) => setVariableValues({
-                            ...variableValues,
-                            [variable.variable_name]: e.target.value
-                          })}
-                          className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-blue-500"
-                        >
-                          <option value="">-- Pilih {variable.label} --</option>
-                          {variable.choices.map((choice) => (
-                            <option key={choice} value={choice}>{choice}</option>
-                          ))}
-                        </select>
-                      )}
+                        {variable.variable_type === 'number' && (
+                          <input
+                            id={inputId}
+                            type="number"
+                            value={variableValues[variable.variable_name] || ''}
+                            onChange={(e) => setVariableValues({
+                              ...variableValues,
+                              [variable.variable_name]: e.target.value
+                            })}
+                            placeholder={variable.description}
+                            className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-blue-500"
+                          />
+                        )}
 
-                      <p className="text-xs text-gray-500">{variable.description}</p>
-                    </div>
-                  ))}
+                        {variable.variable_type === 'choice' && variable.choices && (
+                          <select
+                            id={inputId}
+                            value={variableValues[variable.variable_name] || ''}
+                            onChange={(e) => setVariableValues({
+                              ...variableValues,
+                              [variable.variable_name]: e.target.value
+                            })}
+                            className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-blue-500"
+                          >
+                            <option value="">-- Pilih {variable.label} --</option>
+                            {variable.choices.map((choice, index) => (
+                              <option key={index} value={choice}>{choice}</option>
+                            ))}
+                          </select>
+                        )}
+
+                        <p className="text-xs text-gray-500">{variable.description}</p>
+                      </div>
+                    )
+                  })}
                 </div>
 
                 <div className="mt-6 flex space-x-3">
@@ -409,7 +414,11 @@ const TemplatesPage = () => {
               />
             </div>
 
+            <label htmlFor="template-category" className="sr-only">
+              Filter berdasarkan kategori template
+            </label>
             <select
+              id="template-category"
               value={selectedCategory}
               onChange={(e) => setSelectedCategory(e.target.value)}
               className="px-3 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-blue-500"
@@ -455,17 +464,17 @@ const TemplatesPage = () => {
                 </p>
 
                 <div className="flex flex-wrap gap-1 mb-4">
-                  {template.tags.slice(0, 3).map((tag) => (
+                  {template.tags?.slice(0, 3).map((tag: string, index: number) => (
                     <span
-                      key={tag}
+                      key={index}
                       className="text-xs px-2 py-1 bg-blue-100 text-blue-700 rounded-full"
                     >
                       {tag}
                     </span>
                   ))}
-                  {template.tags.length > 3 && (
+                  {(template.tags?.length || 0) > 3 && (
                     <span className="text-xs px-2 py-1 bg-gray-100 text-gray-600 rounded-full">
-                      +{template.tags.length - 3} more
+                      +{(template.tags?.length || 0) - 3} more
                     </span>
                   )}
                 </div>
@@ -482,13 +491,13 @@ const TemplatesPage = () => {
         {/* Popular Templates Section */}
         <div className="bg-white rounded-xl shadow-lg p-8">
           <h2 className="text-2xl font-bold mb-6 flex items-center">
-            <TrendingUp className="w-8 h-8 mr-3 text-blind-600" />
+            <TrendingUp className="w-8 h-8 mr-3 text-blue-600" />
             Most Popular Templates
           </h2>
 
           <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
             {templates.slice(0, 4).map((template, index) => (
-              <div
+              <div 
                 key={template.template_id}
                 onClick={() => setSelectedTemplate(template)}
                 className="border border-gray-200 rounded-lg p-6 hover:border-blue-300 hover:shadow-md transition-all cursor-pointer"

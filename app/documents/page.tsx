@@ -1,6 +1,6 @@
 'use client';
 
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useCallback } from 'react';
 import { useRouter } from 'next/navigation';
 import { FileText, Upload, Clock, CheckCircle, AlertCircle, Trash2 } from 'lucide-react';
 import DocumentUpload from '@/components/DocumentUpload';
@@ -16,7 +16,7 @@ interface DocumentItem {
   summary?: string;
   risk_assessment?: string;
   recommendations?: string[];
-  ai_insights?: Record<string, any>;
+  ai_insights?: Record<string, unknown>;
   legal_references?: string[];
   extracted_text?: string;
 }
@@ -29,20 +29,7 @@ const DocumentsPage = () => {
   const [showAnalysis, setShowAnalysis] = useState(false);
   const router = useRouter();
 
-  useEffect(() => {
-    fetchDocuments();
-
-    // Poll for updates every 10 seconds if there are analyzing documents
-    const interval = setInterval(() => {
-      if (analyzingDocuments.size > 0) {
-        fetchDocuments();
-      }
-    }, 10000);
-
-    return () => clearInterval(interval);
-  }, [analyzingDocuments.size]);
-
-  const fetchDocuments = async () => {
+  const fetchDocuments = useCallback(async () => {
     try {
       const token = localStorage.getItem('token');
       if (!token) {
@@ -74,7 +61,20 @@ const DocumentsPage = () => {
     } finally {
       setLoading(false);
     }
-  };
+  }, [router]);
+
+  useEffect(() => {
+    fetchDocuments();
+
+    // Poll for updates every 10 seconds if there are analyzing documents
+    const interval = setInterval(() => {
+      if (analyzingDocuments.size > 0) {
+        fetchDocuments();
+      }
+    }, 10000);
+
+    return () => clearInterval(interval);
+  }, [analyzingDocuments.size, fetchDocuments]);
 
   const handleUploadSuccess = (document: DocumentItem) => {
     setDocuments(prev => [document, ...prev]);

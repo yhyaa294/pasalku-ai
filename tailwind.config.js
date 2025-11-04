@@ -7,6 +7,21 @@ export default {
     './app/**/*.{js,ts,jsx,tsx,mdx}',
   ],
   theme: {
+    screens: {
+      'xs': '320px',   // Tiny phones
+      'sm': '640px',   // Small phones  
+      'md': '768px',   // Tablets
+      'lg': '1024px',  // Small laptops
+      'xl': '1280px',  // Desktops
+      '2xl': '1536px', // Large screens
+      '3xl': '1920px', // Ultra-wide
+      // Custom breakpoints
+      'mobile': {'max': '767px'},
+      'tablet': {'min': '768px', 'max': '1023px'},
+      'desktop': {'min': '1024px'},
+      'touch': {'raw': '(hover: none)'},
+      'mouse': {'raw': '(hover: hover)'},
+    },
     extend: {
       fontFamily: {
         'sans': ['Inter', 'system-ui', 'sans-serif'],
