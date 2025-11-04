@@ -3,6 +3,7 @@
 import { ModernNavigation } from '@/components/navigation-modern';
 import { HeroSection } from '@/components/hero-section-adhi-aura';
 import { ProblemStatementSection } from '@/components/problem-statement-section-psychology';
+import { WhyPasalkuSection } from '@/components/why-pasalku-section';
 import { EnhancedFooter } from '@/components/enhanced-footer';
 import { ClientOnlyWrapper } from '@/components/ClientOnlyWrapper';
 import { useEffect, useState } from 'react';
@@ -11,7 +12,7 @@ import Link from 'next/link';
 import dynamic from 'next/dynamic';
 
 // CRITICAL: All dynamic sections must use ssr: false to prevent hydration mismatch
-const FeaturesSection = dynamic(() => import('@/components/features-modern').then(m => m.ModernFeaturesSection), {
+const FeaturesSection = dynamic(() => import('@/components/features-section-psychology').then(m => m.FeaturesSection), {
   ssr: false,
   loading: () => <section className="py-20 bg-white dark:bg-slate-950" aria-busy="true"><div className="max-w-7xl mx-auto px-4 text-center"><div className="animate-pulse">Loading features...</div></div></section>
 });
@@ -233,6 +234,9 @@ export default function PasalkuLandingPage() {
         
         {/* Problem Statement Section - Psychology Driven */}
         <ProblemStatementSection />
+        
+        {/* Why Pasalku Section - Statistics */}
+        <WhyPasalkuSection />
         
         {/* Features Section - Psychology Enhanced */}
         <FeaturesSection />
