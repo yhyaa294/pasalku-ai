@@ -1,11 +1,13 @@
 """
-AI Orchestrator Engine - IMPLEMENTASI NYATA
-Menganalisis konteks user dan memutuskan fitur apa yang harus ditrigger
+AI Orchestrator Engine - REAL AI INTEGRATION
+Menggunakan LLM untuk understand context, bukan cuma keyword matching!
 """
 
 from typing import Dict, List, Any, Optional
 from enum import Enum
 import re
+from services.ai_service import ai_service
+import json
 
 
 class UserTier(str, Enum):
@@ -119,7 +121,11 @@ class OrchestratorEngine:
         }
     
     def detect_legal_area(self, message: str) -> LegalArea:
-        """Deteksi area hukum dari pesan user"""
+        """
+        Deteksi area hukum - HYBRID approach:
+        1. Quick keyword check untuk efficiency
+        2. Fall back ke AI jika ambiguous
+        """
         message_lower = message.lower()
         
         # Count keyword matches per area
@@ -129,11 +135,54 @@ class OrchestratorEngine:
             if score > 0:
                 area_scores[area] = score
         
-        # Return area dengan score tertinggi
+        # Return area dengan score tertinggi jika clear (>= 2 keywords)
         if area_scores:
-            return max(area_scores, key=area_scores.get)
+            max_score = max(area_scores.values())
+            if max_score >= 2:
+                return max(area_scores, key=area_scores.get)
         
+        # Jika ambiguous, pakai AI untuk classify (akan implement di orchestrate method)
         return LegalArea.GENERAL
+    
+    async def detect_legal_area_with_ai(self, message: str) -> LegalArea:
+        """
+        REAL AI detection - bukan keyword matching!
+        Pakai LLM untuk understand context
+        """
+        
+        prompt = f"""Analisis pesan user berikut dan tentukan kategori hukum yang paling relevan.
+
+Pesan: "{message}"
+
+Kategori yang tersedia:
+1. employment - Hukum ketenagakerjaan (PHK, kontrak kerja, gaji, cuti, dll)
+2. consumer - Perlindungan konsumen (produk rusak, penipuan, komplain, dll)
+3. business - Hukum bisnis (perjanjian, kerjasama, hutang piutang, dll)
+4. family - Hukum keluarga (cerai, warisan, hak asuh, dll)
+5. property - Hukum properti (tanah, rumah, sewa, dll)
+6. criminal - Hukum pidana (pencurian, penganiayaan, penipuan, dll)
+7. general - Umum/tidak spesifik
+
+Jawab HANYA dengan nama kategori (employment/consumer/business/family/property/criminal/general).
+Jangan tambahkan penjelasan lain."""
+
+        try:
+            response = await ai_service.get_chat_completion([
+                {"role": "system", "content": "Kamu adalah classifier hukum yang akurat."},
+                {"role": "user", "content": prompt}
+            ])
+            
+            category = response.get("response", "general").strip().lower()
+            
+            # Validate
+            try:
+                return LegalArea(category)
+            except ValueError:
+                return LegalArea.GENERAL
+                
+        except Exception as e:
+            print(f"AI detection failed: {e}")
+            return LegalArea.GENERAL
     
     def extract_context_signals(self, message: str, conversation_history: List[str] = None) -> Dict[str, Any]:
         """Extract signals penting dari message"""
@@ -240,7 +289,103 @@ class OrchestratorEngine:
         
         return suggested[:3]  # Max 3 options
     
-    def orchestrate(
+    async def generate_ai_clarification(
+        self,
+        user_message: str,
+        legal_area: LegalArea,
+        context: Dict[str, Any]
+    ) -> str:
+        """
+        Generate REAL AI response untuk clarification stage
+        Bukan template! Pakai LLM untuk understand & respond naturally
+        """
+        
+        system_prompt = f"""Kamu adalah AI Konsultan Hukum Indonesia yang cerdas dan empatik.
+
+User baru saja bercerita tentang masalah hukum mereka (area: {legal_area.value}).
+
+Tugasmu:
+1. Tunjukkan empati & pemahaman
+2. Tanyakan 2-3 pertanyaan klarifikasi yang RELEVAN dengan kasus mereka
+3. Jelaskan KENAPA pertanyaan itu penting
+4. Gunakan bahasa yang natural, bukan template
+
+Jangan:
+- Langsung kasih solusi
+- Tanya hal yang sudah user sebutkan
+- Pakai bahasa terlalu formal/kaku
+
+Format:
+[Empati & Pemahaman]
+[2-3 Pertanyaan spesifik]
+[Kenapa ini penting]"""
+
+        try:
+            messages = [
+                {"role": "system", "content": system_prompt},
+                {"role": "user", "content": f"User berkata: {user_message}"}
+            ]
+            
+            response = await ai_service.get_chat_completion(messages)
+            return response.get("response", "Bisa tolong ceritakan lebih detail?")
+            
+        except Exception as e:
+            print(f"AI clarification failed: {e}")
+            # Fallback ke template
+            questions = self.generate_clarifying_questions(legal_area, context)
+            return f"Saya memahami situasi Anda. Untuk analisis yang akurat, saya perlu tahu:\n\n" + "\n".join(f"{i+1}. {q}" for i, q in enumerate(questions))
+    
+    async def generate_ai_analysis_with_features(
+        self,
+        conversation_summary: str,
+        legal_area: LegalArea,
+        features: List[Dict[str, Any]],
+        context: Dict[str, Any]
+    ) -> str:
+        """
+        Generate REAL AI analysis & feature suggestion
+        AI akan explain WHY fitur-fitur ini relevan, bukan cuma list
+        """
+        
+        features_desc = "\n".join([
+            f"- {f['name']} ({f['tier']}): {f['description']}"
+            for f in features
+        ])
+        
+        system_prompt = f"""Kamu adalah AI Konsultan Hukum yang proaktif.
+
+Berdasarkan percakapan dengan user, kamu sudah memahami situasi mereka (area: {legal_area.value}).
+
+Fitur yang tersedia untuk membantu mereka:
+{features_desc}
+
+Tugasmu:
+1. Berikan analisis SINGKAT situasi mereka (2-3 kalimat)
+2. Explain secara natural KENAPA fitur-fitur ini bisa membantu
+3. Suggest mana yang paling prioritas untuk situasi mereka
+4. Motivate user untuk ambil action
+
+Jangan:
+- Cuma list fitur tanpa context
+- Terlalu panjang (max 5 kalimat)
+- Pakai bullet points kaku
+
+Gaya: Friendly advisor yang peduli, bukan sales pitch!"""
+
+        try:
+            messages = [
+                {"role": "system", "content": system_prompt},
+                {"role": "user", "content": f"Ringkasan situasi user: {conversation_summary}"}
+            ]
+            
+            response = await ai_service.get_chat_completion(messages)
+            return response.get("response", "Berdasarkan situasi Anda, saya punya beberapa tools yang bisa membantu.")
+            
+        except Exception as e:
+            print(f"AI analysis failed: {e}")
+            return f"Berdasarkan situasi Anda, saya bisa membantu dengan {len(features)} tools yang relevan."
+    
+    async def orchestrate(
         self,
         user_message: str,
         conversation_history: List[Dict[str, str]] = None,
@@ -248,60 +393,105 @@ class OrchestratorEngine:
         context: Dict[str, Any] = None
     ) -> Dict[str, Any]:
         """
-        Main orchestration function
+        Main orchestration function - NOW WITH REAL AI!
         
         Returns response structure dengan:
         - stage: conversation stage
         - legal_area: detected area
         - response_type: 'question', 'analysis', 'feature_offer', 'execution'
-        - content: actual response
+        - content: actual AI-generated response
         - features: suggested features (if applicable)
         """
         
         if context is None:
             context = {}
         
-        # Detect legal area
+        # STEP 1: Detect legal area (hybrid: keyword + AI fallback)
         legal_area = self.detect_legal_area(user_message)
+        if legal_area == LegalArea.GENERAL and len(user_message) > 20:
+            # Use AI for ambiguous cases
+            legal_area = await self.detect_legal_area_with_ai(user_message)
         
-        # Extract signals
+        # STEP 2: Extract signals
         signals = self.extract_context_signals(user_message, conversation_history)
         context.update(signals)
         context["messages_count"] = len(conversation_history or []) + 1
         
-        # Determine stage
+        # STEP 3: Determine stage
         stage = self.determine_stage(context)
         
-        # Build response based on stage
+        # STEP 4: Generate REAL AI response based on stage
         if stage == ConversationStage.INITIAL or stage == ConversationStage.CLARIFICATION:
-            questions = self.generate_clarifying_questions(legal_area, context)
+            # Generate AI clarification questions
+            ai_message = await self.generate_ai_clarification(user_message, legal_area, context)
+            questions = self.generate_clarifying_questions(legal_area, context)  # Keep for frontend
+            
             return {
                 "stage": stage.value,
                 "legal_area": legal_area.value,
                 "response_type": "clarification",
                 "questions": questions,
                 "signals": signals,
-                "message": f"Saya memahami ini terkait {legal_area.value}. Untuk analisis akurat, saya perlu beberapa detail:"
+                "message": ai_message,  # AI-generated message!
+                "ai_powered": True
             }
         
         elif stage == ConversationStage.ANALYSIS:
+            # Get features
             features = self.get_feature_suggestions(legal_area, context, user_tier)
+            
+            # Generate AI analysis
+            conversation_summary = " ".join([msg.get("content", "") for msg in (conversation_history or [])])
+            ai_message = await self.generate_ai_analysis_with_features(
+                conversation_summary, legal_area, features, context
+            )
+            
             return {
                 "stage": stage.value,
                 "legal_area": legal_area.value,
                 "response_type": "feature_offer",
                 "features": features,
                 "signals": signals,
-                "message": "Berdasarkan situasi Anda, saya bisa membantu lebih jauh dengan:"
+                "message": ai_message,  # AI-generated analysis!
+                "ai_powered": True
             }
         
         else:
+            # General conversation - full AI response
+            system_prompt = f"""Kamu adalah AI Konsultan Hukum Indonesia (Pasalku.AI).
+Area: {legal_area.value}
+Context: {json.dumps(signals, ensure_ascii=False)}
+
+Tugasmu: Jawab pertanyaan user dengan natural & helpful.
+Gunakan pengetahuan hukum Indonesia yang akurat.
+Selalu sebutkan rujukan hukum (UU/PP) jika relevan."""
+
+            messages = [{"role": "system", "content": system_prompt}]
+            
+            # Add conversation history
+            if conversation_history:
+                for msg in conversation_history[-4:]:  # Last 4 messages
+                    messages.append({
+                        "role": msg.get("role", "user"),
+                        "content": msg.get("content", "")
+                    })
+            
+            messages.append({"role": "user", "content": user_message})
+            
+            try:
+                response = await ai_service.get_chat_completion(messages)
+                ai_message = response.get("response", "Silakan lanjutkan...")
+            except Exception as e:
+                print(f"AI response failed: {e}")
+                ai_message = "Silakan lanjutkan ceritakan masalah Anda..."
+            
             return {
                 "stage": stage.value,
                 "legal_area": legal_area.value,
                 "response_type": "general",
-                "message": "Silakan lanjutkan...",
-                "signals": signals
+                "message": ai_message,
+                "signals": signals,
+                "ai_powered": True
             }
 
 

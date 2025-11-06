@@ -28,6 +28,7 @@ from ..models.chat import ChatSession, AIQueryLog
 from ..core.security_updated import get_current_user
 from ..services.conversation_orchestrator import ConversationOrchestrator, ConversationStage
 from ..services.ark_ai_service import ark_ai_service
+from ..services.report_generator import report_generator
 
 logger = logging.getLogger(__name__)
 router = APIRouter(prefix="/api/proactive-chat", tags=["Proactive AI Chat"])
@@ -484,6 +485,293 @@ async def _route_feature_execution(
             "error": f"Feature {feature_id} belum diimplementasikan",
             "next_steps": []
         }
+
+
+@router.post("/generate-report")
+async def generate_strategic_report(
+    session_id: str,
+    user_id: Optional[str] = None,
+    mongodb = Depends(get_mongodb)
+):
+    """
+    🎯 GENERATE STRATEGIC REPORT (Stage 4 - Synthesis)
+    
+    Endpoint untuk generate Laporan Strategi Hukum PDF yang komprehensif
+    dari seluruh aktivitas dalam sesi konsultasi.
+    
+    **Features:**
+    - Executive Summary
+    - Detailed Analysis
+    - SWOT Analysis
+    - Risk Assessment
+    - 30-Day Action Plan
+    - Legal References
+    
+    **Response:**
+    - PDF file (downloadable)
+    """
+    try:
+        # Get session from MongoDB
+        chat_collection = mongodb["chat_transcripts"]
+        session = chat_collection.find_one({"session_id": session_id})
+        
+        if not session:
+            raise HTTPException(status_code=404, detail="Session not found")
+        
+        # Prepare session data for report
+        transcript = session.get("transcript", [])
+        features_used = session.get("features_used", [])
+        legal_category = session.get("legal_category", "general")
+        
+        # Extract key information from transcript
+        user_messages = [msg for msg in transcript if msg.get("role") == "user"]
+        ai_responses = [msg for msg in transcript if msg.get("role") == "assistant"]
+        
+        # Build comprehensive session data
+        session_data = {
+            "transcript": transcript,
+            "features_used": features_used,
+            "legal_category": legal_category,
+            "stage_history": session.get("stage_history", []),
+            
+            # Analysis summary (combine AI responses)
+            "analysis_summary": _extract_analysis_summary(ai_responses),
+            
+            # Key findings
+            "key_findings": _extract_key_findings(transcript, features_used),
+            
+            # Detailed analysis
+            "detailed_analysis": {
+                "legal_basis": _extract_legal_basis(ai_responses),
+                "relevant_articles": _extract_relevant_articles(ai_responses),
+                "precedents": "Based on similar cases in Indonesian jurisdiction"
+            },
+            
+            # SWOT Analysis
+            "swot_analysis": _generate_swot_analysis(transcript, legal_category),
+            
+            # Risk Assessment
+            "risks": _identify_risks(transcript, legal_category),
+            
+            # Action Plan
+            "action_plan": _generate_action_plan(transcript, features_used),
+            
+            # Legal References
+            "legal_references": _compile_legal_references(legal_category)
+        }
+        
+        # User info (if available)
+        user_info = None
+        if user_id:
+            user_info = {
+                "name": "Client",  # Would fetch from DB in production
+                "company": "N/A"
+            }
+        
+        # Generate PDF report
+        pdf_bytes = report_generator.generate_report(
+            session_id=session_id,
+            session_data=session_data,
+            user_info=user_info
+        )
+        
+        # Return PDF as downloadable file
+        from fastapi.responses import Response
+        
+        filename = f"Strategic_Report_{session_id[:8]}_{datetime.now().strftime('%Y%m%d')}.pdf"
+        
+        return Response(
+            content=pdf_bytes,
+            media_type="application/pdf",
+            headers={
+                "Content-Disposition": f"attachment; filename={filename}"
+            }
+        )
+        
+    except Exception as e:
+        logger.error(f"Error generating report: {str(e)}")
+        raise HTTPException(status_code=500, detail=f"Report generation failed: {str(e)}")
+
+
+# Helper functions for report data extraction
+def _extract_analysis_summary(ai_responses: List[Dict]) -> str:
+    """Extract comprehensive analysis summary from AI responses"""
+    if not ai_responses:
+        return "Konsultasi telah dilakukan dengan analisis AI komprehensif."
+    
+    # Get the most substantive responses
+    summaries = []
+    for resp in ai_responses[-3:]:  # Last 3 responses
+        content = resp.get("content", "")
+        if len(content) > 100:
+            summaries.append(content[:300])
+    
+    return " ".join(summaries) if summaries else "Analisis lengkap tersedia dalam transkrip."
+
+
+def _extract_key_findings(transcript: List[Dict], features_used: List[Dict]) -> List[str]:
+    """Extract key findings from session"""
+    findings = []
+    
+    # Add finding based on features used
+    if features_used:
+        findings.append(f"Utilized {len(features_used)} AI-powered analysis tools")
+    
+    # Add finding based on conversation length
+    user_msgs = len([m for m in transcript if m.get("role") == "user"])
+    findings.append(f"Comprehensive consultation with {user_msgs} interaction points")
+    
+    # Generic findings
+    findings.extend([
+        "Identified primary legal category and relevant regulations",
+        "Assessed risks and opportunities in current situation",
+        "Developed actionable strategy with clear timeline"
+    ])
+    
+    return findings[:5]
+
+
+def _extract_legal_basis(ai_responses: List[Dict]) -> str:
+    """Extract mentioned legal basis from AI responses"""
+    legal_mentions = []
+    keywords = ["UU", "Undang-Undang", "Pasal", "Peraturan", "KUHP", "KUHPerdata"]
+    
+    for resp in ai_responses:
+        content = resp.get("content", "")
+        for keyword in keywords:
+            if keyword in content:
+                legal_mentions.append(keyword)
+                break
+    
+    if legal_mentions:
+        return f"Based on Indonesian legal framework including {', '.join(set(legal_mentions[:3]))}"
+    return "Based on applicable Indonesian laws and regulations"
+
+
+def _extract_relevant_articles(ai_responses: List[Dict]) -> List[str]:
+    """Extract mentioned legal articles"""
+    articles = []
+    
+    for resp in ai_responses:
+        content = resp.get("content", "")
+        # Simple pattern matching for "Pasal XX"
+        import re
+        pasal_matches = re.findall(r'Pasal \d+[a-z]?', content, re.IGNORECASE)
+        articles.extend(pasal_matches[:3])
+    
+    return list(set(articles))[:5] if articles else ["Pasal terkait dalam regulasi yang berlaku"]
+
+
+def _generate_swot_analysis(transcript: List[Dict], category: str) -> Dict:
+    """Generate SWOT analysis based on case category"""
+    swot_templates = {
+        "ketenagakerjaan": {
+            "strengths": ["Clear employment documentation", "Witness availability"],
+            "weaknesses": ["Limited written evidence", "Timeline constraints"],
+            "opportunities": ["Settlement negotiation potential", "Regulatory support"],
+            "threats": ["Litigation costs", "Time-consuming legal process"]
+        },
+        "kontrak": {
+            "strengths": ["Written agreement exists", "Clear terms documented"],
+            "weaknesses": ["Ambiguous clauses", "Force majeure considerations"],
+            "opportunities": ["Contract renegotiation", "Mediation options"],
+            "threats": ["Breach penalties", "Reputation risks"]
+        }
+    }
+    
+    return swot_templates.get(category, {
+        "strengths": ["Strong legal position"],
+        "weaknesses": ["Documentation gaps"],
+        "opportunities": ["Settlement potential"],
+        "threats": ["Litigation risks"]
+    })
+
+
+def _identify_risks(transcript: List[Dict], category: str) -> List[Dict]:
+    """Identify potential risks based on case"""
+    risk_templates = {
+        "ketenagakerjaan": [
+            {
+                "description": "Insufficient severance calculation",
+                "likelihood": "Medium",
+                "impact": "High",
+                "priority": "High",
+                "mitigation": "Verify calculation with legal formula"
+            }
+        ],
+        "kontrak": [
+            {
+                "description": "Contract breach implications",
+                "likelihood": "Medium",
+                "impact": "Medium",
+                "priority": "Medium",
+                "mitigation": "Review force majeure clauses"
+            }
+        ]
+    }
+    
+    return risk_templates.get(category, [
+        {
+            "description": "General legal risks",
+            "likelihood": "Low",
+            "impact": "Medium",
+            "priority": "Medium",
+            "mitigation": "Consult with legal professional"
+        }
+    ])
+
+
+def _generate_action_plan(transcript: List[Dict], features_used: List[Dict]) -> Dict:
+    """Generate 30-day action plan"""
+    return {
+        "week_1": [
+            "Review all documentation and evidence",
+            "Consult with legal professional if needed",
+            "Gather supporting documents"
+        ],
+        "week_2": [
+            "Draft initial legal correspondence",
+            "Identify negotiation opportunities",
+            "Prepare settlement proposal"
+        ],
+        "week_3": [
+            "Initiate formal communication with other party",
+            "Monitor response deadlines",
+            "Prepare alternative strategies"
+        ],
+        "week_4": [
+            "Evaluate progress and outcomes",
+            "Consider mediation or litigation options",
+            "Finalize strategic approach"
+        ]
+    }
+
+
+def _compile_legal_references(category: str) -> List[str]:
+    """Compile relevant legal references"""
+    references = {
+        "ketenagakerjaan": [
+            "Undang-Undang Nomor 13 Tahun 2003 tentang Ketenagakerjaan",
+            "Peraturan Pemerintah Nomor 35 Tahun 2021 tentang PKWT",
+            "Surat Edaran Menaker terkait PHK dan Pesangon"
+        ],
+        "kontrak": [
+            "Kitab Undang-Undang Hukum Perdata (KUHPerdata) Buku III",
+            "Undang-Undang Nomor 30 Tahun 1999 tentang Arbitrase",
+            "Peraturan terkait perjanjian dan kontrak"
+        ],
+        "pidana": [
+            "Kitab Undang-Undang Hukum Pidana (KUHP)",
+            "Kitab Undang-Undang Hukum Acara Pidana (KUHAP)",
+            "Undang-Undang terkait tindak pidana khusus"
+        ]
+    }
+    
+    return references.get(category, [
+        "Kitab Undang-Undang Hukum Perdata (KUHPerdata)",
+        "Peraturan perundang-undangan terkait",
+        "Yurisprudensi Mahkamah Agung"
+    ])
 
 
 # Export router

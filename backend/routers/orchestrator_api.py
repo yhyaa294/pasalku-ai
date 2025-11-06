@@ -66,8 +66,8 @@ async def analyze_conversation(request: OrchestrationRequest):
         history = [{"role": msg.role, "content": msg.content} 
                   for msg in request.conversation_history]
         
-        # Call orchestrator
-        result = orchestrator.orchestrate(
+        # Call orchestrator (NOW ASYNC WITH REAL AI!)
+        result = await orchestrator.orchestrate(
             user_message=request.message,
             conversation_history=history,
             user_tier=request.user_tier,
