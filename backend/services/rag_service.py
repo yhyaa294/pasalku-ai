@@ -26,9 +26,15 @@ class RAGService:
     async def initialize(self):
         """Setup vector database"""
         try:
-            # import chromadb
-            # self.vector_db = chromadb.Client()
-            # self.collection = self.vector_db.create_collection("legal_docs")
+            try:
+                import chromadb
+                self.vector_db = chromadb.PersistentClient(path="./data/chroma_db")
+                self.collection = self.vector_db.get_or_create_collection("legal_docs")
+                print("✅ ChromaDB initialized")
+            except ImportError:
+                print("⚠️ ChromaDB not installed. Install with: pip install chromadb sentence-transformers")
+                self.initialized = False
+                return
             
             # Load dokumen hukum
             await self._load_legal_documents()
@@ -37,6 +43,7 @@ class RAGService:
             print("✅ RAG Service initialized")
         except Exception as e:
             print(f"⚠️ RAG initialization failed: {e}")
+            self.initialized = False
     
     async def _load_legal_documents(self):
         """

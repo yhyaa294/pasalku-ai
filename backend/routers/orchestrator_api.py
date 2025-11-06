@@ -16,6 +16,9 @@ from backend.services.orchestrator_engine import (
 from backend.services.contract_analyzer import contract_analyzer
 from backend.services.negotiation_simulator import negotiation_simulator
 from backend.services.report_generator import report_generator
+from backend.services.conversation_storage import conversation_storage
+from backend.models.orchestrator_conversation import ConversationSession, ConversationMessage
+from uuid import uuid4
 
 router = APIRouter(prefix="/api/orchestrator", tags=["AI Orchestrator"])
 
@@ -32,6 +35,8 @@ class OrchestrationRequest(BaseModel):
     conversation_history: Optional[List[ChatMessage]] = []
     user_tier: UserTier = UserTier.FREE
     context: Optional[Dict[str, Any]] = {}
+    session_id: Optional[str] = None  # For continuing existing conversation
+    user_id: Optional[str] = None  # For authenticated users
 
 
 class OrchestrationResponse(BaseModel):
@@ -43,12 +48,14 @@ class OrchestrationResponse(BaseModel):
     features: Optional[List[Dict[str, Any]]] = None
     signals: Optional[Dict[str, Any]] = None
     ai_response: str  # Formatted response untuk ditampilkan
+    session_id: Optional[str] = None  # Return session ID
 
 
 @router.post("/analyze", response_model=OrchestrationResponse)
 async def analyze_conversation(request: OrchestrationRequest):
     """
     Endpoint utama untuk orchestrate conversation
+    AUTO-SAVE to MongoDB!
     
     Contoh request:
     ```json
@@ -56,12 +63,17 @@ async def analyze_conversation(request: OrchestrationRequest):
         "message": "Saya di-PHK sepihak tapi disuruh resign",
         "user_tier": "free",
         "conversation_history": [],
-        "context": {}
+        "context": {},
+        "session_id": "optional-for-continue",
+        "user_id": "optional-clerk-id"
     }
     ```
     """
     
     try:
+        # Get or create session ID
+        session_id = request.session_id or str(uuid4())
+        
         # Convert history to simple format
         history = [{"role": msg.role, "content": msg.content} 
                   for msg in request.conversation_history]
@@ -77,6 +89,48 @@ async def analyze_conversation(request: OrchestrationRequest):
         # Format AI response berdasarkan type
         ai_response = format_ai_response(result)
         
+        # ====== SAVE TO DATABASE ======
+        if conversation_storage.initialized:
+            # Load or create session
+            session = await conversation_storage.get_conversation(session_id)
+            
+            if not session:
+                # New conversation
+                session = ConversationSession(
+                    session_id=session_id,
+                    user_id=request.user_id,
+                    user_tier=request.user_tier,
+                    legal_area=result["legal_area"],
+                    current_stage=result["stage"]
+                )
+            
+            # Add user message
+            session.messages.append(ConversationMessage(
+                role="user",
+                content=request.message,
+                timestamp=datetime.utcnow()
+            ))
+            
+            # Add AI response
+            session.messages.append(ConversationMessage(
+                role="assistant",
+                content=result["message"],
+                timestamp=datetime.utcnow(),
+                metadata={
+                    "response_type": result["response_type"],
+                    "ai_powered": result.get("ai_powered", False)
+                }
+            ))
+            
+            # Update context
+            session.legal_area = result["legal_area"]
+            session.current_stage = result["stage"]
+            session.detected_signals = result.get("signals", {})
+            session.suggested_features = result.get("features", [])
+            
+            # Save
+            await conversation_storage.save_conversation(session)
+        
         return OrchestrationResponse(
             stage=result["stage"],
             legal_area=result["legal_area"],
@@ -85,7 +139,8 @@ async def analyze_conversation(request: OrchestrationRequest):
             questions=result.get("questions"),
             features=result.get("features"),
             signals=result.get("signals"),
-            ai_response=ai_response
+            ai_response=ai_response,
+            session_id=session_id  # Return session ID for frontend
         )
         
     except Exception as e:

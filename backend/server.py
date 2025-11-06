@@ -115,6 +115,13 @@ try:
     from routers.orchestrator_api import router as orchestrator_router
     app.include_router(orchestrator_router, tags=["AI Orchestrator"])
     logger.info("✅ AI Orchestrator Router registered successfully")
+    
+    # Initialize conversation storage
+    from services.conversation_storage import conversation_storage
+    import asyncio
+    asyncio.create_task(conversation_storage.initialize())
+    logger.info("🔄 Conversation storage initialization started")
+    
 except ImportError as e:
     logger.warning(f"⚠️ AI Orchestrator Router not available: {e}")
 

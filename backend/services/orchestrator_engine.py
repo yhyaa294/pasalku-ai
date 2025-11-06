@@ -9,6 +9,14 @@ import re
 from services.ai_service import ai_service
 import json
 
+# Import RAG service (optional - will work without it)
+try:
+    from services.rag_service import rag_service
+    RAG_AVAILABLE = True
+except ImportError:
+    RAG_AVAILABLE = False
+    rag_service = None
+
 
 class UserTier(str, Enum):
     FREE = "free"
@@ -298,17 +306,28 @@ Jangan tambahkan penjelasan lain."""
         """
         Generate REAL AI response untuk clarification stage
         Bukan template! Pakai LLM untuk understand & respond naturally
+        WITH RAG ENHANCEMENT if available!
         """
+        
+        # Get RAG context if available
+        rag_context = ""
+        if RAG_AVAILABLE and rag_service and rag_service.initialized:
+            try:
+                rag_context = await rag_service.get_augmented_context(user_message)
+                rag_context = f"\n\nREFERENSI HUKUM:\n{rag_context}\n"
+            except Exception as e:
+                print(f"RAG enhancement failed: {e}")
         
         system_prompt = f"""Kamu adalah AI Konsultan Hukum Indonesia yang cerdas dan empatik.
 
 User baru saja bercerita tentang masalah hukum mereka (area: {legal_area.value}).
-
+{rag_context}
 Tugasmu:
 1. Tunjukkan empati & pemahaman
 2. Tanyakan 2-3 pertanyaan klarifikasi yang RELEVAN dengan kasus mereka
 3. Jelaskan KENAPA pertanyaan itu penting
 4. Gunakan bahasa yang natural, bukan template
+5. JIKA ada referensi hukum relevan di atas, sebutkan secara natural
 
 Jangan:
 - Langsung kasih solusi
