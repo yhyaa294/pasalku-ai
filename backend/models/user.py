@@ -7,7 +7,7 @@ from datetime import datetime
 from sqlalchemy import Column, Integer, String, Enum, Text, DateTime, Boolean, JSON
 from sqlalchemy.dialects.postgresql import UUID
 from sqlalchemy.orm import relationship
-from ..database import Base
+from database import Base
 
 
 class UserRole(str, enum.Enum):

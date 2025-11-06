@@ -10,12 +10,12 @@ from uuid import UUID
 
 logger = logging.getLogger(__name__)
 
-from backend import crud
-from backend import schemas
-from backend import models
-from backend.core.security_updated import get_current_user
-from backend.database import get_db
-from backend.services.ai_service_enhanced import ai_service_enhanced as ai_service
+import crud
+import schemas
+import models
+from core.security_updated import get_current_user
+from database import get_db
+from services.ai_service_enhanced import ai_service_enhanced as ai_service
 
 router = APIRouter()
 

@@ -11,7 +11,7 @@ from typing import Any, Optional
 
 import crud
 import schemas
-import models
+from models import User
 from core.security_updated import (
     create_access_token,
     create_refresh_token,
@@ -201,7 +201,7 @@ async def register_user(
 
 @router.get("/me", response_model=schemas.User)
 async def read_users_me(
-    current_user: models.User = Depends(get_current_user)
+    current_user: User = Depends(get_current_user)
 ):
     """
     Get current user information
@@ -211,7 +211,7 @@ async def read_users_me(
 @router.put("/me", response_model=schemas.User)
 async def update_user_me(
     user_in: schemas.UserUpdate,
-    current_user: models.User = Depends(get_current_user),
+    current_user: User = Depends(get_current_user),
     db: Session = Depends(get_db)
 ):
     """

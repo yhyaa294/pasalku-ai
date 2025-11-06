@@ -9,14 +9,14 @@ import os
 import logging
 from pathlib import Path
 
-from ..database import get_db
-from ..models.consultation import ConsultationSession, ConsultationMessage, LegalCategory
-from ..core.security import get_current_user
-from ..services.ai_agent import AIConsultationAgent
-from ..services.consultation_flow import advance_flow, state_store, ConversationState
+from database import get_db
+from models.consultation import ConsultationSession, ConsultationMessage, LegalCategory
+from core.security import get_current_user
+from services.ai_agent import AIConsultationAgent
+from services.consultation_flow import advance_flow, state_store, ConversationState
 # Temporarily commented out due to syntax error - will fix
-# from ..services.ai_service import ai_service
-from ..core.config import settings
+# from services.ai_service import ai_service
+from core.config import settings
 
 logger = logging.getLogger(__name__)
 
@@ -103,7 +103,7 @@ async def send_message(
     # Load persisted flow_context if any and seed in-memory store
     try:
         if session.flow_context:
-            from ..services.consultation_flow import ConsultationContext
+            from services.consultation_flow import ConsultationContext
             ctx = ConsultationContext.from_dict(session.flow_context)
             state_store.set(ctx)
     except Exception as e:
@@ -217,7 +217,7 @@ async def reset_session_state(
         raise HTTPException(status_code=status.HTTP_404_NOT_FOUND, detail="Session not found")
 
     # Reinitialize state entry
-    from ..services.consultation_flow import ConsultationContext
+    from services.consultation_flow import ConsultationContext
     state_store.set(ConsultationContext(session_id=session_id))
     return {"status": "reset", "session_id": session_id}
 

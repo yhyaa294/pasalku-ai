@@ -1,6 +1,6 @@
 import json
-from ..core.config import settings
-from .. import schemas
+from core.config import settings
+import schemas
 
 # Initialize BytePlus Ark client with proper imports that work with the installed SDK
 try:

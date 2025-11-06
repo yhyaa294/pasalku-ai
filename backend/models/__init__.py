@@ -22,14 +22,24 @@ except ImportError:
 
 # Import and export chat models
 try:
-    from backend.models.chat import ChatSession, AIQueryLog, SessionAnalytics
+    from .chat import ChatSession, AIQueryLog, SessionAnalytics
     __all__.extend(['ChatSession', 'AIQueryLog', 'SessionAnalytics'])
 except ImportError:
     pass
 
 # Import and export consultation models
 try:
-    from backend.models.consultation import ConsultationSession, ConsultationMessage, EvidenceRecord, LegalCategory
+    from .consultation import ConsultationSession, ConsultationMessage, EvidenceRecord, LegalCategory
     __all__.extend(['ConsultationSession', 'ConsultationMessage', 'EvidenceRecord', 'LegalCategory'])
+except ImportError:
+    pass
+
+# Import and export payment models from root models.py
+try:
+    import sys
+    import os
+    sys.path.append(os.path.dirname(os.path.dirname(__file__)))
+    from models import Payment, ChatMessage
+    __all__.extend(['Payment', 'ChatMessage'])
 except ImportError:
     pass

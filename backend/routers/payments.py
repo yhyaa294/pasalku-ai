@@ -1,9 +1,10 @@
 import stripe
 from fastapi import APIRouter, HTTPException, Depends, Request
 from sqlalchemy.orm import Session
-from backend.database import get_db
-from backend.core.config import get_settings
-from backend.models import User, ChatSession
+from database import get_db
+from core.config import get_settings
+from models import User, ChatSession
+from models import Payment  # Import from root models.py
 from pydantic import BaseModel
 from typing import Optional
 from datetime import datetime
