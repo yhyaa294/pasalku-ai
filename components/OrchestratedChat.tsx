@@ -61,26 +61,35 @@ export default function OrchestratedChat() {
     setIsLoading(true)
 
     try {
-      // Call orchestrator API
-      const response = await fetch('/api/orchestrator/analyze', {
+      // Call REAL orchestrator API (backend FastAPI)
+      const apiUrl = process.env.NEXT_PUBLIC_API_URL || 'http://localhost:8000'
+      const response = await fetch(`${apiUrl}/api/orchestrator/analyze`, {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({
           message: input,
-          conversation_history: messages,
+          conversation_history: messages.map(msg => ({
+            role: msg.role,
+            content: msg.content,
+            timestamp: msg.timestamp.toISOString()
+          })),
           user_tier: userTier,
           context: {}
         })
       })
 
-      if (!response.ok) throw new Error('API call failed')
+      if (!response.ok) {
+        const errorData = await response.json().catch(() => ({}))
+        throw new Error(errorData.detail || 'API call failed')
+      }
 
       const data: OrchestratedResponse = await response.json()
       setCurrentResponse(data)
 
+      // Use AI-generated message (not template!)
       const aiMessage: Message = {
         role: 'assistant',
-        content: data.ai_response,
+        content: data.message || data.ai_response,
         timestamp: new Date()
       }
 
@@ -89,7 +98,7 @@ export default function OrchestratedChat() {
       console.error('Error:', error)
       const errorMessage: Message = {
         role: 'assistant',
-        content: 'Maaf, terjadi kesalahan. Silakan coba lagi.',
+        content: `Maaf, terjadi kesalahan: ${error instanceof Error ? error.message : 'Unknown error'}. Pastikan backend sudah running di ${process.env.NEXT_PUBLIC_API_URL || 'http://localhost:8000'}`,
         timestamp: new Date()
       }
       setMessages(prev => [...prev, errorMessage])
@@ -269,6 +278,8 @@ export default function OrchestratedChat() {
           <button
             onClick={handleSend}
             disabled={!input.trim() || isLoading}
+            aria-label="Send message"
+            title="Send message"
             className="px-6 py-3 bg-gradient-to-r from-purple-600 to-pink-600 text-white rounded-xl font-medium hover:shadow-lg transition-all disabled:opacity-50 disabled:cursor-not-allowed"
           >
             <Send className="w-5 h-5" />
