@@ -1,9 +1,12 @@
 'use client';
 
 import { UltraSimpleNavbar } from '@/components/ultra-simple-navbar';
-import { HeroWithIllustration } from '@/components/hero-with-illustration';
+import HeroSection from '@/components/hero/HeroSection';
+import SocialProofBar from '@/components/sections/SocialProofBar';
+import FeaturesShowcase from '@/components/sections/FeaturesShowcase';
+import TestimonialCarousel from '@/components/sections/TestimonialCarousel';
+import FinalCTA from '@/components/sections/FinalCTA';
 import { WhyThisAISection } from '@/components/why-this-ai-section';
-import { FeaturesShowcase } from '@/components/features-showcase';
 import { ZigzagHowItWorks } from '@/components/zigzag-how-it-works';
 import { PowerfulPricingSection } from '@/components/powerful-pricing-section';
 import { FloatingCustomerService, FloatingMusicToggle } from '@/components/floating-widgets';
@@ -69,14 +72,17 @@ export default function PasalkuLandingPage() {
 
       {/* Main Content */}
       <main>
-        {/* Hero Section with Illustration/Video */}
-        <HeroWithIllustration onGetStarted={handleGetStarted} />
+        {/* NEW HERO SECTION - Animated Gradient with Live Demo */}
+        <HeroSection />
+
+        {/* Social Proof Bar - Stats + Live Activity */}
+        <SocialProofBar />
+
+        {/* NEW FEATURES SHOWCASE - Interactive with Demos */}
+        <FeaturesShowcase />
 
         {/* Why This AI Section - Alasan terciptanya AI ini */}
         <WhyThisAISection />
-
-        {/* Features Showcase - Menampilkan fitur utama dengan tombol "Lihat Lainnya" */}
-        <FeaturesShowcase />
 
         {/* How It Works - Zigzag pattern dengan nomor dan gambar */}
         <ZigzagHowItWorks />
@@ -89,31 +95,11 @@ export default function PasalkuLandingPage() {
           <FAQSection />
         </section>
 
-        {/* Testimonials Section - Scrollable */}
-        <section className="py-20 bg-white dark:bg-slate-950">
-          <TestimonialsSection />
-        </section>
+        {/* NEW Testimonials Section - Interactive Carousel */}
+        <TestimonialCarousel />
 
-        {/* Final CTA Section */}
-        <section className="py-24 bg-gradient-to-br from-purple-600 via-pink-600 to-blue-600">
-          <div className="max-w-4xl mx-auto px-4 text-center">
-            <h2 className="text-5xl font-black text-white mb-6">
-              Siap Memulai Perjalanan Hukum Anda?
-            </h2>
-            <p className="text-xl text-white/90 mb-10">
-              Bergabunglah dengan 10,000+ pengguna yang sudah merasakan kemudahan akses keadilan
-            </p>
-            <button
-              onClick={handleGetStarted}
-              className="px-12 py-5 bg-white text-purple-600 rounded-full font-black text-xl shadow-2xl hover:shadow-white/50 hover:scale-105 transition-all duration-300"
-            >
-              Mulai Gratis Sekarang →
-            </button>
-            <p className="mt-6 text-white/80 text-sm">
-              Tidak perlu kartu kredit • Setup 30 detik • Cancel kapan saja
-            </p>
-          </div>
-        </section>
+        {/* NEW Final CTA Section - Countdown + Urgency */}
+        <FinalCTA />
       </main>
 
       {/* Footer */}
