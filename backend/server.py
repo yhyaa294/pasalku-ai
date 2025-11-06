@@ -102,6 +102,22 @@ app.include_router(payments.router, prefix="/api/payments", tags=["Payments"])
 app.include_router(analytics.router, prefix="/api/analytics", tags=["Analytics"])
 app.include_router(terms.router, prefix="/api/terms", tags=["Legal Terms"])
 
+# Import and register proactive chat router
+try:
+    from backend.routers.proactive_chat import router as proactive_chat_router
+    app.include_router(proactive_chat_router, tags=["Proactive AI Chat"])
+    logger.info("✅ Proactive Chat Router registered successfully")
+except ImportError as e:
+    logger.warning(f"⚠️ Proactive Chat Router not available: {e}")
+
+# Import and register AI Orchestrator router
+try:
+    from routers.orchestrator_api import router as orchestrator_router
+    app.include_router(orchestrator_router, tags=["AI Orchestrator"])
+    logger.info("✅ AI Orchestrator Router registered successfully")
+except ImportError as e:
+    logger.warning(f"⚠️ AI Orchestrator Router not available: {e}")
+
 
 @app.get("/", response_class=HTMLResponse, include_in_schema=False)
 async def backend_homepage() -> HTMLResponse:

@@ -115,41 +115,61 @@ class ArkAIService:
         user_query: str,
         conversation_history: Optional[List[Dict[str, str]]] = None,
         legal_context: Optional[Dict[str, Any]] = None,
-        persona: str = "default"
+        persona: str = "konsultan_hukum",
+        conversation_stage: Optional[str] = None,
+        user_context: Optional[Dict[str, Any]] = None
     ) -> Dict[str, Any]:
         """
-        Specialized legal consultation using Ark AI
+        Specialized legal consultation using Ark AI with Orchestrator System Prompt
         
         Args:
             user_query: User's legal question
             conversation_history: Previous messages in conversation
             legal_context: Additional legal context (laws, precedents, etc.)
-            persona: AI persona to use
+            persona: AI persona to use (konsultan_hukum, advokat_progresif, etc.)
+            conversation_stage: Current stage (clarification, analysis, execution, synthesis)
+            user_context: User tier, previous sessions, etc.
         
         Returns:
             Dict with consultation response
         """
-        # Build system prompt based on persona
-        system_prompts = {
-            "default": """Anda adalah asisten hukum AI yang profesional dan membantu. 
+        # Import orchestrator prompt
+        try:
+            from ..prompts.orchestrator_system_prompt import get_orchestrator_prompt
+            
+            # Use new orchestrator prompt system
+            system_prompt = get_orchestrator_prompt(
+                persona=persona,
+                stage=conversation_stage,
+                user_context=user_context
+            )
+        except ImportError:
+            logger.warning("Orchestrator prompt not found, using fallback")
+            # Fallback to old system prompts
+            system_prompts = {
+                "default": """Anda adalah asisten hukum AI yang profesional dan membantu. 
 Berikan jawaban yang akurat, jelas, dan mudah dipahami tentang hukum Indonesia. 
 Selalu sertakan referensi pasal atau peraturan yang relevan jika memungkinkan.
 Jika tidak yakin, katakan dengan jujur dan sarankan untuk berkonsultasi dengan profesional hukum.""",
-            
-            "advokat_progresif": """Anda adalah advokat progresif yang berpengalaman dalam hukum Indonesia.
+                
+                "konsultan_hukum": """Anda adalah konsultan hukum senior yang berpengalaman dalam hukum Indonesia.
+Berikan analisis hukum yang mendalam, praktis, dan strategis.
+Fokus pada solusi yang efektif dan meminimalkan risiko hukum.""",
+                
+                "advokat_progresif": """Anda adalah advokat progresif yang berpengalaman dalam hukum Indonesia.
 Berikan analisis hukum yang mendalam dengan perspektif progresif dan perlindungan HAM.
 Fokus pada keadilan substantif dan interpretasi hukum yang melindungi hak-hak individu.""",
-            
-            "konsultan_bisnis": """Anda adalah konsultan hukum bisnis yang ahli dalam hukum perusahaan Indonesia.
+                
+                "konsultan_bisnis": """Anda adalah konsultan hukum bisnis yang ahli dalam hukum perusahaan Indonesia.
 Berikan saran praktis untuk kepatuhan hukum bisnis, kontrak, dan regulasi.
 Fokus pada solusi yang efisien dan meminimalkan risiko hukum.""",
-            
-            "mediator": """Anda adalah mediator hukum yang netral dan objektif.
+                
+                "mediator": """Anda adalah mediator hukum yang netral dan objektif.
 Berikan perspektif yang seimbang dari berbagai sudut pandang hukum.
 Fokus pada penyelesaian sengketa dan win-win solution."""
-        }
-        
-        system_prompt = system_prompts.get(persona, system_prompts["default"])
+            }
+            
+            system_prompt = system_prompts.get(persona, system_prompts["default"])
         
         # Add legal context to system prompt if provided
         if legal_context:
