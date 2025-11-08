@@ -1,10 +1,11 @@
 "use client"
 
 import { useState, useEffect, useRef } from 'react'
+import type { CSSProperties } from 'react'
 import { Button } from '@/components/ui/button'
-import { Card } from '@/components/ui/card'
 import { cn } from '@/lib/utils'
-import { X, ChevronUp } from 'lucide-react'
+import { X } from 'lucide-react'
+import styles from './mobile-bottom-sheet.module.css'
 
 interface MobileBottomSheetProps {
   isOpen: boolean
@@ -73,9 +74,9 @@ export default function MobileBottomSheet({
   }
 
   const heightClasses = {
-    auto: 'max-h-[70vh]',
-    half: 'h-[50vh]',
-    full: 'h-[90vh]'
+    auto: styles.heightAuto,
+    half: styles.heightHalf,
+    full: styles.heightFull
   }
 
   if (!isOpen) return null
@@ -84,7 +85,7 @@ export default function MobileBottomSheet({
     <>
       {/* Backdrop */}
       <div 
-        className="fixed inset-0 bg-black/50 z-50 transition-opacity duration-300"
+        className={styles.backdrop}
         onClick={onClose}
       />
       
@@ -92,20 +93,22 @@ export default function MobileBottomSheet({
       <div 
         ref={sheetRef}
         className={cn(
-          'fixed bottom-0 left-0 right-0 z-50',
-          'bg-white dark:bg-slate-900 rounded-t-3xl shadow-2xl',
-          'transition-transform duration-300 ease-out',
+          styles.sheetContainer,
+          'dark:bg-slate-900 bg-white',
           heightClasses[height],
-          isDragging && 'transition-none'
+          isDragging && styles.noTransition
         )}
         style={{
-          transform: `translateY(${currentY}px)`
-        }}
+          '--sheet-translate': `${currentY}px`
+        } as CSSProperties}
       >
         {/* Drag Handle */}
         {enableDrag && (
           <div
-            className="flex justify-center py-4 cursor-grab active:cursor-grabbing"
+            className={cn(
+              styles.dragHandle,
+              isDragging && styles.dragHandleActive
+            )}
             onMouseDown={handleDragStart}
             onMouseMove={handleDragMove}
             onMouseUp={handleDragEnd}
@@ -114,13 +117,13 @@ export default function MobileBottomSheet({
             onTouchMove={handleDragMove}
             onTouchEnd={handleDragEnd}
           >
-            <div className="w-12 h-1.5 bg-gray-300 dark:bg-gray-600 rounded-full" />
+            <div className={cn(styles.dragHandleBar, 'dark:bg-gray-600')} />
           </div>
         )}
 
         {/* Header */}
         {(title || enableDrag) && (
-          <div className="flex items-center justify-between px-6 pb-4 border-b border-gray-200 dark:border-slate-800">
+          <div className={cn(styles.header, 'dark:border-slate-800')}>
             {title && (
               <h3 className="text-lg font-semibold text-gray-900 dark:text-white">
                 {title}
@@ -130,7 +133,7 @@ export default function MobileBottomSheet({
               variant="ghost"
               size="sm"
               onClick={onClose}
-              className="rounded-full p-2 hover:bg-gray-100 dark:hover:bg-slate-800"
+              className={cn(styles.closeButton, 'dark:hover:bg-slate-800')}
             >
               <X className="w-5 h-5 text-gray-500 dark:text-gray-400" />
             </Button>
@@ -138,7 +141,7 @@ export default function MobileBottomSheet({
         )}
 
         {/* Content */}
-        <div className="flex-1 overflow-y-auto overscroll-contain">
+        <div className={styles.content}>
           {children}
         </div>
       </div>

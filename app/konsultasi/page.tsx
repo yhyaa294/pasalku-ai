@@ -25,10 +25,10 @@ import { Avatar } from '@/components/ui/avatar'
 import { ScrollArea } from '@/components/ui/scroll-area'
 import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs'
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card'
-import { ConsultationSteps } from '@/components/custom/ConsultationSteps'
-import { LegalCitation } from '@/components/custom/LegalCitation'
-import { ConfidenceIndicator } from '@/components/custom/ConfidenceIndicator'
-import { AiThinking } from '@/components/custom/AiThinking'
+// import { ConsultationSteps } from '@/components/custom/ConsultationSteps' // Removed
+// import { LegalCitation } from '@/components/custom/LegalCitation' // Removed
+// import { ConfidenceIndicator } from '@/components/custom/ConfidenceIndicator' // Removed
+// import { AiThinking } from '@/components/custom/AiThinking' // Removed
 
 interface Citation {
   pasal: string;

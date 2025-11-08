@@ -2,7 +2,7 @@
 
 import { useState } from 'react';
 import Link from 'next/link';
-import { EnhancedNavigation } from '@/components/enhanced-navigation';
+import { UltraSimpleNavbar } from '@/components/ultra-simple-navbar';
 import { EnhancedFooter } from '@/components/enhanced-footer';
 
 export default function FeaturesHubPage() {
@@ -128,7 +128,7 @@ export default function FeaturesHubPage() {
 
   return (
     <div className="min-h-screen bg-gradient-to-br from-gray-50 via-white to-blue-50">
-      <EnhancedNavigation />
+      <UltraSimpleNavbar />
       
       {/* Hero Section */}
       <section className="py-20 px-4">

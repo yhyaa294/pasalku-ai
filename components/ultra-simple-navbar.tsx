@@ -27,6 +27,7 @@ export const UltraSimpleNavbar: FC<UltraSimpleNavbarProps> = ({ onLogin }) => {
     { label: 'Fitur', href: '#features' },
     { label: 'Cara Kerja', href: '#how-it-works' },
     { label: 'Harga', href: '#pricing' },
+    { label: 'Legal AI', href: '/legal-ai' },
     { label: 'FAQ', href: '#faq' },
   ]
 

@@ -7,7 +7,7 @@ import { ScrollArea } from '@/components/ui/scroll-area'
 import { Send, Loader2, User, Bot } from 'lucide-react'
 import { cn } from '@/lib/utils'
 import { useQuotaCheck } from '@/lib/paywall'
-import { QuotaWarning, PaywallModal } from '@/components/PaywallUI'
+// import { QuotaWarning, PaywallModal } from '@/components/PaywallUI' // Removed
 
 interface Message {
   id: string

@@ -1,5 +1,6 @@
 "use client"
 
+import React from 'react'
 import { useState } from 'react'
 import { Card } from '@/components/ui/card'
 import { Button } from '@/components/ui/button'
@@ -8,13 +9,15 @@ import {
   Brain, 
   FileText, 
   Users, 
-  TrendingUp, 
-  Zap, 
-  Shield, 
+  TrendingUp,
+  Zap,
+  Sparkles,
   CheckCircle,
   ArrowRight,
-  Play,
-  Sparkles
+  Shield,
+  Clock,
+  Star,
+  Play
 } from 'lucide-react'
 
 const features = [
@@ -180,7 +183,7 @@ export default function FeaturesShowcase() {
                 <div className="flex items-center justify-between mb-6">
                   <div className="flex items-center gap-3">
                     <div className={`p-3 rounded-xl bg-gradient-to-r ${features[activeFeature].color}`}>
-                      <features[activeFeature].icon className="w-6 h-6 text-white" />
+                      {React.createElement(features[activeFeature].icon, { className: "w-6 h-6 text-white" })}
                     </div>
                     <div>
                       <h3 className="text-xl font-bold text-gray-900 dark:text-white">

@@ -90,3 +90,9 @@ docx2txt==0.8     # For DOCX processing
 # Additional AI/ML libraries for document analysis
 transformers==4.35.2
 torch==2.1.2
+
+# Legal AI specific dependencies
+sentence-transformers==2.2.2
+chromadb==0.4.22
+openai==1.3.7
+tiktoken==0.5.2

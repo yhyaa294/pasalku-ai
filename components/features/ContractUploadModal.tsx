@@ -86,6 +86,7 @@ export default function ContractUploadModal({
             <button
               onClick={onClose}
               className="p-2 hover:bg-gray-100 dark:hover:bg-slate-700 rounded-lg transition-colors"
+              aria-label="Tutup dialog analisis kontrak"
             >
               <X className="w-5 h-5" />
             </button>
@@ -93,10 +94,11 @@ export default function ContractUploadModal({
 
           {/* Contract Type Selection */}
           <div className="mb-6">
-            <label className="block text-sm font-medium mb-2 text-gray-700 dark:text-gray-300">
+            <label htmlFor="contract-type" className="block text-sm font-medium mb-2 text-gray-700 dark:text-gray-300">
               Tipe Kontrak
             </label>
             <select
+              id="contract-type"
               value={contractType}
               onChange={(e) => setContractType(e.target.value)}
               className="w-full px-4 py-2 bg-gray-100 dark:bg-slate-700 rounded-lg border-0 focus:ring-2 focus:ring-purple-500"

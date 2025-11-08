@@ -51,7 +51,7 @@ except Exception as e:
     sentry_available = False
     logger.warning(f"Sentry initialization failed: {str(e)}")
 from database import init_db, get_db, get_db_connections
-from routers import auth_router, users_router, chat_router, consultation_router, payments, analytics, terms
+from routers import auth_router, users_router, chat_router, consultation_router, payments, analytics, terms, legal_ai
 # Import all models to ensure they are registered with SQLAlchemy
 # Import models to register mappers
 from models import user, consultation, chat
@@ -101,6 +101,7 @@ app.include_router(consultation_router, prefix="/api/consultation", tags=["Consu
 app.include_router(payments.router, prefix="/api/payments", tags=["Payments"])
 app.include_router(analytics.router, prefix="/api/analytics", tags=["Analytics"])
 app.include_router(terms.router, prefix="/api/terms", tags=["Legal Terms"])
+app.include_router(legal_ai.router, tags=["Legal AI"])
 
 # Import and register proactive chat router
 try:

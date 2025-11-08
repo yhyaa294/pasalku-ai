@@ -2,7 +2,7 @@
 
 import { useEffect, useState } from 'react'
 import { Badge } from '@/components/ui/badge'
-import { Users, CheckCircle, Clock, Star, TrendingUp, Shield } from 'lucide-react'
+import { Users, CheckCircle, Clock, Star, TrendingUp, Shield, Zap } from 'lucide-react'
 
 const stats = [
   { icon: Users, value: "10,000+", label: "Konsultasi Selesai", color: "text-purple-600 dark:text-purple-400" },
@@ -27,7 +27,7 @@ export default function SocialProofBar() {
   // Animate numbers on mount
   useEffect(() => {
     const timer = setTimeout(() => {
-      setCurrentStats(stats)
+      setCurrentStats(stats.map(s => ({ ...s, display: s.value })))
     }, 500)
     return () => clearTimeout(timer)
   }, [])

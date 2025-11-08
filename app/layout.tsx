@@ -4,9 +4,9 @@ import { GeistSans } from "geist/font/sans"
 import { GeistMono } from "geist/font/mono"
 import { ClerkProvider } from '@clerk/nextjs'
 import "./globals.css"
-import "./safe-animations.css"
-import "./modern-interactions.css"
-import "./ultimate-animations.css"
+// import "./safe-animations.css" // Removed
+// import "./modern-interactions.css" // Removed  
+// import "./ultimate-animations.css" // Removed
 import { ThemeProvider } from "@/contexts/ThemeContext"
 import { Analytics } from '@vercel/analytics/react'
 
