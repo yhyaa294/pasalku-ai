@@ -49,7 +49,7 @@ pydantic_core==2.33.2
 pyflakes==3.4.0
 Pygments==2.19.2
 PyJWT==2.10.1
-pymongo==4.5.0
+pymongo==4.6.3
 pytest==8.4.2
 python-dateutil==2.9.0.post0
 python-dotenv==1.0.1
