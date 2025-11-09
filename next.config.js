@@ -3,7 +3,7 @@ const nextConfig = {
   // EMERGENCY CONFIGURATION - Temporary error suppression for deployment
   experimental: {
     optimizeCss: true,
-    optimizePackageImports: ['lucide-react', '@radix-ui/react-*']
+    optimizePackageImports: ['lucide-react', '@radix-ui/react-*'],
   },
   
   // Suppress TypeScript errors temporarily for emergency deployment
@@ -35,10 +35,16 @@ const nextConfig = {
       };
     }
     
-    // Suppress warnings
+    // Suppress warnings including Prisma/OpenTelemetry
     config.stats = {
       warnings: false
     };
+    
+    // Ignore Prisma instrumentation warnings
+    config.ignoreWarnings = [
+      { module: /node_modules\/@prisma\/instrumentation/ },
+      { module: /node_modules\/@opentelemetry/ },
+    ];
     
     return config;
   },
