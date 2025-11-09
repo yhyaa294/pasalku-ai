@@ -49,9 +49,6 @@ const nextConfig = {
     pagesBufferLength: 2,
   },
   
-  // Performance optimizations
-  swcMinify: true,
-  
   // Redirect configuration
   async redirects() {
     return [

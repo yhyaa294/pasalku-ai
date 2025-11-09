@@ -11,6 +11,7 @@ import { ThemeProvider } from "@/contexts/ThemeContext"
 import { Analytics } from '@vercel/analytics/react'
 
 export const metadata: Metadata = {
+  metadataBase: new URL(process.env.NEXT_PUBLIC_BASE_URL || 'https://pasalku.ai'),
   title: "Pasalku.ai - AI Hukum Indonesia Terdepan | Akurasi 94.1% | Konsultasi Hukum Cerdas",
   description: "Platform kecerdasan buatan hukum pertama di Indonesia dengan akurasi 94.1%. Konsultasi hukum instan gratis, analisis dokumen otomatis, knowledge base hukum lengkap. PDPA compliant & enterprise-ready.",
   keywords: [
